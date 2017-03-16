@@ -1,1 +1,0 @@
-This directory will contains test application from Bacon-JS and Rx-JS to test our extension.
