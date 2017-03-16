@@ -1,0 +1,94 @@
+/* This sets the color for "TK" nodes to a light blue green. */
+g.type-TK > rect {
+    fill: #00ffd0;
+}
+
+g.current > rect {
+    fill: red;
+}
+
+g.highlight > rect {
+    fill: green;
+}
+
+text {
+    font-weight: 300;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+    font-size: 14px;
+}
+
+.node rect {
+    stroke: #999;
+    fill: #fff;
+    stroke-width: 1.5px;
+}
+
+.edgePath path {
+    stroke: #333;
+    stroke-width: 1.5px;
+}
+
+text {
+    font-weight: 300;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+    font-size: 14px;
+}
+
+.node rect {
+    stroke: #333;
+    fill: #fff;
+}
+
+.edgePath path {
+    stroke: #333;
+    fill: #333;
+    stroke-width: 1.5px;
+}
+
+.node text {
+    pointer-events: none;
+}
+
+/* This styles the title of the tooltip */
+.tipsy .name {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #60b1fc;
+    margin: 0;
+}
+
+/* This styles the body of the tooltip */
+.tipsy .description {
+    font-size: 1.2em;
+}
+
+.container {
+    margin-bottom: 15px;
+}
+
+.ui-slider .ui-slider-handle {
+    position: absolute;
+    z-index: 2;
+    width: 2.2em;
+    height: 1.2em;
+    cursor: default;
+    text-align: center;
+}
+
+.column-left {
+    float: left;
+    width: 8%;
+}
+
+.column-right {
+    float: right;
+    width: 10%;
+}
+
+.column-center {
+    display: inline-block;
+    width: 80%;
+}
+#svg-canvas{
+    min-height: 800px;
+}

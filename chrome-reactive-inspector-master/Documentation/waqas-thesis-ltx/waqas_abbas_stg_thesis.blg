@@ -1,0 +1,22 @@
+This is BibTeX, Version 0.99dThe top-level auxiliary file: waqas_abbas_stg_thesis.aux
+The style file: alpha.bst
+Database file #1: bibliography.bib
+Warning--entry type for "EPFL-REPORT-176887" isn't style-file defined
+--line 85 of file bibliography.bib
+Warning--entry type for "SMLI-TR-2007-166" isn't style-file defined
+--line 94 of file bibliography.bib
+Repeated entry---line 407 of file bibliography.bib
+ : @inbook{Lienhard2008
+ :                     ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 423 of file bibliography.bib
+ : @inbook{Lienhard2008
+ :                     ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 439 of file bibliography.bib
+ : @inbook{Lienhard2008
+ :                     ,
+I'm skipping whatever remains of this entry
+Warning--can't use both author and editor fields in Lienhard2008
+Warning--can't use both author and editor fields in Pothier2011
+(There were 3 error messages)

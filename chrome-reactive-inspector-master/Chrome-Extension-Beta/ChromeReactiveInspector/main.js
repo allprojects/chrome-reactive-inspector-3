@@ -1,0 +1,1 @@
+console.log("from main.js that is defined in  web_accessible_resources");

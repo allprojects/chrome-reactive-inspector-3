@@ -1,0 +1,61 @@
+{
+    "manifest_version": 2,
+    "name": "Reactive Inspector",
+    "version": "1.0",
+    "description": "This is an extension to devtool for debugging Reactive JS libraries like Bacon.JS , RX-JS Version 5 ",
+    "author": "Waqas Abbas with Dr.Guido Salvaneschi at TU - Darmstadt",
+    "devtools_page": "devtools.html",
+    "background": {
+        "scripts": [
+            "helpers/comm_api_background.js",
+            "background.js"
+        ]
+    },
+    "permissions": [
+        "tabs",
+        "storage",
+        "<all_urls>"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "rx-debugger-data-structure.js",
+                "helpers/comm_api_content-script.js",
+                "helpers/storage_api_general.js",
+                "libraries/jquery.js",
+                "myinst.js",
+                "libraries/underscore.js",
+                "libraries/d3.v3.min.js",
+                "inject-for-instrumentation.js",
+                "Bacon.js",
+                "Rx.js",
+                "myanalysis.js"
+            ],
+            "run_at": "document_start",
+            "all_frames": false
+        },
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "content-script-end.js"
+            ],
+            "run_at": "document_end",
+            "all_frames": false
+        }
+    ],
+    "icons": {
+        "128": "icon.png"
+    },
+    "web_accessible_resources": [
+        "main.js",
+        "myinst.js",
+        "panel.js",
+        "messaging.js",
+        "helpers/storage_api_general.js"
+    ]
+}

@@ -1,0 +1,222 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{KBDM13}
+
+\bibitem[Ash]{Underscorejs}
+Jeremy Ashkenas.
+\newblock {Underscore.Js}.
+\newblock \url{http://underscorejs.org}.
+\newblock last accessed: 10-02-2017.
+
+\bibitem[Aut]{reactiveManifesto}
+Various Authors.
+\newblock {The reactive manifesto}.
+\newblock \url{http://www.reactivemanifesto.org/}.
+\newblock last accessed: 08-02-2017.
+
+\bibitem[Bac]{BaconProperty}
+Bacon.
+\newblock {Bacon Property}.
+\newblock \url{https://baconjs.github.io/api.html#property}.
+\newblock last accessed: 10-02-2017.
+
+\bibitem[BCC{\etalchar{+}}13]{Bainomugisha:2013:SRP:2501654.2501666}
+Engineer Bainomugisha, Andoni~Lombide Carreton, Tom~van Cutsem, Stijn
+  Mostinckx, and Wolfgang~de Meuter.
+\newblock A survey on reactive programming.
+\newblock {\em ACM Comput. Surv.}, 45(4):52:1--52:34, August 2013.
+
+\bibitem[Dev]{NodeJs}
+Node.js Developers.
+\newblock {Node.js}.
+\newblock \url{https://nodejs.org}.
+\newblock last accessed: 12-02-2017.
+
+\bibitem[DOM]{W3DOM}
+W3C DOM.
+\newblock Document object model.
+
+\bibitem[Edw09]{Edwards:2009:CR:1639950.1640058}
+Jonathan Edwards.
+\newblock Coherent reaction.
+\newblock In {\em Proceedings of the 24th ACM SIGPLAN Conference Companion on
+  Object Oriented Programming Systems Languages and Applications}, OOPSLA '09,
+  pages 925--932, New York, NY, USA, 2009. ACM.
+
+\bibitem[Faca]{ReactFacebook}
+Facebook.
+\newblock {React}.
+\newblock \url{https://facebook.github.io/react/}.
+\newblock last accessed: 10-02-2017.
+
+\bibitem[Facb]{ReactFacebookChrome}
+Facebook.
+\newblock {React Chrome Developer Tools}.
+\newblock
+  \url{https://facebook.github.io/react/blog/2014/01/02/react-chrome-developer-tools.html
+  }.
+\newblock last accessed: 10-02-2017.
+
+\bibitem[Fora]{GithubRxvision}
+Jared Forsyth.
+\newblock {RxVision}.
+\newblock \url{https://github.com/jaredly/rxvision}.
+\newblock last accessed: 10-02-2017.
+
+\bibitem[Forb]{PlaygroundRxvision}
+Jared Forsyth.
+\newblock {RxVision Playgound}.
+\newblock \url{http://jaredforsyth.com/rxvision/examples/playground/}.
+\newblock last accessed: 10-02-2017.
+
+\bibitem[GHJV95]{Gamma:1995:DPE:186897}
+Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides.
+\newblock {\em Design Patterns: Elements of Reusable Object-oriented Software}.
+\newblock Addison-Wesley Longman Publishing Co., Inc., Boston, MA, USA, 1995.
+
+\bibitem[Git]{GithubFRP}
+Github.
+\newblock {FRP}.
+\newblock \url{https://en.wikipedia.org/wiki/Functional_reactive_programming}.
+\newblock last accessed: 10-02-2017.
+
+\bibitem[Int]{ecmaScriptPromise}
+Ecma International.
+\newblock {ECMAScript Promise}.
+\newblock
+  \url{https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise}.
+\newblock last accessed: 14-02-2017.
+
+\bibitem[KBDM13]{Kambona:2013:ERP:2489798.2489802}
+Kennedy Kambona, Elisa~Gonzalez Boix, and Wolfgang De~Meuter.
+\newblock An evaluation of reactive programming and promises for structuring
+  collaborative web applications.
+\newblock In {\em Proceedings of the 7th Workshop on Dynamic Languages and
+  Applications}, DYLA '13, pages 3:1--3:9, New York, NY, USA, 2013. ACM.
+
+\bibitem[LGN08]{Lienhard2008}
+Adrian Lienhard, Tudor G{\^i}rba, and Oscar Nierstrasz.
+\newblock {\em Practical Object-Oriented Back-in-Time Debugging}, pages
+  592--615.
+\newblock Springer Berlin Heidelberg, Berlin, Heidelberg, 2008.
+
+\bibitem[MO12]{EPFL-REPORT-176887}
+Ingo Maier and Martin Odersky.
+\newblock Deprecating the observer pattern with scala.react, 2012.
+
+\bibitem[MT07]{SMLI-TR-2007-166}
+Tommi Mikkonen and Antero Taivalsaari.
+\newblock Web applications - spaghetti code for the 21st century, 2007.
+
+\bibitem[PT11]{Pothier2011}
+Guillaume Pothier and {\'E}ric Tanter.
+\newblock {\em Summarized Trace Indexing and Querying for Scalable Back-in-Time
+  Debugging}, pages 558--582.
+\newblock Springer Berlin Heidelberg, Berlin, Heidelberg, 2011.
+
+\bibitem[PTP07]{Pothier:2007:SOD:1297105.1297067}
+Guillaume Pothier, \'{E}ric Tanter, and Jos{\'e} Piquer.
+\newblock Scalable omniscient debugging.
+\newblock {\em SIGPLAN Not.}, 42(10):535--552, October 2007.
+
+\bibitem[RE]{rxjs}
+Reactive-Extensions.
+\newblock {RxJS}.
+\newblock \url{https://github.com/Reactive-Extensions/RxJS}.
+\newblock last accessed: 08-02-2017.
+
+\bibitem[RLBV10]{Richards:2010:ADB:1809028.1806598}
+Gregor Richards, Sylvain Lebresne, Brian Burg, and Jan Vitek.
+\newblock An analysis of the dynamic behavior of javascript programs.
+\newblock {\em SIGPLAN Not.}, 45(6):1--12, June 2010.
+
+\bibitem[Rxa]{reactivex}
+Rx.
+\newblock {ReactiveX}.
+\newblock \url{http://reactivex.io/intro.html}.
+\newblock last accessed: 08-02-2017.
+
+\bibitem[Rxb]{reactivexOperators}
+Rx.
+\newblock {ReactiveX Operators}.
+\newblock \url{http://reactivex.io/documentation/operators.html}.
+\newblock last accessed: 10-02-2017.
+
+\bibitem[Sch12]{Schafer:2012:RTD:2328876.2328885}
+Max Sch\"{a}fer.
+\newblock Refactoring tools for dynamic languages.
+\newblock In {\em Proceedings of the Fifth Workshop on Refactoring Tools}, WRT
+  '12, pages 59--62, New York, NY, USA, 2012. ACM.
+
+\bibitem[SKBG13]{Sen:2013:JSR:2491411.2491447}
+Koushik Sen, Swaroop Kalasapur, Tasneem Brutch, and Simon Gibbs.
+\newblock Jalangi: A selective record-replay and dynamic analysis framework for
+  javascript.
+\newblock In {\em Proceedings of the 2013 9th Joint Meeting on Foundations of
+  Software Engineering}, ESEC/FSE 2013, pages 488--498, New York, NY, USA,
+  2013. ACM.
+
+\bibitem[SM16]{Salvaneschi:2016:DRP:2884781.2884815}
+Guido Salvaneschi and Mira Mezini.
+\newblock Debugging for reactive programming.
+\newblock In {\em Proceedings of the 38th International Conference on Software
+  Engineering}, ICSE '16, pages 796--807, New York, NY, USA, 2016. ACM.
+
+\bibitem[Staa]{StaltzAticleHowToDebugRxJS}
+Staltz.
+\newblock {How to debug RxJS}.
+\newblock \url{http://staltz.com/how-to-debug-rxjs-code.html}.
+\newblock last accessed: 10-02-2017.
+
+\bibitem[Stab]{StaltzMarbleDiagrams}
+Staltz.
+\newblock {Marble Diagrams}.
+\newblock \url{http://rxmarbles.com}.
+\newblock last accessed: 10-02-2017.
+
+\bibitem[Stac]{CycleJs}
+Staltzs.
+\newblock {Cycle.Js}.
+\newblock \url{https://cycle.js.org}.
+\newblock last accessed: 10-02-2017.
+
+\bibitem[Stad]{GithubCycleJsDevtool}
+Staltzs.
+\newblock {Cycle.Js Devtool}.
+\newblock \url{https://github.com/cyclejs/cyclejs/tree/master/devtool}.
+\newblock last accessed: 10-02-2017.
+
+\bibitem[TIO]{TiobeIndex}
+TIOBE.
+\newblock {Tiobe index for february 2017}.
+\newblock \url{http://www.tiobe.com/tiobe-index/}.
+\newblock last accessed: 13-02-2017.
+
+\bibitem[TM11]{6068340}
+A.~Taivalsaari and T.~Mikkonen.
+\newblock The web as an application platform: The saga continues.
+\newblock In {\em 2011 37th EUROMICRO Conference on Software Engineering and
+  Advanced Applications}, pages 170--174, Aug 2011.
+
+\bibitem[Van96]{vanderburg1996tricks}
+G.L. Vanderburg.
+\newblock {\em Tricks of the Java Programming Gurus}.
+\newblock Tricks of the Java Programming Gurus. Sams.net, 1996.
+
+\bibitem[Whi10]{White2010}
+Alexei White.
+\newblock {\em JavaScript Programmer's Reference}.
+\newblock John Wiley \& Sons, New York, 2010.
+
+\bibitem[Win79]{Winograd:1979:BPL:359131.359133}
+Terry Winograd.
+\newblock Beyond programming languages.
+\newblock {\em Commun. ACM}, 22(7):391--401, July 1979.
+
+\bibitem[ZJ14]{Zanarini:2014:MRS:2637113.2637120}
+Dante Zanarini and Mauro Jaskelioff.
+\newblock Monitoring reactive systems with dynamic channels.
+\newblock In {\em Proceedings of the Ninth Workshop on Programming Languages
+  and Analysis for Security}, PLAS'14, pages 66:66--66:78, New York, NY, USA,
+  2014. ACM.
+
+\end{thebibliography}
