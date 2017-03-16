@@ -8,11 +8,4 @@ Chrome extension to debug JavaScript Reactive Libraries like [Bacon-JS](https://
 ## Usage
 After Successful installation you can go to Chrome devtools and there you will see new panel called  "Reative Inspector"
 
-## History
-This is project done as Master Thesis at TU - Darmstadt Germany with collaboration of [Prof. Dr Guido Salvaneschi](http://www.guidosalvaneschi.com/)
-This project is done as extension to the work of [Reative Inspector](https://github.com/guidosalva/reactive-inspector)
-## Credits
-TODO: Write credits here
-## License
-TODO: Write license here
 
