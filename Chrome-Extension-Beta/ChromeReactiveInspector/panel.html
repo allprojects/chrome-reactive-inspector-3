@@ -9,6 +9,8 @@
 <script src="libraries/d3.v3.min.js" charset="utf-8"></script>
 <script src="libraries/dagre-d3.js"></script>
 <link rel="stylesheet" href="libraries/tipsy.css">
+<link rel="stylesheet" href="libraries/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="libraries/bootstrap/css/bootstrap-responsive.min.css">
 <script src="libraries/jquery-1.9.1.min.js"></script>
 <script src="libraries/tipsy.js"></script>
 
@@ -22,37 +24,42 @@
 <script src="helpers/storage_api_general.js"></script>
 <script src="helpers/comm_api_panel.js"></script>
 
-
-<h3>Configuration</h3>
-<label>Instrument Files (Names separated by comma)</label>
-<input type="text" id="cri-config-includes">
-
-<div>
-    <button id="cri-reset" type="button" class="btn btn-info">Reset</button>
-    <button id="cri-rec-status" data-rec-status="1" type="button" class="btn btn-info">Pause Recording</button>
-</div>
-<hr>
-<div>
-    Search node <input name="searchNode" type="text" id="cri-node-search">
-</div>
-<hr>
-<h3>History Navigator</h3>
-
-<div class="container">
-    <div class="column-center">
-        <div id="slider"></div>
+<div class="clearfix">
+    <h3 class="span12">Configuration</h3>
+    <div class="span6">
+        <label for="cri-config-includes">Instrument Files (Names separated by comma)</label>
+        <input type="text" id="cri-config-includes"><br>
+        <button id="cri-reset" type="button" class="btn btn-info">Reset</button>
+        <button id="cri-rec-status" data-rec-status="1" type="button" class="btn btn-info">Pause Recording</button>
     </div>
-    <div class="column-left">
-        <button id='up'><</button>
-    </div>
-    <div class="column-right">
-        <button id='down'>></button>
+    <div class="span6">
+        <label for="cri-node-search">Search node </label>
+        <input name="searchNode" type="text" id="cri-node-search">
     </div>
 </div>
 <hr>
-<h3>Dependency Graph</h3>
-<svg id="svg-canvas" width="100%" ></svg>
 
+<div class="clearfix">
+    <div class="span12">
+        <h3>History Navigator</h3>
+        <div class="column-center">
+            <div id="slider"></div>
+        </div>
+        <div class="column-left">
+            <button id='up'><</button>
+        </div>
+        <div class="column-right">
+            <button id='down'>></button>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="clearfix">
+    <div class="span12">
+        <h3>Dependency Graph</h3>
+        <svg id="svg-canvas" width="100%" ></svg>
+    </div>
+</div>
 
 <script src="panel.js"></script>
 

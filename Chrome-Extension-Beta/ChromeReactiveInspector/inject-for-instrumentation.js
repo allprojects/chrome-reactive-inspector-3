@@ -3,14 +3,14 @@ console.log("inject-for-instrumentation.js");
 // Get file names from configuration text field displayed in panel
 var filesShouldOnlyInstrument = false;
 chrome.storage.sync.get('criconfigincludes', function (items) {
-    if (items.criconfigincludes != undefined) {
+    if (items.criconfigincludes !== undefined) {
         filesShouldOnlyInstrument = items.criconfigincludes.split(',');
     }
 });
 
 /** DOCUMENT LOAD INTERCEPTION Start ***/
 // stop loading document so that we can load the instrumented version
-// window.stop();
+window.stop();
 // load current document and
 // All scripts will be rendered inert,
 var request = new XMLHttpRequest();
@@ -21,52 +21,45 @@ var shouldReactiveDebuggerRun = true;
 // Later this should be overwritten from options page of extension
 var filesShouldNotInstrument = [ "underscore.js", "hammer.js" , "d3.v3.min.js" ];
 
-var filesShouldNotInclude = ["Rx.js", "Bacon.js", "Bacon.UI.js", "jquery.js"];
-
+var filesShouldNotInclude = ["Rx.js", "Bacon.js", "Bacon.UI.js", "jquery.js", "rx.all.js", "jquery-2.1.4.js"];
+var fileReadOver = false;
 request.onload = function (event) {
 
     // here check if response text contain Bacon / Rxjs then continue otherwise do not do anything
     var respText = request.responseText;
     // check if this page contains bacon / rx , if not then debugger should not run
-    if ((respText.search("Rx.js") == -1) && (respText.search("Bacon.js") == -1) && (respText.search("rx.lite.js") == -1) && (respText.search("rx.lite.compat.js") == -1) && (respText.search("rx.all.js") == -1)) {
+    if ((respText.search("Rx.js") === -1) && (respText.search("Bacon.js") === -1) && (respText.search("rx.lite.js") === -1) && (respText.search("rx.lite.compat.js") === -1) && (respText.search("rx.all.js") === -1)) {
         shouldReactiveDebuggerRun = false;
     }
-
-    if (shouldReactiveDebuggerRun == true) {
+    // Reactive inspector should not run , so load page original content
+    var html = request.responseText;
+    if (shouldReactiveDebuggerRun === true) {
         // change to type of js tags so that js not able to execute
-        var html = request.responseText
+        html = request.responseText
             .replace(/type=\"text\/javascript\"/g, '')
             .replace(/<script/g, '<script type="rx-instrument/javascript"');
-        document.open();
-        document.write(html);
-        document.close();
-    } else {
-        // Reactive inspector should not run , so load page original content
-        var html = request.responseText;
-        document.open();
-        document.write(html);
-        document.close();
-
     }
-
+    document.open();
+    document.write(html);
+    document.close();
 };
 request.send(null);
 
 
 /** DOCUMENT LOAD INTERCEPTION End ***/
 
-if (shouldReactiveDebuggerRun == true) {
+if (shouldReactiveDebuggerRun === true) {
     /**     SEQUENTIAL Loader Start    ***/
 //Sequential loader To get all scripts and insert in document after instrumentation
 // script can be with source or without source (in page JS code)
     setTimeout(function next(index) {
 
         var script = document.scripts[index];
-        if (script == null) {
+        if (script === null || script === undefined) {
             //return setTimeout(callback, 0);
             return false;
         }
-        if (script.getAttribute('type') != 'rx-instrument/javascript') {
+        if (script.getAttribute('type') !== 'rx-instrument/javascript') {
             return false;
         }
         // if script tag contain source file
@@ -77,11 +70,11 @@ if (shouldReactiveDebuggerRun == true) {
             request.open('GET', script.getAttribute('src'));
             request.onload = function () {
 
-                if (filesShouldOnlyInstrument == false) {
+                if (filesShouldOnlyInstrument === false) {
                     // NO CONFIG SET
-                    if (filesShouldNotInclude.indexOf(filename) != -1) {
+                    if (filesShouldNotInclude.indexOf(filename) !== -1) {
 
-                    } else if (filesShouldNotInstrument.indexOf(filename) != -1) {
+                    } else if (filesShouldNotInstrument.indexOf(filename) !== -1) {
                         // do not instrument these files
                         eval(request.responseText);
                         //script.getAttribute('type', 'text/javascript');
@@ -92,23 +85,26 @@ if (shouldReactiveDebuggerRun == true) {
                         //console.log("code after inst");
                         //console.log(code);
                         eval(code);
+                        J$.W(-1, '', '', '');
+                        fileReadOver = true
                         //(new Function(code))();
 
                     }
                 } else {
-                    //CONFIG SET
                     // CONFIG SET SO only instrument files mentioned in config
-                    if (filesShouldNotInclude.indexOf(filename) != -1) {
+                    if (filesShouldNotInclude.indexOf(filename) !== -1) {
 
-                    } else if (filesShouldOnlyInstrument.indexOf(filename) != -1) {
+                    } else if (filesShouldOnlyInstrument.indexOf(filename) !== -1) {
                         var code = CriInstrument(request.responseText);
                         // console.log("code after inst");
                         // console.log(code);
                         eval(code);
+                        fileReadOver = true
+                        J$.W(-1, '', '', '');
 
                     } else {
                         eval(request.responseText);
-                        //script.setAttribute('type', 'text/javascript');
+                        // script.setAttribute('type', 'text/javascript');
                     }
                 }
 
@@ -121,6 +117,7 @@ if (shouldReactiveDebuggerRun == true) {
             //console.log("code after inst");
             //       console.log(code);
             eval(code);
+            fileReadOver = true
             setTimeout(next, 0, ++index);
         }
     }, 0, 0);
@@ -134,15 +131,17 @@ if (shouldReactiveDebuggerRun == true) {
      * @returns {string|*|Number|number|string|string}
      */
     function CriInstrument(code) {
-
-        if (J$.instrumentCode != undefined) {
-            var instrumentedCode = J$.instrumentCode(code, {wrapProgram: false, isEval: false}).code;
-            console.log("instrumentedCodeeeee");
-            console.log(instrumentedCode);
-        } else {
-            var instrumentedCode = code;
+        var instrumentedCode = code;
+        if (J$.instrumentCode !== undefined) {
+            // var esprismaParsed = esprima.parse(code);
+            // console.log("esprismaParsed");
+            // console.log(esprismaParsed);
+            instrumentedCode = J$.instrumentCode(code, {wrapProgram: false, isEval: false}).code;
+            // console.log("instrumentedCodeeeee");
+            // console.log(instrumentedCode);
         }
 
+        // return escodegen.generate(esprismaParsed);
         return instrumentedCode;
     }
 }

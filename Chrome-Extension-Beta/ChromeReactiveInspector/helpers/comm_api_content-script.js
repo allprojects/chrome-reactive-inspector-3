@@ -14,10 +14,9 @@ function sendObjectToDevTools(message) {
     // check the config settings weather to record or not
 
     chrome.storage.sync.get('cri_config_rec_status', function (items) {
-        if (items.cri_config_rec_status != undefined) {
+        if (items.cri_config_rec_status !== undefined) {
             console.log(items.cri_config_rec_status);
-            if (items.cri_config_rec_status == 1) {
-
+            if (items.cri_config_rec_status === 1) {
                 chrome.extension.sendMessage(message, function (message) {
                     console.log("message sent");
                 });
@@ -25,17 +24,12 @@ function sendObjectToDevTools(message) {
 
         }
     });
-
-
-
-
-
 }
 
 // Listen message from background page , that may be sent from panel
 chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
-    //console.log("message recieved to contetn script from background js");
-    if (msg.action == 'test') {
-        console.log("Message recieved!" + msg.content);
+    //console.log("message received to content script from background js");
+    if (msg.action === 'test') {
+        console.log("Message received!" + msg.content);
     }
 });

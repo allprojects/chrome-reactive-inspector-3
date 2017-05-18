@@ -4,16 +4,18 @@ g.type-TK > rect {
 }
 
 g.current > rect {
-    fill: red;
+    stroke: red;
+    stroke-width:5;
 }
 
 g.highlight > rect {
-    fill: green;
+    stroke: green;
+    stroke-width:5;
 }
 
 text {
     font-weight: 300;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serf, serif;
     font-size: 14px;
 }
 
@@ -91,4 +93,12 @@ text {
 }
 #svg-canvas{
     min-height: 800px;
+}
+
+.left-border{
+    border-left: 1px solid black;
+}
+
+.nodes .label {
+    color: #000;
 }

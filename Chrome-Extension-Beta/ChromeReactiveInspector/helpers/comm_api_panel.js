@@ -34,14 +34,14 @@ var rxGraphStages = [];
 
         var currentNodeId = false;
 
-        if (message.action == "saveNode") {
+        if (message.action === "saveNode") {
 
             if (message.content.nodeId) {
                 currentNodeId = message.content.nodeId;
             }
 
             var currentAction = "";
-            if (g.node(message.content.nodeId) != undefined) {
+            if (g.node(message.content.nodeId) !== undefined) {
                 // this node already exist , only change label if there is no value in message
                 // Label  = nodeRef + node val
 
@@ -61,34 +61,39 @@ var rxGraphStages = [];
                 var currentSourceCodeLine = message.content.sourceCodeLine;
 
 
-                if ((currentRef.length == 0) || (currentRef == undefined)) {
-                    var newRef = prevRef;
+                var newRef = '';
+                if ((currentRef.length === 0) || (currentRef === undefined)) {
+                    newRef = prevRef;
                 } else {
-                    var newRef = currentRef;
+                    newRef = currentRef;
                 }
 
-                if (currentValue != "") {
-                    var newValue = currentValue;
+                var newValue = '';
+                if (currentValue !== "") {
+                    newValue = currentValue;
                 } else {
-                    var newValue = prevValue;
+                    newValue = prevValue;
                 }
 
-                if (currentSourceCodeLine != "") {
-                    var newSourceCodeLine = currentSourceCodeLine;
+                var newSourceCodeLine = '';
+                if (currentSourceCodeLine !== "") {
+                    newSourceCodeLine = currentSourceCodeLine;
                 } else {
-                    var newSourceCodeLine = prevSourceCodeLine;
+                    newSourceCodeLine = prevSourceCodeLine;
                 }
 
-                if ((currentMethod.length == 0) || (currentMethod == undefined)) {
-                    var newMethod = prevMethod;
+                var newMethod = '';
+                if ((currentMethod.length === 0) || (currentMethod === undefined)) {
+                    newMethod = prevMethod;
                 } else {
-                    var newMethod = currentMethod;
+                    newMethod = currentMethod;
                 }
 
-                if ((currentType.length == 0) || (currentType == undefined)) {
-                    var newType = prevType;
+                var newType = '';
+                if ((currentType.length === 0) || (currentType === undefined)) {
+                    newType = prevType;
                 } else {
-                    var newType = currentType;
+                    newType = currentType;
                 }
 
 
@@ -127,8 +132,6 @@ var rxGraphStages = [];
                     class: "current",
                     description: "test desc "
                 });
-
-
             }
 
 
@@ -146,7 +149,7 @@ var rxGraphStages = [];
             captureGraphAndSaveAsNewStage(currentAction, currentNodeId);
 
         }
-        if (message.action == "saveEdge") {
+        if (message.action === "saveEdge") {
 
             g.setEdge(message.content.edgeStart, message.content.edgeEnd, {
                 label: message.content.edgeLabel
@@ -239,7 +242,6 @@ function sendObjectToInspectedPage(message) {
     chrome.extension.sendMessage(message);
 }
 
-
 // Listen to change in storage data
 chrome.storage.onChanged.addListener(function (changes, namespace) {
     /*
@@ -259,3 +261,5 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
     });
 
 });
+
+

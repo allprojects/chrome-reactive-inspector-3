@@ -15,6 +15,17 @@ chrome.runtime.onConnect.addListener(function (port) {
             // this is a first message from devtools so let's set the tabId-port mapping
             tabId = message.tabId;
             tabPorts[tabId] = port;
+            // chrome.debugger.setBreakpointByUrl(2, 'http://localhost:63342/RxJs/letterrcount/index.js');
+            // chrome.debugger.getTargets(function(result){
+            //
+            //     console.log('Result!');
+            //     console.log("count: "+result.length);
+            //     for (var index = 0; index < result.length; index++) {
+            //         console.log(index+": "+result[index].url);
+            //
+            //     }
+            //
+            // });
         }
     });
 
@@ -23,7 +34,7 @@ chrome.runtime.onConnect.addListener(function (port) {
         // alert("background.js extensionListener");
 
         const port = sender.tab && tabPorts[sender.tab.id];
-        if (port && message.destination == "panel") {
+        if (port && message.destination === "panel") {
             // alert("background.js - destination is panel");
             port.postMessage(message);
         } else {
@@ -74,6 +85,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 //     return true;
 // });
 
+
 chrome.tabs.onRemoved.addListener(function (tabId) {
     delete tabPorts[tabId];
 });
@@ -81,3 +93,4 @@ chrome.tabs.onRemoved.addListener(function (tabId) {
 chrome.tabs.onReplaced.addListener(function(newTabId, oldTabId) {
     delete tabPorts[oldTabId];
 });
+

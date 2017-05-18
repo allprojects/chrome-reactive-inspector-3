@@ -11,6 +11,7 @@ var g = '',
     svg = '',
     svgGroup = '',
     inner = '';
+
 var initialiseGraph = function () {
     // Create the input graph
     g = new dagreD3.graphlib.Graph()
@@ -84,8 +85,8 @@ function redrawGraphToStage(stageToRedraw) {
 
     // Set up an SVG group so that we can translate the final graph.
     var svg = d3.select("svg"),
-        svgGroup = svg.append("g")
-    inner = svg.select("g");
+        svgGroup = svg.append("g"),
+        inner = svg.select("g");
 
     // Set up zoom support
     var zoom = d3.behavior.zoom().on("zoom", function () {
@@ -146,9 +147,9 @@ function redrawGraphToStage(stageToRedraw) {
         configIncludeFilesField.value = items.criconfigincludes || '';
     });
     chrome.storage.sync.get('cri_config_rec_status', function (items) {
-        if (items.cri_config_rec_status != undefined) {
+        if (items.cri_config_rec_status !== undefined) {
             var recStatusFromStorage = items.cri_config_rec_status;
-            if (recStatusFromStorage == 1) {
+            if (recStatusFromStorage === 1) {
                 $(this).data("rec-status", 1);
                 $(this).html('Pause Recording');
 
@@ -157,6 +158,14 @@ function redrawGraphToStage(stageToRedraw) {
                 $(this).html('Start Recording');
 
             }
+        }
+        // to fix the initial loading
+        else{
+            $(this).data("rec-status", 1);
+            $(this).html('Pause Recording');
+            chrome.storage.sync.set({
+                'cri_config_rec_status': 1
+            });
         }
 
 
@@ -178,7 +187,7 @@ function redrawGraphToStage(stageToRedraw) {
     configRecStatusButton.addEventListener('click', function (e) {
         var currentStatus = $(this).data("rec-status");
 
-        if (currentStatus == 1){
+        if (currentStatus === 1){
             $(this).data("rec-status",0);
             $(this).html('Start Recording');
             chrome.storage.sync.set({
@@ -193,9 +202,6 @@ function redrawGraphToStage(stageToRedraw) {
         }
     }, this);
 
-
-
-
     // Reset everything
     $("#cri-reset").click(function () {
         // 1 clear graph
@@ -208,7 +214,6 @@ function redrawGraphToStage(stageToRedraw) {
 
         // remove saved data
         rxGraphStages = [];
-        // redrawGraphToStage(0);
         d3.selectAll("svg g").remove();
         initialiseGraph();
     });

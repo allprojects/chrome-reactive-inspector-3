@@ -14,7 +14,8 @@
     "permissions": [
         "tabs",
         "storage",
-        "<all_urls>"
+        "<all_urls>",
+        "debugger"
     ],
     "content_scripts": [
         {
@@ -26,12 +27,12 @@
                 "helpers/comm_api_content-script.js",
                 "helpers/storage_api_general.js",
                 "libraries/jquery.js",
-                "myinst.js",
+                "myinst2.js",
                 "libraries/underscore.js",
                 "libraries/d3.v3.min.js",
                 "inject-for-instrumentation.js",
                 "Bacon.js",
-                "Rx.js",
+                "Rx_latest.js",
                 "myanalysis.js"
             ],
             "run_at": "document_start",

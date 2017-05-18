@@ -51,52 +51,80 @@ J$.analysis = {};
         // if it is so then send message to dev tool to record variable name etc..
         // this will log if any Observable being assigned to js variable
         this.write = function (iid, name, val, oldValue) {
+            if(iid === -1){
+                var temp_list = _.uniq(observableList)
+                // temp_list.forEach(function(obs) {
+                //     CriSubscriptRxObservableToLog(obs)
+                // });
 
-            var currentType = "";
-            console.log('writing variable operation intercept: ' + name);
-            if (val) {
-                console.log('type is : ' + val.constructor.name)
-                console.log('val id  is : ' + val.id)
-
-                // For Bacon and Rx-js
-                currentType = val.constructor.name;
-            }
-
-            var currentTypeInSmall = currentType.toLowerCase();
-            // todo what about property here , please check other types that we need to log here ..
-            if (currentTypeInSmall.search("observable") != -1) {
-
-                var currentNodeId = '';
-                // bacon observer already has the id attribute
-                if (val.hasOwnProperty("id")) {
-                    currentNodeId = val.id
-                } else {
-                    if (window.rxObsCounter !== undefined) {
-                        currentNodeId = ++window.rxObsCounter;
-                    }
-                    val.id = currentNodeId;
+                var getChild = function (observables_list) {
+                    var o = {}
+                    observables_list.forEach(function(obs){
+                        if(obs.prev_source){
+                            o = obs
+                        }
+                    })
+                    return o
+                }
+                // var last_child = getChild(temp_list)
+                // CriSubscriptRxObservableToLog(last_child)
+            }else{
+                var currentType = "";
+                console.log('writing variable operation intercept: ' + name);
+                if (val) {
+                    console.log('type is : ' + val.constructor.name)
+                    console.log('val id  is : ' + val.id)
+                    window.variables.push({'name': name, 'id': val.id });
+                    // For Bacon and Rx-js
+                    currentType = val.constructor.name;
                 }
 
+                var currentTypeInSmall = currentType.toLowerCase();
+                // todo what about property here , please check other types that we need to log here ..
+                if (currentTypeInSmall.search("observable") !== -1) {
 
-                // source location
-                var SourceLocation = window.iidToLocationMap[iid];
-                var SourceLocationLine = SourceLocation[1];
+                    var currentNodeId = '';
+                    // bacon observer already has the id attribute
+                    if (val.hasOwnProperty("id")) {
+                        currentNodeId = val.id
+                    } else {
+                        if (window.rxObsCounter !== undefined) {
+                            currentNodeId = ++window.rxObsCounter;
+                        }
+                        val.id = currentNodeId;
+                    }
 
-                sendObjectToDevTools({
-                    content: {
-                        'nodeId': currentNodeId,
-                        'nodeType': currentType,
-                        'nodeMethod': '',
-                        'nodeRef': name,
-                        'nodeValue': '',
-                        'sourceCodeLine': SourceLocationLine
-                    }, action: "saveNode", destination: "panel"
-                });
+                    // source location
+                    var SourceLocation = window.iidToLocationMap[iid];
+                    var SourceLocationLine = SourceLocation[1];
 
+                    sendObjectToDevTools({
+                        content: {
+                            'nodeId': currentNodeId,
+                            'nodeType': currentType,
+                            'nodeMethod': '',
+                            'nodeRef': name,
+                            'nodeValue': '',
+                            'sourceCodeLine': SourceLocationLine
+                        }, action: "saveNode", destination: "panel"
+                    });
+
+                    // Check if the Observable is of type create
+                    // if true, subscribe to it.
+                    if(val._type){
+                        if(val._type === 'createObservable'){
+                            delete val._type
+                            CriSubscriptRxObservableToLog(val)
+                        }
+
+                    }
+
+                }
+
+                showLocation(iid);
+
+                return val;
             }
-
-            showLocation(iid);
-            return val;
         };
 
         this.binary = function (iid, op, left, right, result_c) {
@@ -113,7 +141,7 @@ J$.analysis = {};
 
 // Bacon Analysis Start
 // User Bacon.spy to log all internal activities of Bacon
-if (Bacon != undefined) {
+if (Bacon !== undefined) {
     // https://baconjs.github.io/api.html#bacon-spy
     Bacon.spy(function (obs) {
 
@@ -169,7 +197,7 @@ if (Bacon != undefined) {
                 val = val.type;
             }
 
-            if (val.constructor == Array) {
+            if (val.constructor === Array) {
                 val = '';
             }
             //val = JSON.stringify(val);
@@ -196,18 +224,21 @@ if (Bacon != undefined) {
 // Bacon Analysis End
 
 // Rx-js v-5 Analysis Start
-if (Rx != undefined) {
+if (Rx !== undefined) {
 
     // Override LIFT of RX JS 5
     const _lift = Rx.Observable.prototype.lift;
     var rxObsCounter = 0;
+    var observableList = [];
+    var subscriberList = [];
+    var variables = [];
     Rx.Observable.prototype.lift = function (operator) {
 
         var sourceObs = this;
 
         // check type of source obs is it an ArrayObservable or what
         // append id if not exist
-        if (sourceObs.constructor.name == "ArrayObservable") {
+        if (sourceObs.constructor.name === "ArrayObservable") {
             sourceObs.forEach(function (entry) {
                 if (!(entry.hasOwnProperty("id"))) {
                     entry.id = ++rxObsCounter;
@@ -219,15 +250,7 @@ if (Rx != undefined) {
                 sourceObs.id = ++rxObsCounter;
             }
         }
-
-
         var resultantObservable = _lift.call(sourceObs, operator);
-          console.log("OPR");
-        console.log(operator);
-         console.log("sourceOBS");
-        console.log(sourceObs);
-        console.log("resultOBS");
-        console.log(resultantObservable);
         if (!(resultantObservable.hasOwnProperty("id"))) {
             resultantObservable.id = ++rxObsCounter;
         }
@@ -236,10 +259,115 @@ if (Rx != undefined) {
         return resultantObservable;
     };
 
+    // Todo
+    const _sub_lift = Rx.Subject.prototype.lift;
+    Rx.Subject.prototype.lift = function (operator) {
+
+        var resultantSubject = _sub_lift.call(operator);
+        // var subject = new AnonymousSubject(this, this);
+        // subject.operator = operator;
+        console.log(resultantSubject)
+        return resultantSubject;
+    };
+
+
+   // Todo
+    const create_observable = Rx.Observable.create;
+    Rx.Observable.create = function (observer) {
+        var resultantObservable = create_observable(observer)
+        console.log(resultantObservable)
+        resultantObservable.id = ++rxObsCounter;
+        resultantObservable._type = 'createObservable';
+        return resultantObservable
+
+    }
+
+    // Rx.Subscriber.prototype.next = function (value) {
+    //
+    //     debugger
+    // };
+    // TOdo
+    Rx.Subscriber.create = function (next, error, complete) {
+        var subscriber = new Subscriber(next, error, complete);
+        subscriber.syncErrorThrowable = false;
+        return subscriber;
+    };
+
+
+    /**
+     * This will override the subscribe method for Observable
+     * and add extra fields to each subscriber so that we can log the values in graph
+     * @param observerOrNext
+     * @param error
+     * @param complete
+     * @returns {*}
+     */
+    Rx.Observable.prototype.subscribe = function (observerOrNext, error, complete) {
+        var operator = this.operator;
+        var sink = Rx.toSubscriber(observerOrNext, error, complete);
+        sink._id = this.id;
+        sink._operatorName = operator;
+        var obsType = '';
+        if (this.constructor.name) {
+            obsType = this.constructor.name;
+        }
+        sink.obsType = obsType;
+
+        if (operator) {
+            operator.call(sink, this.source);
+        }
+        else {
+            sink.add(this._trySubscribe(sink));
+        }
+        if (sink.syncErrorThrowable) {
+            sink.syncErrorThrowable = false;
+            if (sink.syncErrorThrown) {
+                throw sink.syncErrorValue;
+            }
+        }
+
+        //Todo Think of what to do with the list of subscribers. Help anywhere or just remove it?
+        subscriberList.push(sink)
+        return sink;
+    };
+
+
+    /**
+     * This will override the next method to get the values in each subscriber
+     * and log the values to graph.
+     * @param value
+     */
+    Rx.Subscriber.prototype.next = function (value) {
+        if (!this.isStopped) {
+
+            var nextValue = ''
+            //Todo check for other type of events or similar kind
+            switch(value.constructor.name){
+                case 'KeyboardEvent':
+                    nextValue = value.currentTarget.value;
+                    break;
+                default:
+                    nextValue = value;
+                    break;
+            }
+
+            sendObjectToDevTools({
+                content: {
+                    'nodeId': this._id,
+                    'nodeType': this.obsType,
+                    'nodeMethod': '',
+                    'nodeRef': '',
+                    'nodeValue': nextValue,
+                    'sourceCodeLine': ''
+                }, action: "saveNode", destination: "panel"
+            });
+            this._next(value);
+        }
+    };
+
     /**
      * This method subscribe to given observable and send message to dev tool on value received
      * @param obs
-     * @constructor
      */
     function CriSubscriptRxObservableToLog(obs) {
 
@@ -292,7 +420,6 @@ if (Rx != undefined) {
      * @param operator
      * @param obsSource
      * @param obsResult
-     * @constructor
      */
     function CriLogObserverFactory(operator, obsSource, obsResult) {
         console.log("CriLogObserverFactory");
@@ -323,17 +450,23 @@ if (Rx != undefined) {
             content: {
                 'nodeId': obsResult.id,
                 'nodeType': resultNodeType,
-                'nodeMethod': operator.constructor.name,
+                'nodeMethod': operName,
                 'nodeRef': '',
                 'nodeValue': '',
                 'sourceCodeLine': ''
             }, action: "saveNode", destination: "panel"
         });
 
+        var name = '';
+        if(obsSource.sourceObj){
+            var res = _.find(window.variables, {id:obsSource.sourceObj.id});
+            name = res.name;
+        }
+
 
         // source obs are the dependencies of resultant obs
 
-        if (obsSource.constructor.name == "ArrayObservable") {
+        if (obsSource.constructor.name === "ArrayObservable") {
             obsSource.forEach(function (entry) {
 
                 sendObjectToDevTools({
@@ -353,7 +486,8 @@ if (Rx != undefined) {
                     destination: "panel"
                 });
 
-                CriSubscriptRxObservableToLog(entry);
+                observableList.push(entry);
+                // CriSubscriptRxObservableToLog(entry);
 
             });
 
@@ -363,7 +497,7 @@ if (Rx != undefined) {
                     'nodeId': obsSource.id,
                     'nodeType': sourceNodeType,
                     'nodeMethod': '',
-                    'nodeRef': '',
+                    'nodeRef': name,
                     'nodeValue': '',
                     'sourceCodeLine': ''
                 }, action: "saveNode", destination: "panel"
@@ -373,9 +507,19 @@ if (Rx != undefined) {
                 action: "saveEdge",
                 destination: "panel"
             });
-            CriSubscriptRxObservableToLog(obsSource);
+            // CriSubscriptRxObservableToLog(obsSource);
+            // if(!(_.includes(observableList, obsSource))){
+            //     observableList.push(obsSource);
+            // }
+
         }
-        CriSubscriptRxObservableToLog(obsResult);
+        // CriSubscriptRxObservableToLog(obsResult);
+        // if(!(_.includes(observableList, obsResult))){
+        //     obsResult.prev_source = observableList[observableList.length - 1]
+        //     observableList.push(obsResult);
+        // }
     }
+
+
 }
 // Rx-js Analysis End
