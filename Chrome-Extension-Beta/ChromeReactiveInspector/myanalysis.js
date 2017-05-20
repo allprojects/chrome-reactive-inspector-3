@@ -302,9 +302,10 @@ if (Rx !== undefined) {
      * @param complete
      * @returns {*}
      */
+    var observable_subscribe = Rx.Observable.prototype.subscribe;
     Rx.Observable.prototype.subscribe = function (observerOrNext, error, complete) {
         var operator = this.operator;
-        var sink = Rx.toSubscriber(observerOrNext, error, complete);
+        var sink = observable_subscribe.call(this, observerOrNext, error, complete);
         sink._id = this.id;
         sink._operatorName = operator;
         var obsType = '';
@@ -312,19 +313,6 @@ if (Rx !== undefined) {
             obsType = this.constructor.name;
         }
         sink.obsType = obsType;
-
-        if (operator) {
-            operator.call(sink, this.source);
-        }
-        else {
-            sink.add(this._trySubscribe(sink));
-        }
-        if (sink.syncErrorThrowable) {
-            sink.syncErrorThrowable = false;
-            if (sink.syncErrorThrown) {
-                throw sink.syncErrorValue;
-            }
-        }
 
         //Todo Think of what to do with the list of subscribers. Help anywhere or just remove it?
         subscriberList.push(sink)

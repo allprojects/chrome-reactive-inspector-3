@@ -15862,7 +15862,6 @@
     exports.AjaxResponse = AjaxResponse;
     exports.AjaxError = AjaxError;
     exports.AjaxTimeoutError = AjaxTimeoutError;
-    exports.toSubscriber = toSubscriber;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

@@ -23,16 +23,18 @@ function getData(url) {
 
 //const source = get('http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson');
 
-Rx.Observable.interval(10000).flatMap(getData).flatMap(function (result) {
+Rx.Observable.interval(50000).flatMap(getData).flatMap(function (result) {
   var jsres = JSON.parse(result);
   console.log(jsres.features);
   return Rx.Observable.from(jsres.features);
 }).distinct(function (quake) {
+  console.log(quake)
   return quake.properties.code;
 }).subscribe(function (response) {
-  return console.log(response);
+    return console.log(response);
 }, function (error) {
-  return console.error(error);
+    return console.error(error);
 }, function () {
-  return console.log('done');
+    return console.log('done');
 });
+
