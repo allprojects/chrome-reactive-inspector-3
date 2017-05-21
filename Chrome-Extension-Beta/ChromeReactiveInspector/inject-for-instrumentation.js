@@ -21,7 +21,7 @@ var shouldReactiveDebuggerRun = true;
 // Later this should be overwritten from options page of extension
 var filesShouldNotInstrument = [ "underscore.js", "hammer.js" , "d3.v3.min.js" ];
 
-var filesShouldNotInclude = ["Rx.js", "Bacon.js", "Bacon.UI.js", "jquery.js", "rx.all.js", "jquery-2.1.4.js"];
+var filesShouldNotInclude = ["Rx.js", "Rx_latest.js", "Bacon.js", "Bacon.UI.js", "jquery.js", "rx.all.js", "jquery-2.1.4.js"];
 var fileReadOver = false;
 request.onload = function (event) {
 

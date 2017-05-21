@@ -111,13 +111,13 @@ J$.analysis = {};
 
                     // Check if the Observable is of type create
                     // if true, subscribe to it.
-                    if(val._type){
-                        if(val._type === 'createObservable'){
-                            delete val._type
-                            CriSubscriptRxObservableToLog(val)
-                        }
-
-                    }
+                    // if(val._type){
+                    //     if(val._type === 'createObservable'){
+                    //         delete val._type
+                    //         CriSubscriptRxObservableToLog(val)
+                    //     }
+                    //
+                    // }
 
                 }
 
@@ -238,18 +238,18 @@ if (Rx !== undefined) {
 
         // check type of source obs is it an ArrayObservable or what
         // append id if not exist
-        if (sourceObs.constructor.name === "ArrayObservable") {
-            sourceObs.forEach(function (entry) {
-                if (!(entry.hasOwnProperty("id"))) {
-                    entry.id = ++rxObsCounter;
-                }
-            });
-        } else {
+        // if (sourceObs.constructor.name === "ArrayObservable") {
+        //     sourceObs.forEach(function (entry) {
+        //         if (!(entry.hasOwnProperty("id"))) {
+        //             entry.id = ++rxObsCounter;
+        //         }
+        //     });
+        // } else {
 
             if (!(sourceObs.hasOwnProperty("id"))) {
                 sourceObs.id = ++rxObsCounter;
             }
-        }
+        // }
         var resultantObservable = _lift.call(sourceObs, operator);
         if (!(resultantObservable.hasOwnProperty("id"))) {
             resultantObservable.id = ++rxObsCounter;
@@ -302,10 +302,9 @@ if (Rx !== undefined) {
      * @param complete
      * @returns {*}
      */
-    var observable_subscribe = Rx.Observable.prototype.subscribe;
     Rx.Observable.prototype.subscribe = function (observerOrNext, error, complete) {
         var operator = this.operator;
-        var sink = observable_subscribe.call(this, observerOrNext, error, complete);
+        var sink = Rx.toSubscriber(observerOrNext, error, complete);
         sink._id = this.id;
         sink._operatorName = operator;
         var obsType = '';
@@ -314,8 +313,21 @@ if (Rx !== undefined) {
         }
         sink.obsType = obsType;
 
+        if (operator) {
+            operator.call(sink, this.source);
+        }
+        else {
+            sink.add(this._trySubscribe(sink));
+        }
+        if (sink.syncErrorThrowable) {
+            sink.syncErrorThrowable = false;
+            if (sink.syncErrorThrown) {
+                throw sink.syncErrorValue;
+            }
+        }
+
         //Todo Think of what to do with the list of subscribers. Help anywhere or just remove it?
-        subscriberList.push(sink)
+        subscriberList.push(sink);
         return sink;
     };
 
@@ -329,14 +341,19 @@ if (Rx !== undefined) {
         if (!this.isStopped) {
 
             var nextValue = ''
-            //Todo check for other type of events or similar kind
-            switch(value.constructor.name){
-                case 'KeyboardEvent':
-                    nextValue = value.currentTarget.value;
-                    break;
-                default:
-                    nextValue = value;
-                    break;
+            if(value){
+                //Todo check for other type of events or similar kind
+                switch(value.constructor.name){
+                    case 'KeyboardEvent':
+                        nextValue = value.currentTarget.value;
+                        break;
+                    case 'Number':
+                        nextValue = JSON.stringify(value);
+                        break;
+                    default:
+                        nextValue = value;
+                        break;
+                }
             }
 
             sendObjectToDevTools({
@@ -454,32 +471,32 @@ if (Rx !== undefined) {
 
         // source obs are the dependencies of resultant obs
 
-        if (obsSource.constructor.name === "ArrayObservable") {
-            obsSource.forEach(function (entry) {
-
-                sendObjectToDevTools({
-                    content: {
-                        'nodeId': entry.id,
-                        'nodeType': sourceNodeType,
-                        'nodeMethod': '',
-                        'nodeRef': '',
-                        'nodeValue': '',
-                        'sourceCodeLine': ''
-                    }, action: "saveNode", destination: "panel"
-                });
-
-                sendObjectToDevTools({
-                    content: {"edgeStart": entry.id, "edgeEnd": obsResult.id, "edgeLabel": operName},
-                    action: "saveEdge",
-                    destination: "panel"
-                });
-
-                observableList.push(entry);
-                // CriSubscriptRxObservableToLog(entry);
-
-            });
-
-        } else {
+        // if (obsSource.constructor.name === "ArrayObservable") {
+        //     obsSource.forEach(function (entry) {
+        //
+        //         sendObjectToDevTools({
+        //             content: {
+        //                 'nodeId': entry.id,
+        //                 'nodeType': sourceNodeType,
+        //                 'nodeMethod': '',
+        //                 'nodeRef': '',
+        //                 'nodeValue': '',
+        //                 'sourceCodeLine': ''
+        //             }, action: "saveNode", destination: "panel"
+        //         });
+        //
+        //         sendObjectToDevTools({
+        //             content: {"edgeStart": entry.id, "edgeEnd": obsResult.id, "edgeLabel": operName},
+        //             action: "saveEdge",
+        //             destination: "panel"
+        //         });
+        //
+        //         observableList.push(entry);
+        //         // CriSubscriptRxObservableToLog(entry);
+        //
+        //     });
+        //
+        // } else {
             sendObjectToDevTools({
                 content: {
                     'nodeId': obsSource.id,
@@ -500,7 +517,7 @@ if (Rx !== undefined) {
             //     observableList.push(obsSource);
             // }
 
-        }
+        // }
         // CriSubscriptRxObservableToLog(obsResult);
         // if(!(_.includes(observableList, obsResult))){
         //     obsResult.prev_source = observableList[observableList.length - 1]
