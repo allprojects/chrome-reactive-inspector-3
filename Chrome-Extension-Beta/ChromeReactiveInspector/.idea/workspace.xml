@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e3c07cc8-9ded-41a8-b9ce-40180b5a70d5" name="Default" comment="Added necessary modification to library and added support to 'From' operator and tested with 'Map' operator as well( Test case 5">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/ChromeReactiveDebugger.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/deployment.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Rx_latest.js" afterPath="$PROJECT_DIR$/Rx_latest.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inject-for-instrumentation.js" afterPath="$PROJECT_DIR$/inject-for-instrumentation.js" />
+    <list default="true" id="e3c07cc8-9ded-41a8-b9ce-40180b5a70d5" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myanalysis.js" afterPath="$PROJECT_DIR$/myanalysis.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../TestApps/RxJs/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../../TestApps/RxJs/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../TestApps/RxJs/letterrcount/index.js" afterPath="$PROJECT_DIR$/../../TestApps/RxJs/letterrcount/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../TestApps/RxJs/letterrcount/lettercount.html" afterPath="$PROJECT_DIR$/../../TestApps/RxJs/letterrcount/lettercount.html" />
     </list>
     <ignored path="ChromeReactiveDebugger.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -44,7 +37,7 @@
       <file leaf-file-name="comm_api_panel.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/helpers/comm_api_panel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1140">
+            <state relative-caret-position="969">
               <caret line="65" column="0" lean-forward="false" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
@@ -56,13 +49,13 @@
       <file leaf-file-name="myanalysis.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/myanalysis.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="137">
-              <caret line="357" column="0" lean-forward="true" selection-start-line="357" selection-start-column="0" selection-end-line="357" selection-end-column="0" />
+            <state relative-caret-position="422">
+              <caret line="513" column="0" lean-forward="false" selection-start-line="513" selection-start-column="0" selection-end-line="513" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
-                <element signature="e#5328#7684#0" expanded="false" />
-                <element signature="e#8975#9210#0" expanded="false" />
-                <element signature="e#12481#13666#0" expanded="false" />
+                <element signature="e#5565#7921#0" expanded="false" />
+                <element signature="e#9626#9861#0" expanded="false" />
+                <element signature="e#13340#14525#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -71,7 +64,7 @@
       <file leaf-file-name="Rx_latest.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Rx_latest.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="16100">
+            <state relative-caret-position="13685">
               <caret line="805" column="52" lean-forward="false" selection-start-line="805" selection-start-column="42" selection-end-line="805" selection-end-column="52" />
               <folding />
             </state>
@@ -419,7 +412,8 @@
       <workItem from="1495011957138" duration="6699000" />
       <workItem from="1495098136695" duration="17991000" />
       <workItem from="1495272601809" duration="6022000" />
-      <workItem from="1495364037002" duration="3725000" />
+      <workItem from="1495364037002" duration="13427000" />
+      <workItem from="1495615688872" duration="5860000" />
     </task>
     <task id="LOCAL-00001" summary="Working code and my hard work of one week.">
       <created>1495140708127</created>
@@ -435,17 +429,25 @@
       <option name="project" value="LOCAL" />
       <updated>1495274700491</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added necessary modification to library and added support to 'From' operator and tested with 'Map' operator as well( Test case 5)">
+      <created>1495370132535</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1495370132535</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="283099000" />
+    <option name="totallyTimeSpent" value="298661000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="-4" width="1313" height="772" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25651145" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26042485" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15325077" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -517,7 +519,8 @@
     </ignored-roots>
     <MESSAGE value="Working code and my hard work of one week." />
     <MESSAGE value="Remove unnecessary modification in library file. and added examples" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remove unnecessary modification in library file. and added examples" />
+    <MESSAGE value="Added necessary modification to library and added support to 'From' operator and tested with 'Map' operator as well( Test case 5)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added necessary modification to library and added support to 'From' operator and tested with 'Map' operator as well( Test case 5)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -701,19 +704,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/helpers/comm_api_panel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1140">
-          <caret line="65" column="0" lean-forward="false" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Rx_latest.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16100">
+        <state relative-caret-position="13685">
           <caret line="805" column="52" lean-forward="false" selection-start-line="805" selection-start-column="42" selection-end-line="805" selection-end-column="52" />
           <folding />
         </state>
@@ -723,19 +716,28 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="400">
           <caret line="23" column="48" lean-forward="false" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
-          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpers/comm_api_panel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="969">
+          <caret line="65" column="0" lean-forward="false" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/myanalysis.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
-          <caret line="357" column="0" lean-forward="true" selection-start-line="357" selection-start-column="0" selection-end-line="357" selection-end-column="0" />
+        <state relative-caret-position="422">
+          <caret line="513" column="0" lean-forward="false" selection-start-line="513" selection-start-column="0" selection-end-line="513" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <element signature="e#5328#7684#0" expanded="false" />
-            <element signature="e#8975#9210#0" expanded="false" />
-            <element signature="e#12481#13666#0" expanded="false" />
+            <element signature="e#5565#7921#0" expanded="false" />
+            <element signature="e#9626#9861#0" expanded="false" />
+            <element signature="e#13340#14525#0" expanded="false" />
           </folding>
         </state>
       </provider>

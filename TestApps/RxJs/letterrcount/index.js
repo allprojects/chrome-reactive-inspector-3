@@ -1,5 +1,6 @@
   /**
    * Test case 1
+   * Status Done
    */
   // var $toCount = document.querySelector('#toCount');
   // var $result = document.querySelector('#result');
@@ -12,7 +13,7 @@
   //   console.log(text);
   //   this.innerHTML = text;
   // }
-  //
+
   // source.subscribe(setHtml.bind($result));
   //
   //
@@ -28,6 +29,7 @@
   /**
    * Test case 2
    * verify Dependency graph when observable is created and subscribed without operators.
+   * Status - Done
    */
   /*
   var observable = Rx.Observable.create(function (observer) {
@@ -52,6 +54,7 @@
 
   /**
    * Test case 3
+   * Status - Yet to  work on this
    */
 
   /*
@@ -83,13 +86,14 @@
 
   /**
    * Test case 4
+   * Status - Done
    */
   /*
   var evenNumbers = Rx.Observable.create(function(observer) {
           var value = 0;
           var interval = setInterval(function(){
               if(value % 2 === 0){
-                  observer.next(value / 2);
+                  observer.next(value);
               }
               value++;
           }, 1000);
@@ -97,10 +101,10 @@
           return function(){clearInterval(interval)};
       });
   //output: 0...2...4...6...8
-  var subscribe = evenNumbers.subscribe(function(val) {console.log(val)});
+  var custom_subscribe = evenNumbers.subscribe(function(val) {console.log(val)});
   //unsubscribe after 10 seconds
   setTimeout(function(){
-      subscribe.unsubscribe();
+      custom_subscribe.unsubscribe();
   }, 10000);
 
   */
@@ -109,15 +113,31 @@
    * Support for from Observable
    * Test case 5
    */
+  /*
   var arraySource = Rx.Observable.from([1,2,3,4,5])
       .map(function (x) {
-          if(x > 2){
+          // if(x > 2){
               return x;
-          }
+          // }
       });
   //output: 1,2,3,4,5
   var subscribe = arraySource.subscribe(function(val){ return val });
+  */
 
+  /**
+   * Support for of Observable
+   * Test case 6
+   * status Done
+   */
+  /*
+  var numbers = Rx.Observable.of(10, 20, 30);
+  var letters = Rx.Observable.of('a', 'b', 'c');
+  // var interval = Rx.Observable.interval(1000);
+  var result = numbers.concat(letters);
+  // setTimeout(function(){
+      result.subscribe(function(x) {console.log(x)});
+  // }, 10000);
+  */
 
   // var a = 1
   // var b = 2

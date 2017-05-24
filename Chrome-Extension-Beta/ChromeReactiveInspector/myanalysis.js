@@ -82,43 +82,43 @@ J$.analysis = {};
                 var currentTypeInSmall = currentType.toLowerCase();
                 // todo what about property here , please check other types that we need to log here ..
                 if (currentTypeInSmall.search("observable") !== -1) {
-
-                    var currentNodeId = '';
-                    // bacon observer already has the id attribute
-                    if (val.hasOwnProperty("id")) {
-                        currentNodeId = val.id
-                    } else {
-                        if (window.rxObsCounter !== undefined) {
-                            currentNodeId = ++window.rxObsCounter;
+                    if(!(val.hasOwnProperty('operator') && val.operator === undefined)){
+                        var currentNodeId = '';
+                        // bacon observer already has the id attribute
+                        if (val.hasOwnProperty("id")) {
+                            currentNodeId = val.id
+                        } else {
+                            if (window.rxObsCounter !== undefined) {
+                                currentNodeId = ++window.rxObsCounter;
+                            }
+                            val.id = currentNodeId;
                         }
-                        val.id = currentNodeId;
+
+                        // source location
+                        var SourceLocation = window.iidToLocationMap[iid];
+                        var SourceLocationLine = SourceLocation[1];
+
+                        sendObjectToDevTools({
+                            content: {
+                                'nodeId': currentNodeId,
+                                'nodeType': currentType,
+                                'nodeMethod': '',
+                                'nodeRef': name,
+                                'nodeValue': '',
+                                'sourceCodeLine': SourceLocationLine
+                            }, action: "saveNode", destination: "panel"
+                        });
+
+                        // Check if the Observable is of type create
+                        // if true, subscribe to it.
+                        // if(val._type){
+                        //     if(val._type === 'createObservable'){
+                        //         delete val._type
+                        //         CriSubscriptRxObservableToLog(val)
+                        //     }
+                        //
+                        // }
                     }
-
-                    // source location
-                    var SourceLocation = window.iidToLocationMap[iid];
-                    var SourceLocationLine = SourceLocation[1];
-
-                    sendObjectToDevTools({
-                        content: {
-                            'nodeId': currentNodeId,
-                            'nodeType': currentType,
-                            'nodeMethod': '',
-                            'nodeRef': name,
-                            'nodeValue': '',
-                            'sourceCodeLine': SourceLocationLine
-                        }, action: "saveNode", destination: "panel"
-                    });
-
-                    // Check if the Observable is of type create
-                    // if true, subscribe to it.
-                    // if(val._type){
-                    //     if(val._type === 'createObservable'){
-                    //         delete val._type
-                    //         CriSubscriptRxObservableToLog(val)
-                    //     }
-                    //
-                    // }
-
                 }
 
                 showLocation(iid);
@@ -235,27 +235,30 @@ if (Rx !== undefined) {
     Rx.Observable.prototype.lift = function (operator) {
 
         var sourceObs = this;
-
-        // check type of source obs is it an ArrayObservable or what
-        // append id if not exist
-        // if (sourceObs.constructor.name === "ArrayObservable") {
-        //     sourceObs.forEach(function (entry) {
-        //         if (!(entry.hasOwnProperty("id"))) {
-        //             entry.id = ++rxObsCounter;
-        //         }
-        //     });
-        // } else {
-
-            if (!(sourceObs.hasOwnProperty("id"))) {
-                sourceObs.id = ++rxObsCounter;
-            }
-        // }
         var resultantObservable = _lift.call(sourceObs, operator);
-        if (!(resultantObservable.hasOwnProperty("id"))) {
-            resultantObservable.id = ++rxObsCounter;
-        }
+        if(operator){
+            // check type of source obs is it an ArrayObservable or what
+            // append id if not exist
+            if (sourceObs.constructor.name === "ArrayObservable") {
+                for(var i=0; i<sourceObs.array.length; i++){
+                    // comparing again to check if its a 'ArrayObservable' because both
+                    // Array observable and concat(which returns ArrayObservable) and we need to avaoid
+                    // adding id property to array values.
+                    if(sourceObs.array[i].constructor.name === "ArrayObservable" && !sourceObs.array[i].hasOwnProperty("id")){
+                        sourceObs.array[i].id = ++rxObsCounter;
+                    }
+                }
+            } else {
 
-        CriLogObserverFactory(operator, sourceObs, resultantObservable);
+                if (!(sourceObs.hasOwnProperty("id"))) {
+                    sourceObs.id = ++rxObsCounter;
+                }
+            }
+            if (!(resultantObservable.hasOwnProperty("id"))) {
+                resultantObservable.id = ++rxObsCounter;
+            }
+            CriLogObserverFactory(operator, sourceObs, resultantObservable);
+        }
         return resultantObservable;
     };
 
@@ -337,13 +340,15 @@ if (Rx !== undefined) {
      * and log the values to graph.
      * @param value
      */
+    var constructorName = ''
     Rx.Subscriber.prototype.next = function (value) {
         if (!this.isStopped) {
 
-            var nextValue = ''
+            var nextValue = '';
             if(value){
+                constructorName = value.constructor.name
                 //Todo check for other type of events or similar kind
-                switch(value.constructor.name){
+                switch(constructorName){
                     case 'KeyboardEvent':
                         nextValue = value.currentTarget.value;
                         break;
@@ -354,18 +359,20 @@ if (Rx !== undefined) {
                         nextValue = value;
                         break;
                 }
+                if(this._id){
+                    sendObjectToDevTools({
+                        content: {
+                            'nodeId': this._id,
+                            'nodeType': this.obsType,
+                            'nodeMethod': '',
+                            'nodeRef': '',
+                            'nodeValue': nextValue,
+                            'sourceCodeLine': ''
+                        }, action: "saveNode", destination: "panel"
+                    });
+                }
             }
 
-            sendObjectToDevTools({
-                content: {
-                    'nodeId': this._id,
-                    'nodeType': this.obsType,
-                    'nodeMethod': '',
-                    'nodeRef': '',
-                    'nodeValue': nextValue,
-                    'sourceCodeLine': ''
-                }, action: "saveNode", destination: "panel"
-            });
             this._next(value);
         }
     };
@@ -428,10 +435,6 @@ if (Rx !== undefined) {
      */
     function CriLogObserverFactory(operator, obsSource, obsResult) {
         console.log("CriLogObserverFactory");
-        //console.log(obsSource.constructor.name);
-        //console.log(obsSource);
-        //console.log(obsResult.constructor.name);
-        //console.log(obsResult);
 
         var operName = "";
         if (operator) {
@@ -471,32 +474,28 @@ if (Rx !== undefined) {
 
         // source obs are the dependencies of resultant obs
 
-        // if (obsSource.constructor.name === "ArrayObservable") {
-        //     obsSource.forEach(function (entry) {
-        //
-        //         sendObjectToDevTools({
-        //             content: {
-        //                 'nodeId': entry.id,
-        //                 'nodeType': sourceNodeType,
-        //                 'nodeMethod': '',
-        //                 'nodeRef': '',
-        //                 'nodeValue': '',
-        //                 'sourceCodeLine': ''
-        //             }, action: "saveNode", destination: "panel"
-        //         });
-        //
-        //         sendObjectToDevTools({
-        //             content: {"edgeStart": entry.id, "edgeEnd": obsResult.id, "edgeLabel": operName},
-        //             action: "saveEdge",
-        //             destination: "panel"
-        //         });
-        //
-        //         observableList.push(entry);
-        //         // CriSubscriptRxObservableToLog(entry);
-        //
-        //     });
-        //
-        // } else {
+        if (obsSource.constructor.name === "ArrayObservable") {
+            for(var i=0; i<obsSource.array.length; i++){
+                // sendObjectToDevTools({
+                //     content: {
+                //         'nodeId': obsSource.array[i].id,
+                //         'nodeType': sourceNodeType,
+                //         'nodeMethod': '',
+                //         'nodeRef': '',
+                //         'nodeValue': '',
+                //         'sourceCodeLine': ''
+                //     }, action: "saveNode", destination: "panel"
+                // });
+                if(obsSource.array[i].constructor.name === "ArrayObservable"){
+                    sendObjectToDevTools({
+                        content: {"edgeStart": obsSource.array[i].id, "edgeEnd": obsResult.id, "edgeLabel": operName},
+                        action: "saveEdge",
+                        destination: "panel"
+                    });
+                }
+
+            }
+        } else {
             sendObjectToDevTools({
                 content: {
                     'nodeId': obsSource.id,
@@ -512,17 +511,7 @@ if (Rx !== undefined) {
                 action: "saveEdge",
                 destination: "panel"
             });
-            // CriSubscriptRxObservableToLog(obsSource);
-            // if(!(_.includes(observableList, obsSource))){
-            //     observableList.push(obsSource);
-            // }
-
-        // }
-        // CriSubscriptRxObservableToLog(obsResult);
-        // if(!(_.includes(observableList, obsResult))){
-        //     obsResult.prev_source = observableList[observableList.length - 1]
-        //     observableList.push(obsResult);
-        // }
+        }
     }
 
 
