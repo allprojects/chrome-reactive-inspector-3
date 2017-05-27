@@ -1,5 +1,10 @@
 // Search Wikipedia for a given term
 
+/**
+ * This test case is verified on May 25th
+ * @param query
+ */
+
 
 function searchWikipedia(query) {
     return jQuery.get(

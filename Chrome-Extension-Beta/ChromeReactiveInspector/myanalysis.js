@@ -98,16 +98,7 @@ J$.analysis = {};
                         var SourceLocation = window.iidToLocationMap[iid];
                         var SourceLocationLine = SourceLocation[1];
 
-                        sendObjectToDevTools({
-                            content: {
-                                'nodeId': currentNodeId,
-                                'nodeType': currentType,
-                                'nodeMethod': '',
-                                'nodeRef': name,
-                                'nodeValue': '',
-                                'sourceCodeLine': SourceLocationLine
-                            }, action: "saveNode", destination: "panel"
-                        });
+                        logNodeData(currentNodeId, currentType, '', name, '', SourceLocationLine);
 
                         // Check if the Observable is of type create
                         // if true, subscribe to it.
@@ -160,25 +151,11 @@ if (Bacon !== undefined) {
         }
 
         var currentObsId = obs.id;
-        sendObjectToDevTools({
-            content: {
-                'nodeId': currentObsId,
-                'nodeType': nodeType,
-                'nodeMethod': nodeMethod,
-                'nodeRef': '',
-                'nodeValue': '',
-                'sourceCodeLine': ''
-            }, action: "saveNode", destination: "panel"
-        });
+        logNodeData(currentObsId, nodeType, nodeMethod, '', '', '');
 
         // Log Observable dependencies
         obs.desc.deps().forEach(function (entry) {
-            sendObjectToDevTools({
-                content: {"edgeStart": entry.id, "edgeEnd": obs.id, "edgeLabel":nodeMethod},
-                action: "saveEdge",
-                destination: "panel"
-            });
-
+            logEdgeData(entry.id, obs.id, nodeMethod)
         });
 
         // Log observable value
@@ -202,16 +179,7 @@ if (Bacon !== undefined) {
             }
             //val = JSON.stringify(val);
 
-            sendObjectToDevTools({
-                content: {
-                    'nodeId': currentObsId,
-                    'nodeType': '',
-                    'nodeMethod': '',
-                    'nodeRef': '',
-                    'nodeValue': val,
-                    'sourceCodeLine': ''
-                }, action: "saveNode", destination: "panel"
-            });
+            logNodeData(currentObsId, '', '', '', val, '');
 
         });
 
@@ -232,19 +200,23 @@ if (Rx !== undefined) {
     var observableList = [];
     var subscriberList = [];
     var variables = [];
+    /**
+     * Below operators do Flattens an Observable-of-Observables
+     * @type {Array}
+     */
+    var flattenOperators = ['MergeAllOperator', 'CombineLatestOperator', 'SwitchFirstOperator', 'MergeMapOperator',
+        'MergeMapToOperator', 'SwitchMapToOperator', 'SwitchMapOperator', 'ZipOperator'];
+
     Rx.Observable.prototype.lift = function (operator) {
 
         var sourceObs = this;
         var resultantObservable = _lift.call(sourceObs, operator);
         if(operator){
-            // check type of source obs is it an ArrayObservable or what
+            // check type of source obs is it an ArrayObservable or not
             // append id if not exist
-            if (sourceObs.constructor.name === "ArrayObservable") {
+            if (sourceObs.constructor.name === "ArrayObservable" && flattenOperators.includes(operator.constructor.name)) {
                 for(var i=0; i<sourceObs.array.length; i++){
-                    // comparing again to check if its a 'ArrayObservable' because both
-                    // Array observable and concat(which returns ArrayObservable) and we need to avaoid
-                    // adding id property to array values.
-                    if(sourceObs.array[i].constructor.name === "ArrayObservable" && !sourceObs.array[i].hasOwnProperty("id")){
+                    if(!sourceObs.array[i].hasOwnProperty("id")){
                         sourceObs.array[i].id = ++rxObsCounter;
                     }
                 }
@@ -283,7 +255,7 @@ if (Rx !== undefined) {
         resultantObservable._type = 'createObservable';
         return resultantObservable
 
-    }
+    };
 
     // Rx.Subscriber.prototype.next = function (value) {
     //
@@ -345,34 +317,36 @@ if (Rx !== undefined) {
         if (!this.isStopped) {
 
             var nextValue = '';
-            if(value){
-                constructorName = value.constructor.name
-                //Todo check for other type of events or similar kind
-                switch(constructorName){
-                    case 'KeyboardEvent':
-                        nextValue = value.currentTarget.value;
-                        break;
-                    case 'Number':
-                        nextValue = JSON.stringify(value);
-                        break;
-                    default:
-                        nextValue = value;
-                        break;
-                }
-                if(this._id){
-                    sendObjectToDevTools({
-                        content: {
-                            'nodeId': this._id,
-                            'nodeType': this.obsType,
-                            'nodeMethod': '',
-                            'nodeRef': '',
-                            'nodeValue': nextValue,
-                            'sourceCodeLine': ''
-                        }, action: "saveNode", destination: "panel"
-                    });
-                }
-            }
 
+            // Check if it has a custom _id else continue
+            if(this._id){
+                if(value || value === 0){
+                    constructorName = value.constructor.name
+                    //Todo check for other type of events or similar kind
+                    switch(constructorName){
+                        case 'KeyboardEvent':
+                            nextValue = value.currentTarget.value;
+                            break;
+                        case 'Number':
+                            nextValue = JSON.stringify(value);
+                            break;
+                        case 'Array':
+                            nextValue = JSON.stringify(value);
+                            break;
+                        case 'Object':
+                            if(value.hasOwnProperty('type') &&  value.type === 'keyup')
+                                nextValue = value.key;
+                            else
+                                nextValue = JSON.stringify(value);
+                            break;
+                        default:
+                            nextValue = JSON.stringify(value);
+                            break;
+                    }
+                    logNodeData(this._id, this.obsType, '', '', nextValue, '');
+                }
+
+            }
             this._next(value);
         }
     };
@@ -454,16 +428,7 @@ if (Rx !== undefined) {
         }
         // create nodes for source and des obs
 
-        sendObjectToDevTools({
-            content: {
-                'nodeId': obsResult.id,
-                'nodeType': resultNodeType,
-                'nodeMethod': operName,
-                'nodeRef': '',
-                'nodeValue': '',
-                'sourceCodeLine': ''
-            }, action: "saveNode", destination: "panel"
-        });
+        logNodeData(obsResult.id, resultNodeType, '', operName, '', '');
 
         var name = '';
         if(obsSource.sourceObj){
@@ -474,46 +439,46 @@ if (Rx !== undefined) {
 
         // source obs are the dependencies of resultant obs
 
-        if (obsSource.constructor.name === "ArrayObservable") {
+        if (obsSource.constructor.name === "ArrayObservable" && flattenOperators.includes(operName)) {
             for(var i=0; i<obsSource.array.length; i++){
-                // sendObjectToDevTools({
-                //     content: {
-                //         'nodeId': obsSource.array[i].id,
-                //         'nodeType': sourceNodeType,
-                //         'nodeMethod': '',
-                //         'nodeRef': '',
-                //         'nodeValue': '',
-                //         'sourceCodeLine': ''
-                //     }, action: "saveNode", destination: "panel"
-                // });
-                if(obsSource.array[i].constructor.name === "ArrayObservable"){
-                    sendObjectToDevTools({
-                        content: {"edgeStart": obsSource.array[i].id, "edgeEnd": obsResult.id, "edgeLabel": operName},
-                        action: "saveEdge",
-                        destination: "panel"
-                    });
+                var tempObsSource = obsSource.array[i];
+                logNodeData(tempObsSource.id, sourceNodeType, '', '', '', '')
+                logEdgeData(tempObsSource.id, obsResult.id, operName)
+                if(tempObsSource.constructor.name === 'Observable'){
+                    if(tempObsSource.source && tempObsSource.source.id){
+                        logEdgeData(tempObsSource.source.id, tempObsSource.id, operName)
+                    }
                 }
-
             }
         } else {
-            sendObjectToDevTools({
-                content: {
-                    'nodeId': obsSource.id,
-                    'nodeType': sourceNodeType,
-                    'nodeMethod': '',
-                    'nodeRef': name,
-                    'nodeValue': '',
-                    'sourceCodeLine': ''
-                }, action: "saveNode", destination: "panel"
-            });
-            sendObjectToDevTools({
-                content: {"edgeStart": obsSource.id, "edgeEnd": obsResult.id, "edgeLabel": operName},
-                action: "saveEdge",
-                destination: "panel"
-            });
+            logNodeData(obsSource.id, sourceNodeType, '', name, '', '')
+            logEdgeData(obsSource.id, obsResult.id, operName)
         }
     }
 
+    function logNodeData(id, type, method, name, val, lineNumber){
+        sendObjectToDevTools({
+            content: {
+                'nodeId': id,
+                'nodeType': type,
+                'nodeMethod': method,
+                'nodeRef': name,
+                'nodeValue': val,
+                'sourceCodeLine': lineNumber
+            }, action: "saveNode", destination: "panel"
+        });
+    }
 
+    function logEdgeData(startId, endId, name){
+        sendObjectToDevTools({
+            content: {
+                "edgeStart": startId,
+                "edgeEnd": endId,
+                "edgeLabel": name
+            },
+            action: "saveEdge",
+            destination: "panel"
+        });
+    }
 }
 // Rx-js Analysis End

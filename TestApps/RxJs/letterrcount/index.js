@@ -54,24 +54,25 @@
 
   /**
    * Test case 3
-   * Status - Yet to  work on this
+   * Status - Done
    */
 
   /*
-  var observer1 = Rx.Observable.create(
-      function (x) {
+
+  var observer = {
+      next: function (x) {
           console.log('Next: ' + x);
       },
-      function (err) {
+      error: function (err) {
           console.log('Error: ' + err);
       },
-      function () {
+      complete: function () {
           console.log('Completed');
-      });
-  //
+      },
+  };
   var source1 = Rx.Observable.range(0, 3);
   //
-  var subscription = source1.subscribe(observer1);
+  var subscription = source1.subscribe(observer);
   // var observable = Rx.Observable.create(function(source) {
   //     source.next(Math.random());
   // });
@@ -113,16 +114,16 @@
    * Support for from Observable
    * Test case 5
    */
-  /*
+  // /*
   var arraySource = Rx.Observable.from([1,2,3,4,5])
       .map(function (x) {
-          // if(x > 2){
+          if(x > 2){
               return x;
-          // }
+          }
       });
   //output: 1,2,3,4,5
   var subscribe = arraySource.subscribe(function(val){ return val });
-  */
+  // */
 
   /**
    * Support for of Observable
