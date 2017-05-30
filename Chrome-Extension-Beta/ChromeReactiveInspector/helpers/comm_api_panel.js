@@ -145,6 +145,22 @@ var rxGraphStages = [];
                     $(this).tipsy({gravity: "w", opacity: 1, html: true});
                 });
 
+            /**
+             * This will send node details to console whenever an user clicks on it.
+             */
+            svg.selectAll("g.node").on("click", function(id) {
+                var _node = g.node(id);
+                sendObjectToInspectedPage(
+                    {
+                        action: "node_details",
+                        content: {
+                            "id": _node.nodeId,
+                            "value": _node.value
+                        }
+                    }
+                );
+            });
+
             // capture current dependency graph
             captureGraphAndSaveAsNewStage(currentAction, currentNodeId);
 
@@ -214,7 +230,7 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
 
             //console.log("current node to push");
             //console.log(nodeToPush);
-            if (nodeToPush.nodeId == currentNodeId) {
+            if (nodeToPush.nodeId === currentNodeId) {
                 nodeToPush.class = "current";
             } else {
                 nodeToPush.class = "normal";

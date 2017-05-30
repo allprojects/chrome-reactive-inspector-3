@@ -174,8 +174,10 @@ if (Bacon !== undefined) {
                 val = val.type;
             }
 
-            if (val.constructor === Array) {
-                val = '';
+            if (val && val.constructor === Array) {
+                val = JSON.stringify(val);
+            }else if(val.constructor.name === 'Object'){
+                val = JSON.stringify(val)
             }
             //val = JSON.stringify(val);
 
@@ -289,6 +291,14 @@ if (Rx !== undefined) {
         sink.obsType = obsType;
 
         if (operator) {
+            // Test case 7 - for buffer operator
+            if(operator.closingNotifier && operator.closingNotifier.id){
+                logEdgeData(operator.closingNotifier.id, this.source.id,  '')
+            }
+            // Test case 10 - bufferToggle operator
+            else if(operator.openings && operator.openings.id){
+                logEdgeData(operator.openings.id, this.source.id,  '')
+            }
             operator.call(sink, this.source);
         }
         else {
@@ -444,6 +454,8 @@ if (Rx !== undefined) {
                 var tempObsSource = obsSource.array[i];
                 logNodeData(tempObsSource.id, sourceNodeType, '', '', '', '')
                 logEdgeData(tempObsSource.id, obsResult.id, operName)
+
+                //Special case because of twitter follow example
                 if(tempObsSource.constructor.name === 'Observable'){
                     if(tempObsSource.source && tempObsSource.source.id){
                         logEdgeData(tempObsSource.source.id, tempObsSource.id, operName)
@@ -455,30 +467,31 @@ if (Rx !== undefined) {
             logEdgeData(obsSource.id, obsResult.id, operName)
         }
     }
-
-    function logNodeData(id, type, method, name, val, lineNumber){
-        sendObjectToDevTools({
-            content: {
-                'nodeId': id,
-                'nodeType': type,
-                'nodeMethod': method,
-                'nodeRef': name,
-                'nodeValue': val,
-                'sourceCodeLine': lineNumber
-            }, action: "saveNode", destination: "panel"
-        });
-    }
-
-    function logEdgeData(startId, endId, name){
-        sendObjectToDevTools({
-            content: {
-                "edgeStart": startId,
-                "edgeEnd": endId,
-                "edgeLabel": name
-            },
-            action: "saveEdge",
-            destination: "panel"
-        });
-    }
 }
 // Rx-js Analysis End
+
+// For logging values
+function logNodeData(id, type, method, name, val, lineNumber){
+    sendObjectToDevTools({
+        content: {
+            'nodeId': id,
+            'nodeType': type,
+            'nodeMethod': method,
+            'nodeRef': name,
+            'nodeValue': val,
+            'sourceCodeLine': lineNumber
+        }, action: "saveNode", destination: "panel"
+    });
+}
+
+function logEdgeData(startId, endId, name){
+    sendObjectToDevTools({
+        content: {
+            "edgeStart": startId,
+            "edgeEnd": endId,
+            "edgeLabel": name
+        },
+        action: "saveEdge",
+        destination: "panel"
+    });
+}

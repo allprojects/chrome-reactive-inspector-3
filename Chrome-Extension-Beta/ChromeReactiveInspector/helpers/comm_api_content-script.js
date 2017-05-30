@@ -32,4 +32,9 @@ chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
     if (msg.action === 'test') {
         console.log("Message received!" + msg.content);
     }
+    if (msg.action === 'node_details') {
+        console.log("Node details");
+        console.log("Node id " + msg.content.id);
+        console.log("Node value " + msg.content.value);
+    }
 });

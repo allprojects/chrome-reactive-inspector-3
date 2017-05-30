@@ -4,14 +4,14 @@ var arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 $("#runBaconFilter").click(function() {
     var baconSourceStream = Bacon.sequentially(1000, arr);
     var baconFilteredEvenStream = baconSourceStream.filter(function(x) {
-        return x % 2 == 0;
+        return x % 2 === 0;
     });
 });
 
 // Bacon
 $("#runBaconFold").click(function() {
     var baconStream = Bacon.sequentially(500, arr);
-   var baconFoldStream =  baconStream.fold(0, function(x, acc) {
+    var baconFoldStream =  baconStream.fold(0, function(x, acc) {
         return x + acc;
     });
     baconFoldStream.onValue(function(val) {
