@@ -76,34 +76,8 @@ $('#up').click(function () {
 function redrawGraphToStage(stageToRedraw) {
 //d3.select("svg").remove();
 
-    // Create the input graph
-    var g = new dagreD3.graphlib.Graph()
-        .setGraph({rankdir: "LR"})
-        .setDefaultEdgeLabel(function () {
-            return {};
-        });
-
-    // Set up an SVG group so that we can translate the final graph.
-    var svg = d3.select("svg"),
-        svgGroup = svg.append("g"),
-        inner = svg.select("g");
-
-    // Set up zoom support
-    var zoom = d3.behavior.zoom().on("zoom", function () {
-        inner.attr("transform", "translate(" + d3.event.translate + ")" +
-            "scale(" + d3.event.scale + ")");
-    });
-    svg.call(zoom);
-
-
-    // Run the renderer. This is what draws the final graph.
-    render(d3.select("svg g"), g);
-
-
-    //destroy current graph
-    // inner.selectAll().remove();
-    //d3.select("svg").remove();
-    //d3.select("svg").selectAll("*").remove();
+    d3.selectAll("svg g").remove();
+    initialiseGraph();
 
     // get data for asked stage
     var stageDataToDraw = '';
@@ -132,6 +106,30 @@ function redrawGraphToStage(stageToRedraw) {
 
     // draw graph with asked stage data
     render(d3.select("svg g"), g);
+    inner.selectAll("g.node")
+        .attr("title", function (v) {
+            return styleTooltip(v, g.node(v).label, g.node(v).description)
+        })
+        .each(function (v) {
+            $(this).tipsy({gravity: "w", opacity: 1, html: true});
+        });
+
+    /**
+     * This will send node details to console whenever an user clicks on it.
+     */
+    svg.selectAll("g.node").on("click", function(id) {
+        var _node = g.node(id);
+        console.log('_node: '+_node)
+        sendObjectToInspectedPage(
+            {
+                action: "node_details",
+                content: {
+                    "id": _node.nodeId,
+                    "value": _node.value
+                }
+            }
+        );
+    });
 
 }
 

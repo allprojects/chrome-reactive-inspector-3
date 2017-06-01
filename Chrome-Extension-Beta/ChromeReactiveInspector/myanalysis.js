@@ -438,7 +438,7 @@ if (Rx !== undefined) {
         }
         // create nodes for source and des obs
 
-        logNodeData(obsResult.id, resultNodeType, '', operName, '', '');
+        logNodeData(obsResult.id, resultNodeType, '', '', '', '');
 
         var name = '';
         if(obsSource.sourceObj){
