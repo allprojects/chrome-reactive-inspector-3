@@ -5,6 +5,9 @@
  Rx list override is used to log Rx internal activities
  */
 
+var allNodes = []
+var allEdges= []
+
 // Jalangi Analysis Start
 J$.analysis = {};
 
@@ -100,15 +103,6 @@ J$.analysis = {};
 
                         logNodeData(currentNodeId, currentType, '', name, '', SourceLocationLine);
 
-                        // Check if the Observable is of type create
-                        // if true, subscribe to it.
-                        // if(val._type){
-                        //     if(val._type === 'createObservable'){
-                        //         delete val._type
-                        //         CriSubscriptRxObservableToLog(val)
-                        //     }
-                        //
-                        // }
                     }
                 }
 
@@ -452,18 +446,24 @@ if (Rx !== undefined) {
         if (obsSource.constructor.name === "ArrayObservable" && flattenOperators.includes(operName)) {
             for(var i=0; i<obsSource.array.length; i++){
                 var tempObsSource = obsSource.array[i];
-                logNodeData(tempObsSource.id, sourceNodeType, '', '', '', '')
+                if(!checkIfNodeAlreadyExists(tempObsSource.id, '', sourceNodeType)){
+                    logNodeData(tempObsSource.id, sourceNodeType, '', '', '', '')
+                }
                 logEdgeData(tempObsSource.id, obsResult.id, operName)
 
                 //Special case because of twitter follow example
                 if(tempObsSource.constructor.name === 'Observable'){
                     if(tempObsSource.source && tempObsSource.source.id){
-                        logEdgeData(tempObsSource.source.id, tempObsSource.id, operName)
+                        if(!checkIfEdgeAlreadyExists(tempObsSource.source.id, tempObsSource.id)) {
+                            logEdgeData(tempObsSource.source.id, tempObsSource.id, operName)
+                        }
                     }
                 }
             }
         } else {
-            logNodeData(obsSource.id, sourceNodeType, '', name, '', '')
+            if(!checkIfNodeAlreadyExists(obsSource.id, name, sourceNodeType)){
+                logNodeData(obsSource.id, sourceNodeType, '', name, '', '')
+            }
             logEdgeData(obsSource.id, obsResult.id, operName)
         }
     }
@@ -472,6 +472,7 @@ if (Rx !== undefined) {
 
 // For logging values
 function logNodeData(id, type, method, name, val, lineNumber){
+    allNodes.push({'nodeId': id, 'type': type, 'name': name});
     sendObjectToDevTools({
         content: {
             'nodeId': id,
@@ -485,6 +486,7 @@ function logNodeData(id, type, method, name, val, lineNumber){
 }
 
 function logEdgeData(startId, endId, name){
+    allEdges.push({'startId': startId, 'endId': endId});
     sendObjectToDevTools({
         content: {
             "edgeStart": startId,
@@ -493,5 +495,20 @@ function logEdgeData(startId, endId, name){
         },
         action: "saveEdge",
         destination: "panel"
+    });
+}
+
+function checkIfNodeAlreadyExists(nodeId, name, type){
+    return  _.some(allNodes, function (node) {
+        if(name)
+            return node.nodeId === nodeId && node.name === name && node.type === type;
+        else
+            return node.nodeId === nodeId && node.type === type;
+    });
+}
+
+function checkIfEdgeAlreadyExists(startId, endId){
+    return  _.some(allEdges, function (edge) {
+        return edge.startId === startId && edge.endId === endId;
     });
 }

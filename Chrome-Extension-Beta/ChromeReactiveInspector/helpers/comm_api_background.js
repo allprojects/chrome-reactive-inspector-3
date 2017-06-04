@@ -15,17 +15,6 @@ chrome.runtime.onConnect.addListener(function (port) {
             // this is a first message from devtools so let's set the tabId-port mapping
             tabId = message.tabId;
             tabPorts[tabId] = port;
-            // chrome.debugger.setBreakpointByUrl(2, 'http://localhost:63342/RxJs/letterrcount/index.js');
-            // chrome.debugger.getTargets(function(result){
-            //
-            //     console.log('Result!');
-            //     console.log("count: "+result.length);
-            //     for (var index = 0; index < result.length; index++) {
-            //         console.log(index+": "+result[index].url);
-            //
-            //     }
-            //
-            // });
         }
     });
 
@@ -53,37 +42,17 @@ chrome.runtime.onConnect.addListener(function (port) {
             }
 
         }
-
-
         sendResponse(message);
-    }
+    };
 
     // Listens to messages sent from the panel
     chrome.runtime.onMessage.addListener(extensionListener);
 
     port.onDisconnect.addListener(function (port) {
-        // this will be executed when we close dev tool window
-        // alert("background.js - port disconneccted");
-
-        /*
-         chrome.storage.sync.remove("graphData", function () {
-
-         console.log('Settings removed from local storage');
-
-         });
-         */
         delete tabPorts[tabId];
         chrome.extension.onMessage.removeListener(extensionListener);
     });
-
-    // port.onMessage.addListener(function (message) {
-    //     port.postMessage(message);
-    // });
-
 });
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-//     return true;
-// });
 
 
 chrome.tabs.onRemoved.addListener(function (tabId) {
@@ -94,3 +63,8 @@ chrome.tabs.onReplaced.addListener(function(newTabId, oldTabId) {
     delete tabPorts[oldTabId];
 });
 
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+    if(changeInfo.status === 'loading'){
+        chrome.tabs.sendMessage(tabId, {action: 'loading'}, function(response) {});
+    }
+});

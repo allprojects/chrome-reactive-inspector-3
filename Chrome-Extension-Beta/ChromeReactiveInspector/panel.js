@@ -2,8 +2,9 @@ console.log("panel.js");
 
 
 // Simple function to style the tooltip for the given node.
-var styleTooltip = function (name, label, description) {
-    return "<p class='name'>" + label + "</p><p class='description'>" + description + "</p>";
+var styleTooltip = function (id, name, type, source) {
+    return "<div class='custom_tooltip'><p>" + 'Id: '+  id + "</p><p>" + 'Name: '+  name + "</p><p>" + 'Type: '+ type + "</p>" +
+        "<p>" + 'Source: '+ source + "</p></div>";
 };
 
 var g = '',
@@ -19,7 +20,6 @@ var initialiseGraph = function () {
         .setDefaultEdgeLabel(function () {
             return {};
         });
-// g.setNode(0, {label: "TOP", class: "type-TOP"});
 
     // Create the renderer
     render = new dagreD3.render();
@@ -49,6 +49,10 @@ render(d3.select("svg g"), g);
  svg.attr("height", g.graph().height + 40);
  */
 
+/**
+ *
+ *  Slider feature
+ *  */
 // Slider initialization , that is used to access history steps
 var rxSlider = $("#slider")
     .slider({
@@ -72,6 +76,11 @@ $('#up').click(function () {
     redrawGraphToStage(rxSlider.slider('value'));
 });
 
+rxSlider.slider("option", "min", 0);
+rxSlider.slider("option", "max", 0);
+rxSlider.slider("option", "value", 0);
+rxSlider.slider("pips", "refresh");
+var _node = '';
 // This method redraw dependency graph to given stage
 function redrawGraphToStage(stageToRedraw) {
 //d3.select("svg").remove();
@@ -108,7 +117,7 @@ function redrawGraphToStage(stageToRedraw) {
     render(d3.select("svg g"), g);
     inner.selectAll("g.node")
         .attr("title", function (v) {
-            return styleTooltip(v, g.node(v).label, g.node(v).description)
+            return styleTooltip(g.node(v).nodeId, g.node(v).ref, g.node(v).type, g.node(v).sourceCodeLine)
         })
         .each(function (v) {
             $(this).tipsy({gravity: "w", opacity: 1, html: true});
@@ -118,14 +127,14 @@ function redrawGraphToStage(stageToRedraw) {
      * This will send node details to console whenever an user clicks on it.
      */
     svg.selectAll("g.node").on("click", function(id) {
-        var _node = g.node(id);
-        console.log('_node: '+_node)
+        _node = g.node(id);
         sendObjectToInspectedPage(
             {
                 action: "node_details",
                 content: {
                     "id": _node.nodeId,
-                    "value": _node.value
+                    "value": _node.value,
+                    "source_line_number": _node.sourceCodeLine
                 }
             }
         );
@@ -165,8 +174,6 @@ function redrawGraphToStage(stageToRedraw) {
                 'cri_config_rec_status': 1
             });
         }
-
-
     });
 
 
@@ -178,7 +185,6 @@ function redrawGraphToStage(stageToRedraw) {
         chrome.storage.sync.set({
             'criconfigincludes': this.value
         });
-
     }, this);
 
 

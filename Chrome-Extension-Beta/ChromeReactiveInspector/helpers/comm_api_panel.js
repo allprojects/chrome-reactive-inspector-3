@@ -10,7 +10,7 @@
 
 // channel is created when we open dev tool and move to our panel
 var rxGraphStages = [];
-
+var _node = '';
 (function createChannel() {
     console.log("creating channel in messaging js that is part of panel ");
     //Create a port with background page for continuous message communication
@@ -30,8 +30,16 @@ var rxGraphStages = [];
     port.onMessage.addListener(function (message) {
         //console.log("messaging.js part of panel script , message from background page");
         //console.log("messaging.js part of panel script , message content is = " + message.content);
-        //console.log(message);
-
+        // console.log(message);
+        if(message.action === 'loading'){
+            if(rxSlider){
+                rxSlider.slider("option", "min", 0);
+                rxSlider.slider("option", "max", 0);
+                rxSlider.slider("option", "value", 0);
+                rxSlider.slider("pips", "refresh");
+            }
+            initialiseGraph()
+        }
         var currentNodeId = false;
 
         if (message.action === "saveNode") {
@@ -42,11 +50,7 @@ var rxGraphStages = [];
 
             var currentAction = "";
             if (g.node(message.content.nodeId) !== undefined) {
-                // this node already exist , only change label if there is no value in message
-                // Label  = nodeRef + node val
-
                 currentAction = "updateNode";
-
 
                 var prevRef = g.node(message.content.nodeId).ref;
                 var prevValue = g.node(message.content.nodeId).value;
@@ -105,7 +109,7 @@ var rxGraphStages = [];
                 }
 
                 g.setNode(message.content.nodeId, {
-                    label: "NodeId :" + message.content.nodeId + "<br> Type :" + newType + "<br>  Method :" + newMethod + "<br> Name:" + newRef + "<br> Value: " + truncatedVal + "<br> Source: " + newSourceCodeLine,
+                    label: "NodeId :" + message.content.nodeId + "<br> Name:" + newRef + "<br> Value: " + truncatedVal + "<br> Source: " + newSourceCodeLine,
                     labelType: "html",
                     ref: newRef,
                     value: newValue,
@@ -113,15 +117,15 @@ var rxGraphStages = [];
                     method: newMethod,
                     sourceCodeLine: newSourceCodeLine,
                     nodeId: message.content.nodeId,
-                    class: "current",
-                    description: "test desc "
+                    class: "current"
                 });
 
-            } else {
+            }
+            else {
 
                 currentAction = "newNode";
                 g.setNode(message.content.nodeId, {
-                    label: "NodeId :" + message.content.nodeId + "<br> Type :" + message.content.nodeType + "<br>  Method :" + message.content.nodeMethod + "<br> Name:" + message.content.nodeRef + "<br> Value: " + message.content.nodeValue + "<br> Source: " + message.content.sourceCodeLine,
+                    label: "NodeId :" + message.content.nodeId + "<br> Name:" + message.content.nodeRef + "<br> Value: " + message.content.nodeValue + "<br> Source: " + message.content.sourceCodeLine,
                     labelType: "html",
                     ref: message.content.nodeRef,
                     value: message.content.nodeValue,
@@ -129,8 +133,7 @@ var rxGraphStages = [];
                     method: message.content.nodeMethod,
                     nodeId: message.content.nodeId,
                     sourceCodeLine: message.content.sourceCodeLine,
-                    class: "current",
-                    description: "test desc "
+                    class: "current"
                 });
             }
 
@@ -139,7 +142,7 @@ var rxGraphStages = [];
 
             inner.selectAll("g.node")
                 .attr("title", function (v) {
-                    return styleTooltip(v, g.node(v).label, g.node(v).description)
+                    return styleTooltip(g.node(v).nodeId, g.node(v).ref, g.node(v).type, g.node(v).sourceCodeLine)
                 })
                 .each(function (v) {
                     $(this).tipsy({gravity: "w", opacity: 1, html: true});
@@ -149,29 +152,29 @@ var rxGraphStages = [];
              * This will send node details to console whenever an user clicks on it.
              */
             svg.selectAll("g.node").on("click", function(id) {
-                var _node = g.node(id);
+                _node = g.node(id);
                 sendObjectToInspectedPage(
                     {
                         action: "node_details",
                         content: {
                             "id": _node.nodeId,
-                            "value": _node.value
+                            "value": _node.value,
+                            "source_line_number": _node.sourceCodeLine
                         }
                     }
                 );
             });
 
             // capture current dependency graph
+            console.log(currentAction)
             captureGraphAndSaveAsNewStage(currentAction, currentNodeId);
-
         }
         if (message.action === "saveEdge") {
-
             g.setEdge(message.content.edgeStart, message.content.edgeEnd, {
                 label: message.content.edgeLabel
             });
             render(d3.select("svg g"), g);
-
+            console.log('saveEdge')
             captureGraphAndSaveAsNewStage("saveEdge", false);
 
         }
@@ -199,24 +202,9 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
     // get current nodes from graph
     d3.selectAll('g.node')  //here's how you get all the nodes
         .each(function (d) {
-
-            /*
-             console.log("val of d");
-             console.log(d);
-             console.log("what is edge here");
-             console.log(g.nodeEdges(d));
-             */
-            /*
-             g.edges(d).forEach(function (e) {
-             console.log("Edge " + e.v + " -> " + e.w + ": " + JSON.stringify(g.edge(e)));
-             });
-             */
-
             var currentNodeEdges = g.nodeEdges(d);
             if (currentNodeEdges.length > 0) {
                 currentNodeEdges.forEach(function (singleEdge) {
-                    console.log("singleEdge");
-                    console.log(g.edge(singleEdge).label);
                     var edgeLabel = "";
                     if (g.edge(singleEdge).label) {
                         edgeLabel = g.edge(singleEdge).label;
@@ -228,20 +216,15 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
 
             var nodeToPush = g.node(d);
 
-            //console.log("current node to push");
-            //console.log(nodeToPush);
             if (nodeToPush.nodeId === currentNodeId) {
                 nodeToPush.class = "current";
             } else {
                 nodeToPush.class = "normal";
             }
             newStage.stageData.nodes.push(nodeToPush);
-
         });
 
     rxGraphStages.push(newStage);
-    //console.log("all stages are");
-    //console.log(rxGraphStages);
 
     // Here we should increase steps count in step slider
     rxSlider.slider("option", "min", 0);

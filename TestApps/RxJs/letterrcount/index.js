@@ -2,19 +2,19 @@
    * Test case 1
    * Status Done
    */
-  // var $toCount = document.querySelector('#toCount');
-  // var $result = document.querySelector('#result');
-  //
-  // var source = Rx.Observable.fromEvent($toCount, 'keyup')
-  //   .map(function (e) { return 'length: ' + e.target.value.length; })
-  //   .distinctUntilChanged();
-  //
-  // function setHtml(text) {
-  //   console.log(text);
-  //   this.innerHTML = text;
-  // }
+  var $toCount = document.querySelector('#toCount');
+  var $result = document.querySelector('#result');
 
-  // source.subscribe(setHtml.bind($result));
+  var source = Rx.Observable.fromEvent($toCount, 'keyup')
+    .map(function (e) { return 'length: ' + e.target.value.length; })
+    .distinctUntilChanged();
+
+  function setHtml(text) {
+    console.log(text);
+    this.innerHTML = text;
+  }
+
+  source.subscribe(setHtml.bind($result));
   //
   //
   // var $toCount1 = document.querySelector('#toCount1');
@@ -211,7 +211,154 @@
 
    */
 
+  /**
+   * BufferWhen Operator
+   * Test case 11
+   * Status Done
+   */
 
+  /*
+  //  emit value every 1 second
+   var oneSecondInterval = Rx.Observable.interval(1000);
+  //  //return an observable that emits value every 5 seconds
+   var fiveSecondInterval = function() {return Rx.Observable.interval(5000)};
+  //  //every five seconds, emit buffered values
+   var bufferWhenExample = oneSecondInterval.bufferWhen(fiveSecondInterval);
+  //  //log values
+  //  //ex. output: [0,1,2,3]...[4,5,6,7,8]
+   var subscribe = bufferWhenExample.subscribe(function(val){ console.log('Emitted Buffer: ', val)});
+
+   */
+  /*
+  var clicks = Rx.Observable.fromEvent(document, 'click');
+  var buffered = clicks.bufferWhen(function () {
+          return Rx.Observable.interval(1000 + Math.random() * 4000);
+      });
+  buffered.subscribe(function (x) {
+      return console.log(x);
+  });
+
+   */
+
+  /**
+   * CombineAll Operator
+   * Test case 12
+   * Status Done
+   */
+
+  /*
+  // Ex -1
+      //emit after five seconds then complete
+  // var fiveSecondTimer = Rx.Observable.timer(5000);
+  // //once timer (outer observable) fires and completes, latest emitted values from inner observables will be output, in this case there is a single value
+  // var example = fiveSecondTimer.mapTo(Rx.Observable.of('Hello', 'World'));
+  // var combined = example.combineAll();
+  // //ex output: ["Hello"]...["World"]
+  // var subscribe = combined.subscribe(function (val) {
+  //     return console.log('Values from inner observable:', val);
+  // });
+
+      // Ex-2
+      //combineAll also takes a projection function that receives emitted values
+  var fiveSecondTimer = Rx.Observable.timer(5000);
+  var example = fiveSecondTimer.mapTo(Rx.Observable.of('Hello', 'Goodbye'));
+  var combined = example.combineAll(function (val) {
+      return val + ' Friend!';
+  });
+  //ex output: "Hello Friend!"..."Goodbye Friend!"
+  var subscribeProjected = combined.subscribe(function (val) {
+      return console.log('Values Using Projection:', val);
+  });
+
+*/
+
+  /**
+   * CombineLatest
+   * Test case 13
+   * Status Done
+   */
+
+  /*
+
+
+  var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+  //timerOne emits first value at 1s, then once every 4s
+  var timerOne = Rx.Observable.timer(1000, 4000);
+  //timerTwo emits first value at 2s, then once every 4s
+  var timerTwo = Rx.Observable.timer(2000, 4000);
+  //timerThree emits first value at 3s, then once every 4s
+  var timerThree = Rx.Observable.timer(3000, 4000);
+
+  //when one timer emits, emit the latest values from each timer as an array
+  var combined = Rx.Observable.combineLatest(timerOne, timerTwo, timerThree);
+
+  var subscribe = combined.subscribe(function (latestValues) {
+      //grab latest emitted values for timers one, two, and three
+      var _latestValues = _slicedToArray(latestValues, 3),
+          timerValOne = _latestValues[0],
+          timerValTwo = _latestValues[1],
+          timerValThree = _latestValues[2];
+       // Example:
+       // timerOne first tick: 'Timer One Latest: 1, Timer Two Latest:0, Timer Three Latest: 0
+       // timerTwo first tick: 'Timer One Latest: 1, Timer Two Latest:1, Timer Three Latest: 0
+       // timerThree first tick: 'Timer One Latest: 1, Timer Two Latest:1, Timer Three Latest: 1
+
+
+      console.log("Timer One Latest: " + timerValOne + ", \n     Timer Two Latest: " + timerValTwo + ", \n     Timer Three Latest: " + timerValThree);
+  });
+
+*/
+
+
+
+  /**
+   * concat operator
+   * Test case 14
+   * Status
+   */
+
+  // /*
+
+  /**
+   *  Status
+   */
+  /*
+      // emits 1,2,3
+   var sourceOne = Rx.Observable.of(1, 2, 3);
+   //emits 4,5,6
+   var sourceTwo = Rx.Observable.of(4, 5, 6);
+   //emit values from sourceOne, when complete, subscribe to sourceTwo
+   var concatSource = sourceOne.concat(sourceTwo);
+   //output: 1,2,3,4,5,6
+   var subscribe = concatSource.subscribe(function (val) {
+   return console.log('Example 1: Basic concat:', val);
+   });
+
+   //delay 3 seconds then emit
+   var delayedSourceOne = sourceOne.delay(3000);
+   //sourceTwo waits on sourceOne to complete before subscribing
+   var concatDelayedSource = delayedSourceOne.concat(sourceTwo);
+   //output: 1,2,3,4,5,6
+   var subscribeDelayed = concatDelayedSource.subscribe(function (val) {
+   return console.log('Example 2: Delayed source one:', val);
+   });
+  */
+
+      /**
+       * Status Done
+       */
+      /*
+
+   //when sourceOne never completes, the subsequent observables never run
+   var sourceOneNeverComplete = Rx.Observable.concat(Rx.Observable.interval(1000), Rx.Observable.of('This', 'Never', 'Runs'))
+   //for logging clarity
+   .delay(5000);
+   //outputs: 1,2,3,4....
+   var subscribeNeverComplete = sourceOneNeverComplete.subscribe(function (val) {
+   return console.log('Example 3: Source one never completes, second observable never runs:', val);
+   });
+       */
   // var custom_observable = Rx.Observable.create(function (observer) {
   //     observer.next(1);
   //     observer.next(2);

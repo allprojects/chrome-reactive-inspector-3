@@ -25,7 +25,7 @@
 <script src="helpers/comm_api_panel.js"></script>
 
 <div class="clearfix">
-    <h3 class="span12">Configuration</h3>
+    <h4 class="span12">Configuration</h4>
     <div class="span6">
         <label for="cri-config-includes">Instrument Files (Names separated by comma)</label>
         <input type="text" id="cri-config-includes"><br>
@@ -41,7 +41,7 @@
 
 <div class="clearfix">
     <div class="span12">
-        <h3>History Navigator</h3>
+        <h4>History Navigator</h4>
         <div class="column-center">
             <div id="slider"></div>
         </div>
@@ -56,8 +56,9 @@
 <hr>
 <div class="clearfix">
     <div class="span12">
-        <h3>Dependency Graph</h3>
+        <h4>Dependency Graph</h4>
         <svg id="svg-canvas" width="100%" ></svg>
+        <div class="tooltip" id="cri-node-tooltip" style=""></div>
     </div>
 </div>
 

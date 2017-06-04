@@ -36,5 +36,11 @@ chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
         console.log("Node details");
         console.log("Node id " + msg.content.id);
         console.log("Node value " + msg.content.value);
+        console.log("Source Code Line No. " + msg.content.source_line_number);
+    }
+    if (msg.action === 'loading') {
+        chrome.extension.sendMessage(msg, function (msg) {
+            console.log("message sent");
+        });
     }
 });

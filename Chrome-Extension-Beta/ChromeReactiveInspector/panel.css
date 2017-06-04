@@ -52,11 +52,13 @@ text {
 }
 
 /* This styles the title of the tooltip */
-.tipsy .name {
+.tipsy .custom_tooltip > p  {
     font-size: 1.5em;
     font-weight: bold;
     color: #60b1fc;
     margin: 0;
+    text-align: left;
+    pointer-events: none;
 }
 
 /* This styles the body of the tooltip */
@@ -101,4 +103,21 @@ text {
 
 .nodes .label {
     color: #000;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: left;
+
+    padding: 8px;
+    font: 14px sans-serif;
+    background: #ffff99;
+    border: solid 1px #aaa;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 1;
+}
+
+hr {
+    margin: 5px 0 !important;
 }
