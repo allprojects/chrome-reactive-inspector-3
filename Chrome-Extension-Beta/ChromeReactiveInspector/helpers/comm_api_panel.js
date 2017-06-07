@@ -38,7 +38,8 @@ var _node = '';
                 rxSlider.slider("option", "value", 0);
                 rxSlider.slider("pips", "refresh");
             }
-            initialiseGraph()
+            initialiseGraph();
+            rxGraphStages = [];
         }
         var currentNodeId = false;
 
@@ -166,7 +167,6 @@ var _node = '';
             });
 
             // capture current dependency graph
-            console.log(currentAction)
             captureGraphAndSaveAsNewStage(currentAction, currentNodeId);
         }
         if (message.action === "saveEdge") {
@@ -174,7 +174,6 @@ var _node = '';
                 label: message.content.edgeLabel
             });
             render(d3.select("svg g"), g);
-            console.log('saveEdge')
             captureGraphAndSaveAsNewStage("saveEdge", false);
 
         }
@@ -198,7 +197,7 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
     newStage.stageEvent = event;
     newStage.stageId = rxGraphStages.length + 1;
 
-
+    var nodeToPush = {}
     // get current nodes from graph
     d3.selectAll('g.node')  //here's how you get all the nodes
         .each(function (d) {
@@ -214,18 +213,16 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
 
             }
 
-            var nodeToPush = g.node(d);
+            nodeToPush = g.node(d);
 
             if (nodeToPush.nodeId === currentNodeId) {
                 nodeToPush.class = "current";
             } else {
                 nodeToPush.class = "normal";
             }
-            newStage.stageData.nodes.push(nodeToPush);
+            newStage.stageData.nodes.push(_.clone(nodeToPush));
         });
-
-    rxGraphStages.push(newStage);
-
+    rxGraphStages.push(_.clone(newStage));
     // Here we should increase steps count in step slider
     rxSlider.slider("option", "min", 0);
     rxSlider.slider("option", "max", rxSlider.slider("option", "max") + 1);

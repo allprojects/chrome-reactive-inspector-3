@@ -2,6 +2,7 @@
    * Test case 1
    * Status Done
    */
+  /*
   var $toCount = document.querySelector('#toCount');
   var $result = document.querySelector('#result');
 
@@ -15,9 +16,11 @@
   }
 
   source.subscribe(setHtml.bind($result));
-  //
-  //
-  // var $toCount1 = document.querySelector('#toCount1');
+
+  */
+
+
+  // var $toCount1 = document.querySelector('#toC   ount1');
   // var $result1 = document.querySelector('#result1');
   //
   // var source1 = Rx.Observable.fromEvent($toCount1, 'keyup')
@@ -187,7 +190,6 @@
   //ex. output [0,1,2]...[3,4,5,6]
   var subscribe = bufferTime.subscribe(function(val){console.log('Buffered with Time:', val)});
     */
-  //
 
   /**
    * Support for bufferToggle operator
@@ -218,14 +220,14 @@
    */
 
   /*
-  //  emit value every 1 second
+   //  emit value every 1 second
    var oneSecondInterval = Rx.Observable.interval(1000);
-  //  //return an observable that emits value every 5 seconds
+   //return an observable that emits value every 5 seconds
    var fiveSecondInterval = function() {return Rx.Observable.interval(5000)};
-  //  //every five seconds, emit buffered values
+   //every five seconds, emit buffered values
    var bufferWhenExample = oneSecondInterval.bufferWhen(fiveSecondInterval);
-  //  //log values
-  //  //ex. output: [0,1,2,3]...[4,5,6,7,8]
+   //log values
+   //ex. output: [0,1,2,3]...[4,5,6,7,8]
    var subscribe = bufferWhenExample.subscribe(function(val){ console.log('Emitted Buffer: ', val)});
 
    */
@@ -249,15 +251,17 @@
   /*
   // Ex -1
       //emit after five seconds then complete
-  // var fiveSecondTimer = Rx.Observable.timer(5000);
-  // //once timer (outer observable) fires and completes, latest emitted values from inner observables will be output, in this case there is a single value
-  // var example = fiveSecondTimer.mapTo(Rx.Observable.of('Hello', 'World'));
-  // var combined = example.combineAll();
-  // //ex output: ["Hello"]...["World"]
-  // var subscribe = combined.subscribe(function (val) {
-  //     return console.log('Values from inner observable:', val);
-  // });
+  var fiveSecondTimer = Rx.Observable.timer(5000);
+  //once timer (outer observable) fires and completes, latest emitted values from inner observables will be output, in this case there is a single value
+  var example = fiveSecondTimer.mapTo(Rx.Observable.of('Hello', 'World'));
+  var combined = example.combineAll();
+  //ex output: ["Hello"]...["World"]
+  var subscribe = combined.subscribe(function (val) {
+      return console.log('Values from inner observable:', val);
+  });
+  */
 
+  /*
       // Ex-2
       //combineAll also takes a projection function that receives emitted values
   var fiveSecondTimer = Rx.Observable.timer(5000);
@@ -359,6 +363,26 @@
    return console.log('Example 3: Source one never completes, second observable never runs:', val);
    });
        */
+
+  /**
+   * Support for ScalarObservable
+   * status Done
+   */
+/*
+  var a$ = Rx.Observable.of(1, 2);
+  var b$ = Rx.Observable.of(10);
+
+  var c$ = Rx.Observable.combineLatest(a$, b$, function (a, b) {
+      return a + b;
+  });
+
+  c$.subscribe(function (c) {
+      return console.log(c);
+  });
+*/
+
+
+
   // var custom_observable = Rx.Observable.create(function (observer) {
   //     observer.next(1);
   //     observer.next(2);

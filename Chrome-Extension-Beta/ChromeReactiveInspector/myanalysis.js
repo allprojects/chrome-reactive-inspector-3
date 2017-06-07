@@ -83,10 +83,12 @@ J$.analysis = {};
                 }
 
                 var currentTypeInSmall = currentType.toLowerCase();
+                var currentNodeId = ''
+                var SourceLocation = '';
+                var SourceLocationLine = '';
                 // todo what about property here , please check other types that we need to log here ..
                 if (currentTypeInSmall.search("observable") !== -1) {
                     if(!(val.hasOwnProperty('operator') && val.operator === undefined)){
-                        var currentNodeId = '';
                         // bacon observer already has the id attribute
                         if (val.hasOwnProperty("id")) {
                             currentNodeId = val.id
@@ -98,12 +100,40 @@ J$.analysis = {};
                         }
 
                         // source location
-                        var SourceLocation = window.iidToLocationMap[iid];
-                        var SourceLocationLine = SourceLocation[1];
+                        SourceLocation = window.iidToLocationMap[iid];
+                        SourceLocationLine = SourceLocation[1];
 
                         logNodeData(currentNodeId, currentType, '', name, '', SourceLocationLine);
 
                     }
+                }else if (currentTypeInSmall.search("subject") !== -1) {
+                    if(!(val.hasOwnProperty('operator') && val.operator === undefined)){
+                        if (val.hasOwnProperty("id")) {
+                            currentNodeId = val.id
+                        } else {
+                            if (window.rxObsCounter !== undefined) {
+                                currentNodeId = ++window.rxObsCounter;
+                            }
+                            val.id = currentNodeId;
+                        }
+
+                        // source location
+                        SourceLocation = window.iidToLocationMap[iid];
+                        SourceLocationLine = SourceLocation[1];
+
+                        logNodeData(currentNodeId, currentType, '', name, '', SourceLocationLine);
+
+                    }
+                }else if(currentTypeInSmall.search("subscriber") !== -1){
+                    // TODO what to with subscribers? should i display or not?
+                    // if (val.hasOwnProperty("id")) {
+                    //     currentNodeId = val.id
+                    // } else {
+                    //     if (window.rxObsCounter !== undefined) {
+                    //         currentNodeId = ++window.rxObsCounter;
+                    //     }
+                    //     val.id = currentNodeId;
+                    // }
                 }
 
                 showLocation(iid);
@@ -207,10 +237,12 @@ if (Rx !== undefined) {
 
         var sourceObs = this;
         var resultantObservable = _lift.call(sourceObs, operator);
+
         if(operator){
+            var operatorName = operator.constructor.name;
             // check type of source obs is it an ArrayObservable or not
             // append id if not exist
-            if (sourceObs.constructor.name === "ArrayObservable" && flattenOperators.includes(operator.constructor.name)) {
+            if (sourceObs.constructor.name === "ArrayObservable" && flattenOperators.includes(operatorName)) {
                 for(var i=0; i<sourceObs.array.length; i++){
                     if(!sourceObs.array[i].hasOwnProperty("id")){
                         sourceObs.array[i].id = ++rxObsCounter;
@@ -218,14 +250,18 @@ if (Rx !== undefined) {
                 }
             } else {
 
-                if (!(sourceObs.hasOwnProperty("id"))) {
+                if (!sourceObs.hasOwnProperty("id") && operatorName !== 'RefCountOperator') {
                     sourceObs.id = ++rxObsCounter;
                 }
             }
             if (!(resultantObservable.hasOwnProperty("id"))) {
                 resultantObservable.id = ++rxObsCounter;
             }
-            CriLogObserverFactory(operator, sourceObs, resultantObservable);
+            if(operator.constructor.name === 'RefCountOperator'){
+                CriLogObserverFactory(operator, sourceObs.getSubject(), resultantObservable)
+            }else{
+                CriLogObserverFactory(operator, sourceObs, resultantObservable);
+            }
         }
         return resultantObservable;
     };
@@ -242,7 +278,7 @@ if (Rx !== undefined) {
     };
 
 
-   // Todo
+    // Todo
     const create_observable = Rx.Observable.create;
     Rx.Observable.create = function (observer) {
         var resultantObservable = create_observable(observer)
@@ -276,6 +312,40 @@ if (Rx !== undefined) {
     Rx.Observable.prototype.subscribe = function (observerOrNext, error, complete) {
         var operator = this.operator;
         var sink = Rx.toSubscriber(observerOrNext, error, complete);
+        if(sink.constructor.name === 'SubjectSubscriber'){
+            if(!checkIfEdgeAlreadyExists(this.id, observerOrNext.id)) {
+                logEdgeData(this.id, observerOrNext.id, '')
+            }
+        }else if(sink.constructor.name === 'ConnectableSubscriber'){
+            if(sink.connectable.hasOwnProperty("id"))
+                if(!checkIfEdgeAlreadyExists(this.id, sink.connectable.id)) {
+                    logEdgeData(this.id, sink.connectable.id, '')
+                }
+            if(sink.destination.observers.length){
+                var observers = _.uniq(sink.destination.observers, function (e) {
+                    return e.id;
+                });
+                var observerId = '';
+                if(observers.length > 0){
+                    for(var i=0; i< observers.length; i++){
+                        try{
+                            observerId = observers[i]._id;
+                        }catch(err) {
+                            observerId = observers[i].id;
+                        }
+                        if(!checkIfEdgeAlreadyExists(sink.connectable.id, observerId)) {
+                            logEdgeData(sink.connectable.id, observerId, '')
+                        }
+                    }
+                }
+                else{
+                    if(!checkIfEdgeAlreadyExists(sink.connectable.source.id, sink.destination.id)) {
+                        logEdgeData(sink.connectable.source.id, sink.destination.id, '')
+                    }
+                }
+
+            }
+        }
         sink._id = this.id;
         sink._operatorName = operator;
         var obsType = '';
@@ -321,33 +391,39 @@ if (Rx !== undefined) {
         if (!this.isStopped) {
 
             var nextValue = '';
-
+            //this.outerValue.constructor.name
             // Check if it has a custom _id else continue
-            if(this._id){
-                if(value || value === 0){
-                    constructorName = value.constructor.name
-                    //Todo check for other type of events or similar kind
-                    switch(constructorName){
-                        case 'KeyboardEvent':
-                            nextValue = value.currentTarget.value;
-                            break;
-                        case 'Number':
+
+            if(value || value === 0){
+                constructorName = value.constructor.name;
+                //Todo check for other type of events or similar kind
+                switch(constructorName){
+                    case 'KeyboardEvent':
+                        nextValue = value.currentTarget.value;
+                        break;
+                    case 'Number':
+                        nextValue = JSON.stringify(value);
+                        break;
+                    case 'Array':
+                        nextValue = JSON.stringify(value);
+                        break;
+                    case 'Object':
+                        if(value.hasOwnProperty('type') &&  value.type === 'keyup')
+                            nextValue = value.key;
+                        else
                             nextValue = JSON.stringify(value);
-                            break;
-                        case 'Array':
-                            nextValue = JSON.stringify(value);
-                            break;
-                        case 'Object':
-                            if(value.hasOwnProperty('type') &&  value.type === 'keyup')
-                                nextValue = value.key;
-                            else
-                                nextValue = JSON.stringify(value);
-                            break;
-                        default:
-                            nextValue = JSON.stringify(value);
-                            break;
-                    }
+                        break;
+                    default:
+                        nextValue = JSON.stringify(value);
+                        break;
+                }
+                if(this._id){
                     logNodeData(this._id, this.obsType, '', '', nextValue, '');
+                    if(this.constructor.name === 'ConnectableSubscriber' && this.connectable.hasOwnProperty("id")){
+                        logNodeData(this.connectable.id, this.connectable.constructor.name, '', '', nextValue, '');
+                    }
+                }else if(this.outerValue && this.outerValue.id && this.outerValue.constructor.name === 'ScalarObservable'){
+                    logNodeData(this.outerValue.id, this.outerValue.constructor.name, '', '', nextValue, '');
                 }
 
             }
@@ -355,6 +431,16 @@ if (Rx !== undefined) {
         }
     };
 
+
+    // Rx.Observable.prototype.multicast = function (subjectOrSubjectFactory, selector) {
+    //     if (typeof subjectOrSubjectFactory !== 'function') {
+    //         console.log(subjectOrSubjectFactory)
+    //         if(!checkIfEdgeAlreadyExists(this.id, subjectOrSubjectFactory.id)) {
+    //             logEdgeData(this.id, subjectOrSubjectFactory.id, '')
+    //         }
+    //     }
+    //     return Rx.Observable.prototype.multicast.call(subjectOrSubjectFactory, selector);
+    // }
     /**
      * This method subscribe to given observable and send message to dev tool on value received
      * @param obs
@@ -368,16 +454,16 @@ if (Rx !== undefined) {
 
         obs.subscribe(function (x) {
 
-            console.log("next val in subscribe");
-            console.log(obs);
-            console.log(x);
+                console.log("next val in subscribe");
+                console.log(obs);
+                console.log(x);
                 if (x instanceof jQuery.Event) {
                     x = x.type;
                 }
 
                 if(x){
                     //if (x.constructor == Array) {
-                        x = JSON.stringify(x);
+                    x = JSON.stringify(x);
                     //}
                 }
 
@@ -446,8 +532,8 @@ if (Rx !== undefined) {
         if (obsSource.constructor.name === "ArrayObservable" && flattenOperators.includes(operName)) {
             for(var i=0; i<obsSource.array.length; i++){
                 var tempObsSource = obsSource.array[i];
-                if(!checkIfNodeAlreadyExists(tempObsSource.id, '', sourceNodeType)){
-                    logNodeData(tempObsSource.id, sourceNodeType, '', '', '', '')
+                if(!checkIfNodeAlreadyExists(tempObsSource.id, '', tempObsSource.constructor.name)){
+                    logNodeData(tempObsSource.id, tempObsSource.constructor.name, '', '', '', '')
                 }
                 logEdgeData(tempObsSource.id, obsResult.id, operName)
 
