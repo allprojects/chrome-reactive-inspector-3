@@ -413,6 +413,9 @@ if (Rx !== undefined) {
                         else
                             nextValue = JSON.stringify(value);
                         break;
+                    case 'MouseEvent':
+                        nextValue = JSON.stringify({'clientX':value.clientX, 'clientY':value.clientY});
+                        break;
                     default:
                         nextValue = JSON.stringify(value);
                         break;
@@ -521,21 +524,24 @@ if (Rx !== undefined) {
         logNodeData(obsResult.id, resultNodeType, '', '', '', '');
 
         var name = '';
-        if(obsSource.sourceObj){
+        if(obsSource.sourceObj && obsSource.sourceObj.id){
             var res = _.find(window.variables, {id:obsSource.sourceObj.id});
             name = res.name;
         }
 
 
         // source obs are the dependencies of resultant obs
-
+        var temp_val = '';
         if (obsSource.constructor.name === "ArrayObservable" && flattenOperators.includes(operName)) {
             for(var i=0; i<obsSource.array.length; i++){
                 var tempObsSource = obsSource.array[i];
+                temp_val = '';
                 if(!checkIfNodeAlreadyExists(tempObsSource.id, '', tempObsSource.constructor.name)){
-                    logNodeData(tempObsSource.id, tempObsSource.constructor.name, '', '', '', '')
+                    if(tempObsSource.constructor.name === 'ScalarObservable' && tempObsSource.value)
+                        temp_val = tempObsSource.value;
+                    logNodeData(tempObsSource.id, tempObsSource.constructor.name, '', '', temp_val, '')
                 }
-                logEdgeData(tempObsSource.id, obsResult.id, operName)
+                logEdgeData(tempObsSource.id, obsResult.id, operName);
 
                 //Special case because of twitter follow example
                 if(tempObsSource.constructor.name === 'Observable'){

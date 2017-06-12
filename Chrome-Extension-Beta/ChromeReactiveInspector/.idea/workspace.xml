@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e3c07cc8-9ded-41a8-b9ce-40180b5a70d5" name="Default" comment="">
+    <list default="true" id="e3c07cc8-9ded-41a8-b9ce-40180b5a70d5" name="Default" comment="Added">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../TestApps/RxJs/draw_with_combine_latest/index.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../TestApps/RxJs/draw_with_combine_latest/index.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myanalysis.js" afterPath="$PROJECT_DIR$/myanalysis.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/panel.js" afterPath="$PROJECT_DIR$/panel.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../TestApps/RxJs/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../../TestApps/RxJs/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../TestApps/RxJs/autocomplete/autocomplete.html" afterPath="$PROJECT_DIR$/../../TestApps/RxJs/autocomplete/autocomplete.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../TestApps/RxJs/autocomplete/index.js" afterPath="$PROJECT_DIR$/../../TestApps/RxJs/autocomplete/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../TestApps/RxJs/letterrcount/index.js" afterPath="$PROJECT_DIR$/../../TestApps/RxJs/letterrcount/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../TestApps/RxJs/SubjectsExamples/index.js" afterPath="$PROJECT_DIR$/../../TestApps/RxJs/SubjectsExamples/index.js" />
     </list>
     <ignored path="ChromeReactiveDebugger.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,22 +36,66 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="comm_api_panel.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/helpers/comm_api_panel.js">
+      <file leaf-file-name="inject-for-instrumentation.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/inject-for-instrumentation.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1140">
-              <caret line="65" column="0" lean-forward="false" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
+            <state relative-caret-position="221">
+              <caret line="13" column="17" lean-forward="true" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="myanalysis.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="manifest.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/manifest.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-151">
+              <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="comm_api_background.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/helpers/comm_api_background.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="436">
+              <caret line="74" column="0" lean-forward="false" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="comm_api_content-script.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/helpers/comm_api_content-script.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="504">
+              <caret line="44" column="0" lean-forward="false" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="panel.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/panel.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="14" column="36" lean-forward="false" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="myanalysis.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/myanalysis.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="185">
-              <caret line="335" column="33" lean-forward="true" selection-start-line="335" selection-start-column="33" selection-end-line="335" selection-end-column="33" />
-              <folding />
+            <state relative-caret-position="343">
+              <caret line="416" column="103" lean-forward="false" selection-start-line="416" selection-start-column="36" selection-end-line="416" selection-end-column="103" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -58,8 +103,8 @@
       <file leaf-file-name="Rx_latest.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Rx_latest.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304660">
-              <caret line="15233" column="40" lean-forward="false" selection-start-line="15233" selection-start-column="29" selection-end-line="15233" selection-end-column="40" />
+            <state relative-caret-position="16711">
+              <caret line="983" column="6" lean-forward="false" selection-start-line="983" selection-start-column="6" selection-end-line="983" selection-end-column="6" />
               <folding />
             </state>
           </provider>
@@ -76,36 +121,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Rx.internals.AbstractObserver</find>
-      <find>prototype.subscribe</find>
-      <find>function (observerOrNext, error, complete)</find>
-      <find>Observable.prototype.subscribe</find>
-      <find>Rx.Subject.prototype.onNext</find>
-      <find>Subject</find>
-      <find>var Subject</find>
-      <find>FromEvent</find>
-      <find>Observer.create</find>
-      <find>CriSubscriptRxObservableToLog</find>
-      <find>RefCountObservable</find>
-      <find>CriLogObserverFactory</find>
-      <find>operator.co</find>
-      <find>Observable.pro</find>
-      <find>operator</find>
-      <find>observable</find>
-      <find>lift</find>
-      <find>.lift</find>
-      <find>.from</find>
-      <find>.next</find>
-      <find>Observable.sub</find>
-      <find>.subscribe</find>
-      <find>toSubscriber</find>
-      <find>Rx.</find>
-      <find>window.</find>
-      <find>update</find>
-      <find>action</find>
-      <find>action ==</find>
-      <find>action ===</find>
-      <find>currentType</find>
+      <find>rxGraphStages.s</find>
+      <find>rxGraphStages.st</find>
+      <find>rxGraphStages.state</find>
+      <find>rxGraphStages.stat</find>
+      <find>Render</find>
+      <find>render</find>
+      <find>create-nodes</find>
+      <find>rxGraphStages.sta</find>
+      <find>stageDataToDraw.edges</find>
+      <find>stageToRedraw</find>
+      <find>rxGraphStages[</find>
+      <find>currentNodeId</find>
+      <find>createNodes</find>
+      <find>t</find>
+      <find>tip</find>
+      <find>captureGraphAndSaveAsNewStage</find>
+      <find>chrome.runtime.onMessage.addListener</find>
+      <find>multicast</find>
+      <find>this.lift(new RefCountOperator(this));</find>
+      <find>rxGraphStages</find>
+      <find>operatorName</find>
+      <find>chrome.runtime.onConnect.addListener</find>
+      <find>chrome.runtime.sendMessage</find>
+      <find>re</find>
+      <find>refre</find>
+      <find>refres</find>
+      <find>sendObjectToInspectedPage</find>
+      <find>refresh</find>
+      <find>chrome.extension.onRequest.addListener</find>
+      <find>loading</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -135,24 +180,25 @@
         <option value="$USER_HOME$/Desktop/rxjs/rxExample.html" />
         <option value="$USER_HOME$/Desktop/rxjs/Rx.js" />
         <option value="$USER_HOME$/Desktop/rxjs/rxExample.js" />
-        <option value="$PROJECT_DIR$/helpers/comm_api_content-script.js" />
-        <option value="$PROJECT_DIR$/panel.js" />
         <option value="$PROJECT_DIR$/libraries/bootstrap/css/bootstrap-responsive.css" />
-        <option value="$PROJECT_DIR$/panel.html" />
-        <option value="$PROJECT_DIR$/panel.css" />
         <option value="$PROJECT_DIR$/myinst_pra.js" />
-        <option value="$PROJECT_DIR$/devtools.js" />
-        <option value="$PROJECT_DIR$/helpers/comm_api_background.js" />
         <option value="$PROJECT_DIR$/rx.umd.js" />
         <option value="$PROJECT_DIR$/content-script-start.js" />
         <option value="$PROJECT_DIR$/Rx.js" />
         <option value="$PROJECT_DIR$/rx.all.js" />
         <option value="$PROJECT_DIR$/main.js" />
-        <option value="$PROJECT_DIR$/manifest.json" />
         <option value="$PROJECT_DIR$/Rx_latest.js" />
+        <option value="$PROJECT_DIR$/messaging.js" />
+        <option value="$PROJECT_DIR$/panel.css" />
+        <option value="$PROJECT_DIR$/panel.html" />
         <option value="$PROJECT_DIR$/helpers/comm_api_panel.js" />
-        <option value="$PROJECT_DIR$/inject-for-instrumentation.js" />
+        <option value="$PROJECT_DIR$/devtools.js" />
         <option value="$PROJECT_DIR$/myanalysis.js" />
+        <option value="$PROJECT_DIR$/panel.js" />
+        <option value="$PROJECT_DIR$/helpers/comm_api_content-script.js" />
+        <option value="$PROJECT_DIR$/manifest.json" />
+        <option value="$PROJECT_DIR$/inject-for-instrumentation.js" />
+        <option value="$PROJECT_DIR$/helpers/comm_api_background.js" />
       </list>
     </option>
   </component>
@@ -191,6 +237,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="Scope">
         <subPane subId="Project Files">
           <PATH>
@@ -219,7 +266,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -251,7 +297,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../TestApps/RxJs" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Documents/Thesis/examples/todo-angular2-ngrx" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="js-jscs-nodeInterpreter" value="C:\Program Files\nodejs\node.exe" />
     <property name="LayoutCode.rearrangeEntriesJavaScript" value="false" />
@@ -263,6 +309,7 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
+    <property name="SearchEverywhereHistoryKey" value="back&#9;FILE&#9;file:///home/gamer/WebstormProjects/chrome-plugin/Chrome-Extension-Beta/ChromeReactiveInspector/helpers/comm_api_background.js" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -410,7 +457,21 @@
       <workItem from="1495615688872" duration="7336000" />
       <workItem from="1495708631308" duration="3429000" />
       <workItem from="1495790091529" duration="6583000" />
-      <workItem from="1495877496492" duration="5983000" />
+      <workItem from="1495877496492" duration="7336000" />
+      <workItem from="1495964580667" duration="9885000" />
+      <workItem from="1496144937961" duration="3060000" />
+      <workItem from="1496239452667" duration="533000" />
+      <workItem from="1496312449569" duration="22419000" />
+      <workItem from="1496479760583" duration="4843000" />
+      <workItem from="1496571294190" duration="15535000" />
+      <workItem from="1496738240419" duration="12156000" />
+      <workItem from="1496827680354" duration="4278000" />
+      <workItem from="1497098259549" duration="78000" />
+      <workItem from="1497098357018" duration="171000" />
+      <workItem from="1497181330982" duration="6669000" />
+      <workItem from="1497261196040" duration="605000" />
+      <workItem from="1497264246307" duration="7563000" />
+      <workItem from="1497299568006" duration="7681000" />
     </task>
     <task id="LOCAL-00001" summary="Working code and my hard work of one week.">
       <created>1495140708127</created>
@@ -440,26 +501,68 @@
       <option name="project" value="LOCAL" />
       <updated>1495633492533</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Code refactoring and code works fine for 'Twitter follow' example now">
+      <created>1495892896234</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1495892896234</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Added support for 'print on node click', buffer and bufferToggle operator, and related examples update">
+      <created>1496180637181</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1496180637181</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Fixed 'mouseHover' and 'nodeClick' issues.">
+      <created>1496336839332</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1496336839332</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Added support for buffer related operators and fixed bug- when a user refreshes tha page, slider should be set to zero.">
+      <created>1496597090276</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1496597090276</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Added support for Subjects and scalarObservables. Fixed some bugs">
+      <created>1496843037774</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1496843037774</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Fixed annoying bug where plugin was not letting other websites to load and also fixed to retain the JS code.">
+      <created>1497307271119</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1497307271119</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="316132000" />
+    <option name="totallyTimeSpent" value="412961000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="-4" width="1313" height="772" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2249408" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23367427" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18730651" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.6533128" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15325077" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42724457" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
@@ -467,31 +570,9 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18730651" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.011458334" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
-    <layout-to-restore>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16875" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.011458334" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18921776" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="processedProjectFiles" value="true" />
@@ -504,6 +585,32 @@
         <option value="3" />
         <option value="1" />
       </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
     </option>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -525,19 +632,21 @@
     <MESSAGE value="Remove unnecessary modification in library file. and added examples" />
     <MESSAGE value="Added necessary modification to library and added support to 'From' operator and tested with 'Map' operator as well( Test case 5)" />
     <MESSAGE value="Added Bug fix for ArrayObservables and some test cases" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Bug fix for ArrayObservables and some test cases" />
+    <MESSAGE value="Code refactoring and code works fine for 'Twitter follow' example now" />
+    <MESSAGE value="Added support for 'print on node click', buffer and bufferToggle operator, and related examples update" />
+    <MESSAGE value="Fixed 'mouseHover' and 'nodeClick' issues." />
+    <MESSAGE value="Added support for buffer related operators and fixed bug- when a user refreshes tha page, slider should be set to zero." />
+    <MESSAGE value="Added support for Subjects and scalarObservables. Fixed some bugs" />
+    <MESSAGE value="Fixed annoying bug where plugin was not letting other websites to load and also fixed to retain the JS code." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed annoying bug where plugin was not letting other websites to load and also fixed to retain the JS code." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="13" />
+      <option name="time" value="15" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://C:/xampp/htdocs/RxDebuggerTests/timer.js" />
-    <entry file="file://C:/xampp/htdocs/test/mytest.js" />
-    <entry file="file://C:/xampp/htdocs/test/mytest.html" />
-    <entry file="file://C:/xampp/htdocs/RxDebuggerTests/bacon-operators.js" />
     <entry file="file://C:/xampp/htdocs/RxDebuggerTests/bacon-operators.html" />
     <entry file="file://C:/xampp/htdocs/RxDebuggerTests/bacon-events.html" />
     <entry file="file://C:/xampp/htdocs/RxDebuggerTests/bacon-events.js" />
@@ -555,20 +664,6 @@
     <entry file="file://$USER_HOME$/Desktop/rxjs/Rx.js" />
     <entry file="file://$USER_HOME$/Desktop/rxjs/rxExample.html" />
     <entry file="file://$USER_HOME$/Desktop/rxjs/rxExample.js" />
-    <entry file="file://$PROJECT_DIR$/Bacon.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57726">
-          <caret line="3207" column="15" lean-forward="false" selection-start-line="3207" selection-start-column="4" selection-end-line="3207" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/helpers/storage_api_general.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-756">
-          <caret line="9" column="22" lean-forward="false" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/EcmaScript.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
@@ -598,20 +693,6 @@
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/Downloads/esprima.js" />
-    <entry file="file://$PROJECT_DIR$/panel.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-691">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/devtools.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/esprima.js" />
     <entry file="file://$PROJECT_DIR$/escodegen.browser.js" />
     <entry file="file://$PROJECT_DIR$/myinst2.js">
@@ -628,32 +709,117 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/background.js">
+    <entry file="file://$PROJECT_DIR$/myinst.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-900">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rx.umd.js" />
+    <entry file="file://$PROJECT_DIR$/rx.all.js" />
+    <entry file="file://$PROJECT_DIR$/Rx.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Bacon.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2975">
+          <caret line="175" column="70" lean-forward="false" selection-start-line="175" selection-start-column="67" selection-end-line="175" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/content-script-start.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/helpers/comm_api_background.js">
+    <entry file="file://$PROJECT_DIR$/helpers/storage_api_general.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="15" column="30" lean-forward="true" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/helpers/comm_api_content-script.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-181">
+        <state relative-caret-position="-2640">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/myinst.js">
+    <entry file="file://$PROJECT_DIR$/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-900">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/messaging.js" />
+    <entry file="file://$PROJECT_DIR$/libraries/dagre-d3.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="918" column="45" lean-forward="false" selection-start-line="918" selection-start-column="34" selection-end-line="918" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/devtools.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/content-script-end.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rx-debugger-data-structure.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panel.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="104" column="16" lean-forward="true" selection-start-line="104" selection-start-column="16" selection-end-line="104" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panel.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="36" lean-forward="false" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Rx_latest.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="16711">
+          <caret line="983" column="6" lean-forward="false" selection-start-line="983" selection-start-column="6" selection-end-line="983" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3556">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/myanalysis.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="343">
+          <caret line="416" column="103" lean-forward="false" selection-start-line="416" selection-start-column="36" selection-end-line="416" selection-end-column="103" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -661,84 +827,76 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rx.umd.js" />
-    <entry file="file://$PROJECT_DIR$/content-script-start.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="3" selection-end-line="4" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rx.all.js" />
-    <entry file="file://$PROJECT_DIR$/Rx.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/panel.css">
+    <entry file="file://$PROJECT_DIR$/background.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/panel.js">
+    <entry file="file://$PROJECT_DIR$/helpers/comm_api_content-script.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="504">
+          <caret line="44" column="0" lean-forward="false" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpers/comm_api_background.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="436">
+          <caret line="74" column="0" lean-forward="false" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/manifest.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="51" column="14" lean-forward="true" selection-start-line="51" selection-start-column="14" selection-end-line="51" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="44" lean-forward="false" selection-start-line="0" selection-start-column="44" selection-end-line="0" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/inject-for-instrumentation.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="23" column="48" lean-forward="false" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
+        <state relative-caret-position="-151">
+          <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/helpers/comm_api_panel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1140">
-          <caret line="65" column="0" lean-forward="false" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="226">
+          <caret line="156" column="41" lean-forward="false" selection-start-line="156" selection-start-column="16" selection-end-line="156" selection-end-column="41" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Rx_latest.js">
+    <entry file="file://$PROJECT_DIR$/inject-for-instrumentation.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304660">
-          <caret line="15233" column="40" lean-forward="false" selection-start-line="15233" selection-start-column="29" selection-end-line="15233" selection-end-column="40" />
+        <state relative-caret-position="221">
+          <caret line="13" column="17" lean-forward="true" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/myanalysis.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="335" column="33" lean-forward="true" selection-start-line="335" selection-start-column="33" selection-end-line="335" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>

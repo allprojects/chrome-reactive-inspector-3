@@ -78,7 +78,7 @@ multicasted.connect();
 */
 /**
  * Multicast support with refCount
- *
+ * Status Done
  */
 
 /*
@@ -121,6 +121,7 @@ setTimeout(function () {
 
 /**
  * BehaviorSubject
+ * Status Done
  */
 /*
 var subject = new Rx.BehaviorSubject(0); // 0 is the initial value
@@ -145,6 +146,7 @@ subject.next(3);
 
 /**
  * ReplaySubject
+ * Status Done
  */
 // Case 1
     /*
@@ -197,7 +199,8 @@ setTimeout(function () {
 
 /**
  * AsyncSubject
- * */
+ * Status Done
+ */
 /*
 var subject = new Rx.AsyncSubject();
 
