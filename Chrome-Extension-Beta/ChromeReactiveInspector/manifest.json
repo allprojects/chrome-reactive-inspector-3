@@ -30,7 +30,6 @@
                 "myinst2.js",
                 "libraries/underscore.js",
                 "libraries/d3.v3.min.js",
-                "inject-for-instrumentation.js",
                 "Bacon.js",
                 "Rx_latest.js",
                 "myanalysis.js"

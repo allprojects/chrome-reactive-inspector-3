@@ -10,7 +10,7 @@ chrome.storage.sync.get('criconfigincludes', function (items) {
 
 /** DOCUMENT LOAD INTERCEPTION Start ***/
 // stop loading document so that we can load the instrumented version
-window.stop();
+// window.stop();
 // load current document and
 // All scripts will be rendered inert,
 var request = new XMLHttpRequest();
@@ -29,7 +29,7 @@ request.onload = function (event) {
     var respText = request.responseText;
     // check if this page contains bacon / rx , if not then debugger should not run
     if ((respText.search("Rx.js") === -1) && (respText.search("Bacon.js") === -1) && (respText.search("rx.lite.js") === -1) && (respText.search("rx.lite.compat.js") === -1) && (respText.search("rx.all.js") === -1)) {
-        shouldReactiveDebuggerRun = false;
+        shouldReactiveDebuggerRun = true;
     }
     // Reactive inspector should not run , so load page original content
     var html = request.responseText;
@@ -59,7 +59,7 @@ if (shouldReactiveDebuggerRun === true) {
             //return setTimeout(callback, 0);
             return false;
         }
-        if (script.getAttribute('type') !== 'rx-instrument/javascript') {
+        if (script.getAttribute('type') && script.getAttribute('type') !== 'rx-instrument/javascript') {
             return false;
         }
         // if script tag contain source file

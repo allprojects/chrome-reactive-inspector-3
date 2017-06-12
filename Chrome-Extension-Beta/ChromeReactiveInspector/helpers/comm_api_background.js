@@ -16,6 +16,8 @@ chrome.runtime.onConnect.addListener(function (port) {
             tabId = message.tabId;
             tabPorts[tabId] = port;
         }
+        chrome.tabs.executeScript(message.tabId,
+            { file: 'inject-for-instrumentation.js' });
     });
 
     var extensionListener = function (message, sender, sendResponse) {
@@ -38,7 +40,11 @@ chrome.runtime.onConnect.addListener(function (port) {
                 // sends them to the panel
             } else {
                 // alert("background.js - got from content script and send to panel script");
-                port.postMessage(message);
+                if(port)
+                    port.postMessage(message);
+                else
+                    return false;
+
             }
 
         }
@@ -66,5 +72,9 @@ chrome.tabs.onReplaced.addListener(function(newTabId, oldTabId) {
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if(changeInfo.status === 'loading'){
         chrome.tabs.sendMessage(tabId, {action: 'loading'}, function(response) {});
+        if(tabPorts[tabId] !== undefined){
+            chrome.tabs.executeScript(tabId,
+                { file: 'inject-for-instrumentation.js' });
+        }
     }
 });
