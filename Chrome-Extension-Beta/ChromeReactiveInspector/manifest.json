@@ -27,7 +27,7 @@
                 "helpers/comm_api_content-script.js",
                 "helpers/storage_api_general.js",
                 "libraries/jquery.js",
-                "myinst2.js",
+                "myinst.js",
                 "libraries/underscore.js",
                 "libraries/d3.v3.min.js",
                 "Bacon.js",

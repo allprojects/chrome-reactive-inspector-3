@@ -31,6 +31,10 @@ var _node = '';
         //console.log("messaging.js part of panel script , message from background page");
         //console.log("messaging.js part of panel script , message content is = " + message.content);
         // console.log(message);
+
+        /**
+         * If the user refreshes the page, then reset the graph and slider and load it again.
+         */
         if(message.action === 'loading'){
             if(rxSlider){
                 rxSlider.slider("option", "min", 0);
@@ -41,6 +45,7 @@ var _node = '';
             initialiseGraph();
             rxGraphStages = [];
         }
+
         var currentNodeId = false;
 
         if (message.action === "saveNode") {
@@ -137,8 +142,6 @@ var _node = '';
                     class: "current"
                 });
             }
-
-
             render(d3.select("svg g"), g);
 
             inner.selectAll("g.node")
@@ -175,7 +178,6 @@ var _node = '';
             });
             render(d3.select("svg g"), g);
             captureGraphAndSaveAsNewStage("saveEdge", false);
-
         }
 
     });
@@ -197,9 +199,9 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
     newStage.stageEvent = event;
     newStage.stageId = rxGraphStages.length + 1;
 
-    var nodeToPush = {}
+    var nodeToPush = {};
     // get current nodes from graph
-    d3.selectAll('g.node')  //here's how you get all the nodes
+    d3.selectAll('g.node')
         .each(function (d) {
             var currentNodeEdges = g.nodeEdges(d);
             if (currentNodeEdges.length > 0) {
@@ -215,6 +217,7 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
 
             nodeToPush = g.node(d);
 
+            // Check if its the current node, if yes set it as current node
             if (nodeToPush.nodeId === currentNodeId) {
                 nodeToPush.class = "current";
             } else {

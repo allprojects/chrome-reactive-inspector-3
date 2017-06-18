@@ -72,52 +72,35 @@ if (shouldReactiveDebuggerRun === true) {
 
                 if (filesShouldOnlyInstrument === false) {
                     // NO CONFIG SET
-                    if (filesShouldNotInclude.indexOf(filename) !== -1) {
-
-                    } else if (filesShouldNotInstrument.indexOf(filename) !== -1) {
-                        // do not instrument these files
+                    if (filesShouldNotInclude.indexOf(filename) !== -1) {}
+                    else if (filesShouldNotInstrument.indexOf(filename) !== -1) {
                         eval(request.responseText);
-                        //script.getAttribute('type', 'text/javascript');
-                        // script.setAttribute('type', 'text/javascript');
                     } else {
-
                         var code = CriInstrument(request.responseText);
-                        //console.log("code after inst");
-                        //console.log(code);
                         eval(code);
                         J$.W(-1, '', '', '');
                         fileReadOver = true
-                        //(new Function(code))();
-
                     }
                 } else {
                     // CONFIG SET SO only instrument files mentioned in config
-                    if (filesShouldNotInclude.indexOf(filename) !== -1) {
-
-                    } else if (filesShouldOnlyInstrument.indexOf(filename) !== -1) {
+                    if (filesShouldNotInclude.indexOf(filename) !== -1) {}
+                    else if (filesShouldOnlyInstrument.indexOf(filename) !== -1) {
                         var code = CriInstrument(request.responseText);
-                        // console.log("code after inst");
-                        // console.log(code);
                         eval(code);
-                        fileReadOver = true
+                        fileReadOver = true;
                         J$.W(-1, '', '', '');
-
                     } else {
                         eval(request.responseText);
-                        // script.setAttribute('type', 'text/javascript');
                     }
                 }
-
                 setTimeout(next, 0, ++index);
             };
             request.send(null);
         } else {
             // script tag contains inline code.
             var code = CriInstrument(script.textContent);
-            //console.log("code after inst");
-            //       console.log(code);
             eval(code);
-            fileReadOver = true
+            fileReadOver = true;
             setTimeout(next, 0, ++index);
         }
     }, 0, 0);
@@ -133,15 +116,8 @@ if (shouldReactiveDebuggerRun === true) {
     function CriInstrument(code) {
         var instrumentedCode = code;
         if (J$.instrumentCode !== undefined) {
-            // var esprismaParsed = esprima.parse(code);
-            // console.log("esprismaParsed");
-            // console.log(esprismaParsed);
             instrumentedCode = J$.instrumentCode(code, {wrapProgram: false, isEval: false}).code;
-            // console.log("instrumentedCodeeeee");
-            // console.log(instrumentedCode);
         }
-
-        // return escodegen.generate(esprismaParsed);
         return instrumentedCode;
     }
 }

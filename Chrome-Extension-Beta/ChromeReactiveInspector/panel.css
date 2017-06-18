@@ -90,6 +90,7 @@ text {
 }
 
 .column-center {
+    margin-top: 5px;
     display: inline-block;
     width: 80%;
 }

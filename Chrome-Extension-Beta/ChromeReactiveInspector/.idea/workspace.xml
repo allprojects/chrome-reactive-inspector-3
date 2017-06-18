@@ -2,13 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e3c07cc8-9ded-41a8-b9ce-40180b5a70d5" name="Default" comment="Added">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../TestApps/RxJs/draw_with_combine_latest/index.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../TestApps/RxJs/draw_with_combine_latest/index.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myanalysis.js" afterPath="$PROJECT_DIR$/myanalysis.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpers/comm_api_content-script.js" afterPath="$PROJECT_DIR$/helpers/comm_api_content-script.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpers/comm_api_panel.js" afterPath="$PROJECT_DIR$/helpers/comm_api_panel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inject-for-instrumentation.js" afterPath="$PROJECT_DIR$/inject-for-instrumentation.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libraries/jquery-ui.css" afterPath="$PROJECT_DIR$/libraries/jquery-ui.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/manifest.json" afterPath="$PROJECT_DIR$/manifest.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/panel.css" afterPath="$PROJECT_DIR$/panel.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/panel.html" afterPath="$PROJECT_DIR$/panel.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/panel.js" afterPath="$PROJECT_DIR$/panel.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../TestApps/RxJs/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../../TestApps/RxJs/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../TestApps/RxJs/SubjectsExamples/index.js" afterPath="$PROJECT_DIR$/../../TestApps/RxJs/SubjectsExamples/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../TestApps/RxJs/letterrcount/index.js" afterPath="$PROJECT_DIR$/../../TestApps/RxJs/letterrcount/index.js" />
     </list>
     <ignored path="ChromeReactiveDebugger.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,12 +40,44 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="inject-for-instrumentation.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="inject-for-instrumentation.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inject-for-instrumentation.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" column="17" lean-forward="true" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
+            <state relative-caret-position="1500">
+              <caret line="75" column="20" lean-forward="false" selection-start-line="75" selection-start-column="20" selection-end-line="75" selection-end-column="20" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="panel.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/panel.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="145">
+              <caret line="109" column="11" lean-forward="true" selection-start-line="109" selection-start-column="11" selection-end-line="109" selection-end-column="11" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="panel.css" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/panel.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="266">
+              <caret line="94" column="15" lean-forward="true" selection-start-line="94" selection-start-column="15" selection-end-line="94" selection-end-column="15" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="comm_api_panel.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/helpers/comm_api_panel.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-3621">
+              <caret line="34" column="11" lean-forward="true" selection-start-line="34" selection-start-column="11" selection-end-line="34" selection-end-column="11" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -49,18 +85,18 @@
       <file leaf-file-name="manifest.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/manifest.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-151">
-              <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+            <state relative-caret-position="370">
+              <caret line="55" column="20" lean-forward="false" selection-start-line="55" selection-start-column="20" selection-end-line="55" selection-end-column="20" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="comm_api_background.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/helpers/comm_api_background.js">
+      <file leaf-file-name="myanalysis.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/myanalysis.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="436">
-              <caret line="74" column="0" lean-forward="false" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+            <state relative-caret-position="-501">
+              <caret line="398" column="65" lean-forward="true" selection-start-line="398" selection-start-column="65" selection-end-line="398" selection-end-column="65" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -71,8 +107,8 @@
       <file leaf-file-name="comm_api_content-script.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/helpers/comm_api_content-script.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
-              <caret line="44" column="0" lean-forward="false" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+            <state relative-caret-position="246">
+              <caret line="17" column="38" lean-forward="false" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -81,30 +117,8 @@
       <file leaf-file-name="panel.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/panel.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" column="36" lean-forward="false" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="myanalysis.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/myanalysis.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="343">
-              <caret line="416" column="103" lean-forward="false" selection-start-line="416" selection-start-column="36" selection-end-line="416" selection-end-column="103" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Rx_latest.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Rx_latest.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="16711">
-              <caret line="983" column="6" lean-forward="false" selection-start-line="983" selection-start-column="6" selection-end-line="983" selection-end-column="6" />
+            <state relative-caret-position="206">
+              <caret line="33" column="58" lean-forward="false" selection-start-line="33" selection-start-column="52" selection-end-line="33" selection-end-column="58" />
               <folding />
             </state>
           </provider>
@@ -121,12 +135,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>rxGraphStages.s</find>
-      <find>rxGraphStages.st</find>
-      <find>rxGraphStages.state</find>
-      <find>rxGraphStages.stat</find>
-      <find>Render</find>
-      <find>render</find>
       <find>create-nodes</find>
       <find>rxGraphStages.sta</find>
       <find>stageDataToDraw.edges</find>
@@ -151,6 +159,12 @@
       <find>refresh</find>
       <find>chrome.extension.onRequest.addListener</find>
       <find>loading</find>
+      <find>ui-bg_flat_75_ffffff_40x100.png`</find>
+      <find>ui-bg_flat_75_ffffff_40x100.png</find>
+      <find>.png</find>
+      <find>rec-status</find>
+      <find>cri_config_rec_status</find>
+      <find>column-center</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -189,16 +203,17 @@
         <option value="$PROJECT_DIR$/main.js" />
         <option value="$PROJECT_DIR$/Rx_latest.js" />
         <option value="$PROJECT_DIR$/messaging.js" />
-        <option value="$PROJECT_DIR$/panel.css" />
-        <option value="$PROJECT_DIR$/panel.html" />
-        <option value="$PROJECT_DIR$/helpers/comm_api_panel.js" />
         <option value="$PROJECT_DIR$/devtools.js" />
         <option value="$PROJECT_DIR$/myanalysis.js" />
-        <option value="$PROJECT_DIR$/panel.js" />
-        <option value="$PROJECT_DIR$/helpers/comm_api_content-script.js" />
-        <option value="$PROJECT_DIR$/manifest.json" />
-        <option value="$PROJECT_DIR$/inject-for-instrumentation.js" />
         <option value="$PROJECT_DIR$/helpers/comm_api_background.js" />
+        <option value="$PROJECT_DIR$/libraries/jquery-ui.css" />
+        <option value="$PROJECT_DIR$/inject-for-instrumentation.js" />
+        <option value="$PROJECT_DIR$/manifest.json" />
+        <option value="$PROJECT_DIR$/panel.html" />
+        <option value="$PROJECT_DIR$/helpers/comm_api_content-script.js" />
+        <option value="$PROJECT_DIR$/helpers/comm_api_panel.js" />
+        <option value="$PROJECT_DIR$/panel.js" />
+        <option value="$PROJECT_DIR$/panel.css" />
       </list>
     </option>
   </component>
@@ -237,35 +252,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="ChromeReactiveInspector">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="ChromeReactiveInspector">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="helpers">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -294,10 +280,53 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="ChromeReactiveInspector">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="ChromeReactiveInspector">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="libraries">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="ChromeReactiveInspector">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="helpers">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$USER_HOME$/Documents/Thesis/examples/todo-angular2-ngrx" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/chrome-ext - Final" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="js-jscs-nodeInterpreter" value="C:\Program Files\nodejs\node.exe" />
     <property name="LayoutCode.rearrangeEntriesJavaScript" value="false" />
@@ -471,7 +500,10 @@
       <workItem from="1497181330982" duration="6669000" />
       <workItem from="1497261196040" duration="605000" />
       <workItem from="1497264246307" duration="7563000" />
-      <workItem from="1497299568006" duration="7681000" />
+      <workItem from="1497299568006" duration="7887000" />
+      <workItem from="1497421171497" duration="856000" />
+      <workItem from="1497422368146" duration="321000" />
+      <workItem from="1497804043418" duration="8401000" />
     </task>
     <task id="LOCAL-00001" summary="Working code and my hard work of one week.">
       <created>1495140708127</created>
@@ -543,21 +575,29 @@
       <option name="project" value="LOCAL" />
       <updated>1497307271119</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Added support for mouseMovement values and also added new example">
+      <created>1497307393803</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1497307393803</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="412961000" />
+    <option name="totallyTimeSpent" value="422745000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="-4" width="1313" height="772" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23367427" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24546172" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18730651" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.6533128" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6533128" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42724457" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -638,18 +678,16 @@
     <MESSAGE value="Added support for buffer related operators and fixed bug- when a user refreshes tha page, slider should be set to zero." />
     <MESSAGE value="Added support for Subjects and scalarObservables. Fixed some bugs" />
     <MESSAGE value="Fixed annoying bug where plugin was not letting other websites to load and also fixed to retain the JS code." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed annoying bug where plugin was not letting other websites to load and also fixed to retain the JS code." />
+    <MESSAGE value="Added support for mouseMovement values and also added new example" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added support for mouseMovement values and also added new example" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="15" />
+      <option name="time" value="17" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://C:/xampp/htdocs/RxDebuggerTests/bacon-operators.html" />
-    <entry file="file://C:/xampp/htdocs/RxDebuggerTests/bacon-events.html" />
-    <entry file="file://C:/xampp/htdocs/RxDebuggerTests/bacon-events.js" />
     <entry file="file://C:/xampp/htdocs/RxDebuggerTests/up-down-counter.js" />
     <entry file="file://$PROJECT_DIR$/jquery-ui-slider-pips.css" />
     <entry file="file://$PROJECT_DIR$/dagre-d3.js" />
@@ -782,52 +820,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/panel.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="104" column="16" lean-forward="true" selection-start-line="104" selection-start-column="16" selection-end-line="104" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/panel.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="36" lean-forward="false" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Rx_latest.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16711">
-          <caret line="983" column="6" lean-forward="false" selection-start-line="983" selection-start-column="6" selection-end-line="983" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/panel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3556">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/myanalysis.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="343">
-          <caret line="416" column="103" lean-forward="false" selection-start-line="416" selection-start-column="36" selection-end-line="416" selection-end-column="103" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/devtools.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -835,22 +831,65 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/helpers/comm_api_content-script.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="44" column="0" lean-forward="false" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/helpers/comm_api_background.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="436">
-          <caret line="74" column="0" lean-forward="false" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+        <state relative-caret-position="-321">
+          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libraries/jquery-ui.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1386">
+          <caret line="953" column="60" lean-forward="false" selection-start-line="953" selection-start-column="56" selection-end-line="953" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libraries/jquery-ui-slider-pips.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="11" column="36" lean-forward="true" selection-start-line="11" selection-start-column="36" selection-end-line="11" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libraries/jquery.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Rx_latest.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20">
+          <caret line="983" column="6" lean-forward="false" selection-start-line="983" selection-start-column="6" selection-end-line="983" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inject-for-instrumentation.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1500">
+          <caret line="75" column="20" lean-forward="false" selection-start-line="75" selection-start-column="20" selection-end-line="75" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/myanalysis.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-501">
+          <caret line="398" column="65" lean-forward="true" selection-start-line="398" selection-start-column="65" selection-end-line="398" selection-end-column="65" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
@@ -859,26 +898,50 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/manifest.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-151">
-          <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+        <state relative-caret-position="370">
+          <caret line="55" column="20" lean-forward="false" selection-start-line="55" selection-start-column="20" selection-end-line="55" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panel.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="206">
+          <caret line="33" column="58" lean-forward="false" selection-start-line="33" selection-start-column="52" selection-end-line="33" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpers/comm_api_content-script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="17" column="38" lean-forward="false" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/helpers/comm_api_panel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="156" column="41" lean-forward="false" selection-start-line="156" selection-start-column="16" selection-end-line="156" selection-end-column="41" />
+        <state relative-caret-position="-3621">
+          <caret line="34" column="11" lean-forward="true" selection-start-line="34" selection-start-column="11" selection-end-line="34" selection-end-column="11" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inject-for-instrumentation.js">
+    <entry file="file://$PROJECT_DIR$/panel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="17" lean-forward="true" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
+        <state relative-caret-position="145">
+          <caret line="109" column="11" lean-forward="true" selection-start-line="109" selection-start-column="11" selection-end-line="109" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panel.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="94" column="15" lean-forward="true" selection-start-line="94" selection-start-column="15" selection-end-line="94" selection-end-column="15" />
           <folding />
         </state>
       </provider>

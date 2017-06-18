@@ -16,7 +16,7 @@ function sendObjectToDevTools(message) {
     chrome.storage.sync.get('cri_config_rec_status', function (items) {
         if (items.cri_config_rec_status !== undefined) {
             console.log(items.cri_config_rec_status);
-            if (items.cri_config_rec_status === 1) {
+            if (items.cri_config_rec_status) {
                 chrome.extension.sendMessage(message, function (message) {
                     console.log("message sent");
                 });
@@ -40,7 +40,7 @@ chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
     }
     if (msg.action === 'loading') {
         chrome.extension.sendMessage(msg, function (msg) {
-            console.log("message sent");
+            console.log("Page reload message sent!");
         });
     }
 });

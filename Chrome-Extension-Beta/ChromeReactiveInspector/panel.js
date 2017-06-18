@@ -1,9 +1,9 @@
 console.log("panel.js");
 
-
 // Simple function to style the tooltip for the given node.
 var styleTooltip = function (id, name, type, source) {
-    return "<div class='custom_tooltip'><p>" + 'Id: '+  id + "</p><p>" + 'Name: '+  name + "</p><p>" + 'Type: '+ type + "</p>" +
+    return "<div class='custom_tooltip'><p>" + 'Id: '+  id + "</p>" +
+        "<p>" + 'Name: '+  name + "</p><p>" + 'Type: '+ type + "</p>" +
         "<p>" + 'Source: '+ source + "</p></div>";
 };
 
@@ -32,12 +32,22 @@ var initialiseGraph = function () {
 
 initialiseGraph();
 // Set up zoom support
-var zoom = d3.behavior.zoom().on("zoom", function () {
-    inner.attr("transform", "translate(" + d3.event.translate + ")" +
-        "scale(" + d3.event.scale + ")");
-});
-svg.call(zoom);
+var zoom = d3.behavior.zoom()
+    .translate([0, 0])
+    .scale(1)
+    .scaleExtent([-8, 8])
+    .on('zoom', zoomed);
+//
+svg
+    .call(zoom) // delete this line to disable free zooming
+    .call(zoom.event);
 
+function zoomed() {
+    inner.attr("transform",
+        "translate(" + zoom.translate() + ")" +
+        "scale(" + zoom.scale() + ")"
+    );
+}
 
 // Run the renderer. This is what draws the final graph.
 render(d3.select("svg g"), g);
@@ -83,9 +93,7 @@ rxSlider.slider("pips", "refresh");
 var _node = '';
 // This method redraw dependency graph to given stage
 function redrawGraphToStage(stageToRedraw) {
-//d3.select("svg").remove();
 
-    d3.selectAll("svg g").remove();
     initialiseGraph();
 
     // get data for asked stage
@@ -102,7 +110,6 @@ function redrawGraphToStage(stageToRedraw) {
         });
 
         edgesToDraw.forEach(function (edge) {
-            //console.log(entry);
             var edgeLabel = "";
             if (edge.edgeLabel) {
                 edgeLabel = edge.edgeLabel;
@@ -156,22 +163,19 @@ function redrawGraphToStage(stageToRedraw) {
     chrome.storage.sync.get('cri_config_rec_status', function (items) {
         if (items.cri_config_rec_status !== undefined) {
             var recStatusFromStorage = items.cri_config_rec_status;
-            if (recStatusFromStorage === 1) {
-                $(this).data("rec-status", 1);
+            $(this).data("rec-status", recStatusFromStorage);
+            if (recStatusFromStorage) {
                 $(this).html('Pause Recording');
-
             } else {
-                $(this).data("rec-status", 0);
                 $(this).html('Start Recording');
-
             }
         }
         // to fix the initial loading
         else{
-            $(this).data("rec-status", 1);
+            $(this).data("rec-status", true);
             $(this).html('Pause Recording');
             chrome.storage.sync.set({
-                'cri_config_rec_status': 1
+                'cri_config_rec_status': true
             });
         }
     });
@@ -188,27 +192,28 @@ function redrawGraphToStage(stageToRedraw) {
     }, this);
 
 
+    /**
+     * This method is called whenever the user clicks on 'Pause' or 'Start' recording button.
+     */
     configRecStatusButton.addEventListener('click', function (e) {
         var currentStatus = $(this).data("rec-status");
 
-        if (currentStatus === 1){
-            $(this).data("rec-status",0);
+        $(this).data("rec-status",!currentStatus);
+        chrome.storage.sync.set({
+            'cri_config_rec_status': !currentStatus
+        });
+        if (currentStatus){
             $(this).html('Start Recording');
-            chrome.storage.sync.set({
-                'cri_config_rec_status': 0
-            });
         }else{
-            $(this).data("rec-status",1);
             $(this).html('Pause Recording');
-            chrome.storage.sync.set({
-                'cri_config_rec_status': 1
-            });
         }
     }, this);
 
     // Reset everything
     $("#cri-reset").click(function () {
         // 1 clear graph
+        d3.selectAll("svg g").remove();
+        initialiseGraph();
 
         //2 reset step slider
         rxSlider.slider("option", "min", 0);
@@ -218,10 +223,11 @@ function redrawGraphToStage(stageToRedraw) {
 
         // remove saved data
         rxGraphStages = [];
-        d3.selectAll("svg g").remove();
-        initialiseGraph();
     });
 
+    /**
+     * Whenever user searches for node, below method will be called.
+     */
     $("#cri-node-search").on('change keyup paste', function() {
         var all_nodes = Object.keys(g._nodes).map(function (key) { return g._nodes[key]; });
         var searchNode = $("#cri-node-search").val();

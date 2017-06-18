@@ -2,7 +2,7 @@
    * Test case 1
    * Status Done
    */
-  /*
+  // /*
   var $toCount = document.querySelector('#toCount');
   var $result = document.querySelector('#result');
 
@@ -17,7 +17,7 @@
 
   source.subscribe(setHtml.bind($result));
 
-  */
+  // */
 
 
   // var $toCount1 = document.querySelector('#toC   ount1');
