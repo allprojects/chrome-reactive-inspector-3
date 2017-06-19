@@ -5,8 +5,9 @@
  Rx list override is used to log Rx internal activities
  */
 
-var allNodes = []
-var allEdges= []
+var allNodes = [];
+var allEdges= [];
+var updatedVar = {};
 
 // Jalangi Analysis Start
 J$.analysis = {};
@@ -55,35 +56,20 @@ J$.analysis = {};
         // this will log if any Observable being assigned to js variable
         this.write = function (iid, name, val, oldValue) {
             if(iid === -1){
-                var temp_list = _.uniq(observableList)
-                // temp_list.forEach(function(obs) {
-                //     CriSubscriptRxObservableToLog(obs)
-                // });
-
-                var getChild = function (observables_list) {
-                    var o = {}
-                    observables_list.forEach(function(obs){
-                        if(obs.prev_source){
-                            o = obs
-                        }
-                    })
-                    return o
-                }
-                // var last_child = getChild(temp_list)
-                // CriSubscriptRxObservableToLog(last_child)
+                console.log('End of file reading!');
             }else{
                 var currentType = "";
                 console.log('writing variable operation intercept: ' + name);
                 if (val) {
-                    console.log('type is : ' + val.constructor.name)
-                    console.log('val id  is : ' + val.id)
+                    console.log('type is : ' + val.constructor.name);
+                    console.log('val id  is : ' + val.id);
                     window.variables.push({'name': name, 'id': val.id });
                     // For Bacon and Rx-js
                     currentType = val.constructor.name;
                 }
 
                 var currentTypeInSmall = currentType.toLowerCase();
-                var currentNodeId = ''
+                var currentNodeId = '';
                 var SourceLocation = '';
                 var SourceLocationLine = '';
                 // todo what about property here , please check other types that we need to log here ..
@@ -104,7 +90,8 @@ J$.analysis = {};
                         SourceLocationLine = SourceLocation[1];
 
                         logNodeData(currentNodeId, currentType, '', name, '', SourceLocationLine);
-
+                        updatedVar = {'id': currentNodeId, 'name': name};
+                        _.extend(_.findWhere(window.variables, { name: updatedVar.name }), updatedVar);
                     }
                 }else if (currentTypeInSmall.search("subject") !== -1) {
                     if(!(val.hasOwnProperty('operator') && val.operator === undefined)){
@@ -122,7 +109,8 @@ J$.analysis = {};
                         SourceLocationLine = SourceLocation[1];
 
                         logNodeData(currentNodeId, currentType, '', name, '', SourceLocationLine);
-
+                        updatedVar = {'id': currentNodeId, 'name': name};
+                        _.extend(_.findWhere(window.variables, { name: updatedVar.name }), updatedVar);
                     }
                 }else if(currentTypeInSmall.search("subscriber") !== -1){
                     // TODO what to with subscribers? should i display or not?
@@ -273,7 +261,7 @@ if (Rx !== undefined) {
         var resultantSubject = _sub_lift.call(operator);
         // var subject = new AnonymousSubject(this, this);
         // subject.operator = operator;
-        console.log(resultantSubject)
+        console.log(resultantSubject);
         return resultantSubject;
     };
 
@@ -380,20 +368,15 @@ if (Rx !== undefined) {
         return sink;
     };
 
-
     /**
      * This will override the next method to get the values in each subscriber
      * and log the values to graph.
      * @param value
      */
-    var constructorName = ''
+    var constructorName = '';
+    var nextValue = '';
     Rx.Subscriber.prototype.next = function (value) {
         if (!this.isStopped) {
-
-            var nextValue = '';
-            //this.outerValue.constructor.name
-            // Check if it has a custom _id else continue
-
             if(value || value === 0){
                 constructorName = value.constructor.name;
                 //Todo check for other type of events or similar kind
@@ -420,6 +403,9 @@ if (Rx !== undefined) {
                         //TODO get value from promised object
                         nextValue = JSON.stringify(value);
                         break;
+                    case 'String':
+                        nextValue = value;
+                        break;
                     default:
                         nextValue = JSON.stringify(value);
                         break;
@@ -432,7 +418,6 @@ if (Rx !== undefined) {
                 }else if(this.outerValue && this.outerValue.id && this.outerValue.constructor.name === 'ScalarObservable'){
                     logNodeData(this.outerValue.id, this.outerValue.constructor.name, '', '', nextValue, '');
                 }
-
             }
             this._next(value);
         }
@@ -448,55 +433,6 @@ if (Rx !== undefined) {
     //     }
     //     return Rx.Observable.prototype.multicast.call(subjectOrSubjectFactory, selector);
     // }
-    /**
-     * This method subscribe to given observable and send message to dev tool on value received
-     * @param obs
-     */
-    function CriSubscriptRxObservableToLog(obs) {
-
-        var obsType = "";
-        if (obs.constructor.name) {
-            obsType = obs.constructor.name;
-        }
-
-        obs.subscribe(function (x) {
-
-                console.log("next val in subscribe");
-                console.log(obs);
-                console.log(x);
-                if (x instanceof jQuery.Event) {
-                    x = x.type;
-                }
-
-                if(x){
-                    //if (x.constructor == Array) {
-                    x = JSON.stringify(x);
-                    //}
-                }
-
-
-                var nodeMethod = "";
-
-                sendObjectToDevTools({
-                    content: {
-                        'nodeId': obs.id,
-                        'nodeType': obsType,
-                        'nodeMethod': '',
-                        'nodeRef': '',
-                        'nodeValue': x,
-                        'sourceCodeLine': ''
-                    }, action: "saveNode", destination: "panel"
-                });
-
-            },
-            function (err) {
-                //console.log('LOG Error: ' + err);
-            },
-            function () {
-                //console.log('LOG Completed');
-            });
-
-    }
 
     /**
      * This method log RX js Data
@@ -505,8 +441,6 @@ if (Rx !== undefined) {
      * @param obsResult
      */
     function CriLogObserverFactory(operator, obsSource, obsResult) {
-        console.log("CriLogObserverFactory");
-
         var operName = "";
         if (operator) {
             if (operator.constructor.name) {
@@ -528,11 +462,15 @@ if (Rx !== undefined) {
         logNodeData(obsResult.id, resultNodeType, '', '', '', '');
 
         var name = '';
+        var res = '';
         if(obsSource.sourceObj && obsSource.sourceObj.id){
-            var res = _.find(window.variables, {id:obsSource.sourceObj.id});
+            res = _.find(window.variables, {id:obsSource.sourceObj.id});
             name = res.name;
+        }else{
+            res = _.find(window.variables, {id:obsSource.id});
+            if(res)
+                name = res.name;
         }
-
 
         // source obs are the dependencies of resultant obs
         var temp_val = '';
@@ -567,7 +505,17 @@ if (Rx !== undefined) {
             if(!checkIfNodeAlreadyExists(obsSource.id, name, sourceNodeType)){
                 logNodeData(obsSource.id, sourceNodeType, '', name, '', '')
             }
-            logEdgeData(obsSource.id, obsResult.id, operName)
+            logEdgeData(obsSource.id, obsResult.id, operName);
+
+            // Test case 18 - for ConcatMapTo operator
+            if(flattenOperators.includes(operName)){
+                if(obsResult.operator){
+                    if(obsResult.operator.ish && obsResult.operator.ish.id){
+                        logNodeData(obsResult.operator.ish.id, obsResult.operator.ish.constructor.name, '', '', obsResult.operator.ish.value, '')
+                        logEdgeData(obsResult.operator.ish.id, obsResult.id, operName);
+                    }
+                }
+            }
         }
     }
 }

@@ -366,6 +366,7 @@
 
   /**
    * Support for ScalarObservable
+   * Test case 15
    * status Done
    */
 /*
@@ -382,6 +383,7 @@
 */
   /**
    *  concatAll
+   *  Test case 16
    *  Status Done
    */
 
@@ -419,10 +421,11 @@
 
   /**
    * ConcatMap
-   * Status
+   * Test case 17
+   * Status Done
    */
 
-  // /*
+  /*
   //emit 'Hello' and 'Goodbye'
   var source = Rx.Observable.of('Hello', 'Goodbye');
   // map value from source into inner observable, when complete emit result and move to next
@@ -452,7 +455,58 @@
           return console.log('Example w/ Promise:', val);
       });
 
-   // */
+   */
+
+  /**
+   * ConcatMapTo
+   * Test case 18
+   * Status Done
+   */
+  // /*
+  //emit value every 2 seconds
+  var interval = Rx.Observable.interval(2000);
+  var message = Rx.Observable.of('Second(s) elapsed!');
+  //when interval emits, subscribe to message until complete, merge for result
+  var example = interval.concatMapTo(message, function (time, msg) {
+      return time + ' ' + msg;
+  });
+  //log values
+  //output: '0 Second(s) elapsed', '1 Second(s) elapsed'
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+
+  //emit value every second for 5 seconds
+  var basicTimer = Rx.Observable.interval(1000).take(5);
+  /*
+   ***Be Careful***: In situations like this where the source emits at a faster pace
+   than the inner observable completes, memory issues can arise.
+   (interval emits every 1 second, basicTimer completes every 5)
+   */
+  //basicTimer will complete after 5 seconds, emitting 0,1,2,3,4
+  var exampleTwo = interval.concatMapTo(basicTimer, function (firstInterval, secondInterval) {
+      return firstInterval + ' ' + secondInterval;
+  });
+  /*
+   output: 0 0
+   0 1
+   0 2
+   0 3
+   0 4
+   1 0
+   1 1
+   continued...
+
+   */
+  var subscribeTwo = exampleTwo.subscribe(function (val) {
+      return console.log(val);
+  });
+
+  // */
+
+
+
+
 
   // var custom_observable = Rx.Observable.create(function (observer) {
   //     observer.next(1);

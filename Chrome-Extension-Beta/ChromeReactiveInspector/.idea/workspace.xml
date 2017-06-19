@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e3c07cc8-9ded-41a8-b9ce-40180b5a70d5" name="Default" comment="">
+    <list default="true" id="e3c07cc8-9ded-41a8-b9ce-40180b5a70d5" name="Default" comment="Added Support for ConcatAll and ConcatMap, fixed slider issue - Now user can slide the slider and graph will be re-rendered accordingly.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpers/comm_api_panel.js" afterPath="$PROJECT_DIR$/helpers/comm_api_panel.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myanalysis.js" afterPath="$PROJECT_DIR$/myanalysis.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/panel.js" afterPath="$PROJECT_DIR$/panel.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../TestApps/RxJs/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../../TestApps/RxJs/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../TestApps/RxJs/letterrcount/index.js" afterPath="$PROJECT_DIR$/../../TestApps/RxJs/letterrcount/index.js" />
     </list>
@@ -35,11 +33,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="myanalysis.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="myanalysis.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/myanalysis.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="440">
-              <caret line="554" column="0" lean-forward="false" selection-start-line="554" selection-start-column="0" selection-end-line="554" selection-end-column="0" />
+            <state relative-caret-position="345">
+              <caret line="471" column="16" lean-forward="false" selection-start-line="471" selection-start-column="16" selection-end-line="471" selection-end-column="16" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -47,7 +45,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="panel.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="panel.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/panel.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-1180">
@@ -178,9 +176,9 @@
         <option value="$PROJECT_DIR$/panel.html" />
         <option value="$PROJECT_DIR$/helpers/comm_api_content-script.js" />
         <option value="$PROJECT_DIR$/panel.css" />
-        <option value="$PROJECT_DIR$/myanalysis.js" />
         <option value="$PROJECT_DIR$/helpers/comm_api_panel.js" />
         <option value="$PROJECT_DIR$/panel.js" />
+        <option value="$PROJECT_DIR$/myanalysis.js" />
       </list>
     </option>
   </component>
@@ -294,6 +292,20 @@
               <option name="myItemType" value="" />
             </PATH_ELEMENT>
             <PATH_ELEMENT USER_OBJECT="ChromeReactiveInspector">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="ChromeReactiveInspector">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="libraries">
               <option name="myItemId" value="" />
               <option name="myItemType" value="" />
             </PATH_ELEMENT>
@@ -580,11 +592,18 @@
       <option name="project" value="LOCAL" />
       <updated>1497823497369</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Added Support for ConcatAll and ConcatMap, fixed slider issue - Now user can slide the slider and graph will be re-rendered accordingly.">
+      <created>1497867951373</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1497867951373</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="427240000" />
+    <option name="totallyTimeSpent" value="432963000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="-4" width="1313" height="772" extended-state="6" />
@@ -709,7 +728,8 @@
     <MESSAGE value="Fixed annoying bug where plugin was not letting other websites to load and also fixed to retain the JS code." />
     <MESSAGE value="Added support for mouseMovement values and also added new example" />
     <MESSAGE value="Added comments, fixed zoom reset after each redraw" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added comments, fixed zoom reset after each redraw" />
+    <MESSAGE value="Added Support for ConcatAll and ConcatMap, fixed slider issue - Now user can slide the slider and graph will be re-rendered accordingly." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Support for ConcatAll and ConcatMap, fixed slider issue - Now user can slide the slider and graph will be re-rendered accordingly." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -718,7 +738,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://C:/xampp/htdocs/RxDebuggerTests/up-down-counter.js" />
     <entry file="file://$PROJECT_DIR$/jquery-ui-slider-pips.css" />
     <entry file="file://$PROJECT_DIR$/dagre-d3.js" />
     <entry file="file://C:/../slider/slider.html" />
@@ -934,24 +953,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/helpers/comm_api_content-script.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="17" column="38" lean-forward="false" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/myanalysis.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="554" column="0" lean-forward="false" selection-start-line="554" selection-start-column="0" selection-end-line="554" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/helpers/comm_api_panel.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-135">
@@ -968,6 +969,32 @@
           <caret line="73" column="83" lean-forward="false" selection-start-line="73" selection-start-column="83" selection-end-line="73" selection-end-column="83" />
           <folding>
             <marker date="1497867822771" expanded="true" signature="6814:7302" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpers/comm_api_content-script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="17" column="38" lean-forward="false" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libraries/underscore.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="21" lean-forward="true" selection-start-line="0" selection-start-column="21" selection-end-line="0" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/myanalysis.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="471" column="16" lean-forward="false" selection-start-line="471" selection-start-column="16" selection-end-line="471" selection-end-column="16" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>

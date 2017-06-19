@@ -21,8 +21,8 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/letterrcount/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="437" column="39" lean-forward="false" selection-start-line="437" selection-start-column="31" selection-end-line="437" selection-end-column="39" />
+            <state relative-caret-position="521">
+              <caret line="509" column="0" lean-forward="false" selection-start-line="509" selection-start-column="0" selection-end-line="509" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -371,7 +371,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="210322000" />
+    <option name="totallyTimeSpent" value="214552000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="-4" width="1313" height="772" extended-state="6" />
@@ -790,8 +790,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/letterrcount/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="437" column="39" lean-forward="false" selection-start-line="437" selection-start-column="31" selection-end-line="437" selection-end-column="39" />
+        <state relative-caret-position="521">
+          <caret line="509" column="0" lean-forward="false" selection-start-line="509" selection-start-column="0" selection-end-line="509" selection-end-column="0" />
           <folding />
         </state>
       </provider>
