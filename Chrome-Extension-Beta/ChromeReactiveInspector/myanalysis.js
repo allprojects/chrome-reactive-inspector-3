@@ -416,6 +416,10 @@ if (Rx !== undefined) {
                     case 'MouseEvent':
                         nextValue = JSON.stringify({'clientX':value.clientX, 'clientY':value.clientY});
                         break;
+                    case 'Promise':
+                        //TODO get value from promised object
+                        nextValue = JSON.stringify(value);
+                        break;
                     default:
                         nextValue = JSON.stringify(value);
                         break;
@@ -536,12 +540,19 @@ if (Rx !== undefined) {
             for(var i=0; i<obsSource.array.length; i++){
                 var tempObsSource = obsSource.array[i];
                 temp_val = '';
-                if(!checkIfNodeAlreadyExists(tempObsSource.id, '', tempObsSource.constructor.name)){
-                    if(tempObsSource.constructor.name === 'ScalarObservable' && tempObsSource.value)
-                        temp_val = tempObsSource.value;
-                    logNodeData(tempObsSource.id, tempObsSource.constructor.name, '', '', temp_val, '')
+                if(tempObsSource.id){
+                    if(!checkIfNodeAlreadyExists(tempObsSource.id, '', tempObsSource.constructor.name)){
+                        if(tempObsSource.constructor.name === 'ScalarObservable' && tempObsSource.value)
+                            temp_val = tempObsSource.value;
+                        logNodeData(tempObsSource.id, tempObsSource.constructor.name, '', '', temp_val, '')
+                    }
+                    logEdgeData(tempObsSource.id, obsResult.id, operName);
                 }
-                logEdgeData(tempObsSource.id, obsResult.id, operName);
+                else{
+                    if(!checkIfEdgeAlreadyExists(obsSource.id, obsResult.id)) {
+                        logEdgeData(obsSource.id, obsResult.id, operName);
+                    }
+                }
 
                 //Special case because of twitter follow example
                 if(tempObsSource.constructor.name === 'Observable'){

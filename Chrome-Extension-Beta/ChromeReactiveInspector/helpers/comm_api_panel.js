@@ -115,7 +115,7 @@ var _node = '';
                 }
 
                 g.setNode(message.content.nodeId, {
-                    label: "NodeId :" + message.content.nodeId + "<br> Name:" + newRef + "<br> Value: " + truncatedVal + "<br> Source: " + newSourceCodeLine,
+                    label: "Id :" + message.content.nodeId + "<br> Name:" + newRef + "<br> Value: " + truncatedVal + "<br> Source: " + newSourceCodeLine,
                     labelType: "html",
                     ref: newRef,
                     value: newValue,
@@ -131,7 +131,7 @@ var _node = '';
 
                 currentAction = "newNode";
                 g.setNode(message.content.nodeId, {
-                    label: "NodeId :" + message.content.nodeId + "<br> Name:" + message.content.nodeRef + "<br> Value: " + message.content.nodeValue + "<br> Source: " + message.content.sourceCodeLine,
+                    label: "Id :" + message.content.nodeId + "<br> Name:" + message.content.nodeRef + "<br> Value: " + message.content.nodeValue + "<br> Source: " + message.content.sourceCodeLine,
                     labelType: "html",
                     ref: message.content.nodeRef,
                     value: message.content.nodeValue,

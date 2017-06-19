@@ -71,7 +71,10 @@ var rxSlider = $("#slider")
         change: function (event, ui) {
             $('.ui-slider-handle').text(ui.value);
             // on slider change destroy current graph and re build based on slider value
-            // redrawGraphToStage(ui.value);
+            // Check if the even is triggered by Manual sliding or programmatically.
+            if (event.originalEvent) {
+                redrawGraphToStage(ui.value);
+            }
         }
     })
     .slider("pips");

@@ -2,7 +2,7 @@
    * Test case 1
    * Status Done
    */
-  // /*
+  /*
   var $toCount = document.querySelector('#toCount');
   var $result = document.querySelector('#result');
 
@@ -17,7 +17,7 @@
 
   source.subscribe(setHtml.bind($result));
 
-  // */
+  */
 
 
   // var $toCount1 = document.querySelector('#toC   ount1');
@@ -380,8 +380,79 @@
       return console.log(c);
   });
 */
+  /**
+   *  concatAll
+   *  Status Done
+   */
 
+  /*
+ //emit a value every 2 seconds
+  var sourceOne = Rx.Observable.interval(15000);
+  var example = sourceOne
+  //for demonstration, add 10 to and return as observable
+      .map(function (val) {
+              return Rx.Observable.of(val + 10);
+          }
+          //merge values from inner observable
+      ).concatAll();
+  //output: 'Example with Basic Observable 0', 'Example with Basic Observable 2'...
+  var subscribe = example.subscribe(function (val) {
+      return console.log('Example with Basic Observable:', val);
+  });
 
+  //create and resolve basic promise
+  var samplePromise = function samplePromise(val) {
+      return new Promise(function (resolve) {
+          return resolve(val);
+      });
+  };
+  var exampleTwo = sourceOne.map(function (val) {
+          return samplePromise(val);
+      }
+      //merge values from resolved promise
+  ).concatAll();
+  //output: 'Example with Promise 0', 'Example with Promise 1'...
+  var subscribeTwo = exampleTwo.subscribe(function (val) {
+      return console.log('Example with Promise:', val);
+  });
+ // */
+
+  /**
+   * ConcatMap
+   * Status
+   */
+
+  // /*
+  //emit 'Hello' and 'Goodbye'
+  var source = Rx.Observable.of('Hello', 'Goodbye');
+  // map value from source into inner observable, when complete emit result and move to next
+  var exampleOne = source.concatMap(function (val) {
+      return Rx.Observable.of(val + ' World!');
+  });
+  //output: 'Example One: 'Hello World', Example One: 'Goodbye World'
+  var subscribe = exampleOne.subscribe(function (val) {
+      return console.log('Example One:', val);
+  });
+
+  //example with promise
+  var examplePromise = function examplePromise(val) {
+      return new Promise(function (resolve) {
+          return resolve(val + ' World!');
+      });
+  };
+  // map value from source into inner observable, when complete emit result and move to next
+  var exampleTwo = source.concatMap(function (val) {
+      return examplePromise(val);
+  }
+//output: 'Example w/ Promise: 'Hello World', Example w/ Promise: 'Goodbye World'
+  );
+  var subscribeTwo = exampleTwo
+  //delay for logging clarity
+      .delay(1000).subscribe(function (val) {
+          return console.log('Example w/ Promise:', val);
+      });
+
+   // */
 
   // var custom_observable = Rx.Observable.create(function (observer) {
   //     observer.next(1);
