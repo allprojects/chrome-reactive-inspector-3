@@ -27,12 +27,10 @@
                 "helpers/comm_api_content-script.js",
                 "helpers/storage_api_general.js",
                 "libraries/jquery.js",
-                "myinst.js",
                 "libraries/underscore.js",
                 "libraries/d3.v3.min.js",
                 "Bacon.js",
-                "Rx_latest.js",
-                "myanalysis.js"
+                "Rx_latest.js"
             ],
             "run_at": "document_start",
             "all_frames": false
@@ -53,7 +51,6 @@
     },
     "web_accessible_resources": [
         "main.js",
-        "myinst.js",
         "panel.js",
         "messaging.js",
         "helpers/storage_api_general.js"

@@ -15,7 +15,6 @@ function sendObjectToDevTools(message) {
 
     chrome.storage.sync.get('cri_config_rec_status', function (items) {
         if (items.cri_config_rec_status !== undefined) {
-            console.log(items.cri_config_rec_status);
             if (items.cri_config_rec_status) {
                 chrome.extension.sendMessage(message, function (message) {
                     console.log("message sent");

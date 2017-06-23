@@ -462,7 +462,7 @@
    * Test case 18
    * Status Done
    */
-  // /*
+  /*
   //emit value every 2 seconds
   var interval = Rx.Observable.interval(2000);
   var message = Rx.Observable.of('Second(s) elapsed!');
@@ -470,7 +470,6 @@
   var example = interval.concatMapTo(message, function (time, msg) {
       return time + ' ' + msg;
   });
-  //log values
   //output: '0 Second(s) elapsed', '1 Second(s) elapsed'
   var subscribe = example.subscribe(function (val) {
       return console.log(val);
@@ -478,34 +477,396 @@
 
   //emit value every second for 5 seconds
   var basicTimer = Rx.Observable.interval(1000).take(5);
-  /*
-   ***Be Careful***: In situations like this where the source emits at a faster pace
-   than the inner observable completes, memory issues can arise.
-   (interval emits every 1 second, basicTimer completes every 5)
-   */
+
   //basicTimer will complete after 5 seconds, emitting 0,1,2,3,4
   var exampleTwo = interval.concatMapTo(basicTimer, function (firstInterval, secondInterval) {
       return firstInterval + ' ' + secondInterval;
   });
-  /*
-   output: 0 0
-   0 1
-   0 2
-   0 3
-   0 4
-   1 0
-   1 1
-   continued...
 
-   */
+  //  output: 0 0
+  //  0 1
+  //  0 2
+  //  0 3
+  //  0 4
+  //  1 0
+  //  1 1
+  //  continued...
+
   var subscribeTwo = exampleTwo.subscribe(function (val) {
       return console.log(val);
   });
 
-  // */
+  */
+
+  /**
+   * Count
+   * Test case 19
+   * Status Done
+   */
+
+  /*
+  // Example 1
+  //emit 1,2,3 then complete
+  var threeItems = Rx.Observable.of(1, 2, 3);
+  //when threeItems completes, return count of items emitted
+  var exampleOne = threeItems.count();
+  //output: 'Count from Example One: 3'
+  var subscribe = exampleOne.subscribe(function (val) {
+      return console.log("Count from Example One: " + val);
+  });
+
+  // Example 2
+  //count of basic array
+  // var myArray = [1, 2, 3, 4, 5];
+  // var myObsArray = Rx.Observable.from(myArray);
+  // var exampleTwo = myObsArray.count();
+  // //output: 'Count of Basic Array: 5'
+  // var subscribeTwo = exampleTwo.subscribe(function (val) {
+  //     return console.log("Count of Basic Array: " + val);
+  // });
+  //
+  // //count emitted items from source that satisfy predicate expression
+  // var evensCount = myObsArray.count(function (val) {
+  //     return val % 2 === 0;
+  // });
+  // //output: 'Count of Even Numbers: 2'
+  // var subscribeThree = evensCount.subscribe(function (val) {
+  //     return console.log("Count of Even Numbers: " + val);
+  // });
+
+ */
+
+  /**
+   * debounce
+   * Test case 20
+   * Status Done
+   */
+
+  /*
+  //emit four strings
+  var example = Rx.Observable.of('WAIT', 'ONE', 'SECOND', 'Last will display');
+
+  // Only emit values after a second has passed between the last emission,
+  // throw away all other values
+
+  var debouncedExample = example.debounce(function () {
+      return Rx.Observable.timer(1000);
+  });
+  //In this example, all values but the last will be omitted
+  // output: 'Last will display'
+  var subscribe = debouncedExample.subscribe(function (val) {
+      return console.log(val);
+  });
+
+  //emit value every 1 second, ex. 0...1...2
+  // var interval = Rx.Observable.interval(1000);
+  // //raise the debounce time by 200ms each second
+  // var debouncedInterval = interval.debounce(function (val) {
+  //     return Rx.Observable.timer(val * 200);
+  // }
+  //     // After 5 seconds, debounce time will be greater than interval time,
+  //     //all future values will be thrown away
+  //     // output: 0...1...2...3...4......(debounce time over 1s, no values emitted)
+  // );
+  //
+  // var subscribeTwo = debouncedInterval.subscribe(function (val) {
+  //     return console.log('Example Two: ' + val);
+  // });
+
+  */
+
+  /**
+   * debounceTime
+   * Test case 21
+   * Status Done
+   */
+  /*
+  var input = document.getElementById('toCount');
+
+  //for every keyup, map to current input value
+  var example = Rx.Observable.fromEvent(input, 'keyup').map(function (i) {
+      return i.currentTarget.value;
+  });
+
+  //wait .5s between keyups to emit current value
+  //throw away all other values
+  var debouncedInput = example.debounceTime(500);
+
+  //log values
+  var subscribe = debouncedInput.subscribe(function (val) {
+      console.log('Debounced Input: ' + val);
+  });
+
+  */
+
+  /**
+   * defaultIfEmpty
+   * Test case 22
+   * Status Done
+   */
+
+/*
+//   var empty = Rx.Observable.of();
+//   //emit 'Observable.of() Empty!' when empty, else any values from source
+//   var exampleOne = empty.defaultIfEmpty('Observable.of() Empty!');
+//   //output: 'Observable.of() Empty!'
+//   var subscribe = exampleOne.subscribe(function (val) {
+//       return console.log(val);
+//   });
+
+ //empty observable
+ var emptyTwo = Rx.Observable.empty();
+ //emit 'Observable.empty()!' when empty, else any values from source
+ var exampleTwo = emptyTwo.defaultIfEmpty('Observable.empty()!');
+ //output: 'Observable.empty()!'
+ var subscribe = exampleTwo.subscribe(function (val) {
+ return console.log(val);
+ });
+  */
+
+  /**
+   * delay
+   * Test case 23
+   * Status Done
+   */
+
+  /*
+  //emit one item
+  var example = Rx.Observable.of(null);
+  //delay output of each by an extra second
+  var message = Rx.Observable.merge(example.mapTo('Hello'), example.mapTo('World!').delay(1000), example.mapTo('Goodbye').delay(2000), example.mapTo('World!').delay(3000));
+  //output: 'Hello'...'World!'...'Goodbye'...'World!'
+  var subscribe = message.subscribe(function (val) {
+      return console.log(val);
+  });
+  */
+
+  /**
+   * delayWhen
+   * Test case 23
+   * Status Done
+   */
+
+  /*
+  //emit value every second
+  var message = Rx.Observable.interval(1000);
+  //emit value after five seconds
+  var delayForFiveSeconds = function delayForFiveSeconds() {
+      return Rx.Observable.timer(5000);
+  };
+  //after 5 seconds, start emitting delayed interval values
+  var delayWhenExample = message.delayWhen(delayForFiveSeconds);
+  //log values, delayed for 5 seconds
+  //ex. output: 5s....1...2...3
+  var subscribe = delayWhenExample.subscribe(function (val) {
+      return console.log(val);
+  });
+   */
+
+  /**
+   * dematerialize
+   * Test case 24
+   * Status Done
+   */
+
+  /*
+  //emit next and error notifications
+  var source = Rx.Observable.from([Rx.Notification.createNext('SUCCESS!'), Rx.Notification.createError('ERROR!')]
+    //turn notification objects into notification values
+      ).dematerialize();
+
+  //output: 'NEXT VALUE: SUCCESS' 'ERROR VALUE: 'ERROR!'
+  var subscription = source.subscribe({
+      next: function next(val) {
+          return console.log('NEXT VALUE: ' + val);
+      },
+      error: function error(val) {
+          return console.log('ERROR VALUE: ' + val);
+      }
+  });
+ */
+
+  /**
+   * do
+   * Test case 25
+   * Status Done
+   */
+
+  /*
+  var source = Rx.Observable.of(1, 2, 3, 4, 5);
+  //transparently log values from source with 'do'
+  var example = source.do(function (val) {
+      return console.log("BEFORE MAP: " + val);
+  }).map(function (val) {
+      return val + 10;
+  }).do(function (val) {
+      return console.log("AFTER MAP: " + val);
+  });
+  //'do' does not transform values
+  //output: 11...12...13...14...15
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+   */
+
+  /**
+   * every
+   * Test case 26
+   * Status Done
+   */
+
+  /*
+
+//emit 5 values
+  var source = Rx.Observable.of(1, 2, 3, 4, 5);
+  var example = source
+  //is every value even?
+      .every(function (val) {
+          return val % 2 === 0;
+      }
+    //output: false
+      );var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+  //emit 5 values
+  var allEvens = Rx.Observable.of(2, 4, 6, 8, 10);
+  var exampleTwo = allEvens
+  //is every value even?
+      .every(function (val) {
+          return val % 2 === 0;
+      });
+  //output: true
+  var subscribeTwo = exampleTwo.subscribe(function (val) {
+      return console.log(val);
+  });
+
+  */
 
 
+  /**
+   * expand
+   * Test case26
+   * Status Done
+   */
 
+  /*
+  //emit 2
+  var source = Rx.Observable.of(2);
+  var example = source
+  //recursively call supplied function
+      .expand(function (val) {
+          //2,3,4,5,6
+          console.log("Passed value: " + val);
+          //3,4,5,6
+          return Rx.Observable.of(1 + val);
+      }
+//call 5 times
+      ).take(5);
+
+   // "RESULT: 2"
+   // "Passed value: 2"
+   // "RESULT: 3"
+   // "Passed value: 3"
+   // "RESULT: 4"
+   // "Passed value: 4"
+   // "RESULT: 5"
+   // "Passed value: 5"
+   // "RESULT: 6"
+   // "Passed value: 6"
+
+  //output: 2,3,4,5,6
+  var subscribe = example.subscribe(function (val) {
+      return console.log("RESULT: " + val);
+  });
+
+  */
+
+  /**
+   * filter
+   * Test case26
+   * Status Done
+   */
+
+  /*
+
+      //emit (1,2,3,4,5)
+  var source = Rx.Observable.from([1, 2, 3, 4, 5]);
+  //filter out non-even numbers
+  var example = source.filter(function (num) {
+      return num % 2 === 0;
+  });
+  //output: "Even number: 2", "Even number: 4"
+  var subscribe = example.subscribe(function (val) {
+      return console.log('Even number: ' + val);
+  });
+
+  //emit ({name: 'Joe', age: 31}, {name: 'Bob', age:25})
+  var sourceTwo = Rx.Observable.from([{ name: 'Joe', age: 31 }, { name: 'Bob', age: 25 }]);
+  //filter out people with age under 30
+  var exampleTwo = sourceTwo.filter(function (person) {
+      return person.age >= 30;
+  });
+  //output: "Over 30: Joe"
+  var subscribeTwo = exampleTwo.subscribe(function (val) {
+      return console.log('Over 30: ' + val.name);
+  });
+   */
+
+
+  /**
+   * first
+   * Test case26
+   * Status Done
+   */
+
+  /*
+  var source = Rx.Observable.from([1, 2, 3, 4, 5]);
+  //no arguments, emit first value
+  var example = source.first();
+  //output: "First value: 1"
+  var subscribe = example.subscribe(function (val) {
+      return console.log("First value: " + val);
+  });
+
+  //emit first item to pass test
+  var exampleTwo = source.first(function (num) {
+      return num === 5;
+  });
+  //output: "First to pass test: 5"
+  var subscribeTwo = exampleTwo.subscribe(function (val) {
+      return console.log("First to pass test: " + val);
+  });
+
+  //using optional projection function
+  var exampleThree = source.first(function (num) {
+      return num % 2 === 0;
+  }, function (result, index) {
+      return "First even: " + result + " is at index: " + index;
+  });
+  //output: "First even: 2 at index: 1"
+  var subscribeThree = exampleThree.subscribe(function (val) {
+      return console.log(val);
+  });
+   */
+
+  /**
+   * first
+   * Test case26
+   * Status Done
+   */
+
+  /*
+
+  var source = Rx.Observable.from([1, 2, 3, 4, 5]);
+  //emit first item to pass test
+  var example = source.first(function (num) {
+      return num === 5;
+  });
+  //output: "First to pass test: 5"
+  var subscribe = example.subscribe(function (val) {
+      return console.log("First to pass test: " + val);
+  });
+  */
 
 
   // var custom_observable = Rx.Observable.create(function (observer) {

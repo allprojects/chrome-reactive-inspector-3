@@ -109,13 +109,13 @@ var _node = '';
 
                 console.log(newValue);
                 var truncatedVal = "";
-                if(newValue){
+                if(newValue || newValue.constructor.name === 'Boolean'){
                     newValue = newValue.toString();
-                  truncatedVal =   newValue.substring(0, 25);
+                    truncatedVal = newValue.substring(0, 25);
                 }
 
                 g.setNode(message.content.nodeId, {
-                    label: "Id :" + message.content.nodeId + "<br> Name:" + newRef + "<br> Value: " + truncatedVal + "<br> Source: " + newSourceCodeLine,
+                    label: "Id: " + message.content.nodeId + "<br> Name:" + newRef + "<br> Value: " + truncatedVal + "<br> Source: " + newSourceCodeLine,
                     labelType: "html",
                     ref: newRef,
                     value: newValue,
@@ -131,7 +131,7 @@ var _node = '';
 
                 currentAction = "newNode";
                 g.setNode(message.content.nodeId, {
-                    label: "Id :" + message.content.nodeId + "<br> Name:" + message.content.nodeRef + "<br> Value: " + message.content.nodeValue + "<br> Source: " + message.content.sourceCodeLine,
+                    label: "Id: " + message.content.nodeId + "<br> Name:" + message.content.nodeRef + "<br> Value: " + message.content.nodeValue + "<br> Source: " + message.content.sourceCodeLine,
                     labelType: "html",
                     ref: message.content.nodeRef,
                     value: message.content.nodeValue,

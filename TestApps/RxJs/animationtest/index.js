@@ -37,13 +37,13 @@
     });
   };
 
-  //$(function () {
+  $(function () {
 
     Rx.Observable.prototype.movingWindow = function(size, selector, onShift) {
-      var source = this;
+      var source1 = this;
       return Rx.Observable.create(function (o) {
         var arr = [];
-        return source.subscribe(
+        return source1.subscribe(
           function (x) {
             var item = selector(x);
             arr.push(item);
@@ -52,8 +52,7 @@
               onShift(i);
             }
           },
-          function (e) { o.onError(e); },
-          function () { o.onCompleted(); }
+          function (e) { o.onError(e); }
         );
       })
     }
@@ -75,5 +74,5 @@
 
     var sourceSubscriber = source.subscribe();
 
-  //});
+  });
 }());

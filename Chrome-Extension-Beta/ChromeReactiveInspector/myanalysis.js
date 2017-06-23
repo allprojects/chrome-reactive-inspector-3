@@ -29,7 +29,7 @@ J$.analysis = {};
         this.invokeFunPre = function (iid, f, base, args, isConstructor) {
             console.log('function call intercepted before invoking');
             console.log(f);
-            console.log(f.constructor.name);
+            // console.log(f.constructor.name);
             showLocation(iid);
         };
 
@@ -112,16 +112,19 @@ J$.analysis = {};
                         updatedVar = {'id': currentNodeId, 'name': name};
                         _.extend(_.findWhere(window.variables, { name: updatedVar.name }), updatedVar);
                     }
-                }else if(currentTypeInSmall.search("subscriber") !== -1){
+                }else if(val.constructor.name === 'Subscriber'){
                     // TODO what to with subscribers? should i display or not?
-                    // if (val.hasOwnProperty("id")) {
-                    //     currentNodeId = val.id
-                    // } else {
-                    //     if (window.rxObsCounter !== undefined) {
-                    //         currentNodeId = ++window.rxObsCounter;
-                    //     }
-                    //     val.id = currentNodeId;
-                    // }
+                    if (val.hasOwnProperty("_id")) {
+                        if(val._subscriptions && val._subscriptions.length){
+                            val._subscriptions.forEach(function (subscription) {
+                                if(subscription._id){
+                                    if(!checkIfEdgeAlreadyExists(val._id, subscription._id)) {
+                                        logEdgeData(val._id, subscription._id, '')
+                                    }
+                                }
+                            })
+                        }
+                    }
                 }
 
                 showLocation(iid);
@@ -377,7 +380,7 @@ if (Rx !== undefined) {
     var nextValue = '';
     Rx.Subscriber.prototype.next = function (value) {
         if (!this.isStopped) {
-            if(value || value === 0){
+            if(value || value === 0 || value === false){
                 constructorName = value.constructor.name;
                 //Todo check for other type of events or similar kind
                 switch(constructorName){
@@ -393,8 +396,14 @@ if (Rx !== undefined) {
                     case 'Object':
                         if(value.hasOwnProperty('type') &&  value.type === 'keyup')
                             nextValue = value.key;
-                        else
+                        else if(value.hasOwnProperty('type')){
+                            if(value.type ==='mousemove')
+                                nextValue = JSON.stringify({'screenX':value.screenX, 'screenY':value.screenY});
+                            else
+                                nextValue = JSON.stringify(value);
+                        }else{
                             nextValue = JSON.stringify(value);
+                        }
                         break;
                     case 'MouseEvent':
                         nextValue = JSON.stringify({'clientX':value.clientX, 'clientY':value.clientY});
@@ -406,11 +415,23 @@ if (Rx !== undefined) {
                     case 'String':
                         nextValue = value;
                         break;
+                    case 'Boolean':
+                        nextValue = value;
+                        break;
+                    case 'GroupedObservable':
+                        nextValue = value.key;
+                        break;
                     default:
                         nextValue = JSON.stringify(value);
                         break;
                 }
                 if(this._id){
+                    // Added this condition for animation test example
+                    // Make sure it does not affect other
+                    if(this._parent && this._parent.constructor.name === 'Subscriber'){
+                        if(this._parent.destination && this._parent.destination._complete && !this._parent.destination._id)
+                            logNodeData(this._parent._id, this._parent.obsType, '', '', nextValue, '');
+                    }
                     logNodeData(this._id, this.obsType, '', '', nextValue, '');
                     if(this.constructor.name === 'ConnectableSubscriber' && this.connectable.hasOwnProperty("id")){
                         logNodeData(this.connectable.id, this.connectable.constructor.name, '', '', nextValue, '');
