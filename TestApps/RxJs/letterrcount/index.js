@@ -868,6 +868,304 @@
   });
   */
 
+  /**
+   * ignoreElements
+   * Test case 27
+   * Status Done
+   */
+  /*
+
+//emit value every 100ms
+  var source = Rx.Observable.interval(100);
+  //ignore everything but complete
+  var example = source.take(5).ignoreElements();
+  //output: "COMPLETE!"
+  var subscribe = example.subscribe(function (val) {
+      return console.log('NEXT: ' + val);
+  }, function (val) {
+      return console.log('ERROR: ' + val);
+  }, function () {
+      return console.log('COMPLETE!');
+  });
+
+  //ignore everything but error
+  var error = source.flatMap(function (val) {
+      if (val === 4) {
+          return Rx.Observable.throw('ERROR AT ' + val);
+      }
+      return Rx.Observable.of(val);
+  }).ignoreElements();
+  //output: "ERROR: ERROR AT 4"
+  var subscribeTwo = error.subscribe(function (val) {
+      return console.log('NEXT: ' + val);
+  }, function (val) {
+      return console.log('ERROR: ' + val);
+  }, function () {
+      return console.log('SECOND COMPLETE!');
+  });
+   */
+
+  /**
+   * last
+   * Test case 28
+   * Status Done
+   */
+
+  /*
+  var source = Rx.Observable.from([1, 2, 3, 4, 5]);
+  //no arguments, emit last value
+  var example = source.last();
+  //output: "Last value: 5"
+  var subscribe = example.subscribe(function (val) {
+      return console.log("Last value: " + val);
+  });
+
+  //emit last even number
+  var exampleTwo = source.last(function (num) {
+      return num % 2 === 0;
+  });
+  //output: "Last to pass test: 4"
+  var subscribeTwo = exampleTwo.subscribe(function (val) {
+      return console.log("Last to pass test: " + val);
+  });
+   */
+
+  /**
+   * let
+   * Test case 29
+   * Status Done
+   */
+
+  /*
+  var myArray = [1, 2, 3, 4, 5];
+  var myObservableArray = Rx.Observable.from(myArray);
+  //demonstrating the difference between let and other operators
+  var test = myObservableArray.map(function (val) {
+      return val + 1;
+  }
+//this fails, let behaves differently than most operators
+//val in this case is an observable
+//.let(val => val + 2)
+  ).subscribe(function (val) {
+      return console.log('VALUE FROM ARRAY: ', val);
+  });
+
+  var letTest = myObservableArray.map(function (val) {
+      return val + 1;
+  }
+//'let' me have the entire observable
+  ).let(function (obs) {
+      return obs.map(function (val) {
+          return val + 2;
+      });
+  }).subscribe(function (val) {
+      return console.log('VALUE FROM ARRAY WITH let: ', val);
+  });
+
+  //let provides flexibility to add multiple operators to source observable then return
+  var letTestThree = myObservableArray.map(function (val) {
+      return val + 1;
+  }).let(function (obs) {
+      return obs.map(function (val) {
+              return val + 2;
+          }
+          //also, just return evens
+      ).filter(function (val) {
+          return val % 2 === 0;
+      });
+  }).subscribe(function (val) {
+      return console.log('let WITH MULTIPLE OPERATORS: ', val);
+  });
+
+  //pass in your own function to add operators to observable
+  var obsArrayPlusYourOperators = function obsArrayPlusYourOperators(yourAppliedOperators) {
+      return myObservableArray.map(function (val) {
+          return val + 1;
+      }).let(yourAppliedOperators);
+  };
+  var addTenThenTwenty = function addTenThenTwenty(obs) {
+      return obs.map(function (val) {
+          return val + 10;
+      }).map(function (val) {
+          return val + 20;
+      });
+  };
+  var letTestFour = obsArrayPlusYourOperators(addTenThenTwenty).subscribe(function (val) {
+      return console.log('let FROM FUNCTION:', val);
+  });
+   */
+
+  /**
+   * mapTo
+   * Test case 30
+   * Status Done
+   */
+
+  /*
+      //emit value every two seconds
+  var source = Rx.Observable.interval(2000);
+  //map all emissions to one value
+  var example = source.mapTo('HELLO WORLD!');
+  //output: 'HELLO WORLD!'...'HELLO WORLD!'...'HELLO WORLD!'...
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+
+  //emit every click on document
+  var clickSource = Rx.Observable.fromEvent(document, 'click');
+  //map all emissions to one value
+  var exampleTwo = clickSource.mapTo('GOODBYE WORLD!');
+  //output: (click)'GOODBYE WORLD!'...
+  var subscribeTwo = exampleTwo.subscribe(function (val) {
+      return console.log(val);
+  });
+
+  */
+
+  /**
+   * merge
+   * Test case 31
+   * Status Done
+   */
+  /*
+      //emit every 2.5 seconds
+  var first = Rx.Observable.interval(2500);
+  //emit every 2 seconds
+  var second = Rx.Observable.interval(2000);
+  //emit every 1.5 seconds
+  var third = Rx.Observable.interval(1500);
+  //emit every 1 second
+  var fourth = Rx.Observable.interval(1000);
+
+  //emit outputs from one observable
+  var example = Rx.Observable.merge(first.mapTo('FIRST!'), second.mapTo('SECOND!'), third.mapTo('THIRD'), fourth.mapTo('FOURTH'));
+  //output: "FOURTH", "THIRD", "SECOND!", "FOURTH", "FIRST!", "THIRD", "FOURTH"
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+
+
+  //used as instance method
+  // var exampleTwo = first.merge(fourth);
+  // //output: 0,1,0,2....
+  // var subscribeTwo = exampleTwo.subscribe(function (val) {
+  //     return console.log(val);
+  // });
+   // */
+
+  /**
+   * mergeMap
+   * Test case 32
+   * Status Done
+   */
+  /*
+      //emit 'Hello'
+  var source = Rx.Observable.of('Hello');
+  //map to inner observable and flatten
+  var example = source.mergeMap(function (val) {
+      return Rx.Observable.of(val + ' World!');
+  });
+  //output: 'Hello World!'
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+
+  //mergeMap also emits result of promise
+  var myPromise = function myPromise(val) {
+      return new Promise(function (resolve) {
+          return resolve(val + ' World From Promise!');
+      });
+  };
+  //map to promise and emit result
+  var exampleTwo = source.mergeMap(function (val) {
+      return myPromise(val);
+  });
+  //output: 'Hello World From Promise'
+  var subscribeTwo = exampleTwo.subscribe(function (val) {
+      return console.log(val);
+  });
+
+   // you can also supply a second argument which recieves the source value and emitted
+   // value of inner observable or promise
+
+  var exampleThree = source.mergeMap(function (val) {
+      return myPromise(val);
+  }, function (valueFromSource, valueFromPromise) {
+      return 'Source: ' + valueFromSource + ', Promise: ' + valueFromPromise;
+  });
+  //output: "Source: Hello, Promise: Hello World From Promise!"
+  var subscribeThree = exampleThree.subscribe(function (val) {
+      return console.log(val);
+  });
+   */
+
+  /**
+   * partition
+   * Test case 33
+   * Status Done
+   */
+  /*
+  var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+  var source = Rx.Observable.from([1, 2, 3, 4, 5, 6]);
+  //first value is true, second false
+
+  var _source$partition = source.partition(function (val) {
+          return val % 2 === 0;
+      }),
+      _source$partition2 = _slicedToArray(_source$partition, 2),
+      evens = _source$partition2[0],
+      odds = _source$partition2[1];
+   // Output:
+   // "Even: 2"
+   // "Even: 4"
+   // "Even: 6"
+   // "Odd: 1"
+   // "Odd: 3"
+   // "Odd: 5"
+
+
+  var subscribe = Rx.Observable.merge(evens.map(function (val) {
+      return "Even: " + val;
+  }), odds.map(function (val) {
+      return "Odd: " + val;
+  })).subscribe(function (val) {
+      return console.log(val);
+  });
+  //if greater than 3 throw
+  var example = source.map(function (val) {
+      if (val > 3) {
+          throw val + " greater than 3!";
+      }
+      return { success: val };
+  }).catch(function (val) {
+      return Rx.Observable.of({ error: val });
+  });
+  //split on success or error
+
+  var _example$partition = example.partition(function (res) {
+          return res.success;
+      }
+
+      ),
+      _example$partition2 = _slicedToArray(_example$partition, 2),
+      success = _example$partition2[0],
+      error = _example$partition2[1];
+
+  var subscribeTwo = Rx.Observable.merge(success.map(function (val) {
+      return "Success! " + val.success;
+  }), error.map(function (val) {
+      return "Error! " + val.error;
+  })).subscribe(function (val) {
+      return console.log(val);
+  });
+   */
+
+
+  /**
+   *
+   */
+
 
   // var custom_observable = Rx.Observable.create(function (observer) {
   //     observer.next(1);

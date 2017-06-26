@@ -60,20 +60,25 @@ J$.analysis = {};
             }else{
                 var currentType = "";
                 console.log('writing variable operation intercept: ' + name);
+                var SourceLocation;
+                var SourceLocationLine;
+                // source location
+                SourceLocation = window.iidToLocationMap[iid];
+                SourceLocationLine = SourceLocation[1];
+
                 if (val) {
                     console.log('type is : ' + val.constructor.name);
                     console.log('val id  is : ' + val.id);
-                    window.variables.push({'name': name, 'id': val.id });
+                    window.variables.push({'name': name, 'id': val.id, 'location': SourceLocationLine });
                     // For Bacon and Rx-js
                     currentType = val.constructor.name;
                 }
 
                 var currentTypeInSmall = currentType.toLowerCase();
                 var currentNodeId = '';
-                var SourceLocation = '';
-                var SourceLocationLine = '';
+
                 // todo what about property here , please check other types that we need to log here ..
-                if (currentTypeInSmall.search("observable") !== -1) {
+                if (currentTypeInSmall.search("observable") !== -1 || currentTypeInSmall.search("subject") !== -1) {
                     if(!(val.hasOwnProperty('operator') && val.operator === undefined)){
                         // bacon observer already has the id attribute
                         if (val.hasOwnProperty("id")) {
@@ -85,34 +90,28 @@ J$.analysis = {};
                             val.id = currentNodeId;
                         }
 
-                        // source location
-                        SourceLocation = window.iidToLocationMap[iid];
-                        SourceLocationLine = SourceLocation[1];
-
                         logNodeData(currentNodeId, currentType, '', name, '', SourceLocationLine);
                         updatedVar = {'id': currentNodeId, 'name': name};
                         _.extend(_.findWhere(window.variables, { name: updatedVar.name }), updatedVar);
                     }
-                }else if (currentTypeInSmall.search("subject") !== -1) {
-                    if(!(val.hasOwnProperty('operator') && val.operator === undefined)){
-                        if (val.hasOwnProperty("id")) {
-                            currentNodeId = val.id
-                        } else {
-                            if (window.rxObsCounter !== undefined) {
-                                currentNodeId = ++window.rxObsCounter;
-                            }
-                            val.id = currentNodeId;
-                        }
-
-                        // source location
-                        SourceLocation = window.iidToLocationMap[iid];
-                        SourceLocationLine = SourceLocation[1];
-
-                        logNodeData(currentNodeId, currentType, '', name, '', SourceLocationLine);
-                        updatedVar = {'id': currentNodeId, 'name': name};
-                        _.extend(_.findWhere(window.variables, { name: updatedVar.name }), updatedVar);
-                    }
-                }else if(val.constructor.name === 'Subscriber'){
+                }
+                // else if (currentTypeInSmall.search("subject") !== -1) {
+                //     if(!(val.hasOwnProperty('operator') && val.operator === undefined)){
+                //         if (val.hasOwnProperty("id")) {
+                //             currentNodeId = val.id
+                //         } else {
+                //             if (window.rxObsCounter !== undefined) {
+                //                 currentNodeId = ++window.rxObsCounter;
+                //             }
+                //             val.id = currentNodeId;
+                //         }
+                //
+                //         logNodeData(currentNodeId, currentType, '', name, '', SourceLocationLine);
+                //         updatedVar = {'id': currentNodeId, 'name': name, 'location': SourceLocationLine};
+                //         _.extend(_.findWhere(window.variables, { name: updatedVar.name }), updatedVar);
+                //     }
+                // }
+                else if(val.constructor.name === 'Subscriber'){
                     // TODO what to with subscribers? should i display or not?
                     if (val.hasOwnProperty("_id")) {
                         if(val._subscriptions && val._subscriptions.length){
@@ -380,8 +379,7 @@ if (Rx !== undefined) {
     var nextValue = '';
     Rx.Subscriber.prototype.next = function (value) {
         if (!this.isStopped) {
-            if(this.constructor && this.constructor.name !== 'InnerSubscriber'){
-                if(value || value === 0 || value === false){
+            if(value || value === 0 || value === false){
                     constructorName = value.constructor.name;
                     //Todo check for other type of events or similar kind
                     switch(constructorName){
@@ -422,6 +420,9 @@ if (Rx !== undefined) {
                         case 'GroupedObservable':
                             nextValue = value.key;
                             break;
+                        case 'Observable':
+                            nextValue = value;
+                            break;
                         default:
                             nextValue = JSON.stringify(value);
                             break;
@@ -441,11 +442,26 @@ if (Rx !== undefined) {
                         logNodeData(this.outerValue.id, this.outerValue.constructor.name, '', '', nextValue, '');
                     }
                 }
-            }
             this._next(value);
         }
     };
 
+    Rx.Subscriber.prototype.error = function (err) {
+        if (!this.isStopped) {
+            if(this._id){
+                logNodeData(this._id, this.obsType, '', '', JSON.stringify(err), '');
+            }
+            this.isStopped = true;
+            this._error(err);
+        }
+    };
+
+    Rx.Subscriber.prototype.complete = function () {
+        if (!this.isStopped) {
+            this.isStopped = true;
+            this._complete();
+        }
+    };
 
     // Rx.Observable.prototype.multicast = function (subjectOrSubjectFactory, selector) {
     //     if (typeof subjectOrSubjectFactory !== 'function') {
@@ -486,9 +502,11 @@ if (Rx !== undefined) {
 
         var name = '';
         var res = '';
+        var location = '';
         if(obsSource.sourceObj && obsSource.sourceObj.id){
             res = _.find(window.variables, {id:obsSource.sourceObj.id});
             name = res.name;
+            location = res.location;
         }else{
             res = _.find(window.variables, {id:obsSource.id});
             if(res)
@@ -526,7 +544,7 @@ if (Rx !== undefined) {
             }
         } else {
             if(!checkIfNodeAlreadyExists(obsSource.id, name, sourceNodeType)){
-                logNodeData(obsSource.id, sourceNodeType, '', name, '', '')
+                logNodeData(obsSource.id, sourceNodeType, '', name, '', location)
             }
             logEdgeData(obsSource.id, obsResult.id, operName);
 
@@ -583,6 +601,6 @@ function checkIfNodeAlreadyExists(nodeId, name, type){
 
 function checkIfEdgeAlreadyExists(startId, endId){
     return  _.some(allEdges, function (edge) {
-        return edge.startId === startId && edge.endId === endId;
+        return (edge.startId === startId && edge.endId === endId) || edge.startId === endId && edge.endId === startId;
     });
 }
