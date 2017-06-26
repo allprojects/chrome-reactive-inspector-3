@@ -380,64 +380,66 @@ if (Rx !== undefined) {
     var nextValue = '';
     Rx.Subscriber.prototype.next = function (value) {
         if (!this.isStopped) {
-            if(value || value === 0 || value === false){
-                constructorName = value.constructor.name;
-                //Todo check for other type of events or similar kind
-                switch(constructorName){
-                    case 'KeyboardEvent':
-                        nextValue = value.currentTarget.value;
-                        break;
-                    case 'Number':
-                        nextValue = JSON.stringify(value);
-                        break;
-                    case 'Array':
-                        nextValue = JSON.stringify(value);
-                        break;
-                    case 'Object':
-                        if(value.hasOwnProperty('type') &&  value.type === 'keyup')
-                            nextValue = value.key;
-                        else if(value.hasOwnProperty('type')){
-                            if(value.type ==='mousemove')
-                                nextValue = JSON.stringify({'screenX':value.screenX, 'screenY':value.screenY});
-                            else
-                                nextValue = JSON.stringify(value);
-                        }else{
+            if(this.constructor && this.constructor.name !== 'InnerSubscriber'){
+                if(value || value === 0 || value === false){
+                    constructorName = value.constructor.name;
+                    //Todo check for other type of events or similar kind
+                    switch(constructorName){
+                        case 'KeyboardEvent':
+                            nextValue = value.currentTarget.value;
+                            break;
+                        case 'Number':
                             nextValue = JSON.stringify(value);
+                            break;
+                        case 'Array':
+                            nextValue = JSON.stringify(value);
+                            break;
+                        case 'Object':
+                            if(value.hasOwnProperty('type') &&  value.type === 'keyup')
+                                nextValue = value.key;
+                            else if(value.hasOwnProperty('type')){
+                                if(value.type ==='mousemove')
+                                    nextValue = JSON.stringify({'screenX':value.screenX, 'screenY':value.screenY});
+                                else
+                                    nextValue = JSON.stringify(value);
+                            }else{
+                                nextValue = JSON.stringify(value);
+                            }
+                            break;
+                        case 'MouseEvent':
+                            nextValue = JSON.stringify({'clientX':value.clientX, 'clientY':value.clientY});
+                            break;
+                        case 'Promise':
+                            //TODO get value from promised object
+                            nextValue = JSON.stringify(value);
+                            break;
+                        case 'String':
+                            nextValue = value;
+                            break;
+                        case 'Boolean':
+                            nextValue = value;
+                            break;
+                        case 'GroupedObservable':
+                            nextValue = value.key;
+                            break;
+                        default:
+                            nextValue = JSON.stringify(value);
+                            break;
+                    }
+                    if(this._id){
+                        // Added this condition for animation test example
+                        // Make sure it does not affect other
+                        if(this._parent && this._parent.constructor.name === 'Subscriber' && !this._operatorName){
+                            if(this._parent.destination && this._parent.destination._complete && !this._parent.destination._id)
+                                logNodeData(this._parent._id, this._parent.obsType, '', '', nextValue, '');
                         }
-                        break;
-                    case 'MouseEvent':
-                        nextValue = JSON.stringify({'clientX':value.clientX, 'clientY':value.clientY});
-                        break;
-                    case 'Promise':
-                        //TODO get value from promised object
-                        nextValue = JSON.stringify(value);
-                        break;
-                    case 'String':
-                        nextValue = value;
-                        break;
-                    case 'Boolean':
-                        nextValue = value;
-                        break;
-                    case 'GroupedObservable':
-                        nextValue = value.key;
-                        break;
-                    default:
-                        nextValue = JSON.stringify(value);
-                        break;
-                }
-                if(this._id){
-                    // Added this condition for animation test example
-                    // Make sure it does not affect other
-                    if(this._parent && this._parent.constructor.name === 'Subscriber'){
-                        if(this._parent.destination && this._parent.destination._complete && !this._parent.destination._id)
-                            logNodeData(this._parent._id, this._parent.obsType, '', '', nextValue, '');
+                        logNodeData(this._id, this.obsType, '', '', nextValue, '');
+                        if(this.constructor.name === 'ConnectableSubscriber' && this.connectable.hasOwnProperty("id")){
+                            logNodeData(this.connectable.id, this.connectable.constructor.name, '', '', nextValue, '');
+                        }
+                    }else if(this.outerValue && this.outerValue.id && this.outerValue.constructor.name === 'ScalarObservable'){
+                        logNodeData(this.outerValue.id, this.outerValue.constructor.name, '', '', nextValue, '');
                     }
-                    logNodeData(this._id, this.obsType, '', '', nextValue, '');
-                    if(this.constructor.name === 'ConnectableSubscriber' && this.connectable.hasOwnProperty("id")){
-                        logNodeData(this.connectable.id, this.connectable.constructor.name, '', '', nextValue, '');
-                    }
-                }else if(this.outerValue && this.outerValue.id && this.outerValue.constructor.name === 'ScalarObservable'){
-                    logNodeData(this.outerValue.id, this.outerValue.constructor.name, '', '', nextValue, '');
                 }
             }
             this._next(value);
