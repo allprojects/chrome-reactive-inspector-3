@@ -1163,8 +1163,486 @@
 
 
   /**
-   *
+   * pluck
+   * Test case 34
+   * Status Done
    */
+  /*
+  var source = Rx.Observable.from([{ name: 'Joe', age: 30 }, { name: 'Sarah', age: 35 }]);
+  //grab names
+  var example = source.pluck('name');
+  //output: "Joe", "Sarah"
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+
+  var sourceTwo = Rx.Observable.from([{ name: 'Joe', age: 30, job: { title: 'Developer', language: 'JavaScript' } },
+//will return undefined when no job is found
+      { name: 'Sarah', age: 35 }]);
+  //grab title property under job
+  var exampleTwo = sourceTwo.pluck('job', 'title');
+  //output: "Developer" , undefined
+  var subscribeTwo = exampleTwo.subscribe(function (val) {
+      return console.log(val);
+  });
+   */
+
+
+
+  /**
+   * publish
+   * Test case 35
+   * Status Done
+   */
+    /*
+      //emit value every 1 second
+    var source = Rx.Observable.interval(1000);
+    var example = source
+    //side effects will be executed once
+        .do(function () {
+            return console.log('Do Something!');
+        }
+  //do nothing until connect() is called
+        ).publish();
+
+     // source will not emit values until connect() is called
+     // output: (after 5s)
+     // "Do Something!"
+     // "Subscriber One: 0"
+     // "Subscriber Two: 0"
+     // "Do Something!"
+     // "Subscriber One: 1"
+     // "Subscriber Two: 1"
+
+    var subscribeOne = example.subscribe(function (val) {
+        return console.log('Subscriber One: ' + val);
+    });
+    var subscribeTwo = example.subscribe(function (val) {
+        return console.log('Subscriber Two: ' + val);
+    });
+
+    //call connect after 5 seconds, causing source to begin emitting items
+    setTimeout(function () {
+        example.connect();
+    }, 5000);
+  */
+
+  /**
+   * race
+   * Test case 36
+   * Status Done
+   */
+
+  /*
+  var example = Rx.Observable.race(
+//emit every 1.5s
+      Rx.Observable.interval(1500),
+//emit every 1s
+      Rx.Observable.interval(1000).mapTo('1s won!'),
+//emit every 2s
+      Rx.Observable.interval(2000),
+//emit every 2.5s
+      Rx.Observable.interval(2500));
+  //output: "1s won!"..."1s won!"...etc
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+   */
+
+  /**
+   * repeat
+   * Test case 37
+   * Status Done
+   */
+
+  /*
+  //emit "Repeat this!"
+  var source = Rx.Observable.of('Repeat this!');
+  //repeat items emitted from source 3 times
+  var example = source.repeat(3);
+  //output: "Repeat this!"..."Repeat this!"..."Repeat this!"
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+  //emit every second
+  var sourceTwo = Rx.Observable.interval(1000);
+  //take 5 values, repeat 2 times
+  var exampleTwo = sourceTwo.take(5).repeat(2);
+  //output: 0,1,2,3,4,5...0,1,2,3,4,5
+  var subscribeTwo = exampleTwo.subscribe(function (val) {
+      return console.log(val);
+  });
+   */
+
+  /**
+   * retry
+   * Test case 38
+   * Status Done
+   */
+/*
+  var source = Rx.Observable.interval(1000);
+  var example = source.flatMap(function (val) {
+      //throw error for demonstration
+      if (val > 5) {
+          return Rx.Observable.throw('Error!');
+      }
+      return Rx.Observable.of(val);
+  }
+//retry 2 times on error
+  ).retry(2);
+   // output:
+   // 0..1..2..3..4..5..
+   // 0..1..2..3..4..5..
+   // 0..1..2..3..4..5..
+   // "Error!: Retried 2 times then quit!"
+  var subscribe = example.subscribe({
+      next: function next(val) {
+          return console.log(val);
+      },
+      error: function error(val) {
+          return console.log(val + ': Retried 2 times then quit!');
+      }
+  });
+
+*/
+
+  /**
+   * retryWhen
+   * Test case 39
+   * Status Done
+   */
+  /*
+//emit value every 1s
+  var source = Rx.Observable.interval(1000);
+  var example = source.map(function (val) {
+      if (val > 5) {
+          //error will be picked up by retryWhen
+          throw val;
+      }
+      return val;
+  }).retryWhen(function (errors) {
+      return errors
+      //log error message
+          .do(function (val) {
+                  return console.log("Value " + val + " was too high!");
+              }
+              //restart in 5 seconds
+          ).delayWhen(function (val) {
+              return Rx.Observable.interval(val * 1000);
+          });
+  });
+   // output:
+   // 0
+   // 1
+   // 2
+   // 3
+   // 4
+   // 5
+   // "Value 6 was too high!"
+   // --Wait 5 seconds then repeat
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+   */
+
+  /**
+   * sample
+   * Test case 40
+   * Status Done
+   */
+  /*
+      //emit value every 1s
+  var source = Rx.Observable.interval(1000);
+  //sample last emitted value from source every 2s
+  var example = source.sample(Rx.Observable.interval(2000));
+  //output: 2..4..6..8..
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+
+  var sourceTwo = Rx.Observable.zip(
+//emit 'Joe', 'Frank' and 'Bob' in sequence
+      Rx.Observable.from(['Joe', 'Frank', 'Bob']),
+//emit value every 2s
+      Rx.Observable.interval(2000));
+  //sample last emitted value from source every 2.5s
+  var exampleTwo = sourceTwo.sample(Rx.Observable.interval(2500));
+  //output: ["Joe", 0]...["Frank", 1]...........
+  var subscribeTwo = exampleTwo.subscribe(function (val) {
+      return console.log(val);
+  });
+   */
+
+  /**
+   * scan
+   * Test case 41
+   * Status Done
+   */
+  /*
+  //    example 1
+  var testSubject = new Rx.Subject();
+  //basic scan example, sum over time starting with zero
+  var basicScan = testSubject.startWith(0).scan(function (acc, curr) {
+      return acc + curr;
+  });
+  //log accumulated values
+  var subscribe = basicScan.subscribe(function (val) {
+      return console.log('Accumulated total:', val);
+  });
+  //next values into subject, adding to the current sum
+  testSubject.next(1); //1
+  testSubject.next(2); //3
+  testSubject.next(3); //6
+
+  */
+
+  /*
+   // Example 2
+  var testSubjectTwo = new Rx.Subject();
+  //scan example building an object over time
+  var objectScan = testSubjectTwo.scan(function (acc, curr) {
+      return Object.assign({}, acc, curr);
+  }, {});
+  //log accumulated values
+  var subscribe = objectScan.subscribe(function (val) {
+      return console.log('Accumulated object:', val);
+  });
+  //next values into subject, adding properties to object
+  testSubjectTwo.next({ name: 'Joe' }); // {name: 'Joe'}
+  testSubjectTwo.next({ age: 30 }); // {name: 'Joe', age: 30}
+  testSubjectTwo.next({ favoriteLanguage: 'JavaScript' }); // {name: 'Joe', age: 30, favoriteLanguage: 'JavaScript'}
+   */
+
+  /**
+   * share
+   * Test case 42
+   * Status Done
+   */
+
+  /*
+
+  var source = Rx.Observable.timer(1000);
+  //log side effect, emit result
+  var example = source.do(function () {
+      return console.log('***SIDE EFFECT***');
+  }).mapTo('***RESULT***');
+   // ***NOT SHARED, SIDE EFFECT WILL BE EXECUTED TWICE***
+   // output:
+   // "***SIDE EFFECT***"
+   // "***RESULT***"
+   // "***SIDE EFFECT***"
+   // "***RESULT***"
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+  var subscribeTwo = example.subscribe(function (val) {
+      return console.log(val);
+  });
+
+  //share observable among subscribers
+  var sharedExample = example.share();
+   // ***SHARED, SIDE EFFECT EXECUTED ONCE***
+   // output:
+   // "***SIDE EFFECT***"
+   // "***RESULT***"
+   // "***RESULT***"
+  var subscribeThree = sharedExample.subscribe(function (val) {
+      return console.log(val);
+  });
+  var subscribeFour = sharedExample.subscribe(function (val) {
+      return console.log(val);
+  });
+   */
+
+
+  /**
+   * single
+   * Test case 43
+   * Status Done
+   */
+
+  /*
+//emit (1,2,3,4,5)
+  var source = Rx.Observable.from([1, 2, 3, 4, 5]);
+  //emit one item that matches predicate
+  var example = source.single(function (val) {
+      return val === 4;
+  });
+  //output: 4
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+   */
+
+  /**
+   * skip
+   * Test case 44
+   * Status Done
+   */
+
+  /*
+//emit every 1s
+  var source = Rx.Observable.interval(1000);
+  //skip the first 5 emitted values
+  var example = source.skip(5);
+  //output: 5...6...7...8........
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+  */
+
+  /**
+   * skipUntil
+   * Test case 45
+   * Status Done
+   */
+
+  /*
+
+//emit every 1s
+  var source = Rx.Observable.interval(1000);
+  //skip emitted values from source until inner observable emits (6s)
+  var example = source.skipUntil(Rx.Observable.timer(6000));
+  //output: 5...6...7...8........
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+   */
+
+  /**
+   * skipWhile
+   * Test case 46
+   * Status Done
+   */
+
+  /*
+
+  //emit every 1s
+  var source = Rx.Observable.interval(1000);
+  //skip emitted values from source while value is less than 5
+  var example = source.skipWhile(function (val) {
+      return val < 5;
+  });
+  //output: 5...6...7...8........
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+   */
+  /**
+   * startWith
+   * Test case 47
+   * Status Done
+   */
+/*
+  //emit (1,2,3)
+  var source = Rx.Observable.of(1, 2, 3);
+  //start with 0
+  var example = source.startWith(0);
+  //output: 0,1,2,3
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+  //-----------Second example ---------------
+  //emit ('World!', 'Goodbye', 'World!')
+  var sourceTwo = Rx.Observable.of('World!', 'Goodbye', 'World!');
+  //start with 'Hello', concat current string to previous
+  var exampleTwo = sourceTwo.startWith('Hello').scan(function (acc, curr) {
+      return acc + ' ' + curr;
+  });
+   // output:
+   // "Hello"
+   // "Hello World!"
+   // "Hello World! Goodbye"
+   // "Hello World! Goodbye World!"
+
+  var subscribeTwo = exampleTwo.subscribe(function (val) {
+      return console.log(val);
+  });
+ */
+
+  /**
+   * switchMap
+   * Test case 48
+   * Status Done
+   */
+  /*
+      //emit immediately, then every 5s
+  var source = Rx.Observable.timer(0, 5000);
+  //switch to new inner observable when source emits, emit items that are emitted
+  var example = source.switchMap(function () {
+      return Rx.Observable.interval(500);
+  });
+  //output: 0,1,2,3,4,5,6,7,8,9...0,1,2,3,4,5,6,7,8
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+  // -------- example 2 ----------
+
+  //emit every click
+  var sourceTwo = Rx.Observable.fromEvent(document, 'click');
+  //if another click comes within 3s, message will not be emitted
+  var exampleTwo = sourceTwo.switchMap(function (val) {
+      // This will create new pair od nodes each time its clicked
+      return Rx.Observable.interval(3000).mapTo('Hello, I made it!');
+  });
+  //(click)...3s...'Hello I made it!'...(click)...2s(click)...
+  var subscribeTwo = exampleTwo.subscribe(function (val) {
+      return console.log(val);
+  });
+   */
+
+  /**
+   * window
+   * Test case 49
+   * Status - Not sure
+   */
+  /*
+//emit immediately then every 1s
+  var source = Rx.Observable.timer(0, 1000);
+  var example = source.window(Rx.Observable.interval(3000));
+  var count = example.scan(function (acc, curr) {
+          return acc + 1;
+      }, 0
+       // "Window 1:"
+       // 0
+       // 1
+       // 2
+       // "Window 2:"
+       // 3
+       // 4
+       // 5
+       // ...
+  );
+
+  var subscribe = count.subscribe(function (val) {
+      return console.log("Window " + val + ":");
+  });
+  var subscribeTwo = example.mergeAll().subscribe(function (val) {
+      return console.log(val);
+  });
+   */
+
+  /**
+   * windowCount
+   * Test case 50
+   * Status - Not sure
+   */
+  /*
+      //emit every 1s
+  var source = Rx.Observable.interval(1000);
+  var example = source
+  //start new window every 4 emitted values
+      .windowCount(4).do(function () {
+          return console.log('NEW WINDOW!');
+      });
+
+  var subscribeTwo = example
+  //window emits nested observable
+      .mergeAll().subscribe(function (val) {
+          return console.log(val);
+      });
+    */
+
 
 
   // var custom_observable = Rx.Observable.create(function (observer) {

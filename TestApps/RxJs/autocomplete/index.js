@@ -1,7 +1,7 @@
 // Search Wikipedia for a given term
 
 /**
- * This test case is verified on May 25th
+ * This test case is verified on May 25th, june 28th
  * @param query
  */
 

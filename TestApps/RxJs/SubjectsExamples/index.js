@@ -6,12 +6,12 @@
 /*
 var subject = new Rx.Subject();
 
-subject.subscribe({
+var x=subject.subscribe({
     next: function next(v) {
         return console.log('observerA: ' + v);
     }
 });
-subject.subscribe({
+var y = subject.subscribe({
     next: function next(v) {
         return console.log('observerB: ' + v);
     }
@@ -204,7 +204,7 @@ setTimeout(function () {
 /*
 var subject = new Rx.AsyncSubject();
 
-subject.subscribe({
+var x = subject.subscribe({
     next: function next(v) {
         return console.log('observerA: ' + v);
     }
@@ -215,7 +215,7 @@ subject.next(2);
 subject.next(3);
 subject.next(4);
 
-subject.subscribe({
+var y = subject.subscribe({
     next: function next(v) {
         return console.log('observerB: ' + v);
     }

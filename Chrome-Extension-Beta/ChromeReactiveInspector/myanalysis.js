@@ -8,6 +8,8 @@
 var allNodes = [];
 var allEdges= [];
 var updatedVar = {};
+var SourceLocation;
+var SourceLocationLine;
 
 // Jalangi Analysis Start
 J$.analysis = {};
@@ -60,11 +62,13 @@ J$.analysis = {};
             }else{
                 var currentType = "";
                 console.log('writing variable operation intercept: ' + name);
-                var SourceLocation;
-                var SourceLocationLine;
+                SourceLocationLine = '';
                 // source location
                 SourceLocation = window.iidToLocationMap[iid];
-                SourceLocationLine = SourceLocation[1];
+                if(SourceLocation)
+                    SourceLocationLine = SourceLocation[1];
+                else
+                    SourceLocationLine = '';
 
                 if (val) {
                     console.log('type is : ' + val.constructor.name);
@@ -95,31 +99,23 @@ J$.analysis = {};
                         _.extend(_.findWhere(window.variables, { name: updatedVar.name }), updatedVar);
                     }
                 }
-                // else if (currentTypeInSmall.search("subject") !== -1) {
-                //     if(!(val.hasOwnProperty('operator') && val.operator === undefined)){
-                //         if (val.hasOwnProperty("id")) {
-                //             currentNodeId = val.id
-                //         } else {
-                //             if (window.rxObsCounter !== undefined) {
-                //                 currentNodeId = ++window.rxObsCounter;
-                //             }
-                //             val.id = currentNodeId;
-                //         }
-                //
-                //         logNodeData(currentNodeId, currentType, '', name, '', SourceLocationLine);
-                //         updatedVar = {'id': currentNodeId, 'name': name, 'location': SourceLocationLine};
-                //         _.extend(_.findWhere(window.variables, { name: updatedVar.name }), updatedVar);
-                //     }
-                // }
                 else if(val.constructor.name === 'Subscriber'){
-                    // TODO what to with subscribers? should i display or not?
                     if (val.hasOwnProperty("_id")) {
                         if(val._subscriptions && val._subscriptions.length){
                             val._subscriptions.forEach(function (subscription) {
                                 if(subscription._id){
-                                    if(!checkIfEdgeAlreadyExists(val._id, subscription._id)) {
+                                    // Test case 41 - example 2
+                                    if(subscription._parent && subscription._parent._id)
+                                        if(!checkIfEdgeAlreadyExists(subscription._parent._id, subscription._id)) {
+                                            logEdgeData(subscription._id,subscription._parent._id, '')
+                                        }
+                                    else if(!checkIfEdgeAlreadyExists(val._id, subscription._id)) {
                                         logEdgeData(val._id, subscription._id, '')
                                     }
+                                }else{
+                                    subscription._id = ++window.rxObsCounter;
+                                    logNodeData(subscription._id, currentType, '', name, '', SourceLocationLine);
+                                    logEdgeData(val._id, subscription._id, '')
                                 }
                             })
                         }
@@ -221,7 +217,9 @@ if (Rx !== undefined) {
      * @type {Array}
      */
     var flattenOperators = ['MergeAllOperator', 'CombineLatestOperator', 'SwitchFirstOperator', 'MergeMapOperator',
-        'MergeMapToOperator', 'SwitchMapToOperator', 'SwitchMapOperator', 'ZipOperator'];
+        'MergeMapToOperator', 'SwitchMapToOperator', 'SwitchMapOperator', 'ZipOperator', 'RaceOperator'];
+
+    var subscriberNames = ['SubjectSubscription', 'RaceSubscriber'];
 
     Rx.Observable.prototype.lift = function (operator) {
 
@@ -247,8 +245,10 @@ if (Rx !== undefined) {
             if (!(resultantObservable.hasOwnProperty("id"))) {
                 resultantObservable.id = ++rxObsCounter;
             }
+            // Multicast support with refCount example & test case 42
             if(operator.constructor.name === 'RefCountOperator'){
-                CriLogObserverFactory(operator, sourceObs.getSubject(), resultantObservable)
+                if(sourceObs.getSubject().id)  // for test case 42
+                    CriLogObserverFactory(operator, sourceObs.getSubject(), resultantObservable)
             }else{
                 CriLogObserverFactory(operator, sourceObs, resultantObservable);
             }
@@ -257,22 +257,9 @@ if (Rx !== undefined) {
     };
 
     // Todo
-    const _sub_lift = Rx.Subject.prototype.lift;
-    Rx.Subject.prototype.lift = function (operator) {
-
-        var resultantSubject = _sub_lift.call(operator);
-        // var subject = new AnonymousSubject(this, this);
-        // subject.operator = operator;
-        console.log(resultantSubject);
-        return resultantSubject;
-    };
-
-
-    // Todo
     const create_observable = Rx.Observable.create;
     Rx.Observable.create = function (observer) {
         var resultantObservable = create_observable(observer)
-        console.log(resultantObservable)
         resultantObservable.id = ++rxObsCounter;
         resultantObservable._type = 'createObservable';
         return resultantObservable
@@ -336,7 +323,8 @@ if (Rx !== undefined) {
 
             }
         }
-        sink._id = this.id;
+        if(!sink.hasOwnProperty('_id'))
+            sink._id = this.id;
         sink._operatorName = operator;
         var obsType = '';
         if (this.constructor.name) {
@@ -379,9 +367,11 @@ if (Rx !== undefined) {
     var nextValue = '';
     Rx.Subscriber.prototype.next = function (value) {
         if (!this.isStopped) {
-            if(value || value === 0 || value === false){
+            if(value !== ''){
+                constructorName = '';
+                if(value !== undefined && value !== null){
+
                     constructorName = value.constructor.name;
-                    //Todo check for other type of events or similar kind
                     switch(constructorName){
                         case 'KeyboardEvent':
                             nextValue = value.currentTarget.value;
@@ -427,6 +417,12 @@ if (Rx !== undefined) {
                             nextValue = JSON.stringify(value);
                             break;
                     }
+                }
+                else
+                    if(value === undefined)
+                        nextValue = 'undefined';
+                    //Todo check for other type of events or similar kind
+
                     if(this._id){
                         // Added this condition for animation test example
                         // Make sure it does not affect other
@@ -435,8 +431,16 @@ if (Rx !== undefined) {
                                 logNodeData(this._parent._id, this._parent.obsType, '', '', nextValue, '');
                         }
                         logNodeData(this._id, this.obsType, '', '', nextValue, '');
-                        if(this.constructor.name === 'ConnectableSubscriber' && this.connectable.hasOwnProperty("id")){
-                            logNodeData(this.connectable.id, this.connectable.constructor.name, '', '', nextValue, '');
+                        // if(this.constructor.name === 'ConnectableSubscriber' && this.connectable.hasOwnProperty("id")){
+                        //     logNodeData(this.connectable.id, this.connectable.constructor.name, '', '', nextValue, '');
+                        // }
+                        // Test case 35
+                        if(this._subscriptions && this._subscriptions.length){
+                            this._subscriptions.forEach(function (subscription) {
+                                if(subscription._id && subscriberNames.includes(subscription.constructor.name)){
+                                    logNodeData(subscription._id, subscription.constructor.name, '', '', nextValue, '');
+                                }
+                            })
                         }
                     }else if(this.outerValue && this.outerValue.id && this.outerValue.constructor.name === 'ScalarObservable'){
                         logNodeData(this.outerValue.id, this.outerValue.constructor.name, '', '', nextValue, '');
@@ -481,10 +485,8 @@ if (Rx !== undefined) {
      */
     function CriLogObserverFactory(operator, obsSource, obsResult) {
         var operName = "";
-        if (operator) {
-            if (operator.constructor.name) {
-                operName = operator.constructor.name;
-            }
+        if (operator && operator.constructor.name) {
+            operName = operator.constructor.name;
         }
 
         var sourceNodeType = "";
@@ -521,7 +523,7 @@ if (Rx !== undefined) {
                 temp_val = '';
                 if(tempObsSource.id){
                     if(!checkIfNodeAlreadyExists(tempObsSource.id, '', tempObsSource.constructor.name)){
-                        if(tempObsSource.constructor.name === 'ScalarObservable' && tempObsSource.value)
+                        if(tempObsSource.constructor.name === 'ScalarObservable' && tempObsSource.value !== undefined)
                             temp_val = tempObsSource.value;
                         logNodeData(tempObsSource.id, tempObsSource.constructor.name, '', '', temp_val, '')
                     }
@@ -600,7 +602,12 @@ function checkIfNodeAlreadyExists(nodeId, name, type){
 }
 
 function checkIfEdgeAlreadyExists(startId, endId){
-    return  _.some(allEdges, function (edge) {
-        return (edge.startId === startId && edge.endId === endId) || edge.startId === endId && edge.endId === startId;
-    });
+    if(startId !== endId){
+        return  _.some(allEdges, function (edge) {
+            return (edge.startId === startId && edge.endId === endId) || edge.startId === endId && edge.endId === startId;
+        });
+    }else{
+        return true
+    }
+
 }
