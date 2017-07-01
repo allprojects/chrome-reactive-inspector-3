@@ -79,28 +79,38 @@ J$.analysis = {};
                 }
 
                 var currentTypeInSmall = currentType.toLowerCase();
-                var currentNodeId = '';
 
                 // todo what about property here , please check other types that we need to log here ..
                 if (currentTypeInSmall.search("observable") !== -1 || currentTypeInSmall.search("subject") !== -1) {
                     if(!(val.hasOwnProperty('operator') && val.operator === undefined)){
                         // bacon observer already has the id attribute
-                        if (val.hasOwnProperty("id")) {
-                            currentNodeId = val.id
-                        } else {
-                            if (window.rxObsCounter !== undefined) {
-                                currentNodeId = ++window.rxObsCounter;
-                            }
-                            val.id = currentNodeId;
-                        }
-
-                        logNodeData(currentNodeId, currentType, '', name, '', SourceLocationLine);
-                        updatedVar = {'id': currentNodeId, 'name': name};
+                        val = checkAndAssignId(val);
+                        // log the node and update window.variables
+                        logNodeData(val.id, currentType, '', name, '', SourceLocationLine);
+                        updatedVar = {'id': val.id, 'name': name};
                         _.extend(_.findWhere(window.variables, { name: updatedVar.name }), updatedVar);
                     }
+
                 }
                 else if(val.constructor.name === 'Subscriber'){
                     if (val.hasOwnProperty("_id")) {
+                        // test case 53
+                        if(currentType === val.obsType){
+                            // update name of subscriber and update window.variables
+                            if(!checkIfNodeAlreadyExists(val._id, name, currentType)) {
+                                logNodeData(val._id, currentType, '', name, '', SourceLocationLine);
+                                updatedVar = {'id': val._id, 'name': name};
+                                _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
+                            }
+                        }
+                        else{
+                            if(name){
+                                val.destination._id = ++window.rxObsCounter;
+                                logNodeData(val.destination._id, currentType, '', name, '', SourceLocationLine);
+                                logEdgeData(val._id, val.destination._id, '')
+                            }
+                        }
+
                         if(val._subscriptions && val._subscriptions.length){
                             val._subscriptions.forEach(function (subscription) {
                                 if(subscription._id){
@@ -112,10 +122,6 @@ J$.analysis = {};
                                     else if(!checkIfEdgeAlreadyExists(val._id, subscription._id)) {
                                         logEdgeData(val._id, subscription._id, '')
                                     }
-                                }else{
-                                    subscription._id = ++window.rxObsCounter;
-                                    logNodeData(subscription._id, currentType, '', name, '', SourceLocationLine);
-                                    logEdgeData(val._id, subscription._id, '')
                                 }
                             })
                         }
@@ -442,6 +448,9 @@ if (Rx !== undefined) {
                                 }
                             })
                         }
+                        if(this.destination._id && checkIfNodeAlreadyExists(this.destination._id, '', 'Subscriber')){
+                            logNodeData(this.destination._id, 'Subscriber', '', '', nextValue, '');
+                        }
                     }else if(this.outerValue && this.outerValue.id && this.outerValue.constructor.name === 'ScalarObservable'){
                         logNodeData(this.outerValue.id, this.outerValue.constructor.name, '', '', nextValue, '');
                     }
@@ -522,9 +531,9 @@ if (Rx !== undefined) {
                 var tempObsSource = obsSource.array[i];
                 temp_val = '';
                 if(tempObsSource.id){
+                    if(tempObsSource.constructor.name === 'ScalarObservable' && tempObsSource.value !== undefined)
+                        logNodeData(tempObsSource.id, tempObsSource.constructor.name, '', '', tempObsSource.value, '');
                     if(!checkIfNodeAlreadyExists(tempObsSource.id, '', tempObsSource.constructor.name)){
-                        if(tempObsSource.constructor.name === 'ScalarObservable' && tempObsSource.value !== undefined)
-                            temp_val = tempObsSource.value;
                         logNodeData(tempObsSource.id, tempObsSource.constructor.name, '', '', temp_val, '')
                     }
                     logEdgeData(tempObsSource.id, obsResult.id, operName);
@@ -557,6 +566,15 @@ if (Rx !== undefined) {
                         logNodeData(obsResult.operator.ish.id, obsResult.operator.ish.constructor.name, '', '', obsResult.operator.ish.value, '')
                         logEdgeData(obsResult.operator.ish.id, obsResult.id, operName);
                     }
+                }
+            }else if(operName === 'WithLatestFromOperator'){
+                var obsResultObservables = obsResult.operator.observables;
+                if(obsResultObservables.length){
+                    obsResultObservables.forEach(function (observable) {
+                        if(observable.id && !checkIfEdgeAlreadyExists( obsResult.id, observable.id)){
+                            logEdgeData(observable.id, obsResult.id, operName);
+                        }
+                    })
                 }
             }
         }
@@ -610,4 +628,13 @@ function checkIfEdgeAlreadyExists(startId, endId){
         return true
     }
 
+}
+
+function checkAndAssignId(obj) {
+    if (!obj.hasOwnProperty("id")) {
+        if (window.rxObsCounter !== undefined) {
+            obj.id = ++window.rxObsCounter;
+        }
+    }
+    return obj;
 }

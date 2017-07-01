@@ -21,18 +21,8 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/letterrcount/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="1632" column="22" lean-forward="true" selection-start-line="1632" selection-start-column="22" selection-end-line="1632" selection-end-column="22" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/SubjectsExamples/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="79" column="34" lean-forward="true" selection-start-line="79" selection-start-column="3" selection-end-line="79" selection-end-column="34" />
+            <state relative-caret-position="508">
+              <caret line="1764" column="5" lean-forward="false" selection-start-line="1764" selection-start-column="5" selection-end-line="1764" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -41,8 +31,8 @@
       <file leaf-file-name="lettercount.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/letterrcount/lettercount.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="392">
-              <caret line="28" column="28" lean-forward="true" selection-start-line="28" selection-start-column="28" selection-end-line="28" selection-end-column="28" />
+            <state relative-caret-position="428">
+              <caret line="28" column="28" lean-forward="false" selection-start-line="28" selection-start-column="28" selection-end-line="28" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -163,7 +153,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -193,6 +182,7 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -360,18 +350,19 @@
       <workItem from="1498467902332" duration="7052000" />
       <workItem from="1498481275383" duration="6032000" />
       <workItem from="1498643825526" duration="11986000" />
-      <workItem from="1498814813757" duration="12301000" />
+      <workItem from="1498814813757" duration="12893000" />
+      <workItem from="1498900533906" duration="8166000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="274228000" />
+    <option name="totallyTimeSpent" value="282986000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="-4" width="1313" height="772" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20930232" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20897833" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32923076" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -696,15 +687,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="149">
           <caret line="7992" column="7" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="15868" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/letterrcount/lettercount.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="28" column="28" lean-forward="true" selection-start-line="28" selection-start-column="28" selection-end-line="28" selection-end-column="28" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -712,7 +694,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
           <caret line="18" column="7" lean-forward="false" selection-start-line="18" selection-start-column="7" selection-end-line="18" selection-end-column="7" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -720,22 +701,29 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="2" column="6" lean-forward="false" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/letterrcount/lettercount.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="428">
+          <caret line="28" column="28" lean-forward="false" selection-start-line="28" selection-start-column="28" selection-end-line="28" selection-end-column="28" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/SubjectsExamples/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="79" column="34" lean-forward="true" selection-start-line="79" selection-start-column="3" selection-end-line="79" selection-end-column="34" />
+        <state relative-caret-position="216">
+          <caret line="79" column="34" lean-forward="false" selection-start-line="79" selection-start-column="3" selection-end-line="79" selection-end-column="34" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/letterrcount/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="1632" column="22" lean-forward="true" selection-start-line="1632" selection-start-column="22" selection-end-line="1632" selection-end-column="22" />
+        <state relative-caret-position="508">
+          <caret line="1764" column="5" lean-forward="false" selection-start-line="1764" selection-start-column="5" selection-end-line="1764" selection-end-column="5" />
           <folding />
         </state>
       </provider>

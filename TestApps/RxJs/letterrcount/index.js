@@ -1594,7 +1594,7 @@
   /**
    * window
    * Test case 49
-   * Status - Not sure
+   * Status - Done
    */
   /*
 //emit immediately then every 1s
@@ -1625,7 +1625,7 @@
   /**
    * windowCount
    * Test case 50
-   * Status - Not sure
+   * Status - Done
    */
   /*
       //emit every 1s
@@ -1643,52 +1643,123 @@
       });
     */
 
+  /**
+   * windowTime
+   * Test case 51
+   * Status Done
+   */
 
 
-  // var custom_observable = Rx.Observable.create(function (observer) {
-  //     observer.next(1);
-  //     observer.next(2);
-  //     observer.next(3);
-  //     observer.complete();
-  // }).map(function (v) {
-  //   if(v > 1) {
-  //       return v
-  //   }});
-  // custom_observable.subscribe(
-  //     function (value) {
-  //         console.log('value is: '+value)
-  //     },
-  //     function (err) {
-  //         console.log(err)
-  //     },
-  //     function () {
-  //         console.log('this is the end')
-  //     }
-  // );
+  /*
+      //emit immediately then every 1s
+  var source = Rx.Observable.timer(0, 1000);
+  var example = source
+  //start new window every 3s
+      .windowTime(3000).do(function () {
+          return console.log('NEW WINDOW!');
+      });
 
-  // var array = [10, 20, 30];
-  // var result = Rx.Observable.from(array);
-  // result.subscribe(function(x){
-  //     console.log(x)
-  // });
+  var subscribeTwo = example
+  //window emits nested observable
+      .mergeAll().subscribe(function (val) {
+          return console.log(val);
+      });
+   */
+
+  /**
+   * windowToggle
+   * Test case 52
+   * Status Done
+   */
 
 
-  // var replay = new Rx.ReplaySubject();
-  //
-  // var observable = Rx.Observable.create(function(observer){
-  //     replay.subscribe(observer);
-  // });
-  //
-  // var mySubject = Rx.Subject.create(replay, observable);
-  //
-  //
-  // mySubject.next(1);
-  // mySubject.next(2);
-  // mySubject.next(3);
-  //
-  // mySubject.subscribe(function(x){
-  //     console.log(x)
-  // });
-  //
-  // mySubject.next(4);
-  // mySubject.next(5);
+  /*
+   //emit immediately then every 1s
+      //emit immediately then every 1s
+  var source = Rx.Observable.timer(0, 1000);
+  //toggle window on every 5
+  var toggle = Rx.Observable.interval(5000);
+  var example = source
+  //turn window on every 5s
+      .windowToggle(toggle, function (val) {
+          return Rx.Observable.interval(val * 1000);
+      }).do(function () {
+          return console.log('NEW WINDOW!');
+      });
+
+  var subscribeTwo = example
+  //window emits nested observable
+      .mergeAll().subscribe(function (val) {
+          return console.log(val);
+      });
+   */
+
+  /**
+   * windowWhen
+   * Test case 53
+   * Status Done
+   */
+  /*
+      //emit immediately then every 1s
+  var source = Rx.Observable.timer(0, 1000);
+  var example = source
+  //close window every 5s and emit observable of collected values from source
+      .windowWhen(function (val) {
+          return Rx.Observable.interval(5000);
+      }).do(function () {
+          return console.log('NEW WINDOW!');
+      });
+
+  var subscribeTwo = example
+  //window emits nested observable
+      .mergeAll().subscribe(function (val) {
+          return console.log(val);
+      });
+   */
+
+  /**
+   * withLatestFrom
+   * Test case 53
+   * Status Done
+   */
+  /*
+  var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+  //emit every 5s
+  var source = Rx.Observable.interval(5000);
+  //emit every 1s
+  var secondSource = Rx.Observable.interval(1000);
+  var example = source.withLatestFrom(secondSource).map(function (_ref) {
+      var _ref2 = _slicedToArray(_ref, 2),
+          first = _ref2[0],
+          second = _ref2[1];
+
+      return "First Source (5s): " + first + " Second Source (1s): " + second;
+  });
+   // "First Source (5s): 0 Second Source (1s): 4"
+   // "First Source (5s): 1 Second Source (1s): 9"
+   // "First Source (5s): 2 Second Source (1s): 14"
+   // ...
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+
+   */
+
+  /**
+   * zip
+   * Test case 54
+   * Status Done
+   */
+  /*
+  var sourceOne = Rx.Observable.of('Hello');
+  var sourceTwo = Rx.Observable.of('World!');
+  var sourceThree = Rx.Observable.of('Goodbye');
+  var sourceFour = Rx.Observable.of('World!');
+  //wait until all observables have emitted a value then emit all as an array
+  var example = Rx.Observable.zip(sourceOne, sourceTwo.delay(1000), sourceThree.delay(2000), sourceFour.delay(3000));
+  //output: ["Hello", "World!", "Goodbye", "World!"]
+  var subscribe = example.subscribe(function (val) {
+      return console.log(val);
+  });
+   */
