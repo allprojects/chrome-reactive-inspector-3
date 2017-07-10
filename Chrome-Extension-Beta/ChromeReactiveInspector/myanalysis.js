@@ -53,6 +53,12 @@ J$.analysis = {};
             return val;
         };
 
+        this.binary = function (iid, op, left, right, result_c) {
+            console.log('binary operation intercepted: ' + op);
+            showLocation(iid);
+            return result_c;
+        };
+
         // Use this Jalangi API to check if value being written to js var is an observable
         // if it is so then send message to dev tool to record variable name etc..
         // this will log if any Observable being assigned to js variable
@@ -67,20 +73,14 @@ J$.analysis = {};
                 SourceLocation = window.iidToLocationMap[iid];
                 if(SourceLocation)
                     SourceLocationLine = SourceLocation[1];
-                else
-                    SourceLocationLine = '';
 
                 if (val) {
-                    console.log('type is : ' + val.constructor.name);
-                    console.log('val id  is : ' + val.id);
                     window.variables.push({'name': name, 'id': val.id, 'location': SourceLocationLine });
-                    // For Bacon and Rx-js
                     currentType = val.constructor.name;
                 }
 
                 var currentTypeInSmall = currentType.toLowerCase();
 
-                // todo what about property here , please check other types that we need to log here ..
                 if (currentTypeInSmall.search("observable") !== -1 || currentTypeInSmall.search("subject") !== -1) {
                     if(!(val.hasOwnProperty('operator') && val.operator === undefined)){
                         // bacon observer already has the id attribute
@@ -89,8 +89,8 @@ J$.analysis = {};
                         logNodeData(val.id, currentType, '', name, '', SourceLocationLine);
                         updatedVar = {'id': val.id, 'name': name};
                         _.extend(_.findWhere(window.variables, { name: updatedVar.name }), updatedVar);
+                        updateNodeEdgeName(updatedVar)
                     }
-
                 }
                 else if(val.constructor.name === 'Subscriber'){
                     if (val.hasOwnProperty("_id")) {
@@ -101,6 +101,7 @@ J$.analysis = {};
                                 logNodeData(val._id, currentType, '', name, '', SourceLocationLine);
                                 updatedVar = {'id': val._id, 'name': name};
                                 _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
+                                updateNodeEdgeName(updatedVar)
                             }
                         }
                         else{
@@ -127,17 +128,8 @@ J$.analysis = {};
                         }
                     }
                 }
-
-                showLocation(iid);
-
                 return val;
             }
-        };
-
-        this.binary = function (iid, op, left, right, result_c) {
-            console.log('binary operation intercepted: ' + op);
-            showLocation(iid);
-            return result_c;
         };
     }
 
@@ -212,10 +204,8 @@ if (Bacon !== undefined) {
 // Rx-js v-5 Analysis Start
 if (Rx !== undefined) {
 
-    // Override LIFT of RX JS 5
     const _lift = Rx.Observable.prototype.lift;
     var rxObsCounter = 0;
-    var observableList = [];
     var subscriberList = [];
     var variables = [];
     /**
@@ -228,7 +218,6 @@ if (Rx !== undefined) {
     var subscriberNames = ['SubjectSubscription', 'RaceSubscriber'];
 
     Rx.Observable.prototype.lift = function (operator) {
-
         var sourceObs = this;
         var resultantObservable = _lift.call(sourceObs, operator);
 
@@ -238,19 +227,15 @@ if (Rx !== undefined) {
             // append id if not exist
             if (sourceObs.constructor.name === "ArrayObservable" && flattenOperators.includes(operatorName)) {
                 for(var i=0; i<sourceObs.array.length; i++){
-                    if(!sourceObs.array[i].hasOwnProperty("id")){
-                        sourceObs.array[i].id = ++rxObsCounter;
-                    }
+                    sourceObs.array[i] = checkAndAssignId(sourceObs.array[i]);
                 }
             } else {
-
-                if (!sourceObs.hasOwnProperty("id") && operatorName !== 'RefCountOperator') {
-                    sourceObs.id = ++rxObsCounter;
+                if (operatorName !== 'RefCountOperator') {
+                    sourceObs = checkAndAssignId(sourceObs);
                 }
             }
-            if (!(resultantObservable.hasOwnProperty("id"))) {
-                resultantObservable.id = ++rxObsCounter;
-            }
+            resultantObservable = checkAndAssignId(resultantObservable);
+
             // Multicast support with refCount example & test case 42
             if(operator.constructor.name === 'RefCountOperator'){
                 if(sourceObs.getSubject().id)  // for test case 42
@@ -265,17 +250,13 @@ if (Rx !== undefined) {
     // Todo
     const create_observable = Rx.Observable.create;
     Rx.Observable.create = function (observer) {
-        var resultantObservable = create_observable(observer)
+        var resultantObservable = create_observable(observer);
         resultantObservable.id = ++rxObsCounter;
         resultantObservable._type = 'createObservable';
         return resultantObservable
 
     };
 
-    // Rx.Subscriber.prototype.next = function (value) {
-    //
-    //     debugger
-    // };
     // TOdo
     Rx.Subscriber.create = function (next, error, complete) {
         var subscriber = new Subscriber(next, error, complete);
@@ -376,7 +357,6 @@ if (Rx !== undefined) {
             if(value !== ''){
                 constructorName = '';
                 if(value !== undefined && value !== null){
-
                     constructorName = value.constructor.name;
                     switch(constructorName){
                         case 'KeyboardEvent':
@@ -437,9 +417,6 @@ if (Rx !== undefined) {
                                 logNodeData(this._parent._id, this._parent.obsType, '', '', nextValue, '');
                         }
                         logNodeData(this._id, this.obsType, '', '', nextValue, '');
-                        // if(this.constructor.name === 'ConnectableSubscriber' && this.connectable.hasOwnProperty("id")){
-                        //     logNodeData(this.connectable.id, this.connectable.constructor.name, '', '', nextValue, '');
-                        // }
                         // Test case 35
                         if(this._subscriptions && this._subscriptions.length){
                             this._subscriptions.forEach(function (subscription) {
@@ -476,16 +453,6 @@ if (Rx !== undefined) {
         }
     };
 
-    // Rx.Observable.prototype.multicast = function (subjectOrSubjectFactory, selector) {
-    //     if (typeof subjectOrSubjectFactory !== 'function') {
-    //         console.log(subjectOrSubjectFactory)
-    //         if(!checkIfEdgeAlreadyExists(this.id, subjectOrSubjectFactory.id)) {
-    //             logEdgeData(this.id, subjectOrSubjectFactory.id, '')
-    //         }
-    //     }
-    //     return Rx.Observable.prototype.multicast.call(subjectOrSubjectFactory, selector);
-    // }
-
     /**
      * This method log RX js Data
      * @param operator
@@ -518,6 +485,8 @@ if (Rx !== undefined) {
             res = _.find(window.variables, {id:obsSource.sourceObj.id});
             name = res.name;
             location = res.location;
+            updatedVar = {'id': obsSource.id, 'name': name};
+            _.extend(_.findWhere(window.variables, { name: updatedVar.name }), updatedVar);
         }else{
             res = _.find(window.variables, {id:obsSource.id});
             if(res)
@@ -582,7 +551,19 @@ if (Rx !== undefined) {
 }
 // Rx-js Analysis End
 
-// For logging values
+/**
+ * Utility methods
+ */
+
+/**
+ * This method will log node data.
+ * @param id
+ * @param type
+ * @param method
+ * @param name
+ * @param val
+ * @param lineNumber
+ */
 function logNodeData(id, type, method, name, val, lineNumber){
     allNodes.push({'nodeId': id, 'type': type, 'name': name});
     sendObjectToDevTools({
@@ -597,12 +578,28 @@ function logNodeData(id, type, method, name, val, lineNumber){
     });
 }
 
+/**
+ * This method will log the edgeData
+ * @param startId
+ * @param endId
+ * @param name
+ */
 function logEdgeData(startId, endId, name){
     allEdges.push({'startId': startId, 'endId': endId});
+    var edgeStart = _.find(window.variables, {id:startId});
+    var edgeStartName = '';
+    if(edgeStart)
+        edgeStartName = edgeStart.name;
+    var edgeEnd = _.find(window.variables, {id:endId});
+    var edgeEndName = '';
+    if(edgeEnd)
+        edgeEndName = edgeEnd.name;
     sendObjectToDevTools({
         content: {
             "edgeStart": startId,
+            "edgeStartName": edgeStartName,
             "edgeEnd": endId,
+            "edgeEndName": edgeEndName,
             "edgeLabel": name
         },
         action: "saveEdge",
@@ -610,6 +607,25 @@ function logEdgeData(startId, endId, name){
     });
 }
 
+
+function updateNodeEdgeName(node){
+    sendObjectToDevTools({
+        content: {
+            "id": node.id,
+            "name": node.name
+        },
+        action: "updateSavedEdge",
+        destination: "panel"
+    });
+}
+
+/**
+ * This method will check if the node already exists. return true if exists.
+ * @param nodeId
+ * @param name
+ * @param type
+ * @returns {boolean}
+ */
 function checkIfNodeAlreadyExists(nodeId, name, type){
     return  _.some(allNodes, function (node) {
         if(name)
@@ -619,6 +635,12 @@ function checkIfNodeAlreadyExists(nodeId, name, type){
     });
 }
 
+/**
+ * This method will check if the edge between two nodes is already exists. return true if exists.
+ * @param startId
+ * @param endId
+ * @returns {boolean}
+ */
 function checkIfEdgeAlreadyExists(startId, endId){
     if(startId !== endId){
         return  _.some(allEdges, function (edge) {
@@ -630,6 +652,11 @@ function checkIfEdgeAlreadyExists(startId, endId){
 
 }
 
+/**
+ * This method will check if the passed object has property 'id', if not assign it with a new value.
+ * @param obj
+ * @returns {*}
+ */
 function checkAndAssignId(obj) {
     if (!obj.hasOwnProperty("id")) {
         if (window.rxObsCounter !== undefined) {

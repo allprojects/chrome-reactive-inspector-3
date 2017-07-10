@@ -4,7 +4,7 @@ console.log("inject-for-instrumentation.js");
 var filesShouldOnlyInstrument = false;
 chrome.storage.sync.get('criconfigincludes', function (items) {
     if (items.criconfigincludes !== undefined) {
-        filesShouldOnlyInstrument = items.criconfigincludes.split(',');
+        filesShouldOnlyInstrument = items.criconfigincludes;
     }
 });
 
@@ -73,7 +73,7 @@ if (shouldReactiveDebuggerRun === true) {
                 if (filesShouldOnlyInstrument === false) {
                     // NO CONFIG SET
                     if (filesShouldNotInclude.indexOf(filename) !== -1) {}
-                    else if (filesShouldNotInstrument.indexOf(filename) !== -1) {
+                    else if (_.contains(filesShouldOnlyInstrument, filename)) {
                         eval(request.responseText);
                     } else {
                         var code = CriInstrument(request.responseText);
@@ -84,7 +84,7 @@ if (shouldReactiveDebuggerRun === true) {
                 } else {
                     // CONFIG SET SO only instrument files mentioned in config
                     if (filesShouldNotInclude.indexOf(filename) !== -1) {}
-                    else if (filesShouldOnlyInstrument.indexOf(filename) !== -1) {
+                    else if (_.contains(filesShouldOnlyInstrument, filename)) {
                         var code = CriInstrument(request.responseText);
                         eval(code);
                         fileReadOver = true;

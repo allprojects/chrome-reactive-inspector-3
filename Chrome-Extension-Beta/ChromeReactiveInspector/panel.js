@@ -52,15 +52,7 @@ function zoomed() {
 // Run the renderer. This is what draws the final graph.
 render(d3.select("svg g"), g);
 
-// Center the graph
-/*
- var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
- svgGroup.attr("transform", "translate(" + xCenterOffset + ", 20)");
- svg.attr("height", g.graph().height + 40);
- */
-
 /**
- *
  *  Slider feature
  *  */
 // Slider initialization , that is used to access history steps
@@ -152,16 +144,16 @@ function redrawGraphToStage(stageToRedraw) {
 
 }
 
+var configIncludeFilesField = $('#cri-config-includes');
+var previousConfigFiles = [];
 (function () {
-
-    var configIncludeFilesField = document.getElementById('cri-config-includes');
     var configRecStatusButton = document.getElementById('cri-rec-status');
     // populate
     chrome.storage.sync.get('criconfigincludes', function (items) {
         console.log("config from storage");
         console.log(items.criconfigincludes);
-
-        configIncludeFilesField.value = items.criconfigincludes || '';
+        previousConfigFiles = items.criconfigincludes || [];
+        configIncludeFilesField.value = $('#cri-config-includes').tokenfield('setTokens', items.criconfigincludes) || '';
     });
     chrome.storage.sync.get('cri_config_rec_status', function (items) {
         if (items.cri_config_rec_status !== undefined) {
@@ -183,18 +175,32 @@ function redrawGraphToStage(stageToRedraw) {
         }
     });
 
+    configIncludeFilesField
+        .on('tokenfield:createtoken', function (e) {
+            setCricConfigFiles(1, e.attrs.value)
+        })
+        .on('tokenfield:removedtoken', function (e) {
+            setCricConfigFiles(0, e.attrs.value)
+        })
+        .tokenfield();
 
-    // change
-    configIncludeFilesField.addEventListener('change', function (e) {
-        console.log("config changed");
-        console.log(this.value);
-        // save setting
+    function setCricConfigFiles(val, fileName) {
+        if(val){
+            if(!_.contains(previousConfigFiles, fileName)){
+                previousConfigFiles.push(fileName)
+            }
+        }
+        else{
+            if(_.contains(previousConfigFiles, fileName)){
+                previousConfigFiles = _.without(previousConfigFiles, _.findWhere(previousConfigFiles, fileName));
+            }
+        }
         chrome.storage.sync.set({
-            'criconfigincludes': this.value
+            'criconfigincludes': previousConfigFiles
         });
-    }, this);
+    }
 
-
+    configIncludeFilesField.tokenfield();
     /**
      * This method is called whenever the user clicks on 'Pause' or 'Start' recording button.
      */
@@ -214,7 +220,6 @@ function redrawGraphToStage(stageToRedraw) {
 
     // Reset everything
     $("#cri-reset").click(function () {
-        // 1 clear graph
         d3.selectAll("svg g").remove();
         initialiseGraph();
 
@@ -244,5 +249,147 @@ function redrawGraphToStage(stageToRedraw) {
         render(d3.select("svg g"), g);
     });
 
+    /**
+     * editable select for find by query feature
+     */
+    $('#cri-findnode-select').editableSelect({filter: false});
+    debugger;
+    $("#cri-history-current-step").text(0);
+    $("#cri-history-last-step").text(0);
+
+    var stage = '';
+    $('#cri-history-query-submit').click(function () {
+        var historyQuery, param1, param2 = '';
+        var currentHistoryQuery = $('#cri-findnode-select').val();
+        historyQuery = currentHistoryQuery.substring(0, currentHistoryQuery.indexOf('['))
+        //var matches = currentHistoryQuery.match(/\[(.*?)\]/);
+        var matches = currentHistoryQuery.match(/\[(.*?)\]/g).map(function (val) {
+            return val.replace('[', '').replace(']', '');
+        });
+
+        if (matches) {
+            var param1 = matches[0];
+            if (matches[1]) {
+                var param2 = matches[1];
+            }
+            if (historyQuery === "nodeCreated") {
+                stage = historyEntries.filter( function(history){
+                    if(history.type === 'nodeCreated' && history.nodeName === param1)
+                        return history.stageId;
+                });
+                if(stage.length){
+                    redrawGraphToStage(stage[0].stageId);
+                    rxSlider.slider('value', stage[0].stageId ,rxSlider.slider("option", "step"));
+                    $("#cri-history-current-step").text(1);
+                    $("#cri-history-last-step").text(stage.length);
+                }
+
+            } else if (historyQuery === "nodeUpdated") {
+                stage = historyEntries.filter( function(history){
+                    if(history.type === 'nodeUpdated' && history.nodeName === param1)
+                        return history.stageId;
+                });
+                if(stage.length){
+                    redrawGraphToStage(stage[0].stageId);
+                    rxSlider.slider('value', stage[0].stageId ,rxSlider.slider("option", "step"));
+                    $("#cri-history-current-step").text(1);
+                    $("#cri-history-last-step").text(stage.length);
+                }
+            } else if (historyQuery === "evaluationYielded") {
+                var nodeName = param1;
+                var targetValue = param2;
+
+                stage = historyEntries.filter( function(history){
+                    if(history.type === 'nodeUpdated' && history.nodeName === param1){
+                        if(history.nodeValue === param2 || history.nodeValue.indexOf(param2) !== -1)
+                            return history.stageId;
+                    }
+                });
+                if(stage.length){
+                    redrawGraphToStage(stage[0].stageId);
+                    rxSlider.slider('value', stage[0].stageId ,rxSlider.slider("option", "step"));
+                    $("#cri-history-current-step").text(1);
+                    $("#cri-history-last-step").text(stage.length);
+                }
+
+            } else if (historyQuery === "dependencyCreated") {
+                var nodeNameSource = param1;
+                var nodeNameDest = param2;
+                var result;
+                var tempResult = [];
+                stage = '';
+                var filteredHistoryEntries = _.filter(historyEntries, function (history) {
+                    return history.type === 'dependencyCreated'
+                });
+
+                filteredHistoryEntries.forEach(function (history) {
+                    if(history.startNodeName === nodeNameSource && history.endNodeName === nodeNameDest){
+                        result = history;
+                    }else if(history.startNodeName === nodeNameSource){
+                        tempResult.push(history)
+                    }
+                });
+
+                if(!result){
+                    if(tempResult.length){
+                        tempResult.forEach(function (temp) {
+                            if(temp.endNodeName === nodeNameDest  && !result){
+                                result = temp
+                            }else{
+                                tempResult.pop(temp);
+                                checkFurtherNodes(temp)
+                            }
+                        });
+                    }
+                }
+
+                function checkFurtherNodes(h) {
+                    filteredHistoryEntries.forEach(function (history) {
+                        if(!result){
+                            if(history.startNodeName === h.endNodeName && history.endNodeName === nodeNameDest){
+                                result = history;
+                            }else if(history.startNodeName === h.endNodeName){
+                                tempResult.push(history)
+                            }
+                        }
+                    });
+                }
+
+                if(result){
+                    redrawGraphToStage(result.stageId);
+                    rxSlider.slider('value', result.stageId ,rxSlider.slider("option", "step"));
+                    $("#cri-history-current-step").text(1);
+                    $("#cri-history-last-step").text(1);
+                }
+            }
+        }
+    });
+
+
+    $('#cri-history-query-prev').click(function () {
+        var currentStepFromHistoryQuery = $("#cri-history-current-step").text();
+        var nextStepToAccess = parseInt(currentStepFromHistoryQuery) - 2;
+        if (stage && stage.length && nextStepToAccess > -1) {
+            var firstFoundStageId = stage[nextStepToAccess].stageId;
+            rxSlider.slider('value', firstFoundStageId , rxSlider.slider("option", "step"));
+            redrawGraphToStage(firstFoundStageId);
+            $("#cri-history-current-step").text(nextStepToAccess+1);
+        }
+
+    });
+    $('#cri-history-query-next').click(function () {
+        var currentStepFromHistoryQuery = $("#cri-history-current-step").text();
+        var nextStepToAccess = parseInt(currentStepFromHistoryQuery);
+        if (stage && (stage.length > 1)) {
+            var firstFoundStageId = stage[nextStepToAccess].stageId;
+            rxSlider.slider('value', firstFoundStageId, rxSlider.slider("option", "step"));
+            redrawGraphToStage(firstFoundStageId);
+            $("#cri-history-current-step").text(nextStepToAccess+1);
+
+
+        }
+
+
+    });
 })();
 

@@ -81,12 +81,10 @@ text {
 
 .column-left {
     float: left;
-    width: 8%;
 }
 
 .column-right {
     float: right;
-    width: 10%;
 }
 
 .column-center {
@@ -121,4 +119,35 @@ div.tooltip {
 
 hr {
     margin: 5px 0 !important;
+}
+
+.pd-left-0{
+    padding-left: 0 !important;
+}
+
+.pd-right-0{
+    padding-right: 0 !important;
+}
+
+#cri-breakpoints-container{
+    max-height: 105px;
+    overflow-y: auto;
+}
+
+.bpoint-remove{
+    margin-right: 2px;
+    background: red;
+    color: white;
+    font-size: 12px;
+    padding: 1px 2px;
+    cursor: pointer;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default{
+    line-height: 1;
+}
+
+.ui-slider .ui-slider-handle{
+    min-width: 1.2em;
+    max-width: none !important;
 }

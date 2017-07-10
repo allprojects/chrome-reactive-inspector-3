@@ -11,6 +11,13 @@
 // channel is created when we open dev tool and move to our panel
 var rxGraphStages = [];
 var _node = '';
+var currentAction = "";
+var tempNode = {
+    'type':'',
+    'nodeName': '',
+    'nodeId': '',
+    'nodeValue': ''
+};
 (function createChannel() {
     console.log("creating channel in messaging js that is part of panel ");
     //Create a port with background page for continuous message communication
@@ -28,10 +35,6 @@ var _node = '';
 
     // Listen to messages from the background page
     port.onMessage.addListener(function (message) {
-        //console.log("messaging.js part of panel script , message from background page");
-        //console.log("messaging.js part of panel script , message content is = " + message.content);
-        // console.log(message);
-
         /**
          * If the user refreshes the page, then reset the graph and slider and load it again.
          */
@@ -44,17 +47,18 @@ var _node = '';
             }
             initialiseGraph();
             rxGraphStages = [];
+            historyEntries = [];
         }
 
         var currentNodeId = false;
-
+        var stageId = 0;
         if (message.action === "saveNode") {
 
             if (message.content.nodeId) {
                 currentNodeId = message.content.nodeId;
             }
 
-            var currentAction = "";
+
             if (g.node(message.content.nodeId) !== undefined) {
                 currentAction = "updateNode";
 
@@ -126,6 +130,10 @@ var _node = '';
                     class: "current"
                 });
 
+                tempNode.type = 'nodeUpdated';
+                tempNode.nodeId = message.content.nodeId;
+                tempNode.nodeName = newRef;
+                tempNode.nodeValue = truncatedVal;
             }
             else {
 
@@ -141,6 +149,10 @@ var _node = '';
                     sourceCodeLine: message.content.sourceCodeLine,
                     class: "current"
                 });
+                tempNode.type = 'nodeCreated';
+                tempNode.nodeId = message.content.nodeId;
+                tempNode.nodeName = message.content.nodeRef;
+                tempNode.nodeValue = message.content.nodeValue;
             }
             render(d3.select("svg g"), g);
 
@@ -170,14 +182,27 @@ var _node = '';
             });
 
             // capture current dependency graph
-            captureGraphAndSaveAsNewStage(currentAction, currentNodeId);
+            stageId = captureGraphAndSaveAsNewStage(currentAction, currentNodeId);
+            saveHistory(stageId, currentAction, tempNode)
         }
-        if (message.action === "saveEdge") {
+        else if (message.action === "saveEdge") {
             g.setEdge(message.content.edgeStart, message.content.edgeEnd, {
                 label: message.content.edgeLabel
             });
             render(d3.select("svg g"), g);
-            captureGraphAndSaveAsNewStage("saveEdge", false);
+            stageId = captureGraphAndSaveAsNewStage("saveEdge", false);
+            saveHistory(stageId, "saveEdge", message.content)
+        }else if(message.action === "updateSavedEdge"){
+            var match = _.find(historyEntries, function(history) {
+                if(history.type === 'dependencyCreated'){
+                    if(history.endNodeId === message.content.id ){
+                        history.endNodeName =  message.content.name
+                    }
+                    else if(history.startNodeId === message.content.id){
+                        history.startNodeName = message.content.name
+                    }
+                }
+            })
         }
 
     });
@@ -186,7 +211,6 @@ var _node = '';
 
 // this method is to capture all nodes and edges and add this as new stage in rxGraphStages
 function captureGraphAndSaveAsNewStage(event, currentNodeId) {
-    //alert(currentNodeId);
     var newStage = {
         "stageId": '',
         "stageEvent": '',
@@ -198,6 +222,7 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
 
     newStage.stageEvent = event;
     newStage.stageId = rxGraphStages.length + 1;
+    var tempStageId = newStage.stageId;
 
     var nodeToPush = {};
     // get current nodes from graph
@@ -225,13 +250,40 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
             }
             newStage.stageData.nodes.push(_.clone(nodeToPush));
         });
+    // if(rxSlider.slider('value') !== rxGraphStages.length){
+    //     redrawGraphToStage(rxGraphStages.length)
+    // }
     rxGraphStages.push(_.clone(newStage));
     // Here we should increase steps count in step slider
     rxSlider.slider("option", "min", 0);
     rxSlider.slider("option", "max", rxSlider.slider("option", "max") + 1);
     rxSlider.slider("option", "value", rxSlider.slider("option", "max"));
     rxSlider.slider("pips", "refresh");
+    return tempStageId
+}
 
+var historyEntries = [];
+
+function saveHistory(stageId, type, value) {
+    if(type !== 'saveEdge'){
+        historyEntries.push({
+            'stageId': stageId,
+            'type': value.type,
+            'nodeName': value.nodeName,
+            'nodeId': value.nodeId,
+            'nodeValue': value.nodeValue
+        })
+
+    }else{
+        historyEntries.push({
+            'stageId': stageId,
+            'type': 'dependencyCreated',
+            'startNodeName': value.edgeStartName,
+            'startNodeId': value.edgeStart,
+            'endNodeName': value.edgeEndName,
+            'endNodeId': value.edgeEnd
+        })
+    }
 }
 
 // This sends an object to the background page 
@@ -243,20 +295,9 @@ function sendObjectToInspectedPage(message) {
 
 // Listen to change in storage data
 chrome.storage.onChanged.addListener(function (changes, namespace) {
-    /*
-     for (key in changes) {
-     var storageChange = changes[key];
-     console.log('Storage key "%s" in namespace "%s" changed. ' +
-     'Old value was "%s", new value is "%s".',
-     key,
-     namespace,
-     storageChange.oldValue,
-     storageChange.newValue);
-     }
-     */
     chrome.storage.sync.get("graphData", function (items) {
         console.log('Settings retrieved');
-        console.log('Settings retrieved', items);
+        console.log(items);
     });
 
 });
