@@ -253,7 +253,6 @@ var previousConfigFiles = [];
      * editable select for find by query feature
      */
     $('#cri-findnode-select').editableSelect({filter: false});
-    debugger;
     $("#cri-history-current-step").text(0);
     $("#cri-history-last-step").text(0);
 
@@ -262,7 +261,6 @@ var previousConfigFiles = [];
         var historyQuery, param1, param2 = '';
         var currentHistoryQuery = $('#cri-findnode-select').val();
         historyQuery = currentHistoryQuery.substring(0, currentHistoryQuery.indexOf('['))
-        //var matches = currentHistoryQuery.match(/\[(.*?)\]/);
         var matches = currentHistoryQuery.match(/\[(.*?)\]/g).map(function (val) {
             return val.replace('[', '').replace(']', '');
         });
@@ -296,9 +294,6 @@ var previousConfigFiles = [];
                     $("#cri-history-last-step").text(stage.length);
                 }
             } else if (historyQuery === "evaluationYielded") {
-                var nodeName = param1;
-                var targetValue = param2;
-
                 stage = historyEntries.filter( function(history){
                     if(history.type === 'nodeUpdated' && history.nodeName === param1){
                         if(history.nodeValue === param2 || history.nodeValue.indexOf(param2) !== -1)
@@ -385,11 +380,143 @@ var previousConfigFiles = [];
             rxSlider.slider('value', firstFoundStageId, rxSlider.slider("option", "step"));
             redrawGraphToStage(firstFoundStageId);
             $("#cri-history-current-step").text(nextStepToAccess+1);
+        }
+    });
 
+    /**
+     * Reactive Breakpoints feature
+     */
+    $('#cri-breakpoint-select').editableSelect({filter: false});
+    var allBreakPoints = []
+
+    $('#cri-breakpoint-query-submit').click(function () {
+
+        var historyQuery, param1, param2 = '';
+
+        var currentHistoryQuery = $('#cri-breakpoint-select').val();
+
+        historyQuery = currentHistoryQuery.substring(0, currentHistoryQuery.indexOf('['));
+
+        var matches = currentHistoryQuery.match(/\[(.*?)\]/g).map(function (val) {
+            return val.replace('[', '').replace(']', '');
+        });
+
+        if (matches) {
+            var param1 = matches[0];
+            if (matches[1]) {
+                var param2 = matches[1];
+                if(param2 === 'nodeId')
+                    return false
+            }
+            if(param1 === 'nodeId')
+                return false;
+
+
+            // NOW we have query and parameter
+            // check which query to apply , find data from current stages
+            var breakPointToStore = {
+                query: historyQuery,
+                params: matches
+            };
+
+            var x =  _.some(allBreakPoints, function (bp) {
+                if(param2)
+                    return bp.params[0] === breakPointToStore.params[0] && bp.params[1] === breakPointToStore.params[1] && bp.query === breakPointToStore.query;
+                else
+                    return bp.params[0] === breakPointToStore.params[0] && bp.query === breakPointToStore.query;
+            });
+            if (!x) {
+                storeBreakPoint(breakPointToStore);
+            }
 
         }
 
 
     });
+
+
+    // This method append breakpoint object to local storage
+    function storeBreakPoint(breakPointToStore) {
+        allBreakPoints.push(breakPointToStore);
+        // by passing an object you can define default values e.g.: []
+        chrome.storage.local.get({criReactiveBreakPoints: []}, function (result) {
+            // the input argument is ALWAYS an object containing the queried keys
+            // so we select the key we need
+            var currentBreakPoints = result.criReactiveBreakPoints;
+            currentBreakPoints.push(breakPointToStore);
+            // set the new array value to the same key
+            chrome.storage.local.set({criReactiveBreakPoints: currentBreakPoints}, function () {
+                // you can use strings instead of objects
+                // if you don't  want to define default values
+                chrome.storage.local.get('criReactiveBreakPoints', function (result) {
+                    //console.log(result.criReactiveBreakPoints)
+                });
+                // refresh front end , where we list current breakpoints
+                refreshCurrentBreakPointsFrontEnd();
+            });
+        });
+    }
+
+
+    function removeBreakPointByIndex(index) {
+
+        chrome.storage.local.get({criReactiveBreakPoints: []}, function (result) {
+            // the input argument is ALWAYS an object containing the queried keys
+            // so we select the key we need
+            var currentBreakPoints = result.criReactiveBreakPoints;
+
+
+            currentBreakPoints.splice(index, 1);
+
+            // set the new array value to the same key
+            chrome.storage.local.set({criReactiveBreakPoints: currentBreakPoints}, function () {
+                // you can use strings instead of objects
+                // if you don't  want to define default values
+                chrome.storage.local.get('criReactiveBreakPoints', function (result) {
+                    //console.log(result.criReactiveBreakPoints)
+                });
+                // refresh front end , where we list current breakpoints
+                refreshCurrentBreakPointsFrontEnd();
+            });
+        });
+
+    }
+
+    $("#cri-breakpoints-container").on("click", "span.bpoint-remove", function () {
+        var bpointIndexToRemove = $(this).data('bpoint-index');
+        removeBreakPointByIndex(bpointIndexToRemove);
+    });
+
+
+    function refreshCurrentBreakPointsFrontEnd() {
+        // remove everything
+        $('#cri-breakpoints-container').html("");
+        // get current breakpoints from storage and list down
+
+        chrome.storage.local.get({criReactiveBreakPoints: []}, function (result) {
+            // the input argument is ALWAYS an object containing the queried keys
+            // so we select the key we need
+            var currentBreakPoints = result.criReactiveBreakPoints;
+            for (var index in currentBreakPoints) {
+                var currentBreakPoint = currentBreakPoints[index];
+                var currentBreakPointQuery = currentBreakPoint.query;
+                if (currentBreakPoint.params[0] !== undefined) {
+                    currentBreakPointQuery = currentBreakPointQuery + "[" + currentBreakPoint.params[0] + "]";
+                }
+                if (currentBreakPoint.params[1] !== undefined) {
+                    currentBreakPointQuery = currentBreakPointQuery + "[" + currentBreakPoint.params[1] + "]";
+                }
+
+
+                var bPointHtml = "<div class='bpoint-entry'><span data-bpoint-index='" + index + "' class='bpoint-remove'>X</span><span class='bpoint-query'>" + currentBreakPointQuery + "</span></div>";
+                $('#cri-breakpoints-container').append(bPointHtml);
+            }
+
+        });
+
+
+    }
+
+    refreshCurrentBreakPointsFrontEnd();
 })();
 

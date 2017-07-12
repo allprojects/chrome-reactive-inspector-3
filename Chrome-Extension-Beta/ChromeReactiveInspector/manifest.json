@@ -23,6 +23,7 @@
                 "<all_urls>"
             ],
             "js": [
+                "content-script-start.js",
                 "rx-debugger-data-structure.js",
                 "helpers/comm_api_content-script.js",
                 "helpers/storage_api_general.js",

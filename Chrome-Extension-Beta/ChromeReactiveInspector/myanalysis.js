@@ -565,7 +565,7 @@ if (Rx !== undefined) {
  * @param lineNumber
  */
 function logNodeData(id, type, method, name, val, lineNumber){
-    allNodes.push({'nodeId': id, 'type': type, 'name': name});
+
     sendObjectToDevTools({
         content: {
             'nodeId': id,
@@ -576,6 +576,21 @@ function logNodeData(id, type, method, name, val, lineNumber){
             'sourceCodeLine': lineNumber
         }, action: "saveNode", destination: "panel"
     });
+
+    if(!checkIfNodeAlreadyExists(id, '', type)){
+        if (shouldBreakNow('nodeCreated', id, false)) {
+            debugger;
+        }
+    }else{
+        if (shouldBreakNow('nodeUpdated', id, false)) {
+            debugger;
+        }
+
+        if (shouldBreakNow('evaluationYielded', id, val)) {
+            debugger;
+        }
+    }
+    allNodes.push({'nodeId': id, 'type': type, 'name': name});
 }
 
 /**
@@ -605,6 +620,10 @@ function logEdgeData(startId, endId, name){
         action: "saveEdge",
         destination: "panel"
     });
+
+    if (shouldBreakNow('dependencyCreated', startId, endId)) {
+        debugger;
+    }
 }
 
 
