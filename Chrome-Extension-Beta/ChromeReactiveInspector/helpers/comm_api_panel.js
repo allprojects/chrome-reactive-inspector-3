@@ -1,12 +1,5 @@
 // This creates and maintains the communication channel between
 // the inspectedPage and the dev tools panel.
-//
-// In this example, messages are JSON objects
-// {
-//   action: ['code'|'script'|'message'], // What action to perform on the inspected page
-//   content: [String|Path to script|Object], // data to be passed through
-//   tabId: [Automatically added]
-// }
 
 // channel is created when we open dev tool and move to our panel
 var rxGraphStages = [];
@@ -18,6 +11,10 @@ var tempNode = {
     'nodeId': '',
     'nodeValue': ''
 };
+
+var allNodes = [];
+var allEdges = [];
+
 (function createChannel() {
     console.log("creating channel in messaging js that is part of panel ");
     //Create a port with background page for continuous message communication
@@ -203,6 +200,9 @@ var tempNode = {
                     }
                 }
             })
+        }else  if (message.action === "allNodesEdges") {
+            allNodes = message.content.nodes;
+            allEdges = message.content.edges;
         }
 
     });
