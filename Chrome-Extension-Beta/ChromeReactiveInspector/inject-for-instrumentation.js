@@ -29,7 +29,7 @@ request.onload = function (event) {
     var respText = request.responseText;
     // check if this page contains bacon / rx , if not then debugger should not run
     if ((respText.search("Rx.js") === -1) && (respText.search("Bacon.js") === -1) && (respText.search("rx.lite.js") === -1) && (respText.search("rx.lite.compat.js") === -1) && (respText.search("rx.all.js") === -1)) {
-        shouldReactiveDebuggerRun = true;
+        shouldReactiveDebuggerRun = false;
     }
     // Reactive inspector should not run , so load page original content
     var html = request.responseText;
