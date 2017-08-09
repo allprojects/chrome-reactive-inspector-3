@@ -3803,7 +3803,7 @@ var IntervalObservable = (function (_super) {
      * @see {@link delay}
      *
      * @param {number} [period=0] The interval size in milliseconds (by default)
-     * or the time unit determined by the scheduler's clock.
+     * or the time unit determined by the scheduler's stopwatch.
      * @param {Scheduler} [scheduler=async] The Scheduler to use for scheduling
      * the emission of values, and providing a notion of "time".
      * @return {Observable} An Observable that emits a sequential number each time

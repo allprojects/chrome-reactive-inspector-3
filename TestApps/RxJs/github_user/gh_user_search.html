@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Github  user search</title>
+    <script src="../js/jquery.js"></script>
+
+   <style>
+       /*** COLORS ***/
+       html,
+       body {
+           height: 100%;
+           margin: 0;
+       }
+
+       body {
+           background: #5bc0de;
+           font: 14px monospace;
+           color: #FFFFFF;
+       }
+
+       .cntr {
+           display: table;
+           width: 100%;
+           height: 100%;
+       }
+       .cntr .cntr-innr {
+           display: table-cell;
+           text-align: center;
+           vertical-align: middle;
+       }
+
+       .cntr-innr p {
+           margin-top: 12px;
+           color: #efefef;
+       }
+
+       /*** SEARCH ***/
+       .search {
+           display: inline-block;
+           position: relative;
+           height: 35px;
+           width: 35px;
+           box-sizing: border-box;
+           margin: 0px 8px 7px 0px;
+           padding: 7px 9px 0px 9px;
+           border: 3px solid #FFFFFF;
+           border-radius: 25px;
+           -webkit-transition: all 200ms ease;
+           transition: all 200ms ease;
+           cursor: text;
+       }
+       .search:after {
+           content: "";
+           position: absolute;
+           width: 3px;
+           height: 20px;
+           right: -5px;
+           top: 21px;
+           background: #FFFFFF;
+           border-radius: 3px;
+           -webkit-transform: rotate(-45deg);
+           transform: rotate(-45deg);
+           -webkit-transition: all 200ms ease;
+           transition: all 200ms ease;
+       }
+       .search.active, .search:hover {
+           width: 200px;
+           margin-right: 0px;
+       }
+       .search.active:after, .search:hover:after {
+           height: 0px;
+       }
+       .search input {
+           width: 100%;
+           border: none;
+           box-sizing: border-box;
+           font-family: Helvetica;
+           font-size: 15px;
+           color: inherit;
+           background: transparent;
+           outline-width: 0px;
+       }
+
+       .content {
+           letter-spacing: 2px;
+       }
+       .content h2 {
+           margin-top: 30px;
+           margin-bottom: 2px;
+       }
+       .content p {
+           margin: 6px auto;
+       }
+
+   </style>
+</head>
+<body>
+
+<div class="cntr">
+    <div class="cntr-innr">
+        <label class="search" for="inpt_search">
+            <input id="inpt_search" type="text" />
+        </label>
+        <p>Hover to search the Github.</p>
+        <div class="content">
+            <h2 id="gname"></h2>
+            <p id="grepos"></p>
+            <p id="gemail"></p>
+        </div>
+    </div>
+</div>
+<script src="../js/Rx.js"></script>
+<script src="index.js"></script>
+</body>
+</html>

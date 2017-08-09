@@ -183,7 +183,7 @@
   var openStream = fromEvent(ws, 'open');
   var closeStream = fromEvent(ws,'close');
 
-  var messageStream = fromEvent(ws, 'message').delaySubscription(openStream).takeUntil(closeStream);
+  var messageStream = fromEvent(ws, 'message').takeUntil(closeStream);
 
   openStream.subscribe(function () {
     console.log("Connection opened");

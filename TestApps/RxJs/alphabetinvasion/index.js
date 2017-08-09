@@ -1,25 +1,34 @@
-(function () {
+// (function () {
 
     // Non-standard custom operator
     Rx.Observable.random = function (low, high, intervalLow, intervalHigh, howMany, scheduler) {
-      scheduler || (scheduler = Rx.Scheduler['asap']);
-      if (howMany == null) { howMany = -1; }
-      if (intervalLow == null) { intervalLow = 1; }
-      if (intervalHigh == null) { intervalHigh = 1; }
-      return Rx.Observable.create(function (observer) {
-        var delta = high - low, intervalDelta = intervalHigh - intervalLow;
-		    var iFunc = (intervalDelta === 0) ?
-          function () { return intervalLow; } :
-		      function () { return Math.floor((Math.random() * intervalDelta) + intervalLow); };
-        return scheduler.schedule(0, iFunc(), function (ticks, recurse) {
-          if (++ticks <= howMany) {
-            observer.next(Math.floor((Math.random() * delta) + low));
-            recurse(ticks, iFunc());
-          } else {
-            observer.complete();
-          }
+        scheduler || (scheduler = Rx.Scheduler['default']);
+        if (howMany == null) {
+            howMany = -1;
+        }
+        if (intervalLow == null) {
+            intervalLow = 1;
+        }
+        if (intervalHigh == null) {
+            intervalHigh = 1;
+        }
+        return Rx.Observable.create(function (observer) {
+            var delta = high - low,
+                intervalDelta = intervalHigh - intervalLow;
+            var iFunc = intervalDelta === 0 ? function () {
+                return intervalLow;
+            } : function () {
+                return Math.floor(Math.random() * intervalDelta + intervalLow);
+            };
+            return scheduler.scheduleRecursiveFuture(0, iFunc(), function (ticks, recurse) {
+                if (++ticks <= howMany) {
+                    observer.onNext(Math.floor(Math.random() * delta + low));
+                    recurse(ticks, iFunc());
+                } else {
+                    observer.onCompleted();
+                }
+            });
         });
-      });
     };
 
     var GameState = {
@@ -28,7 +37,7 @@
         stopped: 'stopped'
     };
 
-    var AlphabetInvasion = (function () {
+    var AlphabetInvasion = function () {
         function AlphabetInvasion() {
             this.enemies = [];
 
@@ -89,9 +98,10 @@
 
         AlphabetInvasion.prototype.playLevel = function () {
             if (this.generator) {
-                this.generator.unsubscribe();
+                this.generator.dispose();
             }
-            var title, found = false;
+            var title,
+                found = false;
             for (var level in levels) {
                 if (level.indexOf(this.currentLevel) !== -1) {
                     found = true;
@@ -110,13 +120,12 @@
 
             // nested method to handle the actual gameplay loop
             var self = this;
-            var play = function () {
-                //debugger;
+            var play = function play() {
                 self.hideMessage();
                 var enemiesThisLevel = self.currentLevel * 2 + 13;
                 self.remainingEnemies.textContent = enemiesThisLevel;
 
-                var capitalLetterProbability = 1 - ((self.currentLevel * 2.5) / 100);
+                var capitalLetterProbability = 1 - self.currentLevel * 2.5 / 100;
                 var killed = 0;
                 var allEnemiesLaunched = false;
 
@@ -151,7 +160,7 @@
 
                 // Generate enemies for this Level.
                 // 10% chance for uppercase enemy
-                self.generator = Rx.Observable.random(0, 25, config[LAUNCH_RATE], config[LAUNCH_RATE], enemiesThisLevel).map(function (v) {
+                self.generator = Rx.Observable.random(0, 25, config[LAUNCH_RATE], config[LAUNCH_RATE], enemiesThisLevel).let(function (v) {
                     return Math.random() <= capitalLetterProbability ? lookup.charAt(v) : lookup.charAt(v).toUpperCase();
                 }).subscribe(function (v) {
                     self.launchNewEnemy(v);
@@ -165,7 +174,9 @@
             // This observable sets a delay for showing the level title,
             // after which we call the nested play() method to start
             // the level.
-            Rx.Observable.timer(2500).subscribe(function () { play(); });
+            Rx.Observable.timer(2500).subscribe(function () {
+                play();
+            });
         };
 
         AlphabetInvasion.prototype.nextLevel = function () {
@@ -174,15 +185,17 @@
             }
 
             this.gameState = GameState.stopped;
-            this.gameloop.unsubscribe();
-            this.generator.unsubscribe();
-            this.keyboard.unsubscribe();
+            this.gameloop.dispose();
+            this.generator.dispose();
+            this.keyboard.dispose();
 
             this.showMessage('Level ' + this.currentLevel + ' Complete');
             this.currentLevel++;
 
             var self = this;
-            Rx.Observable.timer(4000).subscribe(function () { self.playLevel(); });
+            Rx.Observable.timer(4000).subscribe(function () {
+                self.playLevel();
+            });
         };
 
         AlphabetInvasion.prototype.youWin = function () {
@@ -193,9 +206,9 @@
             // change game state and dispose of our
             // game loop observables
             this.gameState = GameState.stopped;
-            this.gameloop.unsubscribe();
-            this.generator.unsubscribe();
-            this.keyboard.unsubscribe();
+            this.gameloop.dispose();
+            this.generator.dispose();
+            this.keyboard.dispose();
 
             this.showMessage("You win this time Earthling!  We'll be back!");
 
@@ -214,9 +227,9 @@
             // change game state and dispose of our
             // game loop observables
             this.gameState = GameState.Stopped;
-            this.gameloop.unsubscribe();
-            this.generator.unsubscribe();
-            this.keyboard.unsubscribe();
+            this.gameloop.dispose();
+            this.generator.dispose();
+            this.keyboard.dispose();
 
             // adjust all enemies except the one that landed
             // to look like :P
@@ -271,21 +284,20 @@
                     self.youLose();
                 }
             });
-
         };
 
         AlphabetInvasion.prototype.launchNewEnemy = function (v) {
             //randomize a color, not too dark
-            var r = Math.floor(Math.random() * 100 + 155)
-			, g = Math.floor(Math.random() * 100 + 155)
-			, b = Math.floor(Math.random() * 100 + 155);
+            var r = Math.floor(Math.random() * 100 + 155),
+                g = Math.floor(Math.random() * 100 + 155),
+                b = Math.floor(Math.random() * 100 + 155);
 
             // build the enemy and set it's initial position
             var enemy = document.createElement('div');
             enemy.style.color = 'rgb(' + r + ',' + g + ',' + b + ')';
             enemy.style.position = 'absolute';
             enemy.style.top = this.playfield.offsetTop + 'px';
-            enemy.style.left = (Math.random() * (this.playfield.clientWidth - 25)) + 'px';
+            enemy.style.left = Math.random() * (this.playfield.clientWidth - 25) + 'px';
             enemy.className = 'enemy';
             enemy.textContent = v;
 
@@ -300,7 +312,7 @@
 
             if (newScore > parseInt(this.highScore.textContent)) {
                 this.highScore.textContent = newScore;
-                if (window.localStorage){
+                if (window.localStorage) {
                     window.localStorage.setItem(HIGH_SCORE_STORAGE_KEY, newScore);
                 }
             }
@@ -318,11 +330,11 @@
 
             this.clearPlayfield();
 
-            if (this.windowHeight) this.windowHeight.unsubscribe();
-            if (this.generator) this.generator.unsubscribe();
-            if (this.matcher) this.matcher.unsubscribe();
-            if (this.gameloop) this.gameloop.unsubscribe();
-            if (this.keyboard) this.keyboard.unsubscribe();
+            if (this.windowHeight) this.windowHeight.dispose();
+            if (this.generator) this.generator.dispose();
+            if (this.matcher) this.matcher.dispose();
+            if (this.gameloop) this.gameloop.dispose();
+            if (this.keyboard) this.keyboard.dispose();
 
             this.showMessage('PRESS ANY KEY TO START');
         };
@@ -358,9 +370,8 @@
         };
 
         return AlphabetInvasion;
-
-    })();
+    }();
 
     var game = new AlphabetInvasion();
     game.run();
-})();
+// })();
