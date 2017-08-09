@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <title>My First RxJS page</title>
+    <style>
+        
+        .container-fluid {
+          margin-top: 8px;
+        }
+
+        .click-me {
+          background-color: #B10DC9;
+          border: none;
+          border-radius: 2px;
+          color: white;
+          padding: 10px;
+          position: absolute;
+        }
+    </style>
+</head>
+<!-- <body onload="checkTakeMap()"> -->
+<body>
+    <button id="callSkipMapTake" onclick="callSkipMapTake()">callSkipMapTake</button>
+    <button id="checkTakeWhile" onclick="checkTakeWhile()">checkTakeWhile</button>
+    <button id="checkReduce" onclick="checkReduce()">checkReduce</button>
+    <button id="checkDebounce" onclick="checkDebounce()">checkDebounce</button>
+    <button id="checkSubjects" onclick="checkSubjects()">checkSubjects</button>
+    
+    <button id="activate" onclick="activate()">Activate</button>
+
+    <button id="callFourthCase">callFourthCase</button>
+    <button id="checkAgain" onclick="checkAgain()">checkAgain</button>
+
+    <button id="checkFirst" onclick="checkFirst()">checkFirst</button>
+
+    <button id="concatAll" onclick="concatAllA()">concatAll</button>
+
+    <button id="distinctCheck" onclick="distinctCheck()">Distinct Check</button>
+    
+    <button id="sampleTime" onclick="as()">sampleTime</button>
+
+    <button id="flatMapFunc" onclick="flatMapFunc()">flatMapFunc</button>
+
+    <button id="concatMerge" onclick = "concatMerge()">concatMerge</button>
+
+    <button id="bufferTime" onclick = "bufferTime()">bufferTime</button>
+   
+    <button id="degToRad" onclick="degToRad()">degToRad</button>
+
+    <button id="forkjoin" onclick="forkjoin()">forkjoin</button>
+    
+    <table id="concat-table">
+      <thead>
+        <tr>
+          <td>
+            <b>Concatenated Stream</b>
+          </td>
+        </tr>
+      </thead>
+      <tbody id="concat-table-body">
+      </tbody>
+    </table>
+    
+    <table id="merge-table">
+      <thead>
+        <tr>
+          <td>
+            <b>Merged Stream</b>
+          </td>
+        </tr>
+      </thead>
+      <tbody id="merge-table-body">
+      </tbody>
+    </table>
+
+    <!-- 
+    <button id="button">Click me!</button>
+    <button id="callFourthCase">callFourthCase</button>
+    <button onclick="directDraw()">DirectDraw</button>
+    <button onclick="draw()">Draw</button>
+    <button onclick="setProceedToTrue()">proceedToTrue</button> -->
+    <table>
+      <thead>
+        <tr>
+          <td>
+            <b>Emails</b>
+          </td>
+        </tr>
+      </thead>
+      <tbody id="email-table-body">
+      </tbody>
+    </table>
+
+    <div class='container-fluid'>
+      <div class='row'>
+        <div class='col-xs-2'>
+          <label for='degree'>Degree</label>
+        </div>
+        <div class='col-xs-10'>
+          <input id='degree' name='degree' type='number' value='0'>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-xs-2'>
+          <label for='radian'>Radian</label>
+        </div>
+        <div class='col-xs-10'>
+          <input id='radian' name='radian' type='number' value='0'>
+        </div>
+      </div>
+    </div>
+    
+    <button id="loose" onclick="loose()">loose</button>
+    <button id="dom-event-source">This is the big button</button>
+    <div id="dom-event-output">
+        <div class="left"><p></p></div>
+        <div class="right"><p></p></div>
+    </div>
+
+    <button id="combineLatestFunc" onclick="combineLatestFunc()">combineLatestFunc</button>
+    
+    <!--<button id="concatAll" onclick="concatAll()">concatAll</button>-->
+    
+	<div id="d3Div"></div>
+	<script src="../js/Rx_latest.js"></script>
+	<script src="index.js"></script>  
+
+</body>
+</html>
+
