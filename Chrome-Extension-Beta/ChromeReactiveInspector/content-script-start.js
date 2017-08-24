@@ -37,3 +37,57 @@ function shouldBreakNow(currentEvent, param1, param2) {
     }
     return false;
 }
+
+
+
+
+/**
+ * It will get the value from the localStorage and set the value to isPrintOptionSelected
+ * @type {boolean}
+ */
+var isPrintOptionSelected = false;
+function setPrintOptionValue() {
+    chrome.storage.sync.get({printAllValue: ''}, function (items) {
+        isPrintOptionSelected = items.printAllValue;
+    });
+}
+setPrintOptionValue();
+
+// Listen to change in storage data
+chrome.storage.onChanged.addListener(function (changes, namespace) {
+    setPrintOptionValue();
+});
+
+/**
+ * This method will print the values to console if the user has selected to do so.
+ * @param currentStep
+ * @param value
+ * @param nodeId
+ */
+function printValues(currentStep, value, nodeId) {
+    if(isPrintOptionSelected){
+        console.log("------------------------------Value at step: "+ currentStep +" of Node "+ nodeId+" is----------------------------------------");
+        console.log(value);
+    }
+}
+
+
+var nodesDoNotSave;
+chrome.storage.sync.get({nodesDoNotSave: []}, function (result) {
+    nodesDoNotSave = result.nodesDoNotSave;
+});
+
+// returns true if query matches
+function shouldSaveNodeValue(fileReadOver, nodeId) {
+    if(!fileReadOver){
+        return false;
+    }
+    else{
+        var found = false;
+        nodesDoNotSave.forEach(function (node) {
+            if(+node === nodeId)
+                found = true
+        });
+        return found;
+    }
+}

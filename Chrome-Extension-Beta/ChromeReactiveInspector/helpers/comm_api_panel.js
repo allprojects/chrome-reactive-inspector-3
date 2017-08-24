@@ -45,10 +45,12 @@ var allEdges = [];
             initialiseGraph();
             rxGraphStages = [];
             historyEntries = [];
+            isConfirmed = false;
         }
 
         var currentNodeId = false;
         var stageId = 0;
+        var truncatedVal = "";
         if (message.action === "saveNode") {
 
             if (message.content.nodeId) {
@@ -109,10 +111,15 @@ var allEdges = [];
 
 
                 console.log(newValue);
-                var truncatedVal = "";
                 if(newValue || newValue.constructor.name === 'Boolean'){
                     newValue = newValue.toString();
                     truncatedVal = newValue.substring(0, 25);
+                }
+                var currentClasses = "current";
+                if (newRef !== "") {
+                    currentClasses = currentClasses + " nodeWithRef";
+                } else {
+                    currentClasses = currentClasses + " nodeWithoutRef";
                 }
 
                 g.setNode(message.content.nodeId, {
@@ -124,7 +131,7 @@ var allEdges = [];
                     method: newMethod,
                     sourceCodeLine: newSourceCodeLine,
                     nodeId: message.content.nodeId,
-                    class: "current"
+                    class: currentClasses
                 });
 
                 tempNode.type = 'nodeUpdated';
@@ -134,9 +141,22 @@ var allEdges = [];
             }
             else {
 
+                var currentClasses = "current";
+                if (message.content.nodeRef !== "") {
+                    currentClasses = "current nodeWithRef";
+                } else {
+                    currentClasses = "current nodeWithoutRef";
+                }
+
+                var tempVal = message.content.nodeValue
+                if(tempVal || tempVal.constructor.name === 'Boolean'){
+                    newValue = tempVal.toString();
+                    truncatedVal = newValue.substring(0, 25);
+                }
+
                 currentAction = "newNode";
                 g.setNode(message.content.nodeId, {
-                    label: "Id: " + message.content.nodeId + "<br> Name:" + message.content.nodeRef + "<br> Value: " + message.content.nodeValue + "<br> Source: " + message.content.sourceCodeLine,
+                    label: "Id: " + message.content.nodeId + "<br> Name:" + message.content.nodeRef + "<br> Value: " + truncatedVal + "<br> Source: " + message.content.sourceCodeLine,
                     labelType: "html",
                     ref: message.content.nodeRef,
                     value: message.content.nodeValue,
@@ -144,7 +164,7 @@ var allEdges = [];
                     method: message.content.nodeMethod,
                     nodeId: message.content.nodeId,
                     sourceCodeLine: message.content.sourceCodeLine,
-                    class: "current"
+                    class: currentClasses
                 });
                 tempNode.type = 'nodeCreated';
                 tempNode.nodeId = message.content.nodeId;
@@ -152,6 +172,8 @@ var allEdges = [];
                 tempNode.nodeValue = message.content.nodeValue;
             }
             render(d3.select("svg g"), g);
+            $("#svg-canvas rect").attr("rx", "5");
+            $("#svg-canvas rect").attr("ry", "5");
 
             inner.selectAll("g.node")
                 .attr("title", function (v) {
@@ -203,14 +225,21 @@ var allEdges = [];
         }else  if (message.action === "allNodesEdges") {
             allNodes = message.content.nodes;
             allEdges = message.content.edges;
+        }else if(message.action === 'removeEdge'){
+            g.removeEdge(message.content.edgeStart, message.content.edgeEnd, message.content.edgeLabel);
+            render(d3.select("svg g"), g);
+            stageId = captureGraphAndSaveAsNewStage("saveEdge", false);
+            saveHistory(stageId, "saveEdge", message.content)
         }
 
     });
 
 }());
 
+var isConfirmed = false;
 // this method is to capture all nodes and edges and add this as new stage in rxGraphStages
 function captureGraphAndSaveAsNewStage(event, currentNodeId) {
+    var tempStageId = '';
     var newStage = {
         "stageId": '',
         "stageEvent": '',
@@ -222,7 +251,7 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
 
     newStage.stageEvent = event;
     newStage.stageId = rxGraphStages.length + 1;
-    var tempStageId = newStage.stageId;
+    tempStageId = newStage.stageId;
 
     var nodeToPush = {};
     // get current nodes from graph
@@ -244,21 +273,28 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
 
             // Check if its the current node, if yes set it as current node
             if (nodeToPush.nodeId === currentNodeId) {
-                nodeToPush.class = "current";
+                nodeToPush.class =  nodeToPush.class + " current";
             } else {
-                nodeToPush.class = "normal";
+                var tempClass = nodeToPush.class.replace(/current/g,'').trim();
+                nodeToPush.class =  tempClass + " normal";
             }
             newStage.stageData.nodes.push(_.clone(nodeToPush));
         });
-    // if(rxSlider.slider('value') !== rxGraphStages.length){
-    //     redrawGraphToStage(rxGraphStages.length)
-    // }
     rxGraphStages.push(_.clone(newStage));
     // Here we should increase steps count in step slider
     rxSlider.slider("option", "min", 0);
     rxSlider.slider("option", "max", rxSlider.slider("option", "max") + 1);
     rxSlider.slider("option", "value", rxSlider.slider("option", "max"));
     rxSlider.slider("pips", "refresh");
+
+
+    if(threshold && rxSlider.slider('value') > +threshold && !isConfirmed){
+        // setCriStatus($('#cri-rec-status'), 1);
+
+        // configRecStatusButton.click();
+        $("#dialog").dialog("open");
+        isConfirmed = true
+    }
     return tempStageId
 }
 

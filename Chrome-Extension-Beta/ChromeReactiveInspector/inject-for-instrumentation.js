@@ -28,7 +28,7 @@ request.onload = function (event) {
     // here check if response text contain Bacon / Rxjs then continue otherwise do not do anything
     var respText = request.responseText;
     // check if this page contains bacon / rx , if not then debugger should not run
-    if ((respText.search("Rx.js") === -1) && (respText.search("Bacon.js") === -1) && (respText.search("rx.lite.js") === -1) && (respText.search("rx.lite.compat.js") === -1) && (respText.search("rx.all.js") === -1)) {
+    if ((respText.search("Rx.js") === -1) && (respText.search("Rx_latest.js") === -1) && (respText.search("Bacon.js") === -1) && (respText.search("rx.lite.js") === -1) && (respText.search("rx.lite.compat.js") === -1) && (respText.search("rx.all.js") === -1)) {
         shouldReactiveDebuggerRun = false;
     }
     // Reactive inspector should not run , so load page original content

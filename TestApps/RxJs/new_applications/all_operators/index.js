@@ -3,7 +3,7 @@
  * verify Dependency graph when observable is created and subscribed without operators.
  * Status - Done
  */
-/*
+// /*
 var observable = Rx.Observable.create(function (observer) {
     observer.next(1);
     observer.next(2);
@@ -22,7 +22,7 @@ observable.subscribe(
     }
 );
 
-*/
+// */
 
 /**
  * Test case 3
@@ -1325,10 +1325,12 @@ var source = Rx.Observable.interval(1000);
 //sample last emitted value from source every 2s
 var example = source.sample(Rx.Observable.interval(2000));
 //output: 2..4..6..8..
+debugger;
 var subscribe = example.subscribe(function (val) {
     return console.log(val);
 });
-
+*/
+/*
 var sourceTwo = Rx.Observable.zip(
 //emit 'Joe', 'Frank' and 'Bob' in sequence
     Rx.Observable.from(['Joe', 'Frank', 'Bob']),
@@ -1388,7 +1390,7 @@ testSubjectTwo.next({ favoriteLanguage: 'JavaScript' }); // {name: 'Joe', age: 3
  * Status Done
  */
 
-/*
+// /*
 
 var source = Rx.Observable.timer(1000);
 //log side effect, emit result
@@ -1421,7 +1423,7 @@ var subscribeThree = sharedExample.subscribe(function (val) {
 var subscribeFour = sharedExample.subscribe(function (val) {
     return console.log(val);
 });
- */
+ // */
 
 
 /**

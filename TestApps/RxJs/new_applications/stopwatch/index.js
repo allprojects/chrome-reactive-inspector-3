@@ -61,6 +61,7 @@ var stop$ = toggleOrReset$.filter(function (isRunning) {
     return !isRunning;
 });
 var incOrDecOrReset$ = Rx.Observable.merge(interval$.takeUntil(Rx.Observable.merge(stop$, dblclick$)).mapTo(incOrDec), dblclick$.mapTo(reset));
+// var incOrDecOrReset$ = Rx.Observable.merge(interval$.takeUntil(Rx.Observable.merge(stop$, dblclick$)), dblclick$.mapTo(reset));
 start$.switchMapTo(incOrDecOrReset$).startWith(initialValue).scan(function (seconds, incOrDecOrReset) {
     return incOrDecOrReset(seconds);
 }).takeWhile(stillCan).map(toTime).subscribe(render);

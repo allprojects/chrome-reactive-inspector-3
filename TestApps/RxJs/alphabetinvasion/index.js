@@ -2,7 +2,9 @@
 
     // Non-standard custom operator
     Rx.Observable.random = function (low, high, intervalLow, intervalHigh, howMany, scheduler) {
-        scheduler || (scheduler = Rx.Scheduler['default']);
+        scheduler || (scheduler = Rx.Scheduler);
+        console.log(intervalLow);
+        console.log(intervalHigh);
         if (howMany == null) {
             howMany = -1;
         }
@@ -20,14 +22,15 @@
             } : function () {
                 return Math.floor(Math.random() * intervalDelta + intervalLow);
             };
-            return scheduler.scheduleRecursiveFuture(0, iFunc(), function (ticks, recurse) {
+            return scheduler.queue.schedule(function (ticks) {
                 if (++ticks <= howMany) {
-                    observer.onNext(Math.floor(Math.random() * delta + low));
-                    recurse(ticks, iFunc());
-                } else {
-                    observer.onCompleted();
+                    observer.next(Math.floor(Math.random() * delta + low));
+                    this.schedule(ticks, iFunc());
                 }
-            });
+                else {
+                    observer.complete();
+                }
+            },iFunc(),0);
         });
     };
 
@@ -98,7 +101,7 @@
 
         AlphabetInvasion.prototype.playLevel = function () {
             if (this.generator) {
-                this.generator.dispose();
+                this.generator.unsubscribe();
             }
             var title,
                 found = false;
@@ -160,16 +163,18 @@
 
                 // Generate enemies for this Level.
                 // 10% chance for uppercase enemy
-                self.generator = Rx.Observable.random(0, 25, config[LAUNCH_RATE], config[LAUNCH_RATE], enemiesThisLevel).let(function (v) {
-                    return Math.random() <= capitalLetterProbability ? lookup.charAt(v) : lookup.charAt(v).toUpperCase();
-                }).subscribe(function (v) {
-                    self.launchNewEnemy(v);
-                }, function (e) {
-                    throw e;
-                }, function () {
-                    allEnemiesLaunched = true;
-                });
-            };
+                self.generator = Rx.Observable.random(0, 25, config[LAUNCH_RATE], config[LAUNCH_RATE], enemiesThisLevel)
+                    .map(function (v) {
+                        return Math.random() <= capitalLetterProbability ? lookup.charAt(v) : lookup.charAt(v).toUpperCase();
+                    })
+                    .subscribe(function (v) {
+                        self.launchNewEnemy(v);
+                    }, function (e) {
+                        throw e;
+                    }, function () {
+                        allEnemiesLaunched = true;
+                    });
+                };
 
             // This observable sets a delay for showing the level title,
             // after which we call the nested play() method to start
@@ -185,9 +190,9 @@
             }
 
             this.gameState = GameState.stopped;
-            this.gameloop.dispose();
-            this.generator.dispose();
-            this.keyboard.dispose();
+            this.gameloop.unsubscribe();
+            this.generator.unsubscribe();
+            this.keyboard.unsubscribe();
 
             this.showMessage('Level ' + this.currentLevel + ' Complete');
             this.currentLevel++;
@@ -206,9 +211,9 @@
             // change game state and dispose of our
             // game loop observables
             this.gameState = GameState.stopped;
-            this.gameloop.dispose();
-            this.generator.dispose();
-            this.keyboard.dispose();
+            this.gameloop.unsubscribe();
+            this.generator.unsubscribe();
+            this.keyboard.unsubscribe();
 
             this.showMessage("You win this time Earthling!  We'll be back!");
 
@@ -227,9 +232,9 @@
             // change game state and dispose of our
             // game loop observables
             this.gameState = GameState.Stopped;
-            this.gameloop.dispose();
-            this.generator.dispose();
-            this.keyboard.dispose();
+            this.gameloop.unsubscribe();
+            this.generator.unsubscribe();
+            this.keyboard.unsubscribe();
 
             // adjust all enemies except the one that landed
             // to look like :P
@@ -330,11 +335,11 @@
 
             this.clearPlayfield();
 
-            if (this.windowHeight) this.windowHeight.dispose();
-            if (this.generator) this.generator.dispose();
-            if (this.matcher) this.matcher.dispose();
-            if (this.gameloop) this.gameloop.dispose();
-            if (this.keyboard) this.keyboard.dispose();
+            if (this.windowHeight) this.windowHeight.unsubscribe();
+            if (this.generator) this.generator.unsubscribe();
+            if (this.matcher) this.matcher.unsubscribe();
+            if (this.gameloop) this.gameloop.unsubscribe();
+            if (this.keyboard) this.keyboard.unsubscribe();
 
             this.showMessage('PRESS ANY KEY TO START');
         };
@@ -358,9 +363,9 @@
             var self = this;
             for (var i = 0, len = msg.length; i < len; i++) {
                 (function (i) {
-                    Rx.Observable.of(i).delay(30 * i).subscribe(function (x) {
-                        self.message.textContent = msg.substring(0, x + 1);
-                    });
+                    // Rx.Observable.of(i).delay(30 * i).subscribe(function (x) {
+                        self.message.textContent = msg.substring(0, i + 1);
+                    // });
                 })(i);
             }
         };

@@ -1,5 +1,33 @@
 console.log("panel.js");
 
+$(document).ready(function() {
+    $(".dropdown-toggle").dropdown();
+});
+
+$(".dropdown-menu li a").click(function() {
+    $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+    $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+});
+
+$("#dialog").hide();
+
+$("#dialog").dialog({
+    autoOpen: false,
+    modal: true,
+    buttons : {
+        "Confirm" : function() {
+            // setCriStatus($('#cri-rec-status'), false);
+
+            $(this).dialog("close");
+        },
+        "Cancel" : function() {
+            configRecStatusButton.click();
+            $(this).dialog("close");
+        }
+    }
+});
+
+
 // Simple function to style the tooltip for the given node.
 var styleTooltip = function (id, name, type, source) {
     return "<div class='custom_tooltip'><p>" + 'Id: '+  id + "</p>" +
@@ -117,6 +145,12 @@ function redrawGraphToStage(stageToRedraw) {
 
     // draw graph with asked stage data
     render(d3.select("svg g"), g);
+    $("#svg-canvas rect").attr("rx", "5");
+    $("#svg-canvas rect").attr("ry", "5");
+
+    /**
+     * This will display node details on mouse hover.
+     */
     inner.selectAll("g.node")
         .attr("title", function (v) {
             return styleTooltip(g.node(v).nodeId, g.node(v).ref, g.node(v).type, g.node(v).sourceCodeLine)
@@ -146,8 +180,9 @@ function redrawGraphToStage(stageToRedraw) {
 
 var configIncludeFilesField = $('#cri-config-includes');
 var previousConfigFiles = [];
-(function () {
-    var configRecStatusButton = document.getElementById('cri-rec-status');
+var threshold = '';
+var configRecStatusButton = document.getElementById('cri-rec-status');
+// (function () {
     // populate
     chrome.storage.sync.get('criconfigincludes', function (items) {
         console.log("config from storage");
@@ -158,21 +193,22 @@ var previousConfigFiles = [];
     chrome.storage.sync.get('cri_config_rec_status', function (items) {
         if (items.cri_config_rec_status !== undefined) {
             var recStatusFromStorage = items.cri_config_rec_status;
-            $(this).data("rec-status", recStatusFromStorage);
+            configRecStatusButton.setAttribute('data-rec-status', recStatusFromStorage);
+            // $(this).data("rec-status", recStatusFromStorage);
             if (recStatusFromStorage) {
-                $(this).html('Pause Recording');
+                configRecStatusButton.innerHTML = 'Pause Recording';
+                configRecStatusButton.classList.add('btn-info');
+                configRecStatusButton.classList.remove('btn-danger');
             } else {
-                $(this).html('Start Recording');
+                configRecStatusButton.innerHTML = 'Start Recording';
+                configRecStatusButton.classList.remove('btn-info');
+                configRecStatusButton.classList.add('btn-danger');
             }
         }
-        // to fix the initial loading
-        else{
-            $(this).data("rec-status", true);
-            $(this).html('Pause Recording');
-            chrome.storage.sync.set({
-                'cri_config_rec_status': true
-            });
-        }
+    });
+
+    chrome.storage.sync.get('thresholdValue', function(items) {
+        threshold = items.thresholdValue;
     });
 
     configIncludeFilesField
@@ -205,18 +241,29 @@ var previousConfigFiles = [];
      * This method is called whenever the user clicks on 'Pause' or 'Start' recording button.
      */
     configRecStatusButton.addEventListener('click', function (e) {
-        var currentStatus = $(this).data("rec-status");
+        var currentStatus = $(this).attr('data-rec-status');
+        var temp = (currentStatus === 'true');
+        // $(this).data("rec-status",!currentStatus);
+        $(this).attr('data-rec-status', !temp);
+        setCriStatus($(this), !temp);
 
-        $(this).data("rec-status",!currentStatus);
-        chrome.storage.sync.set({
-            'cri_config_rec_status': !currentStatus
-        });
-        if (currentStatus){
-            $(this).html('Start Recording');
-        }else{
-            $(this).html('Pause Recording');
-        }
     }, this);
+
+    function setCriStatus(element, status){
+        chrome.storage.sync.set({
+            'cri_config_rec_status': status
+        });
+        if (status){
+            // isConfirmed = false;
+            element.html('Pause Recording');
+            element.addClass('btn-info');
+            element.removeClass('btn-danger');
+        }else{
+            element.html('Start Recording');
+            element.addClass('btn-danger');
+            element.removeClass('btn-info');
+        }
+    }
 
     // Reset everything
     $("#cri-reset").click(function () {
@@ -231,23 +278,134 @@ var previousConfigFiles = [];
 
         // remove saved data
         rxGraphStages = [];
+        isConfirmed = false
     });
+
+
+
+    $('#cri-find-btn').click(function () {
+        var type = $('#featureType').text().trim();
+        if(type === 'Search')
+            searchNodeFunction();
+        else if(type === 'Dependents')
+            dependency('dependents');
+        else if(type === 'Dependencies')
+            dependency('dependencies');
+    });
+
+
+    var searchNode = '';
+    function setSearchNode() {
+        searchNode = $("#cri-node-search-val");
+    }
+
+    setSearchNode();
+
+    var nodeFound = false;
+    $("#cri-node-search-val").on('change keyup paste', function() {
+        if(!searchNode){
+            setSearchNode();
+        }
+        var searchNodeVal = searchNode.val();
+        if(searchNodeVal === ''){
+            redrawGraphToStage(rxSlider.slider('value'))
+        }
+        searchNode.removeClass('error');
+    });
+
 
     /**
      * Whenever user searches for node, below method will be called.
      */
-    $("#cri-node-search").on('change keyup paste', function() {
+    function searchNodeFunction() {
+        searchNode.removeClass('error');
         var all_nodes = Object.keys(g._nodes).map(function (key) { return g._nodes[key]; });
-        var searchNode = $("#cri-node-search").val();
-        all_nodes.forEach(function (node) {
-            if (node.ref && searchNode && node.ref.includes(searchNode))
-                node.class = 'highlight';
-            else
-                node.class = 'normal'
-        });
 
+        var searchNodeVal = searchNode.val();
+        if(searchNodeVal){
+            nodeFound = false;
+            all_nodes.forEach(function (node) {
+                if (node.ref && searchNodeVal && node.ref.includes(searchNodeVal)){
+                    nodeFound = true;
+                    node.class = 'highlight';
+                }
+                else{
+                    node.class = 'normal'
+                }
+            });
+            if(nodeFound){
+                searchNode.removeClass('error');
+                render(d3.select("svg g"), g);
+            }else {
+                searchNode.addClass('error');
+            }
+
+        }else{
+            redrawGraphToStage(rxSlider.slider('value'))
+        }
+    }
+
+    function dependency(type) {
+        var all_nodes = Object.keys(g._nodes).map(function (key) { return g._nodes[key]; });
+        var searchNodeVal = searchNode.val();
+        var tempNode = '';
+        var edges = [];
+        if(searchNodeVal){
+            nodeFound = false;
+            all_nodes.forEach(function (node) {
+                if (node.ref && searchNodeVal && node.ref === searchNodeVal){
+                    tempNode = node;
+                    nodeFound = true
+                }
+            });
+            if(nodeFound){
+                searchNode.removeClass('error');
+            }else {
+                searchNode.addClass('error');
+            }
+        }
+        allEdges.forEach(function (edge) {
+            if(type=== 'dependencies'){
+                if(edge.endId === tempNode.nodeId){
+                    edges.push(edge.startId);
+                }
+            }
+            else{
+                if(edge.startId === tempNode.nodeId){
+                    edges.push(edge.endId);
+                }
+            }
+        });
+        if(edges.length){
+            if(type === 'dependencies'){
+                var allEdgesReverse = allEdges.slice().reverse();
+                allEdgesReverse.forEach(function (edge) {
+                    if(_.contains(edges, edge.endId))
+                        edges.push(edge.startId);
+                });
+                edges=_.unique(edges)
+            }
+            else {
+                allEdges.forEach(function (edge) {
+                    if(_.contains(edges, edge.startId))
+                        edges.push(edge.endId);
+                });
+                edges=_.unique(edges)
+            }
+        }
+
+        edges.push(tempNode.nodeId)
+
+        all_nodes.forEach(function (node) {
+            if (searchNodeVal && _.contains(edges, node.nodeId)){
+                node.class = 'highlight';
+            }
+            else{
+                node.class = 'normal'
+            }
+        });
         render(d3.select("svg g"), g);
-    });
+    }
 
     /**
      * editable select for find by query feature
@@ -266,22 +424,24 @@ var previousConfigFiles = [];
         });
 
         if (matches) {
-            var param1 = matches[0];
+            param1 = matches[0];
             if (matches[1]) {
-                var param2 = matches[1];
+                param2 = matches[1];
             }
             if (historyQuery === "nodeCreated") {
-                stage = historyEntries.filter( function(history){
-                    if(history.type === 'nodeCreated' && history.nodeName === param1)
-                        return history.stageId;
-                });
-                if(stage.length){
-                    redrawGraphToStage(stage[0].stageId);
-                    rxSlider.slider('value', stage[0].stageId ,rxSlider.slider("option", "step"));
-                    $("#cri-history-current-step").text(1);
-                    $("#cri-history-last-step").text(stage.length);
+                var _tNode = _.find(allNodes, {name:param1});
+                if(_tNode){
+                    stage = historyEntries.filter( function(history){
+                        if(history.type === 'nodeCreated' && history.nodeId === _tNode.nodeId)
+                            return history.stageId;
+                    });
+                    if(stage.length){
+                        redrawGraphToStage(stage[0].stageId);
+                        rxSlider.slider('value', stage[0].stageId ,rxSlider.slider("option", "step"));
+                        $("#cri-history-current-step").text(1);
+                        $("#cri-history-last-step").text(stage.length);
+                    }
                 }
-
             } else if (historyQuery === "nodeUpdated") {
                 stage = historyEntries.filter( function(history){
                     if(history.type === 'nodeUpdated' && history.nodeName === param1)
@@ -387,7 +547,7 @@ var previousConfigFiles = [];
      * Reactive Breakpoints feature
      */
     $('#cri-breakpoint-select').editableSelect({filter: false});
-    var allBreakPoints = []
+    var allBreakPoints = [];
 
     $('#cri-breakpoint-query-submit').click(function () {
 
@@ -402,9 +562,9 @@ var previousConfigFiles = [];
         });
 
         if (matches) {
-            var param1 = matches[0];
+            param1 = matches[0];
             if (matches[1]) {
-                var param2 = matches[1];
+                param2 = matches[1];
                 if(param2 === 'nodeId')
                     return false
             }
@@ -428,10 +588,7 @@ var previousConfigFiles = [];
             if (!x) {
                 storeBreakPoint(breakPointToStore);
             }
-
         }
-
-
     });
 
 
@@ -449,7 +606,6 @@ var previousConfigFiles = [];
                 // you can use strings instead of objects
                 // if you don't  want to define default values
                 chrome.storage.local.get('criReactiveBreakPoints', function (result) {
-                    //console.log(result.criReactiveBreakPoints)
                 });
                 // refresh front end , where we list current breakpoints
                 refreshCurrentBreakPointsFrontEnd();
@@ -457,17 +613,12 @@ var previousConfigFiles = [];
         });
     }
 
-
     function removeBreakPointByIndex(index) {
-
         chrome.storage.local.get({criReactiveBreakPoints: []}, function (result) {
             // the input argument is ALWAYS an object containing the queried keys
             // so we select the key we need
             var currentBreakPoints = result.criReactiveBreakPoints;
-
-
             currentBreakPoints.splice(index, 1);
-
             // set the new array value to the same key
             chrome.storage.local.set({criReactiveBreakPoints: currentBreakPoints}, function () {
                 // you can use strings instead of objects
@@ -506,17 +657,12 @@ var previousConfigFiles = [];
                 if (currentBreakPoint.params[1] !== undefined) {
                     currentBreakPointQuery = currentBreakPointQuery + "[" + currentBreakPoint.params[1] + "]";
                 }
-
-
                 var bPointHtml = "<div class='bpoint-entry'><span data-bpoint-index='" + index + "' class='bpoint-remove'>X</span><span class='bpoint-query'>" + currentBreakPointQuery + "</span></div>";
                 $('#cri-breakpoints-container').append(bPointHtml);
             }
 
         });
-
-
     }
-
     refreshCurrentBreakPointsFrontEnd();
-})();
+// })();
 

@@ -14,6 +14,8 @@ var SourceLocationLine;
 // Jalangi Analysis Start
 J$.analysis = {};
 
+var currentStep = 0;
+
 (function (sandbox) {
     function AnalysisEngine() {
         var iidToLocation = sandbox.iidToLocation;
@@ -65,6 +67,7 @@ J$.analysis = {};
         this.write = function (iid, name, val, oldValue) {
             if(iid === -1){
                 console.log('End of file reading!');
+                sendAllNodesAndEdges();
             }else{
                 var currentType = "";
                 console.log('writing variable operation intercept: ' + name);
@@ -75,6 +78,10 @@ J$.analysis = {};
                     SourceLocationLine = SourceLocation[1];
 
                 if (val) {
+                    var tempId = '';
+                    if(!isNaN(val.id))
+                        tempId = val.id;
+
                     window.variables.push({'name': name, 'id': val.id, 'location': SourceLocationLine });
                     currentType = val.constructor.name;
                 }
@@ -92,7 +99,7 @@ J$.analysis = {};
                         updateNodeEdgeName(updatedVar)
                     }
                 }
-                else if(val.constructor.name === 'Subscriber'){
+                else if(val && val.constructor.name === 'Subscriber'){
                     if (val.hasOwnProperty("_id")) {
                         // test case 53
                         if(currentType === val.obsType){
@@ -178,16 +185,10 @@ if (Bacon !== undefined) {
              console.log(Object.prototype.toString.call(val));
              console.log(val instanceof jQuery.Event);
              */
-            if (val instanceof jQuery.Event) {
-                val = val.type;
+            var constructorName = '';
+            if(val){
+                constructorName = val.constructor.name;
             }
-
-            if (val && val.constructor === Array) {
-                val = JSON.stringify(val);
-            }else if(val.constructor.name === 'Object'){
-                val = JSON.stringify(val)
-            }
-            //val = JSON.stringify(val);
 
             logNodeData(currentObsId, '', '', '', val, '');
 
@@ -229,22 +230,45 @@ if (Rx !== undefined) {
                 for(var i=0; i<sourceObs.array.length; i++){
                     sourceObs.array[i] = checkAndAssignId(sourceObs.array[i]);
                 }
+                resultantObservable = checkAndAssignId(resultantObservable);
             } else {
                 if (operatorName !== 'RefCountOperator') {
                     sourceObs = checkAndAssignId(sourceObs);
+                    resultantObservable = checkAndAssignId(resultantObservable);
                 }
             }
-            resultantObservable = checkAndAssignId(resultantObservable);
 
             // Multicast support with refCount example & test case 42
             if(operator.constructor.name === 'RefCountOperator'){
-                if(sourceObs.getSubject().id)  // for test case 42
+                if(sourceObs.getSubject().id) { // for test case 42
                     CriLogObserverFactory(operator, sourceObs.getSubject(), resultantObservable)
+                }
+                //for mario game example
+                else if(sourceObs.source && sourceObs.source.id){
+                    resultantObservable = checkAndAssignId(resultantObservable);
+                    CriLogObserverFactory(operator, sourceObs.source, resultantObservable)
+                }
             }else{
-                CriLogObserverFactory(operator, sourceObs, resultantObservable);
+                if(resultantObservable.id)
+                    CriLogObserverFactory(operator, sourceObs, resultantObservable);
             }
         }
         return resultantObservable;
+    };
+
+    Rx.Subject.prototype.lift = function (operator) {
+        var subject = new Rx.AnonymousSubject(this, this);
+        subject = checkAndAssignId(subject);
+        logNodeData(subject.id, subject.constructor.name, '', '', '', '');
+        if(subject.source && subject.source.array.length){
+            subject.source.array.forEach(function (sub){
+                if(sub.id && !checkIfEdgeAlreadyExists(sub.id, subject.id)){
+                    logEdgeData(sub.id, subject.id, operator.constructor.name)
+                }
+            })
+        }
+        subject.operator = operator;
+        return subject;
     };
 
     // Todo
@@ -254,7 +278,6 @@ if (Rx !== undefined) {
         resultantObservable.id = ++rxObsCounter;
         resultantObservable._type = 'createObservable';
         return resultantObservable
-
     };
 
     // TOdo
@@ -312,12 +335,51 @@ if (Rx !== undefined) {
         }
         if(!sink.hasOwnProperty('_id'))
             sink._id = this.id;
-        sink._operatorName = operator;
+        if(operator){
+            sink._operatorName = operator.constructor.name;
+        }else{
+            sink._operatorName = '';
+        }
         var obsType = '';
         if (this.constructor.name) {
             obsType = this.constructor.name;
         }
         sink.obsType = obsType;
+
+
+        function getSouceId(source){
+            if(source.source && source.source.id){
+                getSouceId(source.source)
+            }else{
+                return source.id
+            }
+        }
+        //for crop example
+        if(sink.parent && sink.parent._id && this.source && this.source.id){
+            var tempSourceId = getSouceId(this.source);
+            if(sink.parent._id !== tempSourceId) {
+                if(!checkIfEdgeAlreadyExists(sink.parent._id, tempSourceId)) {
+                    logEdgeData(sink.parent._id, tempSourceId, sink._operatorName);
+                }
+                if( sink.parent._parent && sink.parent._parent._id){
+                    if(!checkIfEdgeAlreadyExists(this.id, sink.parent._parent._id)){
+                        sendObjectToDevTools({
+                            content: {
+                                "edgeStart": sink.parent._id,
+                                "edgeStartName": '',
+                                "edgeEnd": sink.parent._parent._id,
+                                "edgeEndName": '',
+                                "edgeLabel": sink._operatorName.replace('Operator','')
+                            },
+                            action: "removeEdge",
+                            destination: "panel"
+                        });
+                        logEdgeData(this.id, sink.parent._parent._id, sink._operatorName);
+                    }
+                }
+            }
+        }
+
 
         if (operator) {
             // Test case 7 - for buffer operator
@@ -353,83 +415,60 @@ if (Rx !== undefined) {
     var constructorName = '';
     var nextValue = '';
     Rx.Subscriber.prototype.next = function (value) {
-        if (!this.isStopped) {
+        var self = this;
+        if (!self.isStopped) {
             if(value !== ''){
                 constructorName = '';
                 if(value !== undefined && value !== null){
                     constructorName = value.constructor.name;
-                    switch(constructorName){
-                        case 'KeyboardEvent':
-                            nextValue = value.currentTarget.value;
-                            break;
-                        case 'Number':
-                            nextValue = JSON.stringify(value);
-                            break;
-                        case 'Array':
-                            nextValue = JSON.stringify(value);
-                            break;
-                        case 'Object':
-                            if(value.hasOwnProperty('type') &&  value.type === 'keyup')
-                                nextValue = value.key;
-                            else if(value.hasOwnProperty('type')){
-                                if(value.type ==='mousemove')
-                                    nextValue = JSON.stringify({'screenX':value.screenX, 'screenY':value.screenY});
-                                else
-                                    nextValue = JSON.stringify(value);
-                            }else{
-                                nextValue = JSON.stringify(value);
-                            }
-                            break;
-                        case 'MouseEvent':
-                            nextValue = JSON.stringify({'clientX':value.clientX, 'clientY':value.clientY});
-                            break;
-                        case 'Promise':
-                            //TODO get value from promised object
-                            nextValue = JSON.stringify(value);
-                            break;
-                        case 'String':
-                            nextValue = value;
-                            break;
-                        case 'Boolean':
-                            nextValue = value;
-                            break;
-                        case 'GroupedObservable':
-                            nextValue = value.key;
-                            break;
-                        case 'Observable':
-                            nextValue = value;
-                            break;
-                        default:
-                            nextValue = JSON.stringify(value);
-                            break;
-                    }
+
+                    nextValue = value;
                 }
                 else
                     if(value === undefined)
                         nextValue = 'undefined';
                     //Todo check for other type of events or similar kind
 
-                    if(this._id){
+                    if(self._id){
                         // Added this condition for animation test example
                         // Make sure it does not affect other
-                        if(this._parent && this._parent.constructor.name === 'Subscriber' && !this._operatorName){
-                            if(this._parent.destination && this._parent.destination._complete && !this._parent.destination._id)
-                                logNodeData(this._parent._id, this._parent.obsType, '', '', nextValue, '');
+                        if(self._parent && self._parent.constructor.name === 'Subscriber' && !self._operatorName){
+                            if(self._parent.destination && self._parent.destination._complete && !self._parent.destination._id)
+                                logNodeData(this._parent._id, self._parent.obsType, '', '', nextValue, '');
                         }
-                        logNodeData(this._id, this.obsType, '', '', nextValue, '');
+                        logNodeData(self._id, self.obsType, '', '', nextValue, '');
                         // Test case 35
-                        if(this._subscriptions && this._subscriptions.length){
-                            this._subscriptions.forEach(function (subscription) {
+                        if(self._subscriptions && self._subscriptions.length){
+                            self._subscriptions.forEach(function (subscription) {
                                 if(subscription._id && subscriberNames.includes(subscription.constructor.name)){
                                     logNodeData(subscription._id, subscription.constructor.name, '', '', nextValue, '');
                                 }
                             })
                         }
-                        if(this.destination._id && checkIfNodeAlreadyExists(this.destination._id, '', 'Subscriber')){
-                            logNodeData(this.destination._id, 'Subscriber', '', '', nextValue, '');
+                        if(self.destination._id && checkIfNodeAlreadyExists(self.destination._id, '', 'Subscriber')){
+                            logNodeData(self.destination._id, 'Subscriber', '', '', nextValue, '');
                         }
-                    }else if(this.outerValue && this.outerValue.id && this.outerValue.constructor.name === 'ScalarObservable'){
-                        logNodeData(this.outerValue.id, this.outerValue.constructor.name, '', '', nextValue, '');
+
+                        // for animation example
+                        else if(self.destination.constructor.name === 'SafeSubscriber' && !self.destination._id){
+                            if(self._parent && this._parent._id){
+                                logNodeData(self._parent._id, self._parent.obsType, '', '', nextValue, '');
+                                if(self._parent.destination && self._parent.destination._id){
+                                    logNodeData(self._parent.destination._id, 'Subscriber', '', '', nextValue, '');
+                                }
+                            }
+                        }
+
+                        if(self.parent && self.parent._id){
+                            if(!checkIfEdgeAlreadyExists(self._id, self.parent._id)){
+                                if(self.parent._parent && self.parent._parent._id && !checkIfEdgeAlreadyExists(self._id, self.parent._parent._id)){
+                                    logEdgeData(self.parent._id, self._id, self._operatorName);
+                                    logEdgeData(self._id, self.parent._parent._id, self._operatorName);
+                                }
+                            }
+                        }
+                    }else if(self.outerValue && self.outerValue.id && self.outerValue.constructor.name === 'ScalarObservable'){
+                        logNodeData(self.outerValue.id, self.outerValue.constructor.name, '', '', nextValue, '');
                     }
                 }
             this._next(value);
@@ -481,16 +520,22 @@ if (Rx !== undefined) {
         var name = '';
         var res = '';
         var location = '';
-        if(obsSource.sourceObj && obsSource.sourceObj.id){
+        if(obsSource.sourceObj && obsSource.sourceObj.id && !isNaN(obsSource.sourceObj.id)){
             res = _.find(window.variables, {id:obsSource.sourceObj.id});
-            name = res.name;
-            location = res.location;
-            updatedVar = {'id': obsSource.id, 'name': name};
-            _.extend(_.findWhere(window.variables, { name: updatedVar.name }), updatedVar);
-        }else{
-            res = _.find(window.variables, {id:obsSource.id});
-            if(res)
+            if(res){
                 name = res.name;
+                location = res.location;
+                if(!isNaN(obsSource.sourceObj.id)){
+                    updatedVar = {'id': '', 'name': name};
+                    _.extend(_.findWhere(window.variables, { name: updatedVar.name }), updatedVar);
+                }
+            }
+        }else{
+            if(obsSource.id){
+                res = _.find(window.variables, {id:obsSource.id});
+                if(res)
+                    name = res.name;
+            }
         }
 
         // source obs are the dependencies of resultant obs
@@ -524,7 +569,15 @@ if (Rx !== undefined) {
             }
         } else {
             if(!checkIfNodeAlreadyExists(obsSource.id, name, sourceNodeType)){
-                logNodeData(obsSource.id, sourceNodeType, '', name, '', location)
+                logNodeData(obsSource.id, sourceNodeType, '', name, '', location);
+                //for mario game example
+                if(operName === 'ScanOperator'){
+                    if(obsSource.source && obsSource.source.id){
+                        if(!checkIfEdgeAlreadyExists(obsSource.id, obsSource.source.id)) {
+                            logEdgeData(obsSource.source.id, obsSource.id, '')
+                        }
+                    }
+                }
             }
             logEdgeData(obsSource.id, obsResult.id, operName);
 
@@ -561,21 +614,26 @@ if (Rx !== undefined) {
  * @param type
  * @param method
  * @param name
- * @param val
+ * @param value
  * @param lineNumber
  */
-function logNodeData(id, type, method, name, val, lineNumber){
+function logNodeData(id, type, method, name, value, lineNumber){
+    if (!shouldSaveNodeValue(fileReadOver, id)) {
+        ++currentStep;
+        printValues(currentStep, value, id);
+        var val = getValue(value.constructor.name, value);
+        sendObjectToDevTools({
+            content: {
+                'nodeId': id,
+                'nodeType': type,
+                'nodeMethod': method,
+                'nodeRef': name,
+                'nodeValue': val,
+                'sourceCodeLine': lineNumber
+            }, action: "saveNode", destination: "panel"
+        });
+    }
 
-    sendObjectToDevTools({
-        content: {
-            'nodeId': id,
-            'nodeType': type,
-            'nodeMethod': method,
-            'nodeRef': name,
-            'nodeValue': val,
-            'sourceCodeLine': lineNumber
-        }, action: "saveNode", destination: "panel"
-    });
 
     if(!checkIfNodeAlreadyExists(id, '', type)){
         if (shouldBreakNow('nodeCreated', id, false)) {
@@ -600,6 +658,7 @@ function logNodeData(id, type, method, name, val, lineNumber){
  * @param name
  */
 function logEdgeData(startId, endId, name){
+    name = name.replace('Operator','');
     allEdges.push({'startId': startId, 'endId': endId});
     var edgeStart = _.find(window.variables, {id:startId});
     var edgeStartName = '';
@@ -620,7 +679,7 @@ function logEdgeData(startId, endId, name){
         action: "saveEdge",
         destination: "panel"
     });
-
+    currentStep++;
     if (shouldBreakNow('dependencyCreated', startId, endId)) {
         debugger;
     }
@@ -683,4 +742,78 @@ function checkAndAssignId(obj) {
         }
     }
     return obj;
+}
+
+var fileReadOver = false;
+
+function sendAllNodesAndEdges(){
+    fileReadOver = true;
+    sendObjectToDevTools({
+        content: {
+            "nodes": allNodes,
+            "edges": allEdges
+        },
+        action: "allNodesEdges",
+        destination: "panel"
+    });
+}
+
+function getValue(constructorName, value) {
+    switch(constructorName){
+        case 'KeyboardEvent':
+            value = value.currentTarget.value;
+            break;
+        case 'Number':
+            value = JSON.stringify(value);
+            break;
+        case 'Array':
+            value = value.toString();
+            break;
+        case 'Object':
+            if(value.hasOwnProperty('type')){
+                if(value.type ==='mousemove' || value.type ==='mousedown' || value.type ==='mouseup' || value.type ==='mousehover' || value.type ==='click')
+                    value = JSON.stringify({'screenX':value.screenX, 'screenY':value.screenY});
+                else if(value.type === 'keydown' || value.type === 'keyup')
+                    value = value.key;
+                else
+                    value = JSON.stringify(value);
+            }else{
+                value = JSON.stringify(value);
+            }
+            break;
+        case 'MouseEvent':
+            value = JSON.stringify({'clientX':value.clientX, 'clientY':value.clientY});
+            break;
+        case 'Promise':
+            //TODO get value from promised object
+            value = JSON.stringify(value);
+            break;
+        case 'String':
+            value = value;
+            break;
+        case 'Boolean':
+            value = value;
+            break;
+        case 'GroupedObservable':
+            value = value.key;
+            break;
+        case 'Observable':
+            value = value;
+            break;
+        case 'BehaviorSubject':
+            value = value;
+            break;
+        case 'Function':
+            var tempType = value.constructor.name;
+            if(value.name === ''){
+                tempType = 'AnonymousFunction'
+            }
+            value = JSON.stringify({'type': tempType, 'name': value.name});
+            break;
+        default:
+            value = JSON.stringify(value);
+            break;
+    }
+
+    return value;
 }
