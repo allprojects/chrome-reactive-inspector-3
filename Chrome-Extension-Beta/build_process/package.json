@@ -1,0 +1,9 @@
+{
+  "name": "chrome-extension-build",
+  "version": "0.0.1",
+  "dependencies": {
+    "linq": "^3.0.8",
+    "shelljs": "^0.7.8"
+  },
+  "start": "build.js"
+}
