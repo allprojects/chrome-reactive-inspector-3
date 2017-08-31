@@ -621,7 +621,7 @@ function logNodeData(id, type, method, name, value, lineNumber){
     if (!shouldSaveNodeValue(fileReadOver, id)) {
         ++currentStep;
         printValues(currentStep, value, id);
-        var val = getValue(value.constructor.name, value);
+        var val = getValue(value);
         sendObjectToDevTools({
             content: {
                 'nodeId': id,
@@ -758,7 +758,10 @@ function sendAllNodesAndEdges(){
     });
 }
 
-function getValue(constructorName, value) {
+var tempConstructorName = '';
+function getValue(value) {
+    if(value !== null)
+        tempConstructorName = value.constructor.name;
     switch(constructorName){
         case 'KeyboardEvent':
             value = value.currentTarget.value;

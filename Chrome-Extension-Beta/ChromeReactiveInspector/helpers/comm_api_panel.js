@@ -209,6 +209,8 @@ var allEdges = [];
                 label: message.content.edgeLabel
             });
             render(d3.select("svg g"), g);
+            $("#svg-canvas rect").attr("rx", "5");
+            $("#svg-canvas rect").attr("ry", "5");
             stageId = captureGraphAndSaveAsNewStage("saveEdge", false);
             saveHistory(stageId, "saveEdge", message.content)
         }else if(message.action === "updateSavedEdge"){
@@ -228,6 +230,8 @@ var allEdges = [];
         }else if(message.action === 'removeEdge'){
             g.removeEdge(message.content.edgeStart, message.content.edgeEnd, message.content.edgeLabel);
             render(d3.select("svg g"), g);
+            $("#svg-canvas rect").attr("rx", "5");
+            $("#svg-canvas rect").attr("ry", "5");
             stageId = captureGraphAndSaveAsNewStage("saveEdge", false);
             saveHistory(stageId, "saveEdge", message.content)
         }
@@ -272,10 +276,10 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
             nodeToPush = g.node(d);
 
             // Check if its the current node, if yes set it as current node
+            var tempClass = nodeToPush.class.replace(/current/g,'').replace(/normal/g,'').replace(/highlight/g,'').replace(/fade/g,'').trim();
             if (nodeToPush.nodeId === currentNodeId) {
                 nodeToPush.class =  nodeToPush.class + " current";
             } else {
-                var tempClass = nodeToPush.class.replace(/current/g,'').trim();
                 nodeToPush.class =  tempClass + " normal";
             }
             newStage.stageData.nodes.push(_.clone(nodeToPush));

@@ -9,11 +9,15 @@ g.current > rect {
     stroke-width:5;
 }
 
-/*g.highlight > rect {*/
-    /*stroke: green;*/
-    /*stroke-width: 5;*/
-    /*border-radius: 10px;*/
-/*}*/
+g.highlight > rect {
+    stroke: green;
+    stroke-width: 5;
+    opacity: 1 !important;
+}
+
+g.fade > rect {
+    opacity: 0.3;
+}
 
 
 g.nodeWithRef > rect {

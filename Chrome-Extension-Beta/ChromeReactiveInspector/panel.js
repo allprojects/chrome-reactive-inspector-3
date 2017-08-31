@@ -327,15 +327,17 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
             all_nodes.forEach(function (node) {
                 if (node.ref && searchNodeVal && node.ref.includes(searchNodeVal)){
                     nodeFound = true;
-                    node.class = 'highlight';
+                    node.class = node.class.replace(/current/g,'').trim().replace(/normal/g,'').trim()  + ' highlight';
                 }
                 else{
-                    node.class = 'normal'
+                   node.class = node.class.replace(/highlight/g,'') + ' fade';
                 }
             });
             if(nodeFound){
                 searchNode.removeClass('error');
                 render(d3.select("svg g"), g);
+                $("#svg-canvas rect").attr("rx", "5");
+                $("#svg-canvas rect").attr("ry", "5");
             }else {
                 searchNode.addClass('error');
             }
@@ -377,16 +379,31 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
             }
         });
         if(edges.length){
+            var tempArray = []
             if(type === 'dependencies'){
                 var allEdgesReverse = allEdges.slice().reverse();
                 allEdgesReverse.forEach(function (edge) {
                     if(_.contains(edges, edge.endId))
                         edges.push(edge.startId);
+                    else
+                        tempArray.push(edge)
                 });
+
+                tempArray.forEach(function (edge) {
+                    if(_.contains(edges, edge.endId))
+                        edges.push(edge.startId);
+                });
+
                 edges=_.unique(edges)
             }
             else {
                 allEdges.forEach(function (edge) {
+                    if(_.contains(edges, edge.startId))
+                        edges.push(edge.endId);
+                    else
+                        tempArray.push(edge)
+                });
+                tempArray.forEach(function (edge) {
                     if(_.contains(edges, edge.startId))
                         edges.push(edge.endId);
                 });
@@ -398,13 +415,15 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
 
         all_nodes.forEach(function (node) {
             if (searchNodeVal && _.contains(edges, node.nodeId)){
-                node.class = 'highlight';
+                node.class = node.class.replace(/current/g,'').trim().replace(/normal/g,'').trim()  + ' highlight';
             }
             else{
-                node.class = 'normal'
+                node.class = node.class.replace(/highlight/g,'') + ' fade';
             }
         });
         render(d3.select("svg g"), g);
+        $("#svg-canvas rect").attr("rx", "5");
+        $("#svg-canvas rect").attr("ry", "5");
     }
 
     /**
