@@ -1,5 +1,4 @@
-console.log("myinst.js this contains everything regarding jalangi except analysis");
-// demo.js START
+// myinst with some comments to help understand minified version
 
 // JQUERY minified version
 (function (e, f) {
