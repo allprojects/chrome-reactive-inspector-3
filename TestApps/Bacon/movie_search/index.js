@@ -16,21 +16,21 @@ function showMovie(result) {
 function movieSearch(query) {
     if (query.length < 3)
     // show no results for queries of length &lt; 3
-        return singleValStream =  Bacon.once([]);
-    return eventStreamFromPromise =  Bacon.fromPromise(queryMovie(query));
+        return singleValStream = Bacon.once([]);
+    return eventStreamFromPromise = Bacon.fromPromise(queryMovie(query));
 }
 
-var textAsEventStream  = $('#input')
+var textAsEventStream = $('#input')
 // stream of keydown events from text-field
     .asEventStream('keydown');
 
-    // limit the rate of queries
-var debounsedStream =     textAsEventStream.debounce(300);
-    // get input text value from each event
-var mapDebouncedStreamToVal =    debounsedStream.map(function (event) {
-        return event.target.value;
-    })
-    // Ignore duplicate events with same text
+// limit the rate of queries
+var debounsedStream = textAsEventStream.debounce(300);
+// get input text value from each event
+var mapDebouncedStreamToVal = debounsedStream.map(function (event) {
+    return event.target.value;
+})
+// Ignore duplicate events with same text
     .skipDuplicates();
 
 
@@ -42,13 +42,22 @@ var mapDebouncedStreamToVal =    debounsedStream.map(function (event) {
 // if responses from the server arrives out of order
 
 var suggestions =
-    mapDebouncedStreamToVal.flatMapLatest(movieSearch);
+    mapDebouncedStreamToVal.flatMapLatest(function (query) {
+        if (query.length > 3){
+            // show no results for queries of length &lt; return singleValStream = Bacon.once([]);
+            return eventStreamFromPromise = Bacon.fromPromise(queryMovie(query));
+        }
+
+    });
 
 // Display "Searching..." when waiting for the results
+/*
+var waiting = mapDebouncedStreamToVal.awaiting(suggestions);
 
-mapDebouncedStreamToVal.awaiting(suggestions).onValue(function (x) {
+waiting.onValue(function (x) {
     if (x) $('#results').html('Searching...');
 });
+*/
 
 // Render suggestion results to DOM
 

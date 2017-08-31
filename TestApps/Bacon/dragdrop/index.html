@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.js"></script>
+    <script src="../js/Bacon.js"></script>
+    <style>
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        .item {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            display: table-cell;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .item[data-type='A'] {
+            background: #f90;
+        }
+        .item[data-type='B'] {
+            background: #9f0;
+        }
+        .item .remove {
+            background: #f00;
+        }
+        .drag-bin {
+            width: 150px;
+            height: 150px;
+            float: left;
+            margin-left: 200px;
+            display: block;
+            text-align: center;
+            vertical-align: middle;
+            background: #ddd;
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+<div class="drag-bin" data-type="A"> A only </div>
+<div class="drag-bin" data-type="B"> B only </div>
+<div class="drag-bin" id='home-bin'>
+    <div class="item" draggable="true" data-type="A">
+        A1
+        <div class="remove">(x)</div>
+    </div>
+    <div class="item" draggable="true" data-type="B">
+        B1
+        <div class="remove">(x)</div>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="index.js" charset="utf-8"></script>
+</body>
+</html>
