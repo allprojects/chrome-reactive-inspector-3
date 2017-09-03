@@ -6,7 +6,7 @@
  */
 
 var allNodes = [];
-var allEdges= [];
+var allEdges = [];
 var updatedVar = {};
 var SourceLocation;
 var SourceLocationLine;
@@ -65,71 +65,81 @@ var currentStep = 0;
         // if it is so then send message to dev tool to record variable name etc..
         // this will log if any Observable being assigned to js variable
         this.write = function (iid, name, val, oldValue) {
-            if(iid === -1){
+            if (iid === -1) {
                 console.log('End of file reading!');
                 sendAllNodesAndEdges();
-            }else{
+            } else {
                 var currentType = "";
                 console.log('writing variable operation intercept: ' + name);
                 SourceLocationLine = '';
                 // source location
                 SourceLocation = window.iidToLocationMap[iid];
-                if(SourceLocation)
+                if (SourceLocation)
                     SourceLocationLine = SourceLocation[1];
 
                 if (val) {
                     var tempId = '';
-                    if(!isNaN(val.id))
+                    if (!isNaN(val.id))
                         tempId = val.id;
 
-                    window.variables.push({'name': name, 'id': val.id, 'location': SourceLocationLine });
+                    window.variables.push({'name': name, 'id': val.id, 'location': SourceLocationLine});
                     currentType = val.constructor.name;
+                }
+
+                var currentTypeToDisplay = '';
+                if (val._isEventStream) {
+                    currentTypeToDisplay = "Eventstream";
+                }
+                else if (val._isProperty) {
+                    currentTypeToDisplay = "Property";
+                } else {
+                    currentTypeToDisplay = currentType;
                 }
 
                 var currentTypeInSmall = currentType.toLowerCase();
 
                 if (currentTypeInSmall.search("observable") !== -1 || currentTypeInSmall.search("subject") !== -1) {
-                    if(!(val.hasOwnProperty('operator') && val.operator === undefined)){
+                    if (!(val.hasOwnProperty('operator') && val.operator === undefined)) {
                         // bacon observer already has the id attribute
                         val = checkAndAssignId(val);
                         // log the node and update window.variables
-                        logNodeData(val.id, currentType, '', name, '', SourceLocationLine);
+                        logNodeData(val.id, currentTypeToDisplay, '', name, '', SourceLocationLine);
                         updatedVar = {'id': val.id, 'name': name};
-                        _.extend(_.findWhere(window.variables, { name: updatedVar.name }), updatedVar);
+                        _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
                         updateNodeEdgeName(updatedVar)
                     }
                 }
-                else if(val && val.constructor.name === 'Subscriber'){
+                else if (val && val.constructor.name === 'Subscriber') {
                     if (val.hasOwnProperty("_id")) {
                         // test case 53
-                        if(currentType === val.obsType){
+                        if (currentType === val.obsType) {
                             // update name of subscriber and update window.variables
-                            if(!checkIfNodeAlreadyExists(val._id, name, currentType)) {
-                                logNodeData(val._id, currentType, '', name, '', SourceLocationLine);
+                            if (!checkIfNodeAlreadyExists(val._id, name, currentType)) {
+                                logNodeData(val._id, currentTypeToDisplay, '', name, '', SourceLocationLine);
                                 updatedVar = {'id': val._id, 'name': name};
                                 _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
                                 updateNodeEdgeName(updatedVar)
                             }
                         }
-                        else{
-                            if(name){
+                        else {
+                            if (name) {
                                 val.destination._id = ++window.rxObsCounter;
-                                logNodeData(val.destination._id, currentType, '', name, '', SourceLocationLine);
+                                logNodeData(val.destination._id, currentTypeToDisplay, '', name, '', SourceLocationLine);
                                 logEdgeData(val._id, val.destination._id, '')
                             }
                         }
 
-                        if(val._subscriptions && val._subscriptions.length){
+                        if (val._subscriptions && val._subscriptions.length) {
                             val._subscriptions.forEach(function (subscription) {
-                                if(subscription._id){
+                                if (subscription._id) {
                                     // Test case 41 - example 2
-                                    if(subscription._parent && subscription._parent._id)
-                                        if(!checkIfEdgeAlreadyExists(subscription._parent._id, subscription._id)) {
-                                            logEdgeData(subscription._id,subscription._parent._id, '')
+                                    if (subscription._parent && subscription._parent._id)
+                                        if (!checkIfEdgeAlreadyExists(subscription._parent._id, subscription._id)) {
+                                            logEdgeData(subscription._id, subscription._parent._id, '')
                                         }
-                                    else if(!checkIfEdgeAlreadyExists(val._id, subscription._id)) {
-                                        logEdgeData(val._id, subscription._id, '')
-                                    }
+                                        else if (!checkIfEdgeAlreadyExists(val._id, subscription._id)) {
+                                            logEdgeData(val._id, subscription._id, '')
+                                        }
                                 }
                             })
                         }
@@ -170,6 +180,10 @@ if (Bacon !== undefined) {
 
         // Log Observable dependencies
         obs.desc.deps().forEach(function (entry) {
+            if(obs.desc.method && obs.desc.method !== nodeMethod){
+                console.log('nodeMethod changed in observable dependencies from ' + nodeMethod + ' to ' + obs.desc.method);
+                nodeMethod = obs.desc.method;
+            }
             logEdgeData(entry.id, obs.id, nodeMethod)
         });
 
@@ -186,7 +200,7 @@ if (Bacon !== undefined) {
              console.log(val instanceof jQuery.Event);
              */
             var constructorName = '';
-            if(val){
+            if (val) {
                 constructorName = val.constructor.name;
             }
 
@@ -222,12 +236,12 @@ if (Rx !== undefined) {
         var sourceObs = this;
         var resultantObservable = _lift.call(sourceObs, operator);
 
-        if(operator){
+        if (operator) {
             var operatorName = operator.constructor.name;
             // check type of source obs is it an ArrayObservable or not
             // append id if not exist
             if (sourceObs.constructor.name === "ArrayObservable" && flattenOperators.includes(operatorName)) {
-                for(var i=0; i<sourceObs.array.length; i++){
+                for (var i = 0; i < sourceObs.array.length; i++) {
                     sourceObs.array[i] = checkAndAssignId(sourceObs.array[i]);
                 }
                 resultantObservable = checkAndAssignId(resultantObservable);
@@ -239,17 +253,17 @@ if (Rx !== undefined) {
             }
 
             // Multicast support with refCount example & test case 42
-            if(operator.constructor.name === 'RefCountOperator'){
-                if(sourceObs.getSubject().id) { // for test case 42
+            if (operator.constructor.name === 'RefCountOperator') {
+                if (sourceObs.getSubject().id) { // for test case 42
                     CriLogObserverFactory(operator, sourceObs.getSubject(), resultantObservable)
                 }
                 //for mario game example
-                else if(sourceObs.source && sourceObs.source.id){
+                else if (sourceObs.source && sourceObs.source.id) {
                     resultantObservable = checkAndAssignId(resultantObservable);
                     CriLogObserverFactory(operator, sourceObs.source, resultantObservable)
                 }
-            }else{
-                if(resultantObservable.id)
+            } else {
+                if (resultantObservable.id)
                     CriLogObserverFactory(operator, sourceObs, resultantObservable);
             }
         }
@@ -260,9 +274,9 @@ if (Rx !== undefined) {
         var subject = new Rx.AnonymousSubject(this, this);
         subject = checkAndAssignId(subject);
         logNodeData(subject.id, subject.constructor.name, '', '', '', '');
-        if(subject.source && subject.source.array.length){
-            subject.source.array.forEach(function (sub){
-                if(sub.id && !checkIfEdgeAlreadyExists(sub.id, subject.id)){
+        if (subject.source && subject.source.array.length) {
+            subject.source.array.forEach(function (sub) {
+                if (sub.id && !checkIfEdgeAlreadyExists(sub.id, subject.id)) {
                     logEdgeData(sub.id, subject.id, operator.constructor.name)
                 }
             })
@@ -299,45 +313,45 @@ if (Rx !== undefined) {
     Rx.Observable.prototype.subscribe = function (observerOrNext, error, complete) {
         var operator = this.operator;
         var sink = Rx.toSubscriber(observerOrNext, error, complete);
-        if(sink.constructor.name === 'SubjectSubscriber'){
-            if(!checkIfEdgeAlreadyExists(this.id, observerOrNext.id)) {
+        if (sink.constructor.name === 'SubjectSubscriber') {
+            if (!checkIfEdgeAlreadyExists(this.id, observerOrNext.id)) {
                 logEdgeData(this.id, observerOrNext.id, '')
             }
-        }else if(sink.constructor.name === 'ConnectableSubscriber'){
-            if(sink.connectable.hasOwnProperty("id"))
-                if(!checkIfEdgeAlreadyExists(this.id, sink.connectable.id)) {
+        } else if (sink.constructor.name === 'ConnectableSubscriber') {
+            if (sink.connectable.hasOwnProperty("id"))
+                if (!checkIfEdgeAlreadyExists(this.id, sink.connectable.id)) {
                     logEdgeData(this.id, sink.connectable.id, '')
                 }
-            if(sink.destination.observers.length){
+            if (sink.destination.observers.length) {
                 var observers = _.uniq(sink.destination.observers, function (e) {
                     return e.id;
                 });
                 var observerId = '';
-                if(observers.length > 0){
-                    for(var i=0; i< observers.length; i++){
-                        try{
+                if (observers.length > 0) {
+                    for (var i = 0; i < observers.length; i++) {
+                        try {
                             observerId = observers[i]._id;
-                        }catch(err) {
+                        } catch (err) {
                             observerId = observers[i].id;
                         }
-                        if(!checkIfEdgeAlreadyExists(sink.connectable.id, observerId)) {
+                        if (!checkIfEdgeAlreadyExists(sink.connectable.id, observerId)) {
                             logEdgeData(sink.connectable.id, observerId, '')
                         }
                     }
                 }
-                else{
-                    if(!checkIfEdgeAlreadyExists(sink.connectable.source.id, sink.destination.id)) {
+                else {
+                    if (!checkIfEdgeAlreadyExists(sink.connectable.source.id, sink.destination.id)) {
                         logEdgeData(sink.connectable.source.id, sink.destination.id, '')
                     }
                 }
 
             }
         }
-        if(!sink.hasOwnProperty('_id'))
+        if (!sink.hasOwnProperty('_id'))
             sink._id = this.id;
-        if(operator){
+        if (operator) {
             sink._operatorName = operator.constructor.name;
-        }else{
+        } else {
             sink._operatorName = '';
         }
         var obsType = '';
@@ -347,29 +361,30 @@ if (Rx !== undefined) {
         sink.obsType = obsType;
 
 
-        function getSouceId(source){
-            if(source.source && source.source.id){
+        function getSouceId(source) {
+            if (source.source && source.source.id) {
                 getSouceId(source.source)
-            }else{
+            } else {
                 return source.id
             }
         }
+
         //for crop example
-        if(sink.parent && sink.parent._id && this.source && this.source.id){
+        if (sink.parent && sink.parent._id && this.source && this.source.id) {
             var tempSourceId = getSouceId(this.source);
-            if(sink.parent._id !== tempSourceId) {
-                if(!checkIfEdgeAlreadyExists(sink.parent._id, tempSourceId)) {
+            if (sink.parent._id !== tempSourceId) {
+                if (!checkIfEdgeAlreadyExists(sink.parent._id, tempSourceId)) {
                     logEdgeData(sink.parent._id, tempSourceId, sink._operatorName);
                 }
-                if( sink.parent._parent && sink.parent._parent._id){
-                    if(!checkIfEdgeAlreadyExists(this.id, sink.parent._parent._id)){
+                if (sink.parent._parent && sink.parent._parent._id) {
+                    if (!checkIfEdgeAlreadyExists(this.id, sink.parent._parent._id)) {
                         sendObjectToDevTools({
                             content: {
                                 "edgeStart": sink.parent._id,
                                 "edgeStartName": '',
                                 "edgeEnd": sink.parent._parent._id,
                                 "edgeEndName": '',
-                                "edgeLabel": sink._operatorName.replace('Operator','')
+                                "edgeLabel": sink._operatorName.replace('Operator', '')
                             },
                             action: "removeEdge",
                             destination: "panel"
@@ -383,12 +398,12 @@ if (Rx !== undefined) {
 
         if (operator) {
             // Test case 7 - for buffer operator
-            if(operator.closingNotifier && operator.closingNotifier.id){
-                logEdgeData(operator.closingNotifier.id, this.source.id,  '')
+            if (operator.closingNotifier && operator.closingNotifier.id) {
+                logEdgeData(operator.closingNotifier.id, this.source.id, '')
             }
             // Test case 10 - bufferToggle operator
-            else if(operator.openings && operator.openings.id){
-                logEdgeData(operator.openings.id, this.source.id,  '')
+            else if (operator.openings && operator.openings.id) {
+                logEdgeData(operator.openings.id, this.source.id, '')
             }
             operator.call(sink, this.source);
         }
@@ -417,67 +432,66 @@ if (Rx !== undefined) {
     Rx.Subscriber.prototype.next = function (value) {
         var self = this;
         if (!self.isStopped) {
-            if(value !== ''){
+            if (value !== '') {
                 constructorName = '';
-                if(value !== undefined && value !== null){
+                if (value !== undefined && value !== null) {
                     constructorName = value.constructor.name;
 
                     nextValue = value;
                 }
-                else
-                    if(value === undefined)
-                        nextValue = 'undefined';
-                    //Todo check for other type of events or similar kind
+                else if (value === undefined)
+                    nextValue = 'undefined';
+                //Todo check for other type of events or similar kind
 
-                    if(self._id){
-                        // Added this condition for animation test example
-                        // Make sure it does not affect other
-                        if(self._parent && self._parent.constructor.name === 'Subscriber' && !self._operatorName){
-                            if(self._parent.destination && self._parent.destination._complete && !self._parent.destination._id)
-                                logNodeData(this._parent._id, self._parent.obsType, '', '', nextValue, '');
-                        }
-                        logNodeData(self._id, self.obsType, '', '', nextValue, '');
-                        // Test case 35
-                        if(self._subscriptions && self._subscriptions.length){
-                            self._subscriptions.forEach(function (subscription) {
-                                if(subscription._id && subscriberNames.includes(subscription.constructor.name)){
-                                    logNodeData(subscription._id, subscription.constructor.name, '', '', nextValue, '');
-                                }
-                            })
-                        }
-                        if(self.destination._id && checkIfNodeAlreadyExists(self.destination._id, '', 'Subscriber')){
-                            logNodeData(self.destination._id, 'Subscriber', '', '', nextValue, '');
-                        }
-
-                        // for animation example
-                        else if(self.destination.constructor.name === 'SafeSubscriber' && !self.destination._id){
-                            if(self._parent && this._parent._id){
-                                logNodeData(self._parent._id, self._parent.obsType, '', '', nextValue, '');
-                                if(self._parent.destination && self._parent.destination._id){
-                                    logNodeData(self._parent.destination._id, 'Subscriber', '', '', nextValue, '');
-                                }
-                            }
-                        }
-
-                        if(self.parent && self.parent._id){
-                            if(!checkIfEdgeAlreadyExists(self._id, self.parent._id)){
-                                if(self.parent._parent && self.parent._parent._id && !checkIfEdgeAlreadyExists(self._id, self.parent._parent._id)){
-                                    logEdgeData(self.parent._id, self._id, self._operatorName);
-                                    logEdgeData(self._id, self.parent._parent._id, self._operatorName);
-                                }
-                            }
-                        }
-                    }else if(self.outerValue && self.outerValue.id && self.outerValue.constructor.name === 'ScalarObservable'){
-                        logNodeData(self.outerValue.id, self.outerValue.constructor.name, '', '', nextValue, '');
+                if (self._id) {
+                    // Added this condition for animation test example
+                    // Make sure it does not affect other
+                    if (self._parent && self._parent.constructor.name === 'Subscriber' && !self._operatorName) {
+                        if (self._parent.destination && self._parent.destination._complete && !self._parent.destination._id)
+                            logNodeData(this._parent._id, self._parent.obsType, '', '', nextValue, '');
                     }
+                    logNodeData(self._id, self.obsType, '', '', nextValue, '');
+                    // Test case 35
+                    if (self._subscriptions && self._subscriptions.length) {
+                        self._subscriptions.forEach(function (subscription) {
+                            if (subscription._id && subscriberNames.includes(subscription.constructor.name)) {
+                                logNodeData(subscription._id, subscription.constructor.name, '', '', nextValue, '');
+                            }
+                        })
+                    }
+                    if (self.destination._id && checkIfNodeAlreadyExists(self.destination._id, '', 'Subscriber')) {
+                        logNodeData(self.destination._id, 'Subscriber', '', '', nextValue, '');
+                    }
+
+                    // for animation example
+                    else if (self.destination.constructor.name === 'SafeSubscriber' && !self.destination._id) {
+                        if (self._parent && this._parent._id) {
+                            logNodeData(self._parent._id, self._parent.obsType, '', '', nextValue, '');
+                            if (self._parent.destination && self._parent.destination._id) {
+                                logNodeData(self._parent.destination._id, 'Subscriber', '', '', nextValue, '');
+                            }
+                        }
+                    }
+
+                    if (self.parent && self.parent._id) {
+                        if (!checkIfEdgeAlreadyExists(self._id, self.parent._id)) {
+                            if (self.parent._parent && self.parent._parent._id && !checkIfEdgeAlreadyExists(self._id, self.parent._parent._id)) {
+                                logEdgeData(self.parent._id, self._id, self._operatorName);
+                                logEdgeData(self._id, self.parent._parent._id, self._operatorName);
+                            }
+                        }
+                    }
+                } else if (self.outerValue && self.outerValue.id && self.outerValue.constructor.name === 'ScalarObservable') {
+                    logNodeData(self.outerValue.id, self.outerValue.constructor.name, '', '', nextValue, '');
                 }
+            }
             this._next(value);
         }
     };
 
     Rx.Subscriber.prototype.error = function (err) {
         if (!this.isStopped) {
-            if(this._id){
+            if (this._id) {
                 logNodeData(this._id, this.obsType, '', '', JSON.stringify(err), '');
             }
             this.isStopped = true;
@@ -520,20 +534,20 @@ if (Rx !== undefined) {
         var name = '';
         var res = '';
         var location = '';
-        if(obsSource.sourceObj && obsSource.sourceObj.id && !isNaN(obsSource.sourceObj.id)){
-            res = _.find(window.variables, {id:obsSource.sourceObj.id});
-            if(res){
+        if (obsSource.sourceObj && obsSource.sourceObj.id && !isNaN(obsSource.sourceObj.id)) {
+            res = _.find(window.variables, {id: obsSource.sourceObj.id});
+            if (res) {
                 name = res.name;
                 location = res.location;
-                if(!isNaN(obsSource.sourceObj.id)){
+                if (!isNaN(obsSource.sourceObj.id)) {
                     updatedVar = {'id': '', 'name': name};
-                    _.extend(_.findWhere(window.variables, { name: updatedVar.name }), updatedVar);
+                    _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
                 }
             }
-        }else{
-            if(obsSource.id){
-                res = _.find(window.variables, {id:obsSource.id});
-                if(res)
+        } else {
+            if (obsSource.id) {
+                res = _.find(window.variables, {id: obsSource.id});
+                if (res)
                     name = res.name;
             }
         }
@@ -541,39 +555,39 @@ if (Rx !== undefined) {
         // source obs are the dependencies of resultant obs
         var temp_val = '';
         if (obsSource.constructor.name === "ArrayObservable" && flattenOperators.includes(operName)) {
-            for(var i=0; i<obsSource.array.length; i++){
+            for (var i = 0; i < obsSource.array.length; i++) {
                 var tempObsSource = obsSource.array[i];
                 temp_val = '';
-                if(tempObsSource.id){
-                    if(tempObsSource.constructor.name === 'ScalarObservable' && tempObsSource.value !== undefined)
+                if (tempObsSource.id) {
+                    if (tempObsSource.constructor.name === 'ScalarObservable' && tempObsSource.value !== undefined)
                         logNodeData(tempObsSource.id, tempObsSource.constructor.name, '', '', tempObsSource.value, '');
-                    if(!checkIfNodeAlreadyExists(tempObsSource.id, '', tempObsSource.constructor.name)){
+                    if (!checkIfNodeAlreadyExists(tempObsSource.id, '', tempObsSource.constructor.name)) {
                         logNodeData(tempObsSource.id, tempObsSource.constructor.name, '', '', temp_val, '')
                     }
                     logEdgeData(tempObsSource.id, obsResult.id, operName);
                 }
-                else{
-                    if(!checkIfEdgeAlreadyExists(obsSource.id, obsResult.id)) {
+                else {
+                    if (!checkIfEdgeAlreadyExists(obsSource.id, obsResult.id)) {
                         logEdgeData(obsSource.id, obsResult.id, operName);
                     }
                 }
 
                 //Special case because of twitter follow example
-                if(tempObsSource.constructor.name === 'Observable'){
-                    if(tempObsSource.source && tempObsSource.source.id){
-                        if(!checkIfEdgeAlreadyExists(tempObsSource.source.id, tempObsSource.id)) {
+                if (tempObsSource.constructor.name === 'Observable') {
+                    if (tempObsSource.source && tempObsSource.source.id) {
+                        if (!checkIfEdgeAlreadyExists(tempObsSource.source.id, tempObsSource.id)) {
                             logEdgeData(tempObsSource.source.id, tempObsSource.id, operName)
                         }
                     }
                 }
             }
         } else {
-            if(!checkIfNodeAlreadyExists(obsSource.id, name, sourceNodeType)){
+            if (!checkIfNodeAlreadyExists(obsSource.id, name, sourceNodeType)) {
                 logNodeData(obsSource.id, sourceNodeType, '', name, '', location);
                 //for mario game example
-                if(operName === 'ScanOperator'){
-                    if(obsSource.source && obsSource.source.id){
-                        if(!checkIfEdgeAlreadyExists(obsSource.id, obsSource.source.id)) {
+                if (operName === 'ScanOperator') {
+                    if (obsSource.source && obsSource.source.id) {
+                        if (!checkIfEdgeAlreadyExists(obsSource.id, obsSource.source.id)) {
                             logEdgeData(obsSource.source.id, obsSource.id, '')
                         }
                     }
@@ -582,18 +596,18 @@ if (Rx !== undefined) {
             logEdgeData(obsSource.id, obsResult.id, operName);
 
             // Test case 18 - for ConcatMapTo operator
-            if(flattenOperators.includes(operName)){
-                if(obsResult.operator){
-                    if(obsResult.operator.ish && obsResult.operator.ish.id){
+            if (flattenOperators.includes(operName)) {
+                if (obsResult.operator) {
+                    if (obsResult.operator.ish && obsResult.operator.ish.id) {
                         logNodeData(obsResult.operator.ish.id, obsResult.operator.ish.constructor.name, '', '', obsResult.operator.ish.value, '')
                         logEdgeData(obsResult.operator.ish.id, obsResult.id, operName);
                     }
                 }
-            }else if(operName === 'WithLatestFromOperator'){
+            } else if (operName === 'WithLatestFromOperator') {
                 var obsResultObservables = obsResult.operator.observables;
-                if(obsResultObservables.length){
+                if (obsResultObservables.length) {
                     obsResultObservables.forEach(function (observable) {
-                        if(observable.id && !checkIfEdgeAlreadyExists( obsResult.id, observable.id)){
+                        if (observable.id && !checkIfEdgeAlreadyExists(obsResult.id, observable.id)) {
                             logEdgeData(observable.id, obsResult.id, operName);
                         }
                     })
@@ -617,7 +631,7 @@ if (Rx !== undefined) {
  * @param value
  * @param lineNumber
  */
-function logNodeData(id, type, method, name, value, lineNumber){
+function logNodeData(id, type, method, name, value, lineNumber) {
     if (!shouldSaveNodeValue(fileReadOver, id)) {
         ++currentStep;
         printValues(currentStep, value, id);
@@ -635,11 +649,11 @@ function logNodeData(id, type, method, name, value, lineNumber){
     }
 
 
-    if(!checkIfNodeAlreadyExists(id, '', type)){
+    if (!checkIfNodeAlreadyExists(id, '', type)) {
         if (shouldBreakNow('nodeCreated', id, false)) {
             debugger;
         }
-    }else{
+    } else {
         if (shouldBreakNow('nodeUpdated', id, false)) {
             debugger;
         }
@@ -657,16 +671,16 @@ function logNodeData(id, type, method, name, value, lineNumber){
  * @param endId
  * @param name
  */
-function logEdgeData(startId, endId, name){
-    name = name.replace('Operator','');
+function logEdgeData(startId, endId, name) {
+    name = name.replace('Operator', '');
     allEdges.push({'startId': startId, 'endId': endId});
-    var edgeStart = _.find(window.variables, {id:startId});
+    var edgeStart = _.find(window.variables, {id: startId});
     var edgeStartName = '';
-    if(edgeStart)
+    if (edgeStart)
         edgeStartName = edgeStart.name;
-    var edgeEnd = _.find(window.variables, {id:endId});
+    var edgeEnd = _.find(window.variables, {id: endId});
     var edgeEndName = '';
-    if(edgeEnd)
+    if (edgeEnd)
         edgeEndName = edgeEnd.name;
     sendObjectToDevTools({
         content: {
@@ -686,7 +700,7 @@ function logEdgeData(startId, endId, name){
 }
 
 
-function updateNodeEdgeName(node){
+function updateNodeEdgeName(node) {
     sendObjectToDevTools({
         content: {
             "id": node.id,
@@ -704,9 +718,9 @@ function updateNodeEdgeName(node){
  * @param type
  * @returns {boolean}
  */
-function checkIfNodeAlreadyExists(nodeId, name, type){
-    return  _.some(allNodes, function (node) {
-        if(name)
+function checkIfNodeAlreadyExists(nodeId, name, type) {
+    return _.some(allNodes, function (node) {
+        if (name)
             return node.nodeId === nodeId && node.name === name && node.type === type;
         else
             return node.nodeId === nodeId && node.type === type;
@@ -719,12 +733,12 @@ function checkIfNodeAlreadyExists(nodeId, name, type){
  * @param endId
  * @returns {boolean}
  */
-function checkIfEdgeAlreadyExists(startId, endId){
-    if(startId !== endId){
-        return  _.some(allEdges, function (edge) {
+function checkIfEdgeAlreadyExists(startId, endId) {
+    if (startId !== endId) {
+        return _.some(allEdges, function (edge) {
             return (edge.startId === startId && edge.endId === endId) || edge.startId === endId && edge.endId === startId;
         });
-    }else{
+    } else {
         return true
     }
 
@@ -746,7 +760,7 @@ function checkAndAssignId(obj) {
 
 var fileReadOver = false;
 
-function sendAllNodesAndEdges(){
+function sendAllNodesAndEdges() {
     fileReadOver = true;
     sendObjectToDevTools({
         content: {
@@ -759,10 +773,11 @@ function sendAllNodesAndEdges(){
 }
 
 var tempConstructorName = '';
+
 function getValue(value) {
-    if(value !== null)
+    if (value !== null)
         tempConstructorName = value.constructor.name;
-    switch(constructorName){
+    switch (constructorName) {
         case 'KeyboardEvent':
             value = value.currentTarget.value;
             break;
@@ -773,19 +788,19 @@ function getValue(value) {
             value = value.toString();
             break;
         case 'Object':
-            if(value.hasOwnProperty('type')){
-                if(value.type ==='mousemove' || value.type ==='mousedown' || value.type ==='mouseup' || value.type ==='mousehover' || value.type ==='click')
-                    value = JSON.stringify({'screenX':value.screenX, 'screenY':value.screenY});
-                else if(value.type === 'keydown' || value.type === 'keyup')
+            if (value.hasOwnProperty('type')) {
+                if (value.type === 'mousemove' || value.type === 'mousedown' || value.type === 'mouseup' || value.type === 'mousehover' || value.type === 'click')
+                    value = JSON.stringify({'screenX': value.screenX, 'screenY': value.screenY});
+                else if (value.type === 'keydown' || value.type === 'keyup')
                     value = value.key;
                 else
                     value = JSON.stringify(value);
-            }else{
+            } else {
                 value = JSON.stringify(value);
             }
             break;
         case 'MouseEvent':
-            value = JSON.stringify({'clientX':value.clientX, 'clientY':value.clientY});
+            value = JSON.stringify({'clientX': value.clientX, 'clientY': value.clientY});
             break;
         case 'Promise':
             //TODO get value from promised object
@@ -808,7 +823,7 @@ function getValue(value) {
             break;
         case 'Function':
             var tempType = value.constructor.name;
-            if(value.name === ''){
+            if (value.name === '') {
                 tempType = 'AnonymousFunction'
             }
             value = JSON.stringify({'type': tempType, 'name': value.name});
