@@ -281,6 +281,21 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
         isConfirmed = false
     });
 
+$('#cri-download-graph').click(function () {
+
+    var svgElement = document.getElementById('svg-canvas');
+    var simg = new Simg(svgElement);
+    var url = window.location.pathname;
+
+    var filename = currentTabUrl.substring(currentTabUrl.lastIndexOf('/') + 1);
+    if(filename === "")return;
+
+    // Replace the current SVG with an image version of it.
+    //simg.replace();
+    // And trigger a download of the rendered image.
+    simg.download('dependency_graph_' + filename);
+});
+
 
 
     $('#cri-find-btn').click(function () {

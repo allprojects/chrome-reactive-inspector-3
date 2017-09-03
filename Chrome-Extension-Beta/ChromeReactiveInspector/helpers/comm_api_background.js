@@ -16,11 +16,20 @@ chrome.runtime.onConnect.addListener(function (port) {
             tabId = message.tabId;
             tabPorts[tabId] = port;
         }
+
         chrome.tabs.executeScript(tabId, {file: "myanalysis.js"}, function(){
             chrome.tabs.executeScript(tabId, {file: "inject-for-instrumentation.js"}, function(){
                 //all injected
             });
         });
+/*
+        var tabInfoMessage = {
+            "destination": "panel",
+            "mesg": "tab info message",
+            "action": "info",
+            "currentTabUrl": message.tabUrl
+        };
+        port.postMessage(tabInfoMessage);*/
     });
 
     var extensionListener = function (message, sender, sendResponse) {

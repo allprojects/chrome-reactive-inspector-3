@@ -3,6 +3,7 @@
 
 // channel is created when we open dev tool and move to our panel
 var rxGraphStages = [];
+var currentTabUrl = '';
 var _node = '';
 var currentAction = "";
 var tempNode = {
@@ -46,6 +47,11 @@ var allEdges = [];
             rxGraphStages = [];
             historyEntries = [];
             isConfirmed = false;
+        }
+
+        // Info message , receiving current tab title (will be used to extract file name and used as name of download file)
+        if (message.action === "info") {
+            currentTabUrl = message.currentTabUrl;
         }
 
         var currentNodeId = false;

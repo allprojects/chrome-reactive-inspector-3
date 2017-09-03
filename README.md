@@ -39,4 +39,22 @@ It was continued by Pradeep Baradur.
 This project is done as extension to the work of [Reative Inspector](https://github.com/guidosalva/reactive-inspector)
 
 
+## For Developers:
 
+### Installation Instructions:
+
+For development in Chrome version 35.0 or higher
+1. Download the source code of the extension.
+2. In your chrome browser go to "chrome://extensions/" or "Setting" and then "Extensions"
+3. Enable the "Developer mode".
+4. Click Load unpacked extension… to pop up a file-selection dialog.
+5. Navigate to the directory in which your extension files live, and select it.
+
+Now the extensions is loaded, but Chrome will ask at every start to disable the extension.
+Click Cancel in the dialog that pops up and proceed.
+
+### Debugging:
+ * To debug the Reactive Inspector itself, press CTRL-Shift-I on the devtools page for the Reactive Inspector. Then navigate to the Sources Tab in the devtools window.
+ * To debug the generated background html and javascript files go to Chrome - Options - Additional Tools - Extensions 
+ and click on the link to the background page for the Reactive Inspector. Remember that changes to the background scripts
+ are only propagated to Chrome if you press the Refresh button in the Extension menu.
