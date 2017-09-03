@@ -32,7 +32,7 @@ $("#dialog").dialog({
 var styleTooltip = function (id, name, type, source) {
     return "<div class='custom_tooltip'><p>" + 'Id: '+  id + "</p>" +
         "<p>" + 'Name: '+  name + "</p><p>" + 'Type: '+ type + "</p>" +
-        "<p>" + 'Source: '+ source + "</p></div>";
+        "<p>" + 'Source Code Line: '+ source + "</p></div>";
 };
 
 var g = '',

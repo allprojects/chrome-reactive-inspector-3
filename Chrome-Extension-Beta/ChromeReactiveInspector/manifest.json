@@ -32,7 +32,7 @@
                 "libraries/underscore.js",
                 "libraries/d3.v3.min.js",
                 "Bacon.js",
-                "Rx_latest.js"
+                "Rx.js"
             ],
             "run_at": "document_start",
             "all_frames": false
