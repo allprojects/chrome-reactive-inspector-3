@@ -775,9 +775,10 @@ function sendAllNodesAndEdges() {
 var tempConstructorName = '';
 
 function getValue(value) {
-    if (value !== null)
+    tempConstructorName = '';
+    if(value !== null)
         tempConstructorName = value.constructor.name;
-    switch (constructorName) {
+    switch(tempConstructorName){
         case 'KeyboardEvent':
             value = value.currentTarget.value;
             break;
