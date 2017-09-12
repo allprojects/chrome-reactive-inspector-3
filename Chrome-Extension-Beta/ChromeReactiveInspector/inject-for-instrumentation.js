@@ -9,8 +9,6 @@ chrome.storage.sync.get('criconfigincludes', function (items) {
 });
 
 /** DOCUMENT LOAD INTERCEPTION Start ***/
-// stop loading document so that we can load the instrumented version
-// window.stop();
 // load current document and
 // All scripts will be rendered inert,
 var request = new XMLHttpRequest();
