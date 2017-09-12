@@ -1,0 +1,81 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\defcounter {refsection}{0}\relax 
+\select@language {english}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {1}Introduction}{3}{chapter.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.1}Reactive Applications}{3}{section.1.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.2}Motivation}{3}{section.1.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.3}Thesis contribution}{4}{section.1.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.4}Outline}{4}{section.1.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {2}State of the Art}{5}{chapter.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.1}Reactive Systems}{5}{section.2.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.2}Challenges in Implementing Reactive Systems}{5}{section.2.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.3}Implementation of Reactive Systems}{7}{section.2.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.3.1}The Observer Pattern}{7}{subsection.2.3.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.3.2}Aspect-Oriented Programming (AOP)}{7}{subsection.2.3.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.3.3}Callbacks}{8}{subsection.2.3.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.3.4}Promises}{8}{subsection.2.3.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.4}Reactive Programming}{8}{section.2.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.4.1}ReactiveX}{11}{subsection.2.4.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.4.2}RxJS}{11}{subsection.2.4.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {2.4.2.1}RxJS Concpets}{12}{subsubsection.2.4.2.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.4.3}BaconJS}{15}{subsection.2.4.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.5}Debugging Software Programs}{16}{section.2.5}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.5.1}Debugging Javascript}{16}{subsection.2.5.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.5.2}Debugging Reactive Programs}{17}{subsection.2.5.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.5.3}Jalangi Framework}{17}{subsection.2.5.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.6}Google Chrome Developer Tools}{18}{section.2.6}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.6.1}Extending Chrome Developer Tools}{19}{subsection.2.6.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.7}Related Work}{20}{section.2.7}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {3}System Design}{23}{chapter.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.1}System Requirements}{23}{section.3.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.2}System Architecture Overview}{24}{section.3.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.2.1}Analyzer}{25}{subsection.3.2.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.3}System Architecture Details}{26}{section.3.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.3.1}Dependency Graph Visualisation}{26}{subsection.3.3.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.3.2}Navigating through the Dependency Graph History}{27}{subsection.3.3.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.3.3}Breakpoints}{27}{subsection.3.3.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.3.4}Chrome extension}{27}{subsection.3.3.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.3.5}Scoping and other features}{27}{subsection.3.3.5}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.3.6}Chrome Storage}{28}{subsection.3.3.6}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\nonumberline List of Figures}{29}{section*.21}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Listings}{31}{section*.24}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Bibliography}{33}{section*.27}
