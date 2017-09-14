@@ -1,4 +1,4 @@
-console.log("myinst.js this contains everything regarding jalangi except analysis");
+// console.log("myinst.js this contains everything regarding jalangi except analysis");
 // demo.js START
 
 (function (e, f) {

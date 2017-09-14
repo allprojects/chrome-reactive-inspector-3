@@ -1,4 +1,4 @@
-console.log("inject-for-instrumentation.js");
+console.log("instrumentor.js");
 
 // Get file names from configuration text field displayed in panel
 var filesShouldOnlyInstrument = false;
@@ -19,27 +19,16 @@ var shouldReactiveDebuggerRun = true;
 // Later this should be overwritten from options page of extension
 var filesShouldNotInstrument = [ "underscore.js", "hammer.js" , "d3.v3.min.js" ];
 
-var filesShouldNotInclude = ["Rx.js", "Rx_latest.js", "rx.lite.js", "Bacon.js", "Bacon.UI.js", "jquery.js", "rx.all.js", "jquery-2.1.4.js"];
+var filesShouldNotInclude = ["Rx.js", "rx.lite.js", "Bacon.js", "Bacon.UI.js", "jquery.js", "rx.all.js", "jquery-2.1.4.js"];
 var fileReadOver = false;
 request.onload = function (event) {
 
     // here check if response text contain Bacon / Rxjs then continue otherwise do not do anything
     var respText = request.responseText;
     // check if this page contains bacon / rx , if not then debugger should not run
-    if ((respText.search("Rx.js") === -1) && (respText.search("Rx_latest.js") === -1) && (respText.search("Bacon.js") === -1) && (respText.search("rx.lite.js") === -1) && (respText.search("rx.lite.compat.js") === -1) && (respText.search("rx.all.js") === -1)) {
+    if ((respText.search("Rx.js") === -1) && (respText.search("Rx.js") === -1) && (respText.search("Bacon.js") === -1) && (respText.search("rx.lite.js") === -1) && (respText.search("rx.lite.compat.js") === -1) && (respText.search("rx.all.js") === -1)) {
         shouldReactiveDebuggerRun = false;
     }
-    // Reactive inspector should not run , so load page original content
-    var html = request.responseText;
-    if (shouldReactiveDebuggerRun === true) {
-        // change to type of js tags so that js not able to execute
-        html = request.responseText
-            .replace(/type=\"text\/javascript\"/g, '')
-            .replace(/<script/g, '<script type="rx-instrument/javascript"');
-    }
-    document.open();
-    document.write(html);
-    document.close();
 };
 request.send(null);
 
@@ -57,9 +46,9 @@ if (shouldReactiveDebuggerRun === true) {
             //return setTimeout(callback, 0);
             return false;
         }
-        if (script.getAttribute('type') && script.getAttribute('type') !== 'rx-instrument/javascript') {
-            return false;
-        }
+        // if (script.getAttribute('type') && script.getAttribute('type') !== 'rx-instrument/javascript') {
+        //     return false;
+        // }
         // if script tag contain source file
         if (script.hasAttribute('src')) {
             var filename = script.getAttribute('src').replace(/^.*[\\\/]/, '');

@@ -1,10 +1,5 @@
 
 // Make a simple binding
-var label1 = document.querySelector('#label1');
-var hello = new Rx.BehaviorSubject('Hello');
-hello.subscribe(function (text) {
-    label1.textContent = text;
-});
 
 // Create simple bindings for first and last name
 var firstName1 = new Rx.BehaviorSubject('');

@@ -21,42 +21,42 @@ var currentStep = 0;
         var iidToLocation = sandbox.iidToLocation;
 
         function showLocation(iid) {
-            console.log('  Source Location iss: ' + iidToLocation(iid));
+            // console.log('  Source Location iss: ' + iidToLocation(iid));
         }
 
         this.literal = function (iid, val) {
-            console.log('creating literal operation intercepted: ' + val);
+            // console.log('creating literal operation intercepted: ' + val);
             showLocation(iid);
             return val;
         };
 
         this.invokeFunPre = function (iid, f, base, args, isConstructor) {
-            console.log('function call intercepted before invoking');
-            console.log(f);
+            // console.log('function call intercepted before invoking');
+            // console.log(f);
             // console.log(f.constructor.name);
             showLocation(iid);
         };
 
         this.invokeFun = function (iid, f, base, args, val, isConstructor) {
-            console.log('function call intercepted after invoking');
+            // console.log('function call intercepted after invoking');
             showLocation(iid);
             return val;
         };
 
         this.getField = function (iid, base, offset, val) {
-            console.log('get field operation intercepted: ' + offset);
+            // console.log('get field operation intercepted: ' + offset);
             showLocation(iid);
             return val;
         }
 
         this.read = function (iid, name, val, isGlobal) {
-            console.log('reading variable operation intercepted: ' + name);
+            // console.log('reading variable operation intercepted: ' + name);
             showLocation(iid);
             return val;
         };
 
         this.binary = function (iid, op, left, right, result_c) {
-            console.log('binary operation intercepted: ' + op);
+            // console.log('binary operation intercepted: ' + op);
             showLocation(iid);
             return result_c;
         };
@@ -66,11 +66,11 @@ var currentStep = 0;
         // this will log if any Observable being assigned to js variable
         this.write = function (iid, name, val, oldValue) {
             if(iid === -1){
-                console.log('End of file reading!');
+                // console.log('End of file reading!');
                 sendAllNodesAndEdges();
             }else{
                 var currentType = "";
-                console.log('writing variable operation intercept: ' + name);
+                // console.log('writing variable operation intercept: ' + name);
                 SourceLocationLine = '';
                 // source location
                 SourceLocation = window.iidToLocationMap[iid];
@@ -631,7 +631,7 @@ function logNodeData(id, type, method, name, value, lineNumber){
                 'nodeValue': val,
                 'sourceCodeLine': lineNumber
             }, action: "saveNode", destination: "panel"
-        });
+        }, fileReadOver);
     }
 
 

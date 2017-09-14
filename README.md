@@ -1,4 +1,4 @@
-# Chrome Reactive Inspector ![alt text](https://github.com/allprojects/chrome-reactive-inspector/blob/master/logo.png "Chrome Reactive Inspector")
+# Chrome Reactive Inspector ![alt text](https://github.com/allprojects/chrome-reactive-inspector-2/blob/master/logo.png "Chrome Reactive Inspector")
 Chrome extension to debug JavaScript Reactive Libraries like [Bacon-JS](https://baconjs.github.io/)  & [Rx-JS](https://github.com/ReactiveX/rxjs).
 
 ## Installation

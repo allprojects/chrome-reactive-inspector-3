@@ -46,6 +46,13 @@ var allEdges = [];
             rxGraphStages = [];
             historyEntries = [];
             isConfirmed = false;
+            chrome.storage.sync.get('cri_config_rec_status', function (items) {
+                if (items.cri_config_rec_status !== undefined) {
+                    if (!items.cri_config_rec_status) {
+                        configRecStatusButton.click();
+                    }
+                }
+            });
         }
 
         var currentNodeId = false;
@@ -110,7 +117,6 @@ var allEdges = [];
                 }
 
 
-                console.log(newValue);
                 if(newValue || newValue.constructor.name === 'Boolean'){
                     newValue = newValue.toString();
                     truncatedVal = newValue.substring(0, 25);

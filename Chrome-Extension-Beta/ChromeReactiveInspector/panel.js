@@ -1,4 +1,4 @@
-console.log("panel.js");
+// console.log("panel.js");
 
 $(document).ready(function() {
     $(".dropdown-toggle").dropdown();
@@ -185,8 +185,8 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
 // (function () {
     // populate
     chrome.storage.sync.get('criconfigincludes', function (items) {
-        console.log("config from storage");
-        console.log(items.criconfigincludes);
+        // console.log("config from storage");
+        // console.log(items.criconfigincludes);
         previousConfigFiles = items.criconfigincludes || [];
         configIncludeFilesField.value = $('#cri-config-includes').tokenfield('setTokens', items.criconfigincludes) || '';
     });
@@ -195,15 +195,15 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
             var recStatusFromStorage = items.cri_config_rec_status;
             configRecStatusButton.setAttribute('data-rec-status', recStatusFromStorage);
             // $(this).data("rec-status", recStatusFromStorage);
-            if (recStatusFromStorage) {
+            // if (recStatusFromStorage) {
                 configRecStatusButton.innerHTML = 'Pause Recording';
                 configRecStatusButton.classList.add('btn-info');
                 configRecStatusButton.classList.remove('btn-danger');
-            } else {
-                configRecStatusButton.innerHTML = 'Start Recording';
-                configRecStatusButton.classList.remove('btn-info');
-                configRecStatusButton.classList.add('btn-danger');
-            }
+            // } else {
+            //     configRecStatusButton.innerHTML = 'Start Recording';
+            //     configRecStatusButton.classList.remove('btn-info');
+            //     configRecStatusButton.classList.add('btn-danger');
+            // }
         }
     });
 
@@ -615,16 +615,16 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
     function storeBreakPoint(breakPointToStore) {
         allBreakPoints.push(breakPointToStore);
         // by passing an object you can define default values e.g.: []
-        chrome.storage.local.get({criReactiveBreakPoints: []}, function (result) {
+        chrome.storage.sync.get({criReactiveBreakPoints: []}, function (result) {
             // the input argument is ALWAYS an object containing the queried keys
             // so we select the key we need
             var currentBreakPoints = result.criReactiveBreakPoints;
             currentBreakPoints.push(breakPointToStore);
             // set the new array value to the same key
-            chrome.storage.local.set({criReactiveBreakPoints: currentBreakPoints}, function () {
+            chrome.storage.sync.set({criReactiveBreakPoints: currentBreakPoints}, function () {
                 // you can use strings instead of objects
                 // if you don't  want to define default values
-                chrome.storage.local.get('criReactiveBreakPoints', function (result) {
+                chrome.storage.sync.get('criReactiveBreakPoints', function (result) {
                 });
                 // refresh front end , where we list current breakpoints
                 refreshCurrentBreakPointsFrontEnd();
@@ -633,16 +633,16 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
     }
 
     function removeBreakPointByIndex(index) {
-        chrome.storage.local.get({criReactiveBreakPoints: []}, function (result) {
+        chrome.storage.sync.get({criReactiveBreakPoints: []}, function (result) {
             // the input argument is ALWAYS an object containing the queried keys
             // so we select the key we need
             var currentBreakPoints = result.criReactiveBreakPoints;
             currentBreakPoints.splice(index, 1);
             // set the new array value to the same key
-            chrome.storage.local.set({criReactiveBreakPoints: currentBreakPoints}, function () {
+            chrome.storage.sync.set({criReactiveBreakPoints: currentBreakPoints}, function () {
                 // you can use strings instead of objects
                 // if you don't  want to define default values
-                chrome.storage.local.get('criReactiveBreakPoints', function (result) {
+                chrome.storage.sync.get('criReactiveBreakPoints', function (result) {
                     //console.log(result.criReactiveBreakPoints)
                 });
                 // refresh front end , where we list current breakpoints
@@ -663,7 +663,7 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
         $('#cri-breakpoints-container').html("");
         // get current breakpoints from storage and list down
 
-        chrome.storage.local.get({criReactiveBreakPoints: []}, function (result) {
+        chrome.storage.sync.get({criReactiveBreakPoints: []}, function (result) {
             // the input argument is ALWAYS an object containing the queried keys
             // so we select the key we need
             var currentBreakPoints = result.criReactiveBreakPoints;
