@@ -373,7 +373,7 @@ if (Rx !== undefined) {
                             },
                             action: "removeEdge",
                             destination: "panel"
-                        });
+                        }, fileReadOver);
                         logEdgeData(this.id, sink.parent._parent._id, sink._operatorName);
                     }
                 }
@@ -678,7 +678,7 @@ function logEdgeData(startId, endId, name){
         },
         action: "saveEdge",
         destination: "panel"
-    });
+    }, fileReadOver);
     currentStep++;
     if (shouldBreakNow('dependencyCreated', startId, endId)) {
         debugger;
@@ -694,7 +694,7 @@ function updateNodeEdgeName(node){
         },
         action: "updateSavedEdge",
         destination: "panel"
-    });
+    }, fileReadOver);
 }
 
 /**
@@ -755,7 +755,7 @@ function sendAllNodesAndEdges(){
         },
         action: "allNodesEdges",
         destination: "panel"
-    });
+    }, fileReadOver);
 }
 
 var tempConstructorName = '';
