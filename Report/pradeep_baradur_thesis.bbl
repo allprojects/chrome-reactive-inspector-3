@@ -1033,6 +1033,26 @@
     \field{title}{{Oracle Debugger}}
   \endentry
 
+  \entry{dagred3}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=PC}{%
+         family={Pettitt},
+         familyi={P\bibinitperiod},
+         given={Chris},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{PC1}
+    \strng{fullhash}{PC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{P}
+    \field{sortinithash}{P}
+    \field{howpublished}{\url{https://github.com/cpettitt/dagre-d3}}
+    \field{note}{last accessed: 14-09-2017}
+    \field{title}{{dagre-d3}}
+  \endentry
+
   \entry{observable}{misc}{}
     \name{author}{1}{}{%
       {{hash=R}{%

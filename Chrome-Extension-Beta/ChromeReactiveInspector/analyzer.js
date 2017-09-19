@@ -10,6 +10,10 @@ var allEdges= [];
 var updatedVar = {};
 var SourceLocation;
 var SourceLocationLine;
+var previousData= {
+    nodeId: '',
+    value: ''
+};
 
 // Jalangi Analysis Start
 J$.analysis = {};
@@ -114,7 +118,12 @@ var currentStep = 0;
                         else{
                             if(name){
                                 val.destination._id = ++window.rxObsCounter;
-                                logNodeData(val.destination._id, currentType, '', name, '', SourceLocationLine);
+                                var tempVal = ''
+                                if(previousData.nodeId === val._id){
+                                    tempVal = previousData.value;
+                                    previousData = {}
+                                }
+                                logNodeData(val.destination._id, currentType, '', name, tempVal, SourceLocationLine);
                                 logEdgeData(val._id, val.destination._id, '')
                             }
                         }
@@ -175,22 +184,12 @@ if (Bacon !== undefined) {
 
         // Log observable value
         obs.onValue(function (val) {
-            /*
-             console.log(obs);
-             console.log("observer id on val is = ", obs.id);
-             console.log("val is = ", val);
-             console.log("type of val is = ", typeof val);
-             console.log("jquery type of val is = ", $.type(val));
-             console.log("constructor.name of val is = ", val.constructor.name);
-             console.log(Object.prototype.toString.call(val));
-             console.log(val instanceof jQuery.Event);
-             */
             var constructorName = '';
             if(val){
                 constructorName = val.constructor.name;
             }
 
-            logNodeData(currentObsId, '', '', '', val, '');
+            logNodeData(currentObsId, nodeType, '', '', val, '');
 
         });
 
@@ -619,6 +618,9 @@ if (Rx !== undefined) {
  */
 function logNodeData(id, type, method, name, value, lineNumber){
     if (!shouldSaveNodeValue(fileReadOver, id)) {
+        // if(checkPauseNow()){
+        //     debugger;
+        // }
         ++currentStep;
         printValues(currentStep, value, id);
         var val = getValue(value);
@@ -631,7 +633,9 @@ function logNodeData(id, type, method, name, value, lineNumber){
                 'nodeValue': val,
                 'sourceCodeLine': lineNumber
             }, action: "saveNode", destination: "panel"
-        }, fileReadOver);
+        });
+        previousData.nodeId = id;
+        previousData.value = value;
     }
 
 

@@ -74,8 +74,26 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {3.3.6}Chrome Storage}{28}{subsection.3.3.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\nonumberline List of Figures}{29}{section*.21}
+\contentsline {chapter}{\numberline {4}System Implementation}{29}{chapter.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Listings}{31}{section*.24}
+\contentsline {section}{\numberline {4.1}Implementation method}{29}{section.4.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Bibliography}{33}{section*.27}
+\contentsline {section}{\numberline {4.2}Significant Data Structures for the Communication}{30}{section.4.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.3}Communication between components}{32}{section.4.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.4}CRI User Interface}{35}{section.4.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {5}Evaluation}{37}{chapter.5}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.1}Operators}{37}{section.5.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.1.1}RxJS - Operators}{37}{subsection.5.1.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.2}RxJS - Simple Data-binding example}{38}{section.5.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\nonumberline List of Figures}{41}{section*.26}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Listings}{43}{section*.29}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Bibliography}{45}{section*.32}

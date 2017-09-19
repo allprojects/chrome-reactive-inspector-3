@@ -17,22 +17,38 @@ $("#dialog").dialog({
     buttons : {
         "Confirm" : function() {
             // setCriStatus($('#cri-rec-status'), false);
-
+            sendObjectToInspectedPage(
+                {
+                    action: "threshold",
+                    content: {
+                        "status": false
+                    }
+                }
+            );
             $(this).dialog("close");
         },
         "Cancel" : function() {
             configRecStatusButton.click();
             $(this).dialog("close");
+            sendObjectToInspectedPage(
+                {
+                    action: "threshold",
+                    content: {
+                        "status": false
+                    }
+                }
+            );
         }
     }
 });
 
 
 // Simple function to style the tooltip for the given node.
-var styleTooltip = function (id, name, type, source) {
+var styleTooltip = function (id, name, type, source, method) {
     return "<div class='custom_tooltip'><p>" + 'Id: '+  id + "</p>" +
         "<p>" + 'Name: '+  name + "</p><p>" + 'Type: '+ type + "</p>" +
-        "<p>" + 'Source: '+ source + "</p></div>";
+        "<p>" + 'Source: '+ source + "</p> "+
+        "<p>" + 'Method: '+ method + "</p></div>";
 };
 
 var g = '',
@@ -153,7 +169,7 @@ function redrawGraphToStage(stageToRedraw) {
      */
     inner.selectAll("g.node")
         .attr("title", function (v) {
-            return styleTooltip(g.node(v).nodeId, g.node(v).ref, g.node(v).type, g.node(v).sourceCodeLine)
+            return styleTooltip(g.node(v).nodeId, g.node(v).ref, g.node(v).type, g.node(v).sourceCodeLine, g.node(v).method)
         })
         .each(function (v) {
             $(this).tipsy({gravity: "w", opacity: 1, html: true});
@@ -194,16 +210,16 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
         if (items.cri_config_rec_status !== undefined) {
             var recStatusFromStorage = items.cri_config_rec_status;
             configRecStatusButton.setAttribute('data-rec-status', recStatusFromStorage);
-            // $(this).data("rec-status", recStatusFromStorage);
-            // if (recStatusFromStorage) {
+            $(this).data("rec-status", recStatusFromStorage);
+            if (recStatusFromStorage) {
                 configRecStatusButton.innerHTML = 'Pause Recording';
                 configRecStatusButton.classList.add('btn-info');
                 configRecStatusButton.classList.remove('btn-danger');
-            // } else {
-            //     configRecStatusButton.innerHTML = 'Start Recording';
-            //     configRecStatusButton.classList.remove('btn-info');
-            //     configRecStatusButton.classList.add('btn-danger');
-            // }
+            } else {
+                configRecStatusButton.innerHTML = 'Start Recording';
+                configRecStatusButton.classList.remove('btn-info');
+                configRecStatusButton.classList.add('btn-danger');
+            }
         }
     });
 
@@ -253,6 +269,14 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
         chrome.storage.sync.set({
             'cri_config_rec_status': status
         });
+        sendObjectToInspectedPage(
+            {
+                action: "cri_config_rec_status",
+                content: {
+                    "status": status
+                }
+            }
+        );
         if (status){
             // isConfirmed = false;
             element.html('Pause Recording');

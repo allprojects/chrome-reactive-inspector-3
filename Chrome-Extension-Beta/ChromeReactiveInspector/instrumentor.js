@@ -1,4 +1,4 @@
-console.log("instrumentor.js");
+//console.log("instrumentor.js");
 
 // Get file names from configuration text field displayed in panel
 var filesShouldOnlyInstrument = false;
@@ -46,9 +46,6 @@ if (shouldReactiveDebuggerRun === true) {
             //return setTimeout(callback, 0);
             return false;
         }
-        // if (script.getAttribute('type') && script.getAttribute('type') !== 'rx-instrument/javascript') {
-        //     return false;
-        // }
         // if script tag contain source file
         if (script.hasAttribute('src')) {
             var filename = script.getAttribute('src').replace(/^.*[\\\/]/, '');
