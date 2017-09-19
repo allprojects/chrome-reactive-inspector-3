@@ -259,7 +259,7 @@ if (Rx !== undefined) {
         var subject = new Rx.AnonymousSubject(this, this);
         subject = checkAndAssignId(subject);
         logNodeData(subject.id, subject.constructor.name, '', '', '', '');
-        if(subject.source && subject.source.array.length){
+        if(subject.source && subject.source.array && subject.source.array.length){
             subject.source.array.forEach(function (sub){
                 if(sub.id && !checkIfEdgeAlreadyExists(sub.id, subject.id)){
                     logEdgeData(sub.id, subject.id, operator.constructor.name)

@@ -28,14 +28,12 @@ var losslessClick = Rx.Observable.fromEvent(losslessToggle, 'click')
         return e.target.checked;
     })
 
-losslessClick.subscribe(function (checked) {
-    if (checked) {
-        mousemove.resume();
-    } else {
-        // mousemove.pause();
-    }
-})
-
-mousemove.subscribe(function(value){
-    logInput(value);
+var pauser = new Rx.Subject();
+var pausable = pauser.switchMap(function (paused) {
+    return paused ? mousemove : Rx.Observable.never();
 });
+pausable.subscribe(function (x) {
+    return logInput(x);
+});
+pauser.next(true);
+losslessClick.subscribe(pausable);
