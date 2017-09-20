@@ -281,20 +281,27 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
         isConfirmed = false
     });
 
-$('#cri-download-graph').click(function () {
+    $('#cri-download-graph').click(function () {
+        sendObjectToInspectedPage({destination: "background", action:"tabInfo"}, function (response) {
+            var currentTabUrl = response.currentTabUrl;
+            if(!currentTabUrl) {
+                console.log('Error retrieving url of current inspected tab.');
+                return;
+            }
 
-    var svgElement = document.getElementById('svg-canvas');
-    var simg = new Simg(svgElement);
-    var url = window.location.pathname;
+            var filename = currentTabUrl.substring(currentTabUrl.lastIndexOf('/') + 1);
+            if(!filename || filename === ""){
+                return;
+            }
 
-    var filename = currentTabUrl.substring(currentTabUrl.lastIndexOf('/') + 1);
-    if(filename === "")return;
-
-    // Replace the current SVG with an image version of it.
-    //simg.replace();
-    // And trigger a download of the rendered image.
-    simg.download('dependency_graph_' + filename);
-});
+            var svgElement = document.getElementById('svg-canvas');
+            var simg = new Simg(svgElement);
+            // Replace the current SVG with an image version of it.
+            // simg.replace();
+            // And trigger a download of the rendered image.
+            simg.download('dependency_graph_' + filename);
+        });
+    });
 
 
 

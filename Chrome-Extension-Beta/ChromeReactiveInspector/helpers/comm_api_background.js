@@ -22,14 +22,6 @@ chrome.runtime.onConnect.addListener(function (port) {
                 //all injected
             });
         });
-/*
-        var tabInfoMessage = {
-            "destination": "panel",
-            "mesg": "tab info message",
-            "action": "info",
-            "currentTabUrl": message.tabUrl
-        };
-        port.postMessage(tabInfoMessage);*/
     });
 
     var extensionListener = function (message, sender, sendResponse) {
@@ -40,6 +32,17 @@ chrome.runtime.onConnect.addListener(function (port) {
         if (port && message.destination === "panel") {
             // alert("background.js - destination is panel");
             port.postMessage(message);
+
+        } else if(message.destination === "background"){
+            if(message.action === "tabInfo") {
+                // retrieve url for download feature
+                chrome.tabs.get(tabId, function (tab) {
+                    sendResponse({currentTabUrl: tab.url});
+                });
+                // return true to enable async answer
+                return true;
+            }
+            return false;
         } else {
 
             if (message.tabId && message.content) {

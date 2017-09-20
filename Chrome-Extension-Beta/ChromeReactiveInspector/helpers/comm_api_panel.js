@@ -3,7 +3,6 @@
 
 // channel is created when we open dev tool and move to our panel
 var rxGraphStages = [];
-var currentTabUrl = '';
 var _node = '';
 var currentAction = "";
 var tempNode = {
@@ -47,11 +46,6 @@ var allEdges = [];
             rxGraphStages = [];
             historyEntries = [];
             isConfirmed = false;
-        }
-
-        // Info message , receiving current tab title (will be used to extract file name and used as name of download file)
-        if (message.action === "info") {
-            currentTabUrl = message.currentTabUrl;
         }
 
         var currentNodeId = false;
@@ -334,9 +328,9 @@ function saveHistory(stageId, type, value) {
 
 // This sends an object to the background page 
 // where it can be relayed to the inspected page
-function sendObjectToInspectedPage(message) {
+function sendObjectToInspectedPage(message,sendResponse) {
     message.tabId = chrome.devtools.inspectedWindow.tabId;
-    chrome.extension.sendMessage(message);
+    chrome.extension.sendMessage(message,sendResponse);
 }
 
 // Listen to change in storage data
