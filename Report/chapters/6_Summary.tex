@@ -1,1 +1,41 @@
-// Summary
+\chapter{Summary} \label{chap:Summary}
+This chapter presents a short summary of the main contributions along with the implications and results of this thesis. Additionally, various ideas for future research and new features for the developed debugger are proposed.
+
+\section{Conclusion}
+The main goal of this thesis is to improve the debugging process for reactive applications based on JavaScript reactive libraries by designing and implementing a new developer tool for debugging. Developer tools have been found to be useful in supporting programmers in software comprehension and debugging, thus improving their productivity.
+
+
+The debugging tool developed in this thesis is a result of an inspiration from Reactive Inspector, which is a debugger for reactive programs integrated with the Eclipse Scala IDE that allows debugging software in the reactive style.
+The contribution of this thesis is to implement the same technique in the web domain and thus develop an extension to Chrome DevTools to assist in the debugging process for RP.
+CRI (Chrome Reactive Inspector), a debugging tool for JavaScript reactive libraries like RxJS and Bacon.js, is designed and implemented in this thesis. The tool models reactive application code into dependency graphs, which has proved to be useful for understanding applications overall. Additionally, CRI also provides the possibility to see the history of dependency graphs which gives a clear view of data flow in the application. Moreover, reactive-programming-specific breakpoints have been developed. They allow breaking the program execution as soon as a relevant event occurs.
+
+CRI is implemented specifically for JavaScript libraries RxJS and Bacon.js as an extension to Chrome DevTools. However, the technical approach used by the developed system can easily be used to add support for other JavaScript reactive libraries as well as to build similar tools for other browsers like an extension to Firebug of Firefox browser.
+We believe that the system developed in this thesis removes one of the biggest hurdles in the increasing popularity of RP in the web domain by providing a debugging tool.  As demonstrated in chapter~\ref{chap:Evaluation}, the CRI improves and simplifies developer workflow while developing reactive web applications. In the future, the productivity improvements of Chrome Reactive Inspector should be assessed by conducting a user study.
+
+
+\section{Future Work and New Features}
+Regarding future research, it would be good to perform a user study on how the CRI helps developers to understand reactive systems and to find bugs in them. User surveys can help to get feedback on required new features and improvement to the existing features. 
+
+In chapter~\ref{chap:Implementation}, we presented two alternative implementations of CRI extension, it would be very useful to have a deep look into both alternatives, and recommend one of them for future use. As we used Jalangi framework to map reactive values to JavaScript variables. Because our extension intercepts application code and instruments it with Jalangi framework, it creates performance overhead and we do not have the original code in DevTools to refer to.  Although Jalangi instrumentation is optional in the debugging process and we can also limit instrumentation with scoping feature, it would be nice to find some other way to find reference of reactive values to JavaScript variables more elegantly. 
+
+
+CRI is one of the very first debugging tools for RP in the web domain and has much potential for future research and new features. In fact, the current implementation can be used as the foundation, on top of which new features can be built. New features that could be added to CRI include:
+
+
+\begin{itemize}
+\item It would also be worthful to implement the same extension for other browsers like Firefox and Safari.
+
+\item We already have Scoping feature, that only excludes/include JS files for instrumentation. This feature can be extended to exclude/include files or some event types from logging, this will simplify the dependency graph and help to boost performance.
+
+\item The extension could also be made more interactive by allowing developers to set or edit values of nodes at any specific time. 
+
+\item The extension could also present the performance analysis of the application under inspection. It would be very
+helpful to see how many times a node is evaluated or the amount of time these evaluations take.
+
+\item Although current implementation gives the node reference to the line number in the code but it would be helpful if the user can jump to the code in DevTools by clicking on the node in the dependency graph.	
+
+\item Currently, CRI only keeps the history of a dependency graph untill the DevTools window is opened. It would be nice to have the ability to save debugging sessions to share with other developers later.
+
+\item As presented in chapter~\ref{chap:Evaluation}, in the background of CRI extension, every intermediate stream is subscribed that updates the dependency graph. This can sometimes cause performance overhead. In the future, a useful feature could be allowing a developer to activate and deactivate logging events of nodes of dependency graph on a from an individual node level.
+
+\end{itemize}

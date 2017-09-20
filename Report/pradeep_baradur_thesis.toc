@@ -62,7 +62,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3.3}System Architecture Details}{26}{section.3.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3.1}Dependency Graph Visualisation}{26}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.1}Dependency Graph Visualization}{26}{subsection.3.3.1}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {3.3.2}Navigating through the Dependency Graph History}{27}{subsection.3.3.2}
 \defcounter {refsection}{0}\relax 
@@ -92,8 +92,8 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {5.2}RxJS - Simple Data-binding example}{38}{section.5.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\nonumberline List of Figures}{41}{section*.26}
+\contentsline {chapter}{\nonumberline List of Figures}{41}{section*.27}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Listings}{43}{section*.29}
+\contentsline {chapter}{Listings}{43}{section*.30}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Bibliography}{45}{section*.32}
+\contentsline {chapter}{Bibliography}{45}{section*.33}

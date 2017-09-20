@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.7.4)  17 SEP 2017 21:19
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.7.4)  20 SEP 2017 12:06
 entering extended mode
 **./pradeep_baradur_thesis.tex
 (pradeep_baradur_thesis.tex
@@ -2633,9 +2633,9 @@ File: ts15ch.fd 2008/06/23 Fontinst v1.927 font definitions for TS1/5ch.
 <to be read again> 
                    \relax 
 l.23 
-      [3]) [4] (chapters/2_State_of_the_Art.tex
+      [3]) (chapters/2_State_of_the_Art.tex [4]
 chapter 2.
-<images/transformational-systems.png, id=313, 402.50375pt x 41.15375pt>
+<images/transformational-systems.png, id=315, 402.50375pt x 41.15375pt>
 File: images/transformational-systems.png Graphic file (type png)
 
 <use images/transformational-systems.png>
@@ -2643,7 +2643,7 @@ Package pdftex.def Info: images/transformational-systems.png used on input line
  10.
 (pdftex.def)             Requested size: 201.25137pt x 20.57681pt.
 
-<images/reactive-systems.png, id=315, 210.7875pt x 61.22874pt>
+<images/reactive-systems.png, id=317, 210.7875pt x 61.22874pt>
 File: images/reactive-systems.png Graphic file (type png)
 
 <use images/reactive-systems.png>
@@ -2660,9 +2660,8 @@ LaTeX Font Info:    Font shape `T1/txtt/b/n' in size <10> not available
 (Font)              Font shape `T1/txtt/bx/n' tried instead on input line 26.
  [5
 
-
  <./images/transformational-systems.png> <./images/reactive-systems.png>] [6]
-<images/observer-uml.png, id=354, 1003.75pt x 414.54875pt>
+<images/observer-uml.png, id=356, 1003.75pt x 414.54875pt>
 File: images/observer-uml.png Graphic file (type png)
 
 <use images/observer-uml.png>
@@ -2732,7 +2731,7 @@ LaTeX Font Info:    Font shape `OML/mdput/m/it' will be
 LaTeX Font Info:    Font shape `OML/mdput/m/it' will be
 (Font)              scaled to size 5.92201pt on input line 173.
 
-<images/operator-marble-diagram.png, id=433, 611.28375pt x 268.00125pt>
+<images/operator-marble-diagram.png, id=435, 611.28375pt x 268.00125pt>
 File: images/operator-marble-diagram.png Graphic file (type png)
 
 <use images/operator-marble-diagram.png>
@@ -2740,10 +2739,10 @@ Package pdftex.def Info: images/operator-marble-diagram.png used on input line
 181.
 (pdftex.def)             Requested size: 305.64113pt x 134.00029pt.
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 1259) has occurred while \output is active []
 
  [12]
-<images/subjects.png, id=445, 362.35374pt x 181.67876pt>
+<images/subjects.png, id=447, 362.35374pt x 181.67876pt>
 File: images/subjects.png Graphic file (type png)
 
 <use images/subjects.png>
@@ -2757,7 +2756,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [16]
-<images/jalangi-components.png, id=517, 560.8453pt x 341.77687pt>
+<images/jalangi-components.png, id=519, 560.8453pt x 341.77687pt>
 File: images/jalangi-components.png Graphic file (type png)
 
 <use images/jalangi-components.png>
@@ -2771,52 +2770,47 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 Underfull \vbox (badness 2818) has occurred while \output is active []
 
  [17]
-<images/chrome-devtools.png, id=525, 910.15031pt x 278.54062pt>
+<images/chrome-devtools.png, id=527, 910.15031pt x 278.54062pt>
 File: images/chrome-devtools.png Graphic file (type png)
 
 <use images/chrome-devtools.png>
 Package pdftex.def Info: images/chrome-devtools.png used on input line 280.
 (pdftex.def)             Requested size: 455.07405pt x 139.26996pt.
  [18 <./images/jalangi-components.png> <./images/chrome-devtools.png>]
-<images/chrome-extension-architecture.png, id=538, 663.47874pt x 442.65375pt>
+<images/chrome-extension-architecture.png, id=540, 663.47874pt x 442.65375pt>
 File: images/chrome-extension-architecture.png Graphic file (type png)
 
 <use images/chrome-extension-architecture.png>
 Package pdftex.def Info: images/chrome-extension-architecture.png used on input
  line 303.
 (pdftex.def)             Requested size: 331.73856pt x 221.32632pt.
- [19 <./images/chrome-extension-architecture.png>] [20]) [21] [22
+ [19 <./images/chrome-extension-architecture.png>] [20]) (chapters/3_SystemDesi
+gn.tex [21] [22
 
-] (chapters/3_SystemDesign.tex
+]
 chapter 3.
-[23
-
-] <images/system-design.png, id=585, 282.05376pt x 221.82875pt>
+[23] <images/system-design.png, id=587, 282.05376pt x 221.82875pt>
 File: images/system-design.png Graphic file (type png)
 
 <use images/system-design.png>
 Package pdftex.def Info: images/system-design.png used on input line 58.
 (pdftex.def)             Requested size: 141.02652pt x 110.9141pt.
 
-<images/system-architecture.png, id=587, 387.4475pt x 322.20375pt>
+<images/system-architecture.png, id=589, 387.4475pt x 322.20375pt>
 File: images/system-architecture.png Graphic file (type png)
 
 <use images/system-architecture.png>
 Package pdftex.def Info: images/system-architecture.png used on input line 67.
 (pdftex.def)             Requested size: 193.72327pt x 161.10147pt.
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-[24 <./images/system-design.png>]
-<images/analyzer-design.png, id=596, 462.72874pt x 312.16624pt>
+ [24 <./images/system-design.png>]
+<images/analyzer-design.png, id=598, 462.72874pt x 312.16624pt>
 File: images/analyzer-design.png Graphic file (type png)
 
 <use images/analyzer-design.png>
 Package pdftex.def Info: images/analyzer-design.png used on input line 79.
 (pdftex.def)             Requested size: 231.3638pt x 156.08273pt.
  [25 <./images/system-architecture.png> <./images/analyzer-design.png>]
-<images/rxjs-dependency-graph-example.png, id=607, 337.26pt x 342.27875pt>
+<images/rxjs-dependency-graph-example.png, id=609, 337.26pt x 342.27875pt>
 File: images/rxjs-dependency-graph-example.png Graphic file (type png)
 
 <use images/rxjs-dependency-graph-example.png>
@@ -2827,7 +2821,7 @@ Package pdftex.def Info: images/rxjs-dependency-graph-example.png used on input
 tion.tex [28]
 chapter 4.
 
-<images/detailed-system-implementation.png, id=636, 984.67876pt x 532.99126pt>
+<images/detailed-system-implementation.png, id=638, 984.67876pt x 532.99126pt>
 File: images/detailed-system-implementation.png Graphic file (type png)
 
 <use images/detailed-system-implementation.png>
@@ -2837,7 +2831,7 @@ t line 10.
  [29
 
  <./images/detailed-system-implementation.png>] [30] [31] [32] [33]
-<images/cri.png, id=744, 974.89218pt x 372.64218pt>
+<images/cri.png, id=746, 974.89218pt x 372.64218pt>
 File: images/cri.png Graphic file (type png)
  <use images/cri.png>
 Package pdftex.def Info: images/cri.png used on input line 190.
@@ -2846,7 +2840,7 @@ Package pdftex.def Info: images/cri.png used on input line 190.
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [34]
-<images/language-query.png, id=785, 218.31563pt x 134.75343pt>
+<images/language-query.png, id=787, 218.31563pt x 134.75343pt>
 File: images/language-query.png Graphic file (type png)
 
 <use images/language-query.png>
@@ -2861,7 +2855,7 @@ y.png>]
 chapter 5.
 [37
 
-] <images/RxJS-operators/final.png, id=820, 531.48563pt x 48.93282pt>
+] <images/RxJS-operators/final.png, id=822, 531.48563pt x 48.93282pt>
 File: images/RxJS-operators/final.png Graphic file (type png)
 
 <use images/RxJS-operators/final.png>
@@ -2869,7 +2863,7 @@ Package pdftex.def Info: images/RxJS-operators/final.png used on input line 26.
 
 (pdftex.def)             Requested size: 372.0374pt x 34.25272pt.
 
-<images/RxJS-operators/steps-all.png, id=823, 737.00343pt x 319.1925pt>
+<images/RxJS-operators/steps-all.png, id=825, 737.00343pt x 319.1925pt>
 File: images/RxJS-operators/steps-all.png Graphic file (type png)
 
 <use images/RxJS-operators/steps-all.png>
@@ -2882,9 +2876,27 @@ Overfull \hbox (17.97563pt too wide) in paragraph at lines 35--36
  []
 
 [38 <./images/RxJS-operators/final.png> <./images/RxJS-operators/steps-all.png>
-]) [39] [40
+]
+<images/simple-data-binding/simple_db_UI.png, id=848, 239.39438pt x 188.20313pt
+>
+File: images/simple-data-binding/simple_db_UI.png Graphic file (type png)
+ <use images/simple-data-binding/simple_db_UI.png>
+Package pdftex.def Info: images/simple-data-binding/simple_db_UI.png used on in
+put line 74.
+(pdftex.def)             Requested size: 199.16626pt x 156.579pt.
 
-] (pradeep_baradur_thesis.lof)
+<images/simple-data-binding/sd-dg.png, id=849, 286.82156pt x 218.31563pt>
+File: images/simple-data-binding/sd-dg.png Graphic file (type png)
+
+<use images/simple-data-binding/sd-dg.png>
+Package pdftex.def Info: images/simple-data-binding/sd-dg.png used on input lin
+e 76.
+(pdftex.def)             Requested size: 199.16626pt x 151.60065pt.
+) [39 <./images/simple-data-binding/simple_db_UI.png> <./images/simple-data-bin
+ding/sd-dg.png>] [40
+
+]
+(pradeep_baradur_thesis.lof)
 \tf@lof=\write8
 \openout8 = `pradeep_baradur_thesis.lof'.
 
@@ -2926,17 +2938,17 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 49.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 49.
 Package rerunfilecheck Info: File `pradeep_baradur_thesis.out' has not changed.
 
-(rerunfilecheck)             Checksum: BF60940D0C2940C3B158BE62BD6BFB16;3236.
+(rerunfilecheck)             Checksum: 5401B88223028D881E3B345E7A78AC34;3236.
 Package logreq Info: Writing requests to 'pradeep_baradur_thesis.run.xml'.
 \openout1 = `pradeep_baradur_thesis.run.xml'.
 
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 49.
  ) 
 Here is how much of TeX's memory you used:
- 30504 strings out of 493323
- 519228 string characters out of 3139067
+ 30528 strings out of 493323
+ 519869 string characters out of 3139067
  1212080 words of memory out of 3000000
- 33039 multiletter control sequences out of 15000+200000
+ 33056 multiletter control sequences out of 15000+200000
  140133 words of font info for 103 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  70i,13n,108p,8868b,1963s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -2964,9 +2976,9 @@ tex/latex/%PROGRAMFILES%/tuddesign/fonts/type1/softmake/frontpage/5fpm8a.pfb><C
 :/Users/prade/Documents/latex/latex/%PROGRAMFILES%/tuddesign/fonts/type1/softma
 ke/frontpage/5fpr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/txfonts
 /t1xbtt.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/txfonts/t1xtt.pfb>
-Output written on pradeep_baradur_thesis.pdf (53 pages, 666292 bytes).
+Output written on pradeep_baradur_thesis.pdf (53 pages, 683946 bytes).
 PDF statistics:
- 1126 PDF objects out of 1200 (max. 8388607)
- 389 named destinations out of 1000 (max. 500000)
- 479 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1141 PDF objects out of 1200 (max. 8388607)
+ 393 named destinations out of 1000 (max. 500000)
+ 489 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -41,3 +41,9 @@
 \contentsline {figure}{\numberline {5.1}{\ignorespaces Dependency graph - RxJS Operators example\relax }}{38}{figure.caption.22}
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {5.2}{\ignorespaces Dependency graph evolution - RxJS Operators example\relax }}{38}{figure.caption.23}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Simple Data-binding example - RxJS\relax }}{39}{figure.caption.24}
+\defcounter {refsection}{0}\relax 
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {UI}}}{39}{subfigure.3.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Dependency graph}}}{39}{subfigure.3.2}

@@ -17,6 +17,26 @@
 \endgroup
 
 \sortlist[entry]{nty/global/}
+  \entry{cri}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=AW}{%
+         family={Abbas},
+         familyi={A\bibinitperiod},
+         given={Waqas},
+         giveni={W\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{AW1}
+    \strng{fullhash}{AW1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+  \field{howpublished}{\url{https://github.com/allprojects/chrome-reactive-inspector}}
+    \field{note}{last accessed: 23-08-2017}
+    \field{title}{{Chrome Reactive Inspector}}
+  \endentry
+
   \entry{callbackHell}{misc}{}
     \name{author}{1}{}{%
       {{hash=AV}{%

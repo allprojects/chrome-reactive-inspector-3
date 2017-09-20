@@ -1,5 +1,5 @@
 \chapter{System Implementation} \label{chap:Implementation}
-This chapter it dedicated to the implementation details of the debugger. First section describes the implementation method used in our chrome extension. In next section, we explain the data structures that captures all the data. In third section, we explain how communication happens between different components of the extension. Finally, we discuss different components of the extension with the help of graphical user interface.
+This chapter is dedicated to the implementation details of the debugger. The first section describes the implementation method used in our chrome extension. In next section, we explain the data structures that capture all the data. In the third section, we explain how communication happens between different components of the extension. Finally, we discuss different components of the extension with the help of graphical user interface.
 
 \section{Implementation method}
 This section provides in-depth knowledge of how we implemented chrome reactive inspector(CRI).
@@ -11,7 +11,7 @@ This section provides in-depth knowledge of how we implemented chrome reactive i
 	\caption{Detailed System Components}
 	\label{fig:detailed-system-implementation}
 \end{figure}
-As we explained earlier in the section \ref{section:extending_devtools}, current web page script and content script from extension have access to DOM. Figure~\ref{fig:detailed-system-implementation} depicts detailed system design. First user has to load a web page which contains reactive javascript code. Then open DevTools and select a panel \textit{Reactive Inspector}. The moment user selects the panel, we are then injecting two javascript files on-the-fly to our extension as shown in below code.
+As we explained earlier in the section \ref{section:extending_devtools}, current web page script and content script from extension have access to DOM. Figure~\ref{fig:detailed-system-implementation} depicts detailed system design. First, the user has to load a web page which contains reactive javascript code. Then open DevTools and select a panel \textit{Reactive Inspector}. The moment user selects the panel, we are then injecting two javascript files on-the-fly to our extension as shown in below code.
 
 
 \begin{lstlisting}[language=JavaScript, caption=Injecting Javascript Files, label={lst:inject-javascript-files}]
@@ -24,7 +24,7 @@ chrome.tabs.executeScript(tabId, {file: "analyzer.js"}, function(){
 
 In the above code, file ``instrumentor.js'' works as a \textit{Interceptor}. Interceptor is responsible for loading all the client side javascript files sequentially and instrument them if required. Jalangi framework will help instrument all the javascript code. Then we evaluate instrumented code using \textit{eval()} function. The instrumented code invokes Jalangi API functions when it encounters operations such as reading a variable, reading a function etc. 
 
-We override Jalangi API to catch all the operations performed by Jalangi framework. Analyzer component is responsible for further actions. It comprises of both overridden Jalangi API methods and catching all the events emitted by reactive libraries. Analyzer, with the help of Jalangi API, maps the reactive data streams to the respective variable names mentioned in the client code. Analyzer helps to catch the reactive library specific events such as creating an observable, subscriber subscribing to an observable, application of operators on observable, values emitted by observables etc. After catch the events, it analyzes them and then forward the processed data to content-script. Content script then forwards it to background page and then finally it is forwarded to panel in which an end user can see the generated dependency graph. All communication between content scripts, background page and panel are done via Message passing. Messages received by panel can be of type \textit{saveNode}, \textit{saveEdge} or \textit{sendAllNodesAndEdges}. In \textit{saveNode} message, we pass the node details such as nodeId, value, sourceCodeLine etc. and in \textit{saveEdge}, we specify between which nodes there should be a directed graph drawn in the graph. For each message received by panel, the current state of the graph is saved for further computations such as traveling back and forth in history graph, history queries etc. Finally, user can see the generated dependency graph, options to search nodes, find dependencies and add breakpoints. 
+We override Jalangi API to catch all the operations performed by Jalangi framework. Analyzer component is responsible for further actions. It comprises of both overridden Jalangi API methods and catching all the events emitted by reactive libraries. Analyzer, with the help of Jalangi API, maps the reactive data streams to the respective variable names mentioned in the client code. Analyzer helps to catch the reactive library specific events such as creating an observable, subscriber subscribing to an observable, application of operators on observable, values emitted by observables etc. After catching the events, it analyzes them and then forwards the processed data to content-script. Content script then forwards it to background page and then finally it is forwarded to a panel in which an end user can see the generated dependency graph. All communication between content scripts, background page and panel are done via Message passing. Messages received by panel can be of type \textit{saveNode}, \textit{saveEdge} or \textit{sendAllNodesAndEdges}. In \textit{saveNode} message, we pass the node details such as nodeId, value, sourceCodeLine etc. and in \textit{saveEdge}, we specify between which nodes there should be a directed graph drawn in the graph. For each message received by the panel, the current state of the graph is saved for further computations such as traveling back and forth in history graph, history queries etc. Finally, a user can see the generated dependency graph, options to search nodes, find dependencies and add breakpoints. 
 
 \section{Significant Data Structures for the Communication}
 The three important data structures commonly used by the CRI are listed below:
@@ -102,7 +102,7 @@ historyEntry = {
 \end{lstlisting}
 \leavevmode
 \section{Communication between components}
-Building block of components working together is communication. We know that content scripts and other scripts of an extension run in different context of the plugin. In CRI, content scripts includes interceptor and analyzer. These needs a way to communicate with panel where dependency graph is displayed and user can interact with it. Also for every new message, dependency graph should be updated. Chrome provides two ways of communication APIs.  One way is using simple API for one-time requests\footnote{\url{https://developer.chrome.com/apps/messaging\#simple} , last accessed 13-09-2017} and another is using complex API that allows long-lived connections\footnote{\url{https://developer.chrome.com/apps/messaging\#connect} , last accessed 13-09-2017}. Since content scripts and background page needs to communicate continuously, we use long-lived connections. When user opens DevTools, background script opens up a unique port for the panel named \textit{Reactive-Inspector} and adds message listeners to receive messages from background script. The code mentioned in listing \ref{lst:panel-background} is executed when an user opens DevTools. Here, it is creating a panel and creating a channel to post a message to background page.
+The building block of components working together is communication. We know that content scripts and other scripts of an extension run in the different context of the plugin. In CRI, content scripts include interceptor and analyzer. These need a way to communicate with the panel where dependency graph is displayed and a user can interact with it. Also for every new message, dependency graph should be updated. Chrome provides two ways of communication APIs.  One way is using simple API for one-time requests\footnote{\url{https://developer.chrome.com/apps/messaging\#simple} , last accessed 13-09-2017} and another is using complex API that allows long-lived connections\footnote{\url{https://developer.chrome.com/apps/messaging\#connect} , last accessed 13-09-2017}. Since content scripts and background page needs to communicate continuously, we use long-lived connections. When a user opens DevTools, background script opens up a unique port for the panel named \textit{Reactive-Inspector} and adds message listeners to receive messages from background script. The code mentioned in listing \ref{lst:panel-background} is executed when an user opens DevTools. Here, it is creating a panel and creating a channel to post a message to the background page.
 
 \begin{lstlisting}[language=JavaScript, caption=Creating a channel for communication between Panel and Background pages, label={lst:panel-background}]
 //Creates a panel with name "Reactive-Inspector" in DevTools
@@ -118,7 +118,7 @@ chrome.devtools.panels.create("Reactive-Inspector", "reactive-debugger.png", "pa
 
 \end{lstlisting}
 
-Similarly, there should be another channel for background script to communicate with panel script. Listing \ref{lst:background-panel} contains the relevant code snippet. Here, we setup a channel to receive messages sent to background script as shown in line 46. When DevTools with CRI is opened in two different browser tabs, it is hard to differentiate panels by panel name because both panels have same name. Hence to differentiate between panels of different tabs, we need to store port numbers of both panel to avoid cross panel communication. 
+Similarly, there should be another channel for background script to communicate with panel script. Listing \ref{lst:background-panel} contains the relevant code snippet. Here, we set up a channel to receive messages sent to background script as shown in line 46. When DevTools with CRI is opened in two different browser tabs, it is hard to differentiate panels by panel name because both panels have the same name. Hence to differentiate between panels of different tabs, we need to store port numbers of both panels to avoid cross panel communication. 
 \begin{lstlisting}[language=JavaScript, caption=Channel for background script to communicate with Panel script, label={lst:background-panel}]
 // holds objects of key-value pairs of tabid and port number
 var tabPorts = {};
@@ -196,20 +196,20 @@ The user interface(UI) of the CRI is a panel which can be seen when user opens c
 \\
 \textbf{Part 1 - Scoping Feature}
 \\
-This view is responsible for \textit{Scoping} feature. User can mention which files to be included for instrumenting by Jalangi framework. For example, if user enter file named 'index.js', only this file will be instrumented and other files are excluded. Its an optional feature. If the field is empty, then Jalangi instruments all the client-side javascript files. 
+This view is responsible for \textit{Scoping} feature. The user can mention which files to be included for instrumenting by Jalangi framework. For example, if a user enters file named 'index.js', only this file will be instrumented and other files are excluded. It is an optional feature. If the field is empty, then Jalangi instruments all the client-side javascript files. 
 
 \leavevmode
 \\
 \textbf{Part 2 - Node details}
 \\
-This view is responsible for 3 features: search node by name, find dependents of the given node and find dependencies of a node. User can select which feature he/she wants to use and click on Find button. 
+This view is responsible for 3 features: search node by name, find dependents of the given node and find dependencies of a node. The user can select which feature he/she wants to use and click on Find button. 
 The results will be shown in the dependency graph. 
 
 \leavevmode
 \\
 \textbf{Part 3 - History Queries}
 \\
-User can use this part to query all the history entries. We use query language for querying the history. When expanded, the views looks as shown in the Figure \ref{fig:language-query}. User can select any one of the options and edit it as per the requirement. For instance, to query creation of node named 'x', user selects an option \textit{NodeCreated} and edit it to \textit{NodeCreated[x]}.
+The user can use this part to query all the history entries. We use query language for querying the history. When expanded, the views looks as shown in the Figure \ref{fig:language-query}. The user can select any one of the options and edit it as per the requirement. For instance, to query creation of node named 'x', user selects an option \textit{NodeCreated} and edit it to \textit{NodeCreated[x]}.
 \begin{figure}[!h]
 	\centering
 	\includegraphics[scale=1,trim=0 0 0 0]{images/language-query.png}
@@ -221,16 +221,16 @@ User can use this part to query all the history entries. We use query language f
 \\
 \textbf{Part 4 - Reactive Breakpoints}
 \\
-This feature is responsible for adding or removing reactive breakpoints. This looks similar to figure \ref{fig:language-query} but we use nodeId instead of nodeName for queries. User selects an option and click on Add button to add a new breakpoint. List of all the current breakpoints is displayed right side of the button. User can remove breakpoints if they are not required anymore.
+This feature is responsible for adding or removing reactive breakpoints. This looks similar to figure \ref{fig:language-query} but we use nodeId instead of nodeName for queries. The user selects an option and clicks on Add button to add a new breakpoint. List of all the current breakpoints is displayed right side of the button. The user can remove breakpoints if they are not required anymore.
 
 \leavevmode
 \\
 \textbf{Part 5 - History Navigator}
 \\
-To navigate to and forth between history of the dependency graph evolution, we have provided a slider. User can either slide the slider or use the buttons < or > to navigate. 
+To navigate to and forth between the history of the dependency graph evolution, we have provided a slider. A user can either slide the slider or use the buttons < or > to navigate. 
 
 \leavevmode
 \\
 \textbf{Part 6 - Dependency Graph}
 \\
-This view is responsible to display current state of dependency graph. Dependency graph updates as soon as there is a new event. Each node in the graph provide node details such as nodeId, name, current value and source code line number. Additionally, user can mouse hover on each node for more details on particular node. Dependency graph is visualized with the help of open source javascript library called dagre-d3\cite{dagred3}. By default, library provides zoom in and zoom out functionality for the graph. We have also added a new feature to print node details to console when user clicks a node. 
+This view is responsible to display the current state of a dependency graph. Dependency graph updates as soon as there is a new event. Each node in the graph provides node details such as nodeId, name, current value and source code line number. Additionally, a user can mouse hover on each node for more details on a particular node. The dependency graph is visualized with the help of open source javascript library called dagre-d3\cite{dagred3}. By default, the library provides zoom in and zoom out functionality for the graph. We have also added a new feature to print node details to console when a user clicks a node. 

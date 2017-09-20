@@ -1,0 +1,58 @@
+\chapter{Introduction} \label{chap:Introduction}
+In the last two decades, there has been increasing interest in web applications as compared to traditional desktop applications. JavaScript has been predominately used to make web applications dynamic \cite{6068340}. Additionally, today's software applications have become highly interactive with their environment. However, reactive systems can be developed and maintained more efficiently with reactive programming (RP) as compared to imperative programming. Indeed reactive languages like FrTime \cite{Cooper2006} and Flapjax \cite{Meyerovich:2009:FPL:1639949.1640091} have gotten high recognition.
+Recently, JavaScript has emerged as a general purpose programming language and has become popular for server-side programming with platforms such as Node.js. To benefit from RP techniques, the JavaScript community produced libraries like RxJs and Bacon.js, these have made it possible to do RP with JavaScript.
+Unfortunately, most reactive languages and libraries need proper tool support for better understanding and debugging process. 
+Systems based on RP contain very abstract code that make it difficult to understand and debug.
+
+This thesis is another step towards usable debugging support for RP in general and for JavaScript-based reactive libraries more specifically.
+This chapter introduces the topic with some background knowledge, which will be later explained in more detail in the second chapter. The second section addresses the motivation behind the thesis and why better debugging support for JavaScript-based reactive libraries is necessary. The third section presents the outcomes of this thesis and the last section outlines the structure of this thesis.
+\section{Background}
+
+Transformational systems have no interaction with their environment, whereas reactive systems react to environmental changes and to the current input by updating their internal state. A reactive system maintains an ongoing interaction with its environment, activated by receiving input events from the environment and producing output events in response \cite{674156}. Web applications reacting to user input originating from a mouse or keyboard by enabling or disabling the input component is a classical example of the reactive system. 
+Most of the today's software applications are reactive systems because they continuously interact with the systems in its surroundings and react to any change in real time. According to the document ``reactive manifesto''\cite{reactiveManifesto}, responsiveness, scalability, resilience and being event-driven are design properties that all reactive systems should have. 
+Before the birth of RP paradigm, reactive systems were implemented with observer pattern, event-driven programming (EDP) or aspect-oriented programming (AOP).
+The RP paradigm aims to simplify the development of reactive systems.
+Concepts of RP are implemented either as an extension to the already existing language or in the form of a library. Examples of reactive languages are FrTime \cite{Cooper2006}, Flapjax\cite{Meyerovich:2009:FPL:1639949.1640091}, Scala.React~\cite{EPFL-REPORT-176887} and RESCALA~\cite{Salvaneschi:2014:RBO:2577080.2577083}. JavaScript libraries like RxJS\cite{reactivex} and Bacon.js~\cite{BaconJs} introduced RP to the web domain. 
+
+In essence, the RP paradigm provides language-level abstractions for modelling and supports time-changing values. 
+Designs based on RP are declarative where developers define dependencies among different components.
+Propagation of changes among dependent components is implicit. RP provides operators to compose event streams. With RP, computation is driven by events flowing into the system.
+Designs based on RP requires less boiler code and is less error-prone because propagation of updates and dependencies are managed by the language itself. Further advantages of RP over other paradigms have often been discussed \cite{Cooper2006,Meyerovich:2009:FPL:1639949.1640091,EPFL-REPORT-176887,Bainomugisha:2013:SRP:2501654.2501666}. 
+Empirical evaluation proves that the program comprehensibility
+is improved by RP \cite{7827078}.
+\section{Motivation}
+
+Program comprehension is the most important and time-consuming process in software development. Developers spend 50\% to 80\% of their time trying to understand code \cite{6032450,6772122}. Previous research has confirmed that developer tools can considerably improve program comprehension \cite{1421034} and thus reduce overall development time. Debugging is an important aspect of programming and debugging tools can help developers find errors in code as well as assist in comprehention. 
+Reactive programming is a relatively new programming paradigm and is different from traditional imperative programming. 
+Unfortunately, there is no debugging tool support currently available.
+Traditional debuggers are not useful for debugging reactive applications because the code based on RP is very abstract and changes are propagated to dependent components by the language itself.
+This work is inspired by ``RP Debugging'' \cite{Salvaneschi:2016:DRP:2884781.2884815}, a methodology for effectively debugging reactive programs proposed by Guido Salvaneschi and Mira Mezini at the Technical University of Darmstadt, Germany. The proposed debugging model covers some advanced debugging techniques like omniscient debugging, which allows one to look at the program
+state at any arbitrary moment. Their model uses dependency graphs as a primary runtime representation of the program during the debugging process, where each variable is a node and each dependency is represented by a directed edge. We found ``RP Debugging'' very useful and therefore applied their proposed debugging model to the web domain resulting in a debugging tool for web applications based on JavaScript reactive libraries. 
+
+\section{Our Contribution}
+
+In the last two sections, we introduced reactive systems, their implementation in web domain via reactive libraries and the possibility to model them with dependency graphs and omniscient debugging. We also found that tool support for better understanding and debugging purpose is missing.
+The goal of this thesis is to develop an interactive debugger which can visualize the dependency graphs of reactive systems based on JavaScript reactive libraries and provide advanced debugging features like back in time debugging and reactive breakpoints. This thesis focuses on RxJS and bacon.js.  Both are reactive libraries helping RP with JavaScript.
+
+
+As a summary, this thesis makes the following contributions:
+
+\begin{itemize}
+
+	\item Model reactive applications into dependency graphs.
+	\item Save history of dependency graph during the execution of a program.
+	\item Ability to download dependency graph at any point in time.
+	\item Search for nodes in dependency graph by node name.
+	\item Navigate through the history of dependency graph with the help of a slider.
+	\item Navigate history with the help of a query language.
+	\item Reactive breakpoints to provide the facility to halt a program execution directly when a specific event occurrs during execution.
+	\item Evaluation of implemented system with sample applications from the internet.
+	
+
+\end{itemize}
+
+
+\section{Outline}
+
+After providing a short introduction to the topic with the motivation and goals behind this work, the thesis is further structured as follows: 
+Chapter 2 includes more information about the implementation of reactive systems without RP. The basic concept of RP in general and RP with JavaScript is discussed in more detail. The reason why traditional debuggers are not suitable for debugging reactive code is also explained in the second chapter. Next, we present a JavaScript analysis framework called Jalangi. The process of extending Chrome DevTools along with related work is presented at the end of the second chapter. The third chapter illustrates the system on a high-level and system requirements are presented in more detail. This chapter also includes the design options with the decisions that have been made. Chapter 4 explains the system implementation in detail. Two alternative implementations are shown. The GUI of the system and its usage is also presented. Chapter 5 evaluates the developed system with the help of already existing reactive applications from the internet and illustrates all features of the implemented system with sample applications. Chapter 6 finally concludes this thesis and presents possible ideas for future work.
