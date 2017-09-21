@@ -1390,7 +1390,7 @@ testSubjectTwo.next({ favoriteLanguage: 'JavaScript' }); // {name: 'Joe', age: 3
  * Status Done
  */
 
-// /*
+/*
 
 var source = Rx.Observable.timer(1000);
 //log side effect, emit result
@@ -1423,7 +1423,7 @@ var subscribeThree = sharedExample.subscribe(function (val) {
 var subscribeFour = sharedExample.subscribe(function (val) {
     return console.log(val);
 });
- // */
+ */
 
 
 /**

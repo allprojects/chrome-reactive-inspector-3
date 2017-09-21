@@ -46,6 +46,13 @@ var allEdges = [];
             rxGraphStages = [];
             historyEntries = [];
             isConfirmed = false;
+            chrome.storage.sync.get('cri_config_rec_status', function (items) {
+                if (items.cri_config_rec_status !== undefined) {
+                    if (!items.cri_config_rec_status) {
+                        configRecStatusButton.click();
+                    }
+                }
+            });
         }
 
         var currentNodeId = false;
@@ -110,7 +117,6 @@ var allEdges = [];
                 }
 
 
-                console.log(newValue);
                 if(newValue || newValue.constructor.name === 'Boolean'){
                     newValue = newValue.toString();
                     truncatedVal = newValue.substring(0, 25);
@@ -128,7 +134,7 @@ var allEdges = [];
                     ref: newRef,
                     value: newValue,
                     type: newType,
-                    method: newMethod,
+                    method: newMethod || '-',
                     sourceCodeLine: newSourceCodeLine,
                     nodeId: message.content.nodeId,
                     class: currentClasses
@@ -161,7 +167,7 @@ var allEdges = [];
                     ref: message.content.nodeRef,
                     value: message.content.nodeValue,
                     type: message.content.nodeType,
-                    method: message.content.nodeMethod,
+                    method: message.content.nodeMethod || '-',
                     nodeId: message.content.nodeId,
                     sourceCodeLine: message.content.sourceCodeLine,
                     class: currentClasses
@@ -177,7 +183,7 @@ var allEdges = [];
 
             inner.selectAll("g.node")
                 .attr("title", function (v) {
-                    return styleTooltip(g.node(v).nodeId, g.node(v).ref, g.node(v).type, g.node(v).sourceCodeLine)
+                    return styleTooltip(g.node(v).nodeId, g.node(v).ref, g.node(v).type, g.node(v).sourceCodeLine, g.node(v).method)
                 })
                 .each(function (v) {
                     $(this).tipsy({gravity: "w", opacity: 1, html: true});
@@ -294,7 +300,14 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
 
     if(threshold && rxSlider.slider('value') > +threshold && !isConfirmed){
         // setCriStatus($('#cri-rec-status'), 1);
-
+        // sendObjectToInspectedPage(
+        //     {
+        //         action: "threshold",
+        //         content: {
+        //             "status": true
+        //         }
+        //     }
+        // );
         // configRecStatusButton.click();
         $("#dialog").dialog("open");
         isConfirmed = true

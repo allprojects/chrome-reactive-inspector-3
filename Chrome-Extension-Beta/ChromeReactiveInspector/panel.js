@@ -1,4 +1,4 @@
-console.log("panel.js");
+// console.log("panel.js");
 
 $(document).ready(function() {
     $(".dropdown-toggle").dropdown();
@@ -17,22 +17,38 @@ $("#dialog").dialog({
     buttons : {
         "Confirm" : function() {
             // setCriStatus($('#cri-rec-status'), false);
-
+            sendObjectToInspectedPage(
+                {
+                    action: "threshold",
+                    content: {
+                        "status": false
+                    }
+                }
+            );
             $(this).dialog("close");
         },
         "Cancel" : function() {
             configRecStatusButton.click();
             $(this).dialog("close");
+            sendObjectToInspectedPage(
+                {
+                    action: "threshold",
+                    content: {
+                        "status": false
+                    }
+                }
+            );
         }
     }
 });
 
 
 // Simple function to style the tooltip for the given node.
-var styleTooltip = function (id, name, type, source) {
+var styleTooltip = function (id, name, type, source, method) {
     return "<div class='custom_tooltip'><p>" + 'Id: '+  id + "</p>" +
         "<p>" + 'Name: '+  name + "</p><p>" + 'Type: '+ type + "</p>" +
-        "<p>" + 'Source Code Line: '+ source + "</p></div>";
+        "<p>" + 'Source Code Line: '+ source + "</p> "+
+        "<p>" + 'Method: '+ method + "</p></div>";
 };
 
 var g = '',
@@ -153,7 +169,7 @@ function redrawGraphToStage(stageToRedraw) {
      */
     inner.selectAll("g.node")
         .attr("title", function (v) {
-            return styleTooltip(g.node(v).nodeId, g.node(v).ref, g.node(v).type, g.node(v).sourceCodeLine)
+            return styleTooltip(g.node(v).nodeId, g.node(v).ref, g.node(v).type, g.node(v).sourceCodeLine, g.node(v).method)
         })
         .each(function (v) {
             $(this).tipsy({gravity: "w", opacity: 1, html: true});
@@ -185,8 +201,8 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
 // (function () {
     // populate
     chrome.storage.sync.get('criconfigincludes', function (items) {
-        console.log("config from storage");
-        console.log(items.criconfigincludes);
+        // console.log("config from storage");
+        // console.log(items.criconfigincludes);
         previousConfigFiles = items.criconfigincludes || [];
         configIncludeFilesField.value = $('#cri-config-includes').tokenfield('setTokens', items.criconfigincludes) || '';
     });
@@ -194,7 +210,7 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
         if (items.cri_config_rec_status !== undefined) {
             var recStatusFromStorage = items.cri_config_rec_status;
             configRecStatusButton.setAttribute('data-rec-status', recStatusFromStorage);
-            // $(this).data("rec-status", recStatusFromStorage);
+            $(this).data("rec-status", recStatusFromStorage);
             if (recStatusFromStorage) {
                 configRecStatusButton.innerHTML = 'Pause Recording';
                 configRecStatusButton.classList.add('btn-info');
@@ -253,6 +269,14 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
         chrome.storage.sync.set({
             'cri_config_rec_status': status
         });
+        sendObjectToInspectedPage(
+            {
+                action: "cri_config_rec_status",
+                content: {
+                    "status": status
+                }
+            }
+        );
         if (status){
             // isConfirmed = false;
             element.html('Pause Recording');
@@ -637,16 +661,16 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
     function storeBreakPoint(breakPointToStore) {
         allBreakPoints.push(breakPointToStore);
         // by passing an object you can define default values e.g.: []
-        chrome.storage.local.get({criReactiveBreakPoints: []}, function (result) {
+        chrome.storage.sync.get({criReactiveBreakPoints: []}, function (result) {
             // the input argument is ALWAYS an object containing the queried keys
             // so we select the key we need
             var currentBreakPoints = result.criReactiveBreakPoints;
             currentBreakPoints.push(breakPointToStore);
             // set the new array value to the same key
-            chrome.storage.local.set({criReactiveBreakPoints: currentBreakPoints}, function () {
+            chrome.storage.sync.set({criReactiveBreakPoints: currentBreakPoints}, function () {
                 // you can use strings instead of objects
                 // if you don't  want to define default values
-                chrome.storage.local.get('criReactiveBreakPoints', function (result) {
+                chrome.storage.sync.get('criReactiveBreakPoints', function (result) {
                 });
                 // refresh front end , where we list current breakpoints
                 refreshCurrentBreakPointsFrontEnd();
@@ -655,16 +679,16 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
     }
 
     function removeBreakPointByIndex(index) {
-        chrome.storage.local.get({criReactiveBreakPoints: []}, function (result) {
+        chrome.storage.sync.get({criReactiveBreakPoints: []}, function (result) {
             // the input argument is ALWAYS an object containing the queried keys
             // so we select the key we need
             var currentBreakPoints = result.criReactiveBreakPoints;
             currentBreakPoints.splice(index, 1);
             // set the new array value to the same key
-            chrome.storage.local.set({criReactiveBreakPoints: currentBreakPoints}, function () {
+            chrome.storage.sync.set({criReactiveBreakPoints: currentBreakPoints}, function () {
                 // you can use strings instead of objects
                 // if you don't  want to define default values
-                chrome.storage.local.get('criReactiveBreakPoints', function (result) {
+                chrome.storage.sync.get('criReactiveBreakPoints', function (result) {
                     //console.log(result.criReactiveBreakPoints)
                 });
                 // refresh front end , where we list current breakpoints
@@ -685,7 +709,7 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
         $('#cri-breakpoints-container').html("");
         // get current breakpoints from storage and list down
 
-        chrome.storage.local.get({criReactiveBreakPoints: []}, function (result) {
+        chrome.storage.sync.get({criReactiveBreakPoints: []}, function (result) {
             // the input argument is ALWAYS an object containing the queried keys
             // so we select the key we need
             var currentBreakPoints = result.criReactiveBreakPoints;

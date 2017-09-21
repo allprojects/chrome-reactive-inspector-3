@@ -10,6 +10,10 @@ var allEdges = [];
 var updatedVar = {};
 var SourceLocation;
 var SourceLocationLine;
+var previousData= {
+    nodeId: '',
+    value: ''
+};
 
 // Jalangi Analysis Start
 J$.analysis = {};
@@ -21,42 +25,42 @@ var currentStep = 0;
         var iidToLocation = sandbox.iidToLocation;
 
         function showLocation(iid) {
-            console.log('  Source Location iss: ' + iidToLocation(iid));
+            // console.log('  Source Location iss: ' + iidToLocation(iid));
         }
 
         this.literal = function (iid, val) {
-            console.log('creating literal operation intercepted: ' + val);
+            // console.log('creating literal operation intercepted: ' + val);
             showLocation(iid);
             return val;
         };
 
         this.invokeFunPre = function (iid, f, base, args, isConstructor) {
-            console.log('function call intercepted before invoking');
-            console.log(f);
+            // console.log('function call intercepted before invoking');
+            // console.log(f);
             // console.log(f.constructor.name);
             showLocation(iid);
         };
 
         this.invokeFun = function (iid, f, base, args, val, isConstructor) {
-            console.log('function call intercepted after invoking');
+            // console.log('function call intercepted after invoking');
             showLocation(iid);
             return val;
         };
 
         this.getField = function (iid, base, offset, val) {
-            console.log('get field operation intercepted: ' + offset);
+            // console.log('get field operation intercepted: ' + offset);
             showLocation(iid);
             return val;
-        }
+        };
 
         this.read = function (iid, name, val, isGlobal) {
-            console.log('reading variable operation intercepted: ' + name);
+            // console.log('reading variable operation intercepted: ' + name);
             showLocation(iid);
             return val;
         };
 
         this.binary = function (iid, op, left, right, result_c) {
-            console.log('binary operation intercepted: ' + op);
+            // console.log('binary operation intercepted: ' + op);
             showLocation(iid);
             return result_c;
         };
@@ -65,12 +69,12 @@ var currentStep = 0;
         // if it is so then send message to dev tool to record variable name etc..
         // this will log if any Observable being assigned to js variable
         this.write = function (iid, name, val, oldValue) {
-            if (iid === -1) {
-                console.log('End of file reading!');
+            if(iid === -1){
+                // console.log('End of file reading!');
                 sendAllNodesAndEdges();
             } else {
                 var currentType = "";
-                console.log('writing variable operation intercept: ' + name);
+                // console.log('writing variable operation intercept: ' + name);
                 SourceLocationLine = '';
                 // source location
                 SourceLocation = window.iidToLocationMap[iid];
@@ -124,7 +128,12 @@ var currentStep = 0;
                         else {
                             if (name) {
                                 val.destination._id = ++window.rxObsCounter;
-                                logNodeData(val.destination._id, currentTypeToDisplay, '', name, '', SourceLocationLine);
+                                var tempVal = ''
+                                if(previousData.nodeId === val._id){
+                                    tempVal = previousData.value;
+                                    previousData = {}
+                                }
+                                logNodeData(val.destination._id, currentTypeToDisplay, '', name, tempVal, SourceLocationLine);
                                 logEdgeData(val._id, val.destination._id, '')
                             }
                         }
@@ -189,22 +198,12 @@ if (Bacon !== undefined) {
 
         // Log observable value
         obs.onValue(function (val) {
-            /*
-             console.log(obs);
-             console.log("observer id on val is = ", obs.id);
-             console.log("val is = ", val);
-             console.log("type of val is = ", typeof val);
-             console.log("jquery type of val is = ", $.type(val));
-             console.log("constructor.name of val is = ", val.constructor.name);
-             console.log(Object.prototype.toString.call(val));
-             console.log(val instanceof jQuery.Event);
-             */
             var constructorName = '';
             if (val) {
                 constructorName = val.constructor.name;
             }
 
-            logNodeData(currentObsId, '', '', '', val, '');
+            logNodeData(currentObsId, nodeType, '', '', val, '');
 
         });
 
@@ -274,9 +273,9 @@ if (Rx !== undefined) {
         var subject = new Rx.AnonymousSubject(this, this);
         subject = checkAndAssignId(subject);
         logNodeData(subject.id, subject.constructor.name, '', '', '', '');
-        if (subject.source && subject.source.array.length) {
-            subject.source.array.forEach(function (sub) {
-                if (sub.id && !checkIfEdgeAlreadyExists(sub.id, subject.id)) {
+        if(subject.source && subject.source.array && subject.source.array.length){
+            subject.source.array.forEach(function (sub){
+                if(sub.id && !checkIfEdgeAlreadyExists(sub.id, subject.id)){
                     logEdgeData(sub.id, subject.id, operator.constructor.name)
                 }
             })
@@ -633,6 +632,9 @@ if (Rx !== undefined) {
  */
 function logNodeData(id, type, method, name, value, lineNumber) {
     if (!shouldSaveNodeValue(fileReadOver, id)) {
+        // if(checkPauseNow()){
+        //     debugger;
+        // }
         ++currentStep;
         printValues(currentStep, value, id);
         var val = getValue(value);
@@ -646,6 +648,8 @@ function logNodeData(id, type, method, name, value, lineNumber) {
                 'sourceCodeLine': lineNumber
             }, action: "saveNode", destination: "panel"
         });
+        previousData.nodeId = id;
+        previousData.value = value;
     }
 
 

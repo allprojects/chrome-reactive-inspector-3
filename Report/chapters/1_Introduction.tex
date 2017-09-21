@@ -1,0 +1,48 @@
+\chapter{Introduction} \label{chap:Introduction}
+
+\section{Reactive Applications}
+Software applications have been evolving in the past decade and requirements of today\textquotesingle s applications are not same anymore as they were decades ago\cite{reactiveManifesto}. 
+Due to rise in the use of portable devices such as mobiles, tablets etc., there has been more demand for web applications instead of conventional desktop or native mobile applications as the operating system of these devices vary\cite{7818919}. 
+Due to the need of cross-platform applications there emerged a concept of hybrid applications. Javascript is one of the popular programming languages for client-side web programming. Evolution of browser technologies and Javascript frameworks/engines in the recent years have increased the use of Javascript in Rich internet applications\cite{6068340}\cite{Sen:2013:JSR:2491411.2491447}. 
+
+Software applications often need to be very responsive to the user interactions such as external events and data flows. 
+To achieve such responsive systems, needed architectural changes which provide Responsive, Resilient, Elastic and Message driven systems, which are referred as Reactive Systems\cite{reactiveManifesto}. Traditionally, to develop Reactive systems, developers were dependent on Callbacks which mostly lead to a known problem ``Callback hell''. 
+Reactive programming(RP) is a subset of Asynchronous programming and archetype where the accessibility of new data drives the rationale forward as opposed to having control flow driven by thread-of-execution. 
+Reactive Programming helps to develop Reactive systems more efficiently. 
+There are several Reactive programming languages like FrTime\cite{Cooper2006} and FlapJax\cite{Meyerovich:2009:FPL:1639949.1640091}, RxJava\cite{rxJava}. RP has been further got popularized by the likes of Microsoft's ReactiveX frameworks\cite{reactiveX}.  As a result, Javascript community introduced libraries like RxJS\cite{rxjs}, BaconJs\cite{baconjs} and many more.
+
+
+\section{Motivation}
+
+In recent years, even though Reactive Programming is widely adopted by the developers, it is apparently very difficult to debug reactive applications. 
+In reactive programs, changes in one value trigger updates on all the other dependent values. The study\cite{Salvaneschi:2016:DRP:2889160.2893174} describes the challenges occurs in debugging reactive applications and infeasibility of traditional debuggers to debug the reactive applications. Traditional debuggers support imperative style of programming where users can specify breakpoints on specific lines of code and the program execution will pause when it encounters the breakpoint. 
+This kind of debugging is obsolete for reactive applications uses declarative programming style and are data driven. 
+This work is inspired by Reactive Inspector\cite{reactiveInspector}, an Eclipse plugin which is developed by Guido Salvaneschi at the Technical University Darmstadt. 
+The plugin uses dependency graph to represent the flow of the program during debugging process, where each variable is represented by a node and each dependency is represented by a directed edge.
+We have found Reactive inspector very useful. Therefore used the same methodology for debugging Javascript libraries in web domain.
+
+\section{Thesis contribution}
+
+This thesis focuses on RxJS and BaconJS libraries, the currently trending reactive javascript libraries. 
+We discuss Reactive programming in general and RxJS, BaconJS specifically.
+We also explain the complexities involved in debugging reactive applications and the applications built using RxJS and BaconJS. 
+We are extending already existing chrome extension developed at TU Darmstadt by Waqas Abbas\cite{cri} which aids the debugging process of reactive applications. 
+The extension provides a visual representation of how the applications are evolved over the time. 
+The representation shows the dependency graph where it shows which part of the programs depends on other parts of the program. 
+The visualization helps the user understand the flow of the program and this, in turn, helps in pinpointing the operators of interest that may need further scrutiny. 
+The nodes in the dependency graph in each flow will represent each evolution step. 
+The extension provides interactivity where a user can travel back in time through all states of the dependency graph, dependent nodes for a particular node and set a breakpoint at a specific point. 
+Setting a breakpoint enables debugging at a specific point and helps the user to examine node values at that point of execution. 
+Breakpoints can also be disabled at any point in time to continue the normal execution of the program.
+
+
+\section{Outline}
+
+The structure of thesis is as follows. Chapter 2, State of the art introduces the fundamental concepts of Reactive Programming in general and specifically about RxJS and BaconJS libraries. 
+Further, we look at the details of Chrome reactive inspector a google chrome extension and also understand how the Google chrome devtools can be extended. In Chapter 3 System design, we will have more insight into the design of Chrome Reactive inspector. 
+The implementation details covering the inherent challenges are covered in Chapter 4, Implementation. 
+After that, we will look at the sample cases where our tool is helpful. 
+As a part of an evaluation, we will explore the use of our extension for real-time applications built on using RxJS and BaconJS and impact that the usage of our tool has on the reactive applications in chapter 5. 
+Chapter 6, Conclusion and Future Work summarizes the work undertaken in the context of the thesis and present future research directions.
+
+

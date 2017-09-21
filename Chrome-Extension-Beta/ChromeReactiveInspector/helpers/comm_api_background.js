@@ -17,8 +17,8 @@ chrome.runtime.onConnect.addListener(function (port) {
             tabPorts[tabId] = port;
         }
 
-        chrome.tabs.executeScript(tabId, {file: "myanalysis.js"}, function(){
-            chrome.tabs.executeScript(tabId, {file: "inject-for-instrumentation.js"}, function(){
+        chrome.tabs.executeScript(tabId, {file: "analyzer.js"}, function(){
+            chrome.tabs.executeScript(tabId, {file: "instrumentor.js"}, function(){
                 //all injected
             });
         });
@@ -88,8 +88,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if(changeInfo.status === 'loading'){
         chrome.tabs.sendMessage(tabId, {action: 'loading'}, function(response) {});
         if(tabPorts[tabId] !== undefined){
-            chrome.tabs.executeScript(tabId, {file: "myanalysis.js"}, function(){
-                chrome.tabs.executeScript(tabId, {file: "inject-for-instrumentation.js"}, function(){
+            chrome.tabs.executeScript(tabId, {file: "analyzer.js"}, function(){
+                chrome.tabs.executeScript(tabId, {file: "instrumentor.js"}, function(){
                     //all injected
                 });
             });

@@ -1,7 +1,7 @@
-console.log("from content-script-start.js");
+// console.log("from content-script-start.js");
 
 var reactiveBreakPoints;
-chrome.storage.local.get({criReactiveBreakPoints: []}, function (result) {
+chrome.storage.sync.get({criReactiveBreakPoints: []}, function (result) {
     // the input argument is ALWAYS an object containing the queried keys
     // so we select the key we need
     reactiveBreakPoints = result.criReactiveBreakPoints;
@@ -16,13 +16,13 @@ function shouldBreakNow(currentEvent, param1, param2) {
         if (currentEvent === currentBreakPointQuery) {
             if ((currentEvent === "nodeCreated") || (currentEvent === "nodeUpdated")) {
                 if (currentBreakPoint.params[0] !== undefined) {
-                    if (+currentBreakPoint.params[0] === param1) {
+                    if (currentBreakPoint.params[0] == param1) {
                         return true;
                     }
                 }
             } else if ((currentEvent === "evaluationYielded") || (currentEvent === "dependencyCreated")) {
                 if ((currentBreakPoint.params[0] !== undefined) && (currentBreakPoint.params[1] !== undefined)) {
-                    if ((+currentBreakPoint.params[0] === param1) && (+currentBreakPoint.params[1] === param2)) {
+                    if ((+currentBreakPoint.params[0] === param1) && (currentBreakPoint.params[1] == param2)) {
                         return true;
                     }
                 }

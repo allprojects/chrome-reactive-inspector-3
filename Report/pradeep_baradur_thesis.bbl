@@ -1,0 +1,1542 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.8 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\sortlist[entry]{nty/global/}
+  \entry{cri}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=AW}{%
+         family={Abbas},
+         familyi={A\bibinitperiod},
+         given={Waqas},
+         giveni={W\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{AW1}
+    \strng{fullhash}{AW1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+  \field{howpublished}{\url{https://github.com/allprojects/chrome-reactive-inspector}}
+    \field{note}{last accessed: 23-08-2017}
+    \field{title}{{Chrome Reactive Inspector}}
+  \endentry
+
+  \entry{callbackHell}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=AV}{%
+         family={Authors},
+         familyi={A\bibinitperiod},
+         given={Various},
+         giveni={V\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{AV1}
+    \strng{fullhash}{AV1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \field{howpublished}{\url{http://callbackhell.com/}}
+    \field{note}{last accessed: 26-08-2017}
+    \field{title}{{Callback Hell}}
+  \endentry
+
+  \entry{ECMAScript}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=AV}{%
+         family={Authors},
+         familyi={A\bibinitperiod},
+         given={Various},
+         giveni={V\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{AV1}
+    \strng{fullhash}{AV1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \field{howpublished}{\url{http://es6-features.org/}}
+    \field{note}{last accessed: 23-08-2017}
+    \field{title}{{ECMAScript}}
+  \endentry
+
+  \entry{reactiveManifesto}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=AV}{%
+         family={Authors},
+         familyi={A\bibinitperiod},
+         given={Various},
+         giveni={V\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{AV1}
+    \strng{fullhash}{AV1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \field{howpublished}{\url{http://www.reactivemanifesto.org/}}
+    \field{note}{last accessed: 23-08-2017}
+    \field{title}{{The reactive manifesto}}
+  \endentry
+
+  \entry{baconjs}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=B}{%
+         family={Bacon},
+         familyi={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{B1}
+    \strng{fullhash}{B1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{howpublished}{\url{https://baconjs.github.io/. }}
+    \field{note}{last accessed: 31-08-2017}
+    \field{title}{{Bacon.js}}
+  \endentry
+
+  \entry{Bainomugisha:2013:SRP:2501654.2501666}{article}{}
+    \name{author}{5}{}{%
+      {{hash=BE}{%
+         family={Bainomugisha},
+         familyi={B\bibinitperiod},
+         given={Engineer},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=CAL}{%
+         family={Carreton},
+         familyi={C\bibinitperiod},
+         given={Andoni\bibnamedelima Lombide},
+         giveni={A\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=CTv}{%
+         family={Cutsem},
+         familyi={C\bibinitperiod},
+         given={Tom\bibnamedelima van},
+         giveni={T\bibinitperiod\bibinitdelim v\bibinitperiod},
+      }}%
+      {{hash=MS}{%
+         family={Mostinckx},
+         familyi={M\bibinitperiod},
+         given={Stijn},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=MWd}{%
+         family={Meuter},
+         familyi={M\bibinitperiod},
+         given={Wolfgang\bibnamedelima de},
+         giveni={W\bibinitperiod\bibinitdelim d\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM}%
+    }
+    \keyw{Reactive programming, dataflow programming, event-driven
+  applications, functional reactive programming, interactive applications,
+  reactive systems}
+    \strng{namehash}{BE+1}
+    \strng{fullhash}{BECALCTvMSMWd1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \verb{doi}
+    \verb 10.1145/2501654.2501666
+    \endverb
+    \field{issn}{0360-0300}
+    \field{number}{4}
+    \field{pages}{52:1\bibrangedash 52:34}
+    \field{title}{A Survey on Reactive Programming}
+    \verb{url}
+    \verb http://doi.acm.org/10.1145/2501654.2501666
+    \endverb
+    \field{volume}{45}
+    \list{location}{1}{%
+      {New York, NY, USA}%
+    }
+    \field{journaltitle}{ACM Comput. Surv.}
+    \field{month}{08}
+    \field{year}{2013}
+  \endentry
+
+  \entry{rxfiddle}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=BH}{%
+         family={Banken},
+         familyi={B\bibinitperiod},
+         given={Herman},
+         giveni={H\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BH1}
+    \strng{fullhash}{BH1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{howpublished}{\url{https://github.com/hermanbanken/RxFiddle}}
+    \field{note}{last accessed: 10-09-2017}
+    \field{title}{{RxFiddle}}
+  \endentry
+
+  \entry{whyFRP}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=BS}{%
+         family={Blackheath},
+         familyi={B\bibinitperiod},
+         given={Stephen},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BS1}
+    \strng{fullhash}{BS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+  \field{howpublished}{\url{http://blog.reactiveprogramming.org/wp-uploads/2013/12/FRP4.pdf}}
+    \field{note}{last accessed: 26-08-2017}
+    \field{title}{{Why (Functional) Reactive Programming?}}
+  \endentry
+
+  \entry{7818919}{inproceedings}{}
+    \name{author}{3}{}{%
+      {{hash=BS}{%
+         family={Bosnic},
+         familyi={B\bibinitperiod},
+         given={S.},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=PI}{%
+         family={Papp},
+         familyi={P\bibinitperiod},
+         given={I.},
+         giveni={I\bibinitperiod},
+      }}%
+      {{hash=NS}{%
+         family={Novak},
+         familyi={N\bibinitperiod},
+         given={S.},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \keyw{mobile computing;smart phones;Apache Cordova;SDK;hybrid mobile
+  applications;mobile platform;platform-specific native container;programming
+  language;single codebase;Androids;Graphics;Humanoid robots;Mobile
+  applications;Performance evaluation;Random access memory;Testing;Angular
+  JS;Cordova;Ionic;hybrid;mobile application}
+    \strng{namehash}{BSPINS1}
+    \strng{fullhash}{BSPINS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{booktitle}{2016 24th Telecommunications Forum (TELFOR)}
+    \verb{doi}
+    \verb 10.1109/TELFOR.2016.7818919
+    \endverb
+    \field{pages}{1\bibrangedash 4}
+    \field{title}{The development of hybrid mobile applications with Apache
+  Cordova}
+    \field{year}{2016}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Cooper2006}{inbook}{}
+    \name{author}{2}{}{%
+      {{hash=CGH}{%
+         family={Cooper},
+         familyi={C\bibinitperiod},
+         given={Gregory\bibnamedelima H.},
+         giveni={G\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+      {{hash=KS}{%
+         family={Krishnamurthi},
+         familyi={K\bibinitperiod},
+         given={Shriram},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \name{editor}{1}{}{%
+      {{hash=SP}{%
+         family={Sestoft},
+         familyi={S\bibinitperiod},
+         given={Peter},
+         giveni={P\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer Berlin Heidelberg}%
+    }
+    \strng{namehash}{CGHKS1}
+    \strng{fullhash}{CGHKS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{C}
+    \field{sortinithash}{C}
+    \field{abstract}{%
+    This paper describes FrTime, an extension of Scheme designed for writing
+  interactive applications. Inspired by functional reactive programming, the
+  language embeds dynamic dataflow within a call-by-value functional language.
+  The essence of the embedding is to make program expressions evaluate to nodes
+  in a dataflow graph. This strategy eases importation of legacy code and
+  permits incremental program construction. We have integrated FrTime with the
+  DrScheme programming environment and have used it to develop several novel
+  applications. We describe FrTime's design and implementation in detail and
+  present a formal semantics of its evaluation model.%
+    }
+    \field{booktitle}{Programming Languages and Systems: 15th European
+  Symposium on Programming, ESOP 2006, Held as Part of the Joint European
+  Conferences on Theory and Practice of Software, ETAPS 2006, Vienna, Austria,
+  March 27-28, 2006. Proceedings}
+    \verb{doi}
+    \verb 10.1007/11693024_20
+    \endverb
+    \field{isbn}{978-3-540-33096-7}
+    \field{pages}{294\bibrangedash 308}
+    \field{title}{Embedding Dynamic Dataflow in a Call-by-Value Language}
+    \verb{url}
+    \verb https://doi.org/10.1007/11693024_20
+    \endverb
+    \list{location}{1}{%
+      {Berlin, Heidelberg}%
+    }
+    \field{year}{2006}
+  \endentry
+
+  \entry{Doblander:2015:GEA:2675743.2776757}{inproceedings}{}
+    \name{author}{3}{}{%
+      {{hash=DC}{%
+         family={Doblander},
+         familyi={D\bibinitperiod},
+         given={Christoph},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=PT}{%
+         family={Parsch},
+         familyi={P\bibinitperiod},
+         given={Thomas},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=JHA}{%
+         family={Jacobsen},
+         familyi={J\bibinitperiod},
+         given={Hans-Arno},
+         giveni={H\bibinitperiod-A\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM}%
+    }
+    \keyw{DEBS grand challenge, complex event processing, event processing,
+  publish/subscribe, reactive programming}
+    \strng{namehash}{DCPTJHA1}
+    \strng{fullhash}{DCPTJHA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{D}
+    \field{sortinithash}{D}
+    \field{booktitle}{Proceedings of the 9th ACM International Conference on
+  Distributed Event-Based Systems}
+    \verb{doi}
+    \verb 10.1145/2675743.2776757
+    \endverb
+    \field{isbn}{978-1-4503-3286-6}
+    \field{pages}{324\bibrangedash 325}
+    \field{series}{DEBS '15}
+    \field{title}{Geospatial Event Analytics Leveraging Reactive Programming}
+    \verb{url}
+    \verb http://doi.acm.org/10.1145/2675743.2776757
+    \endverb
+    \list{location}{1}{%
+      {Oslo, Norway}%
+    }
+    \field{year}{2015}
+    \warn{\item Can't use 'location' + 'address'}
+  \endentry
+
+  \entry{Drechsler:2014:DRU:2660193.2660240}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=DJ}{%
+         family={Drechsler},
+         familyi={D\bibinitperiod},
+         given={Joscha},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=SG}{%
+         family={Salvaneschi},
+         familyi={S\bibinitperiod},
+         given={Guido},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=MR}{%
+         family={Mogk},
+         familyi={M\bibinitperiod},
+         given={Ragnar},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=MM}{%
+         family={Mezini},
+         familyi={M\bibinitperiod},
+         given={Mira},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM}%
+    }
+    \keyw{distributed programming, reactive programming, scala}
+    \strng{namehash}{DJ+1}
+    \strng{fullhash}{DJSGMRMM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{D}
+    \field{sortinithash}{D}
+    \field{booktitle}{Proceedings of the 2014 ACM International Conference on
+  Object Oriented Programming Systems Languages \& Applications}
+    \verb{doi}
+    \verb 10.1145/2660193.2660240
+    \endverb
+    \field{isbn}{978-1-4503-2585-1}
+    \field{pages}{361\bibrangedash 376}
+    \field{series}{OOPSLA '14}
+    \field{title}{Distributed REScala: An Update Algorithm for Distributed
+  Reactive Programming}
+    \verb{url}
+    \verb http://doi.acm.org/10.1145/2660193.2660240
+    \endverb
+    \list{location}{1}{%
+      {Portland, Oregon, USA}%
+    }
+    \field{year}{2014}
+    \warn{\item Can't use 'location' + 'address'}
+  \endentry
+
+  \entry{rxvision}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=FJ}{%
+         family={Forsyth},
+         familyi={F\bibinitperiod},
+         given={Jared},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{FJ1}
+    \strng{fullhash}{FJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{F}
+    \field{sortinithash}{F}
+    \field{howpublished}{\url{https://github.com/jaredly/rxvision}}
+    \field{note}{last accessed: 10-09-2017}
+    \field{title}{{RxVision}}
+  \endentry
+
+  \entry{rxvisionplayground}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=FJ}{%
+         family={Forsyth},
+         familyi={F\bibinitperiod},
+         given={Jared},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{FJ1}
+    \strng{fullhash}{FJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{F}
+    \field{sortinithash}{F}
+  \field{howpublished}{\url{https://jaredforsyth.com/rxvision/examples/playground/}}
+    \field{note}{last accessed: 10-09-2017}
+    \field{title}{{RxVision playground}}
+  \endentry
+
+  \entry{ajaxANewWayToWP}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=GJJ}{%
+         family={Garrett},
+         familyi={G\bibinitperiod},
+         given={Jesse\bibnamedelima James},
+         giveni={J\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{GJJ1}
+    \strng{fullhash}{GJJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+  \field{howpublished}{\url{http://adaptivepath.org/ideas/ajax-new-approach-web-applications/}}
+    \field{note}{last accessed: 26-08-2017}
+    \field{title}{{Ajax: A New Approach to Web Applications}}
+  \endentry
+
+  \entry{Gifford:1986:IFI:319838.319848}{inproceedings}{}
+    \name{author}{2}{}{%
+      {{hash=GDK}{%
+         family={Gifford},
+         familyi={G\bibinitperiod},
+         given={David\bibnamedelima K.},
+         giveni={D\bibinitperiod\bibinitdelim K\bibinitperiod},
+      }}%
+      {{hash=LJM}{%
+         family={Lucassen},
+         familyi={L\bibinitperiod},
+         given={John\bibnamedelima M.},
+         giveni={J\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM}%
+    }
+    \strng{namehash}{GDKLJM1}
+    \strng{fullhash}{GDKLJM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \field{booktitle}{Proceedings of the 1986 ACM Conference on LISP and
+  Functional Programming}
+    \verb{doi}
+    \verb 10.1145/319838.319848
+    \endverb
+    \field{isbn}{0-89791-200-4}
+    \field{pages}{28\bibrangedash 38}
+    \field{series}{LFP '86}
+    \field{title}{Integrating Functional and Imperative Programming}
+    \verb{url}
+    \verb http://doi.acm.org/10.1145/319838.319848
+    \endverb
+    \list{location}{1}{%
+      {Cambridge, Massachusetts, USA}%
+    }
+    \field{year}{1986}
+    \warn{\item Can't use 'location' + 'address'}
+  \endentry
+
+  \entry{angularjs}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=G}{%
+         family={Google},
+         familyi={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{G1}
+    \strng{fullhash}{G1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \field{howpublished}{\url{https://angularjs.org/}}
+    \field{note}{last accessed: 31-08-2017}
+    \field{title}{{AngularJS}}
+  \endentry
+
+  \entry{devtools}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=G}{%
+         family={Google},
+         familyi={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{G1}
+    \strng{fullhash}{G1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \field{howpublished}{\url{https://developer.chrome.com/devtools}}
+    \field{note}{last accessed: 23-08-2017}
+    \field{title}{{Chrome Developer Tools}}
+  \endentry
+
+  \entry{chrome-storage}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=G}{%
+         family={Google},
+         familyi={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{G1}
+    \strng{fullhash}{G1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \field{howpublished}{\url{https://developer.chrome.com/apps/storage}}
+    \field{note}{last accessed: 10-09-2017}
+    \field{title}{{Chrome Storage}}
+  \endentry
+
+  \entry{contentscripts}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=G}{%
+         family={Google},
+         familyi={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{G1}
+    \strng{fullhash}{G1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+  \field{howpublished}{\url{https://developer.chrome.com/extensions/content_scripts}}
+    \field{note}{last accessed: 08-09-2017}
+    \field{title}{{Content Scripts}}
+  \endentry
+
+  \entry{devtoolsextension}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=G}{%
+         family={Google},
+         familyi={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{G1}
+    \strng{fullhash}{G1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+  \field{howpublished}{\url{https://developer.chrome.com/extensions/devtools}}
+    \field{note}{last accessed: 23-08-2017}
+    \field{title}{{Extending DevTools}}
+  \endentry
+
+  \entry{devtoolsmanifestfile}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=G}{%
+         family={Google},
+         familyi={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{G1}
+    \strng{fullhash}{G1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+  \field{howpublished}{\url{https://developer.chrome.com/extensions/manifest}}
+    \field{note}{last accessed: 23-08-2017}
+    \field{title}{{Manifest file}}
+  \endentry
+
+  \entry{gnuDebugger}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=HPN}{%
+         family={Hilfinger},
+         familyi={H\bibinitperiod},
+         given={P.\bibnamedelima N.},
+         giveni={P\bibinitperiod\bibinitdelim N\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HPN1}
+    \strng{fullhash}{HPN1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+  \field{howpublished}{\url{http://people.eecs.berkeley.edu/~jrs/61bf98/reader/ucb/gdb.pdf}}
+    \field{note}{last accessed: 31-08-2017}
+    \field{title}{{GNU Debugger}}
+  \endentry
+
+  \entry{hoffman2000data}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=HR}{%
+         family={Hoffman},
+         familyi={H\bibinitperiod},
+         given={R.D.},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Google Patents}%
+    }
+    \strng{namehash}{HR1}
+    \strng{fullhash}{HR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \field{note}{US Patent 6,061,518}
+    \field{title}{Data processing system and method for debugging a JavaScript
+  program}
+    \verb{url}
+    \verb https://www.google.com/patents/US6061518
+    \endverb
+    \field{year}{2000}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{RPvsFP}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=HV}{%
+         family={Huber},
+         familyi={H\bibinitperiod},
+         given={Val},
+         giveni={V\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HV1}
+    \strng{fullhash}{HV1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+  \field{howpublished}{\url{http://insights.dice.com/2014/01/13/how-is-reactive-different-from-procedural-programming/}}
+    \field{note}{last accessed: 26-08-2017}
+    \field{title}{{How Is Reactive Different From Procedural Programming?}}
+  \endentry
+
+  \entry{baconBlog}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=KF}{%
+         family={Knüssel},
+         familyi={K\bibinitperiod},
+         given={Federico},
+         giveni={F\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{KF1}
+    \strng{fullhash}{KF1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{K}
+    \field{sortinithash}{K}
+  \field{howpublished}{\url{https://medium.com/@fknussel/event-streams-vs-properties-e55b53be8f42}}
+    \field{note}{last accessed: 31-08-2017}
+    \field{title}{{BaconJsBlog}}
+  \endentry
+
+  \entry{Kristaly:2008:WTW:1389586.1389663}{inproceedings}{}
+    \name{author}{5}{}{%
+      {{hash=KDM}{%
+         family={Kristaly},
+         familyi={K\bibinitperiod},
+         given={Dominic\bibnamedelima Mircea},
+         giveni={D\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=SF}{%
+         family={Sisak},
+         familyi={S\bibinitperiod},
+         given={Francisc},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=TI}{%
+         family={Truican},
+         familyi={T\bibinitperiod},
+         given={Ion},
+         giveni={I\bibinitperiod},
+      }}%
+      {{hash=MSA}{%
+         family={Moraru},
+         familyi={M\bibinitperiod},
+         given={Sorin-Aurel},
+         giveni={S\bibinitperiod-A\bibinitperiod},
+      }}%
+      {{hash=SF}{%
+         family={Sandu},
+         familyi={S\bibinitperiod},
+         given={Florin},
+         giveni={F\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM}%
+    }
+    \keyw{AJAX, Butterfly, CMS, web, website}
+    \strng{namehash}{KDM+1}
+    \strng{fullhash}{KDMSFTIMSASF1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{K}
+    \field{sortinithash}{K}
+    \field{booktitle}{Proceedings of the 1st International Conference on
+  PErvasive Technologies Related to Assistive Environments}
+    \verb{doi}
+    \verb 10.1145/1389586.1389663
+    \endverb
+    \field{isbn}{978-1-60558-067-8}
+    \field{pages}{65:1\bibrangedash 65:4}
+    \field{series}{PETRA '08}
+    \field{title}{Web 2.0 Technologies in Web Application Development}
+    \verb{url}
+    \verb http://doi.acm.org/10.1145/1389586.1389663
+    \endverb
+    \list{location}{1}{%
+      {Athens, Greece}%
+    }
+    \field{year}{2008}
+    \warn{\item Can't use 'location' + 'address'}
+  \endentry
+
+  \entry{deprecatingTheObserverPattern}{article}{}
+    \name{author}{3}{}{%
+      {{hash=MI}{%
+         family={Maier},
+         familyi={M\bibinitperiod},
+         given={Ingo},
+         giveni={I\bibinitperiod},
+      }}%
+      {{hash=RT}{%
+         family={Rompf},
+         familyi={R\bibinitperiod},
+         given={Tiark},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=OM}{%
+         family={Odersky},
+         familyi={O\bibinitperiod},
+         given={Martin},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{MIRTOM1}
+    \strng{fullhash}{MIRTOM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+    \field{title}{Deprecating the Observer Pattern}
+    \field{month}{01}
+    \field{year}{2010}
+  \endentry
+
+  \entry{Margara:2014:WDD:2611286.2611290}{inproceedings}{}
+    \name{author}{2}{}{%
+      {{hash=MA}{%
+         family={Margara},
+         familyi={M\bibinitperiod},
+         given={Alessandro},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=SG}{%
+         family={Salvaneschi},
+         familyi={S\bibinitperiod},
+         given={Guido},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM}%
+    }
+    \keyw{consistency guarantees, distributed reactive programming, dream,
+  event-based middleware, glitch-freedom}
+    \strng{namehash}{MASG1}
+    \strng{fullhash}{MASG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+    \field{booktitle}{Proceedings of the 8th ACM International Conference on
+  Distributed Event-Based Systems}
+    \verb{doi}
+    \verb 10.1145/2611286.2611290
+    \endverb
+    \field{isbn}{978-1-4503-2737-4}
+    \field{pages}{142\bibrangedash 153}
+    \field{series}{DEBS '14}
+    \field{title}{We Have a DREAM: Distributed Reactive Programming with
+  Consistency Guarantees}
+    \verb{url}
+    \verb http://doi.acm.org/10.1145/2611286.2611290
+    \endverb
+    \list{location}{1}{%
+      {Mumbai, India}%
+    }
+    \field{year}{2014}
+    \warn{\item Can't use 'location' + 'address'}
+  \endentry
+
+  \entry{Meyerovich:2009:FPL:1639949.1640091}{article}{}
+    \name{author}{7}{}{%
+      {{hash=MLA}{%
+         family={Meyerovich},
+         familyi={M\bibinitperiod},
+         given={Leo\bibnamedelima A.},
+         giveni={L\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=GA}{%
+         family={Guha},
+         familyi={G\bibinitperiod},
+         given={Arjun},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=BJ}{%
+         family={Baskin},
+         familyi={B\bibinitperiod},
+         given={Jacob},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=CGH}{%
+         family={Cooper},
+         familyi={C\bibinitperiod},
+         given={Gregory\bibnamedelima H.},
+         giveni={G\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+      {{hash=GM}{%
+         family={Greenberg},
+         familyi={G\bibinitperiod},
+         given={Michael},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=BA}{%
+         family={Bromfield},
+         familyi={B\bibinitperiod},
+         given={Aleks},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=KS}{%
+         family={Krishnamurthi},
+         familyi={K\bibinitperiod},
+         given={Shriram},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM}%
+    }
+    \keyw{functional reactive programming, javascript, web programming}
+    \strng{namehash}{MLA+1}
+    \strng{fullhash}{MLAGABJCGHGMBAKS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+    \verb{doi}
+    \verb 10.1145/1639949.1640091
+    \endverb
+    \field{issn}{0362-1340}
+    \field{number}{10}
+    \field{pages}{1\bibrangedash 20}
+    \field{title}{Flapjax: A Programming Language for Ajax Applications}
+    \verb{url}
+    \verb http://doi.acm.org/10.1145/1639949.1640091
+    \endverb
+    \field{volume}{44}
+    \list{location}{1}{%
+      {New York, NY, USA}%
+    }
+    \field{journaltitle}{SIGPLAN Not.}
+    \field{month}{10}
+    \field{year}{2009}
+  \endentry
+
+  \entry{linq}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=M}{%
+         family={Microsoft},
+         familyi={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{M1}
+    \strng{fullhash}{M1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+  \field{howpublished}{\url{https://msdn.microsoft.com/en-us/library/bb308959.aspx?f=255&MSPPError=-2147217396}}
+    \field{note}{last accessed: 06-09-2017}
+    \field{title}{{LINQ}}
+  \endentry
+
+  \entry{reactiveX}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=M}{%
+         family={Microsoft},
+         familyi={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{M1}
+    \strng{fullhash}{M1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+    \field{howpublished}{\url{http://reactivex.io/intro.html}}
+    \field{note}{last accessed: 26-08-2017}
+    \field{title}{{ReactiveX}}
+  \endentry
+
+  \entry{reactiveSubjects}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=M}{%
+         family={Microsoft},
+         familyi={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{M1}
+    \strng{fullhash}{M1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+    \field{howpublished}{\url{http://reactivex.io/documentation/subject.html}}
+    \field{note}{last accessed: 26-08-2017}
+    \field{title}{{ReactiveX Subjects}}
+  \endentry
+
+  \entry{prototype}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=M}{%
+         family={Mozilla},
+         familyi={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{M2}
+    \strng{fullhash}{M2}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+  \field{howpublished}{\url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/prototype}}
+    \field{note}{last accessed: 10-09-2017}
+    \field{title}{{Javascript Object Prototype}}
+  \endentry
+
+  \entry{firefox}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=M}{%
+         family={Mozilla},
+         familyi={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{M2}
+    \strng{fullhash}{M2}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+    \field{howpublished}{\url{https://www.mozilla.org/en-US/firefox/new/}}
+    \field{note}{last accessed: 10-09-2017}
+    \field{title}{{Mozilla Firefox}}
+  \endentry
+
+  \entry{oracleDebugger}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=O}{%
+         family={Oracle},
+         familyi={O\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{O1}
+    \strng{fullhash}{O1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{O}
+    \field{sortinithash}{O}
+  \field{howpublished}{\url{http://docs.oracle.com/javase/7/docs/technotes/tools/windows/jdb.html}}
+    \field{note}{last accessed: 31-08-2017}
+    \field{title}{{Oracle Debugger}}
+  \endentry
+
+  \entry{dagred3}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=PC}{%
+         family={Pettitt},
+         familyi={P\bibinitperiod},
+         given={Chris},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{PC1}
+    \strng{fullhash}{PC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{P}
+    \field{sortinithash}{P}
+    \field{howpublished}{\url{https://github.com/cpettitt/dagre-d3}}
+    \field{note}{last accessed: 14-09-2017}
+    \field{title}{{dagre-d3}}
+  \endentry
+
+  \entry{observable}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=R}{%
+         family={ReactiveX},
+         familyi={R\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{R1}
+    \strng{fullhash}{R1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{R}
+    \field{sortinithash}{R}
+  \field{howpublished}{\url{http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html}}
+    \field{note}{last accessed: 31-08-2017}
+    \field{title}{{Observable}}
+  \endentry
+
+  \entry{rxJava}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=R}{%
+         family={ReactiveX},
+         familyi={R\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{R1}
+    \strng{fullhash}{R1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{R}
+    \field{sortinithash}{R}
+    \field{howpublished}{\url{https://github.com/ReactiveX/RxJava/}}
+    \field{note}{last accessed: 06-09-2017}
+    \field{title}{{RxJava}}
+  \endentry
+
+  \entry{rxjs}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=R}{%
+         family={ReactiveX},
+         familyi={R\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{R1}
+    \strng{fullhash}{R1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{R}
+    \field{sortinithash}{R}
+    \field{howpublished}{\url{https://github.com/ReactiveX/rxjs}}
+    \field{note}{last accessed: 06-09-2017}
+    \field{title}{{RxJs}}
+  \endentry
+
+  \entry{reactiveInspector}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=SG}{%
+         family={Salvaneschi},
+         familyi={S\bibinitperiod},
+         given={Guido},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SG1}
+    \strng{fullhash}{SG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+  \field{howpublished}{\url{https://guidosalva.github.io/reactive-inspector/}}
+    \field{note}{last accessed: 26-08-2017}
+    \field{title}{{Reactive Inspector}}
+  \endentry
+
+  \entry{Salvaneschi:2014:RBO:2577080.2577083}{inproceedings}{}
+    \name{author}{3}{}{%
+      {{hash=SG}{%
+         family={Salvaneschi},
+         familyi={S\bibinitperiod},
+         given={Guido},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=HG}{%
+         family={Hintz},
+         familyi={H\bibinitperiod},
+         given={Gerold},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=MM}{%
+         family={Mezini},
+         familyi={M\bibinitperiod},
+         given={Mira},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM}%
+    }
+    \keyw{event-driven programming, functional-reactive programming, scala}
+    \strng{namehash}{SGHGMM1}
+    \strng{fullhash}{SGHGMM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{booktitle}{Proceedings of the 13th International Conference on
+  Modularity}
+    \verb{doi}
+    \verb 10.1145/2577080.2577083
+    \endverb
+    \field{isbn}{978-1-4503-2772-5}
+    \field{pages}{25\bibrangedash 36}
+    \field{series}{MODULARITY '14}
+    \field{title}{REScala: Bridging Between Object-oriented and Functional
+  Style in Reactive Applications}
+    \verb{url}
+    \verb http://doi.acm.org/10.1145/2577080.2577083
+    \endverb
+    \list{location}{1}{%
+      {Lugano, Switzerland}%
+    }
+    \field{year}{2014}
+    \warn{\item Can't use 'location' + 'address'}
+  \endentry
+
+  \entry{Salvaneschi:2016:DRP:2889160.2893174}{inproceedings}{}
+    \name{author}{2}{}{%
+      {{hash=SG}{%
+         family={Salvaneschi},
+         familyi={S\bibinitperiod},
+         given={Guido},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=MM}{%
+         family={Mezini},
+         familyi={M\bibinitperiod},
+         given={Mira},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM}%
+    }
+    \keyw{debugging, functional-reactive programming}
+    \strng{namehash}{SGMM1}
+    \strng{fullhash}{SGMM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{booktitle}{Proceedings of the 38th International Conference on
+  Software Engineering Companion}
+    \verb{doi}
+    \verb 10.1145/2889160.2893174
+    \endverb
+    \field{isbn}{978-1-4503-4205-6}
+    \field{pages}{728\bibrangedash 730}
+    \field{series}{ICSE '16}
+    \field{title}{Debugging Reactive Programming with Reactive Inspector}
+    \verb{url}
+    \verb http://doi.acm.org/10.1145/2889160.2893174
+    \endverb
+    \list{location}{1}{%
+      {Austin, Texas}%
+    }
+    \field{year}{2016}
+    \warn{\item Can't use 'location' + 'address'}
+  \endentry
+
+  \entry{Salvaneschi:2014:ESP:2635868.2635895}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=SG}{%
+         family={Salvaneschi},
+         familyi={S\bibinitperiod},
+         given={Guido},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=AS}{%
+         family={Amann},
+         familyi={A\bibinitperiod},
+         given={Sven},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=PS}{%
+         family={Proksch},
+         familyi={P\bibinitperiod},
+         given={Sebastian},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=MM}{%
+         family={Mezini},
+         familyi={M\bibinitperiod},
+         given={Mira},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM}%
+    }
+    \keyw{Controlled Experiment, Empirical Study, Reactive Programming}
+    \strng{namehash}{SG+1}
+    \strng{fullhash}{SGASPSMM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{booktitle}{Proceedings of the 22Nd ACM SIGSOFT International
+  Symposium on Foundations of Software Engineering}
+    \verb{doi}
+    \verb 10.1145/2635868.2635895
+    \endverb
+    \field{isbn}{978-1-4503-3056-5}
+    \field{pages}{564\bibrangedash 575}
+    \field{series}{FSE 2014}
+    \field{title}{An Empirical Study on Program Comprehension with Reactive
+  Programming}
+    \verb{url}
+    \verb http://doi.acm.org/10.1145/2635868.2635895
+    \endverb
+    \list{location}{1}{%
+      {Hong Kong, China}%
+    }
+    \field{year}{2014}
+    \warn{\item Can't use 'location' + 'address'}
+  \endentry
+
+  \entry{Schuster:2016:RPR:2892664.2892666}{inproceedings}{}
+    \name{author}{2}{}{%
+      {{hash=SC}{%
+         family={Schuster},
+         familyi={S\bibinitperiod},
+         given={Christopher},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=FC}{%
+         family={Flanagan},
+         familyi={F\bibinitperiod},
+         given={Cormac},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM}%
+    }
+    \keyw{JavaScript, Reactive Programming, Syntax Extension}
+    \strng{namehash}{SCFC1}
+    \strng{fullhash}{SCFC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{booktitle}{Companion Proceedings of the 15th International
+  Conference on Modularity}
+    \verb{doi}
+    \verb 10.1145/2892664.2892666
+    \endverb
+    \field{isbn}{978-1-4503-4033-5}
+    \field{pages}{29\bibrangedash 33}
+    \field{series}{MODULARITY Companion 2016}
+    \field{title}{Reactive Programming with Reactive Variables}
+    \verb{url}
+    \verb http://doi.acm.org/10.1145/2892664.2892666
+    \endverb
+    \list{location}{1}{%
+      {M\&\#225;laga, Spain}%
+    }
+    \field{year}{2016}
+    \warn{\item Can't use 'location' + 'address'}
+  \endentry
+
+  \entry{Sen:2013:JSR:2491411.2491447}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=SK}{%
+         family={Sen},
+         familyi={S\bibinitperiod},
+         given={Koushik},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=KS}{%
+         family={Kalasapur},
+         familyi={K\bibinitperiod},
+         given={Swaroop},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=BT}{%
+         family={Brutch},
+         familyi={B\bibinitperiod},
+         given={Tasneem},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=GS}{%
+         family={Gibbs},
+         familyi={G\bibinitperiod},
+         given={Simon},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM}%
+    }
+    \keyw{Concolic Testing, Dynamic Analysis, JavaScript, Record and Repla}
+    \strng{namehash}{SK+1}
+    \strng{fullhash}{SKKSBTGS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{booktitle}{Proceedings of the 2013 9th Joint Meeting on Foundations
+  of Software Engineering}
+    \verb{doi}
+    \verb 10.1145/2491411.2491447
+    \endverb
+    \field{isbn}{978-1-4503-2237-9}
+    \field{pages}{488\bibrangedash 498}
+    \field{series}{ESEC/FSE 2013}
+    \field{title}{Jalangi: A Selective Record-replay and Dynamic Analysis
+  Framework for JavaScript}
+    \verb{url}
+    \verb http://doi.acm.org/10.1145/2491411.2491447
+    \endverb
+    \list{location}{1}{%
+      {Saint Petersburg, Russia}%
+    }
+    \field{year}{2013}
+    \warn{\item Can't use 'location' + 'address'}
+  \endentry
+
+  \entry{debugRxJS}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=SA}{%
+         family={Staltz},
+         familyi={S\bibinitperiod},
+         given={André},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SA1}
+    \strng{fullhash}{SA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{howpublished}{\url{https://staltz.com/how-to-debug-rxjs-code.html}}
+    \field{note}{last accessed: 07-09-2017}
+    \field{title}{{How to debug RxJS code}}
+  \endentry
+
+  \entry{introToRP}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=SA}{%
+         family={Staltz},
+         familyi={S\bibinitperiod},
+         given={André},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SA1}
+    \strng{fullhash}{SA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+  \field{howpublished}{\url{https://gist.github.com/staltz/868e7e9bc2a7b8c1f754}}
+    \field{note}{last accessed: 26-08-2017}
+    \field{title}{{The introduction to Reactive Programming you've been
+  missing}}
+  \endentry
+
+  \entry{6068340}{inproceedings}{}
+    \name{author}{2}{}{%
+      {{hash=TA}{%
+         family={Taivalsaari},
+         familyi={T\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=MT}{%
+         family={Mikkonen},
+         familyi={M\bibinitperiod},
+         given={T.},
+         giveni={T\bibinitperiod},
+      }}%
+    }
+    \keyw{Internet;Web sites;document handling;HTML5;Saga;Web
+  technologies;WebGL;World Wide Web;application platform;binary
+  programs;content distribution environment;document sharing system;end user
+  software;information distribution;information sharing;interactive Web
+  applications;software platform;Browsers;Graphics;Software;Standards;Three
+  dimensional displays;Web pages;HTML5;WebGL;web evolution;web
+  programming;web-based software development}
+    \strng{namehash}{TAMT1}
+    \strng{fullhash}{TAMT1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{T}
+    \field{sortinithash}{T}
+    \field{booktitle}{2011 37th EUROMICRO Conference on Software Engineering
+  and Advanced Applications}
+    \verb{doi}
+    \verb 10.1109/SEAA.2011.35
+    \endverb
+    \field{issn}{1089-6503}
+    \field{pages}{170\bibrangedash 174}
+    \field{title}{The Web as an Application Platform: The Saga Continues}
+    \field{year}{2011}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{understandingObserverPattern}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=TI}{%
+         family={Teo},
+         familyi={T\bibinitperiod},
+         given={Ignatius},
+         giveni={I\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{TI1}
+    \strng{fullhash}{TI1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{T}
+    \field{sortinithash}{T}
+  \field{howpublished}{\url{https://www.sitepoint.com/understanding-the-observer-pattern//}}
+    \field{note}{last accessed: 26-08-2017}
+    \field{title}{{Understanding the Observer Pattern}}
+  \endentry
+
+  \entry{debugrxjsblog}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=UA}{%
+         family={University},
+         familyi={U\bibinitperiod},
+         given={Angular},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{UA1}
+    \strng{fullhash}{UA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{U}
+    \field{sortinithash}{U}
+    \field{howpublished}{\url{http://blog.angular-university.io/debug-rxjs/}}
+    \field{note}{last accessed: 10-09-2017}
+    \field{title}{{How to debug RxJS}}
+  \endentry
+
+  \entry{promiseKeyword}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=W}{%
+         family={Wikipedia},
+         familyi={W\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{W1}
+    \strng{fullhash}{W1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{W}
+    \field{sortinithash}{W}
+  \field{howpublished}{\url{https://en.wikipedia.org/wiki/Futures_and_promises}}
+    \field{note}{last accessed: 26-08-2017}
+    \field{title}{{Futures and promises}}
+  \endentry
+\endsortlist
+\endinput
