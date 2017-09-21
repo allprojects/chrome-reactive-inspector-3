@@ -97,32 +97,50 @@ function zoomed() {
 render(d3.select("svg g"), g);
 
 /**
- *  Slider feature
- *  */
-// Slider initialization , that is used to access history steps
+ * Slider to navigate the steps in the dependency graph.
+ * @type {jQuery}
+ */
 var rxSlider = $("#slider")
     .slider({
         min: 0,
         max: 0,
         change: function (event, ui) {
+            // The delay is smaller than the delay for graph updates via the slider,
+            // because the buttons allow for a much more fine grained navigation in big graphs.
             $('.ui-slider-handle').text(ui.value);
-            // on slider change destroy current graph and re build based on slider value
-            // Check if the even is triggered by Manual sliding or programmatically.
-            if (event.originalEvent) {
-                redrawGraphToStage(ui.value);
-            }
+            redrawGraphFromUI(ui.value);
+        },
+        slide: function (event, ui) {
+            $('.ui-slider-handle').text(ui.value);
+            debouncedRedrawGraph(ui.value);
         }
     })
     .slider("pips");
 
+var debouncedRedrawGraph = _.debounce(redrawGraphFromUI,250);
+
+var lastDrawnStep = null;
+/**
+ * Prevent unnecessary redraws of the dependency graph.
+ * This catches debounced calls from causing a redraw for a single stage twice.
+ * @param stage
+ */
+function redrawGraphFromUI(stage) {
+
+    if(lastDrawnStep !== null && lastDrawnStep === stage){
+        return;
+    }
+
+    lastDrawnStep = stage;
+    redrawGraphToStage(stage);
+}
+
 // slider controls
 $('#down').click(function () {
     rxSlider.slider('value', rxSlider.slider('value') + rxSlider.slider("option", "step"));
-    redrawGraphToStage(rxSlider.slider('value'));
 });
 $('#up').click(function () {
     rxSlider.slider('value', rxSlider.slider('value') - rxSlider.slider("option", "step"));
-    redrawGraphToStage(rxSlider.slider('value'));
 });
 
 rxSlider.slider("option", "min", 0);
