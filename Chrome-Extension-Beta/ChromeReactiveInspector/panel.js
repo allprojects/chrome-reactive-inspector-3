@@ -230,11 +230,11 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
             configRecStatusButton.setAttribute('data-rec-status', recStatusFromStorage);
             $(this).data("rec-status", recStatusFromStorage);
             if (recStatusFromStorage) {
-                configRecStatusButton.innerHTML = 'Pause Recording';
+                configRecStatusButton.innerText = 'Pause Recording';
                 configRecStatusButton.classList.add('btn-info');
                 configRecStatusButton.classList.remove('btn-danger');
             } else {
-                configRecStatusButton.innerHTML = 'Start Recording';
+                configRecStatusButton.innerText = 'Start Recording';
                 configRecStatusButton.classList.remove('btn-info');
                 configRecStatusButton.classList.add('btn-danger');
             }
@@ -274,14 +274,13 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
     /**
      * This method is called whenever the user clicks on 'Pause' or 'Start' recording button.
      */
-    configRecStatusButton.addEventListener('click', function (e) {
+    configRecStatusButton.addEventListener('click', function () {
         var currentStatus = $(this).attr('data-rec-status');
         var temp = (currentStatus === 'true');
         // $(this).data("rec-status",!currentStatus);
         $(this).attr('data-rec-status', !temp);
         setCriStatus($(this), !temp);
-
-    }, this);
+    });
 
     function setCriStatus(element, status){
         chrome.storage.sync.set({
@@ -297,11 +296,11 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
         );
         if (status){
             // isConfirmed = false;
-            element.html('Pause Recording');
+            element.text('Pause Recording');
             element.addClass('btn-info');
             element.removeClass('btn-danger');
         }else{
-            element.html('Start Recording');
+            element.text('Start Recording');
             element.addClass('btn-danger');
             element.removeClass('btn-info');
         }
