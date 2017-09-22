@@ -25,19 +25,21 @@ Contains test applications.
 ## Installation Instructions
 
 #### 1. Download and install packed extension from "Chrome-Extension-Stable" directory
-For more detail please go to **Chrome-Extension-Stable** directory.
+For more detail please go to [Chrome-Extension-Stable](Chrome-Extension-Stable/README.md) directory.
 
 #### 2. Download and configure Test application from "TestApplications" directory
-For more detail please go to **TestApplications** directory.
+For more detail please go to [TestApplications](TestApps/README.md) directory. 
 
 ## Usage
 After Successful installation you can go to Chrome devtools and there you will see new panel called  "Reative Inspector"
 
 ## History
 This project started as a Master Thesis by Waqas Abbas at TU - Darmstadt Germany with collaboration of [Prof. Dr Guido Salvaneschi](http://www.guidosalvaneschi.com/)
-It was continued by Pradeep Baradur.
+It was continued as a Master Thesis by Pradeep Baradur.
 This project is done as extension to the work of [Reative Inspector](https://github.com/guidosalva/reactive-inspector)
 
+### Contributions
+Waqas Abbas, Pradeep Baradur, [Prof. Dr Guido Salvaneschi](http://www.guidosalvaneschi.com/)
 
 ## For Developers:
 
