@@ -44,7 +44,7 @@ chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
     }
 
     else if (msg.action === 'cri_config_rec_status') {
-        cri_config_rec_status = msg.status;
+        cri_config_rec_status = msg.content.status;
     }
     else if (msg.action === 'threshold') {
         pauseNow =  msg.content.status;
