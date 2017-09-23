@@ -510,7 +510,7 @@ var stage = '';
 $('#cri-history-query-submit').click(function () {
     var historyQuery, param1, param2 = '';
     var currentHistoryQuery = $('#cri-findnode-select').val();
-    historyQuery = currentHistoryQuery.substring(0, currentHistoryQuery.indexOf('['))
+    historyQuery = currentHistoryQuery.substring(0, currentHistoryQuery.indexOf('['));
     var matches = currentHistoryQuery.match(/\[(.*?)\]/g).map(function (val) {
         return val.replace('[', '').replace(']', '');
     });
@@ -627,7 +627,7 @@ $('#cri-history-query-prev').click(function () {
 $('#cri-history-query-next').click(function () {
     var currentStepFromHistoryQuery = $("#cri-history-current-step").text();
     var nextStepToAccess = parseInt(currentStepFromHistoryQuery);
-    if (stage && (stage.length > 1)) {
+    if (stage && (stage.length > 1) && stage.length > nextStepToAccess) {
         var firstFoundStageId = stage[nextStepToAccess].stageId;
         rxSlider.slider('value', firstFoundStageId, rxSlider.slider("option", "step"));
         redrawGraphToStage(firstFoundStageId);
