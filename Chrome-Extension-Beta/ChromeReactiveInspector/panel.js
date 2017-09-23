@@ -670,38 +670,36 @@ $('#cri-breakpoint-query-submit').click(function () {
             query: historyQuery,
             params: matches
         };
-
-        var x = _.some(allBreakPoints, function (bp) {
-            if (param2)
-                return bp.params[0] === breakPointToStore.params[0] && bp.params[1] === breakPointToStore.params[1] && bp.query === breakPointToStore.query;
-            else
-                return bp.params[0] === breakPointToStore.params[0] && bp.query === breakPointToStore.query;
-        });
-        if (!x) {
-            storeBreakPoint(breakPointToStore);
-        }
+        storeBreakPoint(breakPointToStore);
     }
 });
 
 
 // This method append breakpoint object to local storage
 function storeBreakPoint(breakPointToStore) {
-    allBreakPoints.push(breakPointToStore);
     // by passing an object you can define default values e.g.: []
     chrome.storage.sync.get({criReactiveBreakPoints: []}, function (result) {
         // the input argument is ALWAYS an object containing the queried keys
         // so we select the key we need
         var currentBreakPoints = result.criReactiveBreakPoints;
-        currentBreakPoints.push(breakPointToStore);
-        // set the new array value to the same key
-        chrome.storage.sync.set({criReactiveBreakPoints: currentBreakPoints}, function () {
-            // you can use strings instead of objects
-            // if you don't  want to define default values
-            chrome.storage.sync.get('criReactiveBreakPoints', function (result) {
-            });
-            // refresh front end , where we list current breakpoints
-            refreshCurrentBreakPointsFrontEnd();
+
+        var alreadyExists = _.some(currentBreakPoints, function (bp) {
+            if (bp.params[0] === breakPointToStore.params[0] && bp.query === breakPointToStore.query) {
+                if (breakPointToStore.params.length > 1) {
+                    return bp.params.length > 1 && breakPointToStore.params[1] === bp.params[1];
+                }
+                return true;
+            }
+            return false;
         });
+        if (!alreadyExists) {
+            currentBreakPoints.push(breakPointToStore);
+            // set the new array value to the same key
+            chrome.storage.sync.set({criReactiveBreakPoints: currentBreakPoints}, function () {
+                // refresh front end , where we list current breakpoints
+                refreshCurrentBreakPointsFrontEnd();
+            });
+        }
     });
 }
 
@@ -713,11 +711,6 @@ function removeBreakPointByIndex(index) {
         currentBreakPoints.splice(index, 1);
         // set the new array value to the same key
         chrome.storage.sync.set({criReactiveBreakPoints: currentBreakPoints}, function () {
-            // you can use strings instead of objects
-            // if you don't  want to define default values
-            chrome.storage.sync.get('criReactiveBreakPoints', function (result) {
-                //console.log(result.criReactiveBreakPoints)
-            });
             // refresh front end , where we list current breakpoints
             refreshCurrentBreakPointsFrontEnd();
         });
