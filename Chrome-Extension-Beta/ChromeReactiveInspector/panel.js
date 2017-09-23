@@ -578,7 +578,7 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
     $('#cri-history-query-next').click(function () {
         var currentStepFromHistoryQuery = $("#cri-history-current-step").text();
         var nextStepToAccess = parseInt(currentStepFromHistoryQuery);
-        if (stage && (stage.length > 1)) {
+        if (stage && stage.length > 1 && stage.length > nextStepToAccess) {
             var firstFoundStageId = stage[nextStepToAccess].stageId;
             rxSlider.slider('value', firstFoundStageId, rxSlider.slider("option", "step"));
             redrawGraphToStage(firstFoundStageId);
