@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+    <link rel="stylesheet" href="../../assets/bootstrap/css/bootstrap.min.css">
+    <script src="../../js/Bacon.js"></script>
+    <script src="../../js/Bacon.UI.js"></script>
+
+</head>
+<body>
+
+<div style="padding: 20px">
+
+    <h3>Father And Son Wallet War</h3>
+
+    <a href="http://alfredodinapoli.wordpress.com/2011/12/24/functional-reactive-programming-kick-starter-guide/">original
+        post in Haskell here</a>
+    <br>
+<h3>The father will always have 10 dollars more than his son.</h3>
+    <div id="son">
+        <label>Son's wallet :
+            &nbsp;&nbsp;&nbsp;&nbsp;<input id="wallet-son" type="number" placeholder="Son's wallet"
+                   value="0" disabled="disabled"/>
+        </label>
+    </div>
+    <div id="father">
+        <label>Father's wallet :
+            <input id="wallet-father" type="number" placeholder="Son's wallet"
+                   value="10" disabled="disabled"/>
+        </label>
+    </div>
+    <div id="actions">
+        <button id="add-son">Add 1 to son</button>
+        <button id="remove-son">Remove 1 from son</button>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="index.js" charset="utf-8"></script>
+
+</body>
+</html>

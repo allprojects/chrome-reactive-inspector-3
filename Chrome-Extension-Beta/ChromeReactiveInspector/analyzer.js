@@ -769,7 +769,10 @@ function getValue(value) {
         tempConstructorName = value.constructor.name;
     switch(tempConstructorName){
         case 'KeyboardEvent':
-            value = value.currentTarget.value;
+            value = value.currentTarget.value || value.key;
+            if(value === undefined){
+                value = JSON.stringify(value);
+            }
             break;
         case 'Number':
             value = JSON.stringify(value);
@@ -780,11 +783,11 @@ function getValue(value) {
         case 'Object':
             if(value.hasOwnProperty('type')){
                 if(value.type ==='mousemove' || value.type ==='mousedown' || value.type ==='mouseup' || value.type ==='mousehover' || value.type ==='click')
-                    value = JSON.stringify({'screenX':value.screenX, 'screenY':value.screenY});
+                    value = JSON.stringify({'type': value.type,'screenX':value.screenX, 'screenY':value.screenY});
                 else if(value.type === 'keydown' || value.type === 'keyup')
                     value = value.key;
                 else
-                    value = JSON.stringify(value);
+                    value = value.type;
             }else{
                 value = JSON.stringify(value);
             }
