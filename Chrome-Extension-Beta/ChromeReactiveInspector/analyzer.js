@@ -429,13 +429,13 @@ if (Rx !== undefined) {
                     //Todo check for other type of events or similar kind
 
                     if(self._id){
+                        logNodeData(self._id, self.obsType, '', '', nextValue, '');
                         // Added this condition for animation test example
                         // Make sure it does not affect other
-                        if(self._parent && self._parent.constructor.name === 'Subscriber' && !self._operatorName){
-                            if(self._parent.destination && self._parent.destination._complete && !self._parent.destination._id)
-                                logNodeData(this._parent._id, self._parent.obsType, '', '', nextValue, '');
-                        }
-                        logNodeData(self._id, self.obsType, '', '', nextValue, '');
+                        // if(self._parent && self._parent.constructor.name === 'Subscriber' && !self._operatorName){
+                        //     if(self._parent.destination && self._parent.destination._complete && !self._parent.destination._id)
+                        //         logNodeData(this._parent._id, self._parent.obsType, '', '', nextValue, '');
+                        // }
                         // Test case 35
                         if(self._subscriptions && self._subscriptions.length){
                             self._subscriptions.forEach(function (subscription) {
