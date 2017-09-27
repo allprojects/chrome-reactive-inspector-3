@@ -16,28 +16,28 @@ $("#dialog").dialog({
     modal: true,
     buttons : {
         "Confirm" : function() {
-            // setCriStatus($('#cri-rec-status'), false);
-            sendObjectToInspectedPage(
-                {
-                    action: "threshold",
-                    content: {
-                        "status": false
-                    }
-                }
-            );
+            setCriStatus($('#cri-rec-status'), false);
+            // sendObjectToInspectedPage(
+            //     {
+            //         action: "threshold",
+            //         content: {
+            //             "status": false
+            //         }
+            //     }
+            // );
             $(this).dialog("close");
         },
         "Cancel" : function() {
             configRecStatusButton.click();
             $(this).dialog("close");
-            sendObjectToInspectedPage(
-                {
-                    action: "threshold",
-                    content: {
-                        "status": false
-                    }
-                }
-            );
+            // sendObjectToInspectedPage(
+            //     {
+            //         action: "threshold",
+            //         content: {
+            //             "status": false
+            //         }
+            //     }
+            // );
         }
     }
 });
@@ -269,14 +269,14 @@ var configRecStatusButton = document.getElementById('cri-rec-status');
         chrome.storage.sync.set({
             'cri_config_rec_status': status
         });
-        sendObjectToInspectedPage(
-            {
-                action: "cri_config_rec_status",
-                content: {
-                    "status": status
-                }
-            }
-        );
+        // sendObjectToInspectedPage(
+        //     {
+        //         action: "cri_config_rec_status",
+        //         content: {
+        //             "status": status
+        //         }
+        //     }
+        // );
         if (status){
             // isConfirmed = false;
             element.html('Pause Recording');

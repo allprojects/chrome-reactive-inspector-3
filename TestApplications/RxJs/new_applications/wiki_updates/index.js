@@ -180,19 +180,7 @@
   // Create our websocket to get wiki updates
   var ws = new window.WebSocket("ws://wiki-update-sockets.herokuapp.com/");
 
-  // var openStream = fromEvent(ws, 'open');
-  // var closeStream = fromEvent(ws,'close');
-
-  // var messageStream = fromEvent(ws, 'message').takeUntil(closeStream);
   var messageStream = fromEvent(ws, 'message');
-
-  // openStream.subscribe(function () {
-  //   console.log("Connection opened");
-  // });
-
-  // closeStream.subscribe(function () {
-  //   console.log("Connection is closed...");
-  // });
 
   var updateStream = messageStream.map(function(event) {
       var dataString = event.data;
@@ -225,7 +213,6 @@
   var sampledUpdates = updateCount.sample(Rx.Observable.interval(samplingTime));
   var totalUpdatesBeforeLastSample = 0;
   sampledUpdates.subscribe(function(value) {
-      console.log(value)
       updatesOverTime.push({
           x: new Date(),
           y:(value - totalUpdatesBeforeLastSample) /

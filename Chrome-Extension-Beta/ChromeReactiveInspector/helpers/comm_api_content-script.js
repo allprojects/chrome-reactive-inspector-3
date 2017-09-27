@@ -7,18 +7,34 @@
 // will be only recieved if dev tool + panel  is opened
 var cri_config_rec_status = '';
 var pauseNow = false;
-chrome.storage.sync.get('cri_config_rec_status', function (items) {
-    cri_config_rec_status = items.cri_config_rec_status;
-})
-function sendObjectToDevTools(message) {
+// chrome.storage.sync.get('cri_config_rec_status', function (items) {
+//     cri_config_rec_status = items.cri_config_rec_status;
+// })
+function sendObjectToDevTools(message, fileReadOver) {
     //console.log("content script - send object to dev tool via background");
     //console.log("message content to be sent from content script" + message.content);
     // The callback here can be used to execute something on receipt
-    if(cri_config_rec_status){
+
+    // This is added because chrome communication is asynchronous. Initially messages were not sent to panel page,
+    // because of which it was not generating dependency graph as soon as we send message from myanalysis.
+    // it was affecting setting up break point when nodeCreated or dependencyCreated
+    if(!fileReadOver){
         chrome.extension.sendMessage(message, function (message) {
             // console.log("message sent");
         });
+    }else{
+        // check the config settings weather to record or not
+        chrome.storage.sync.get('cri_config_rec_status', function (items) {
+            if (items.cri_config_rec_status !== undefined) {
+                if (items.cri_config_rec_status && fileReadOver) {
+                    chrome.extension.sendMessage(message, function (message) {
+                        // console.log("message sent");
+                    });
+                }
+            }
+        });
     }
+
 }
 
 function checkPauseNow() {
