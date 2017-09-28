@@ -10,15 +10,15 @@ chrome.runtime.onConnect.addListener(function (port) {
     // come here when we click on our dev tool panel only once for the life of dev tool window
     // alert("chrome.extension.onConnect.addListener");
     var tabId;
-    port.onMessage.addListener(function(message){
+    port.onMessage.addListener(function (message) {
         if (!tabId) {
             // this is a first message from devtools so let's set the tabId-port mapping
             tabId = message.tabId;
             tabPorts[tabId] = port;
         }
 
-        chrome.tabs.executeScript(tabId, {file: "analyzer.js"}, function(){
-            chrome.tabs.executeScript(tabId, {file: "instrumentor.js"}, function(){
+        chrome.tabs.executeScript(tabId, {file: "analyzer.js"}, function () {
+            chrome.tabs.executeScript(tabId, {file: "instrumentor.js"}, function () {
                 //all injected
             });
         });
@@ -33,8 +33,8 @@ chrome.runtime.onConnect.addListener(function (port) {
             // alert("background.js - destination is panel");
             port.postMessage(message);
 
-        } else if(message.destination === "background"){
-            if(message.action === "tabInfo") {
+        } else if (message.destination === "background") {
+            if (message.action === "tabInfo") {
                 // retrieve url for download feature
                 chrome.tabs.get(tabId, function (tab) {
                     sendResponse({currentTabUrl: tab.url});
@@ -55,7 +55,7 @@ chrome.runtime.onConnect.addListener(function (port) {
                 // sends them to the panel
             } else {
                 // alert("background.js - got from content script and send to panel script");
-                if(port)
+                if (port)
                     port.postMessage(message);
                 else
                     return false;
@@ -80,16 +80,17 @@ chrome.tabs.onRemoved.addListener(function (tabId) {
     delete tabPorts[tabId];
 });
 
-chrome.tabs.onReplaced.addListener(function(newTabId, oldTabId) {
+chrome.tabs.onReplaced.addListener(function (newTabId, oldTabId) {
     delete tabPorts[oldTabId];
 });
 
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    if(changeInfo.status === 'loading'){
-        chrome.tabs.sendMessage(tabId, {action: 'loading'}, function(response) {});
-        if(tabPorts[tabId] !== undefined){
-            chrome.tabs.executeScript(tabId, {file: "analyzer.js"}, function(){
-                chrome.tabs.executeScript(tabId, {file: "instrumentor.js"}, function(){
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+    if (changeInfo.status === 'loading') {
+        chrome.tabs.sendMessage(tabId, {action: 'loading'}, function (response) {
+        });
+        if (tabPorts[tabId] !== undefined) {
+            chrome.tabs.executeScript(tabId, {file: "analyzer.js"}, function () {
+                chrome.tabs.executeScript(tabId, {file: "instrumentor.js"}, function () {
                     //all injected
                 });
             });

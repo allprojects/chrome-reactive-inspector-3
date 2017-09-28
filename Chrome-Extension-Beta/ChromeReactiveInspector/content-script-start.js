@@ -39,18 +39,18 @@ function shouldBreakNow(currentEvent, param1, param2) {
 }
 
 
-
-
 /**
  * It will get the value from the localStorage and set the value to isPrintOptionSelected
  * @type {boolean}
  */
 var isPrintOptionSelected = false;
+
 function setPrintOptionValue() {
     chrome.storage.sync.get({printAllValue: ''}, function (items) {
         isPrintOptionSelected = items.printAllValue;
     });
 }
+
 setPrintOptionValue();
 
 // Listen to change in storage data
@@ -65,8 +65,8 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
  * @param nodeId
  */
 function printValues(currentStep, value, nodeId) {
-    if(isPrintOptionSelected){
-        console.log("------------------------------Value at step: "+ currentStep +" of Node "+ nodeId+" is----------------------------------------");
+    if (isPrintOptionSelected) {
+        console.log("------------------------------Value at step: " + currentStep + " of Node " + nodeId + " is----------------------------------------");
         console.log(value);
     }
 }
@@ -79,13 +79,13 @@ chrome.storage.sync.get({nodesDoNotSave: []}, function (result) {
 
 // returns true if query matches
 function shouldSaveNodeValue(fileReadOver, nodeId) {
-    if(!fileReadOver){
+    if (!fileReadOver) {
         return false;
     }
-    else{
+    else {
         var found = false;
         nodesDoNotSave.forEach(function (node) {
-            if(+node === nodeId)
+            if (+node === nodeId)
                 found = true
         });
         return found;

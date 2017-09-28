@@ -14,8 +14,8 @@ $dialog.hide();
 $dialog.dialog({
     autoOpen: false,
     modal: true,
-    buttons : {
-        "Confirm" : function() {
+    buttons: {
+        "Confirm": function () {
             //setCriStatus($('#cri-rec-status'), false);
             // sendObjectToInspectedPage(
             //     {
@@ -275,40 +275,40 @@ function setCricConfigFiles(val, fileName) {
 }
 
 
-    configIncludeFilesField.tokenfield();
-    /**
-     * This method is called whenever the user clicks on 'Pause' or 'Start' recording button.
-     */
-    configRecStatusButton.addEventListener('click', function () {
-        var currentStatus = $(this).attr('data-rec-status');
-        var temp = (currentStatus === 'true');
-        // $(this).data("rec-status",!currentStatus);
-        $(this).attr('data-rec-status', !temp);
-        setCriStatus($(this), !temp);
+configIncludeFilesField.tokenfield();
+/**
+ * This method is called whenever the user clicks on 'Pause' or 'Start' recording button.
+ */
+configRecStatusButton.addEventListener('click', function () {
+    var currentStatus = $(this).attr('data-rec-status');
+    var temp = (currentStatus === 'true');
+    // $(this).data("rec-status",!currentStatus);
+    $(this).attr('data-rec-status', !temp);
+    setCriStatus($(this), !temp);
 
+});
+
+function setCriStatus(element, status) {
+    chrome.storage.sync.set({
+        'cri_config_rec_status': status
     });
-
-    function setCriStatus(element, status){
-        chrome.storage.sync.set({
-            'cri_config_rec_status': status
-        });
-        // sendObjectToInspectedPage(
-        //     {
-        //         action: "cri_config_rec_status",
-        //         content: {
-        //             "status": status
-        //         }
-        //     }
-        // );
-        if (status){
-            // isConfirmed = false;
-            element.text('Pause Recording');
-            element.addClass('btn-info');
-            element.removeClass('btn-danger');
-        }else{
-            element.text('Start Recording');
-            element.addClass('btn-danger');
-            element.removeClass('btn-info');
+    // sendObjectToInspectedPage(
+    //     {
+    //         action: "cri_config_rec_status",
+    //         content: {
+    //             "status": status
+    //         }
+    //     }
+    // );
+    if (status) {
+        // isConfirmed = false;
+        element.text('Pause Recording');
+        element.addClass('btn-info');
+        element.removeClass('btn-danger');
+    } else {
+        element.text('Start Recording');
+        element.addClass('btn-danger');
+        element.removeClass('btn-info');
     }
 }
 

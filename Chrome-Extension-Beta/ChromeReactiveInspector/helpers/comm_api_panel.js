@@ -6,7 +6,7 @@ var rxGraphStages = [];
 var _node = '';
 var currentAction = "";
 var tempNode = {
-    'type':'',
+    'type': '',
     'nodeName': '',
     'nodeId': '',
     'nodeValue': ''
@@ -35,8 +35,8 @@ var allEdges = [];
         /**
          * If the user refreshes the page, then reset the graph and slider and load it again.
          */
-        if(message.action === 'loading'){
-            if(rxSlider){
+        if (message.action === 'loading') {
+            if (rxSlider) {
                 rxSlider.slider("option", "min", 0);
                 rxSlider.slider("option", "max", 0);
                 rxSlider.slider("option", "value", 0);
@@ -117,7 +117,7 @@ var allEdges = [];
                 }
 
 
-                if(newValue || newValue.constructor.name === 'Boolean'){
+                if (newValue || newValue.constructor.name === 'Boolean') {
                     newValue = newValue.toString();
                     truncatedVal = newValue.substring(0, 25);
                 }
@@ -155,7 +155,7 @@ var allEdges = [];
                 }
 
                 var tempVal = message.content.nodeValue
-                if(tempVal || tempVal.constructor.name === 'Boolean'){
+                if (tempVal || tempVal.constructor.name === 'Boolean') {
                     newValue = tempVal.toString();
                     truncatedVal = newValue.substring(0, 25);
                 }
@@ -192,7 +192,7 @@ var allEdges = [];
             /**
              * This will send node details to console whenever an user clicks on it.
              */
-            svg.selectAll("g.node").on("click", function(id) {
+            svg.selectAll("g.node").on("click", function (id) {
                 _node = g.node(id);
                 sendObjectToInspectedPage(
                     {
@@ -219,21 +219,21 @@ var allEdges = [];
             $("#svg-canvas rect").attr("ry", "5");
             stageId = captureGraphAndSaveAsNewStage("saveEdge", false);
             saveHistory(stageId, "saveEdge", message.content)
-        }else if(message.action === "updateSavedEdge"){
-            var match = _.find(historyEntries, function(history) {
-                if(history.type === 'dependencyCreated'){
-                    if(history.endNodeId === message.content.id ){
-                        history.endNodeName =  message.content.name
+        } else if (message.action === "updateSavedEdge") {
+            var match = _.find(historyEntries, function (history) {
+                if (history.type === 'dependencyCreated') {
+                    if (history.endNodeId === message.content.id) {
+                        history.endNodeName = message.content.name
                     }
-                    else if(history.startNodeId === message.content.id){
+                    else if (history.startNodeId === message.content.id) {
                         history.startNodeName = message.content.name
                     }
                 }
             })
-        }else  if (message.action === "allNodesEdges") {
+        } else if (message.action === "allNodesEdges") {
             allNodes = message.content.nodes;
             allEdges = message.content.edges;
-        }else if(message.action === 'removeEdge'){
+        } else if (message.action === 'removeEdge') {
             g.removeEdge(message.content.edgeStart, message.content.edgeEnd, message.content.edgeLabel);
             render(d3.select("svg g"), g);
             $("#svg-canvas rect").attr("rx", "5");
@@ -247,6 +247,7 @@ var allEdges = [];
 }());
 
 var isConfirmed = false;
+
 // this method is to capture all nodes and edges and add this as new stage in rxGraphStages
 function captureGraphAndSaveAsNewStage(event, currentNodeId) {
     var tempStageId = '';
@@ -274,7 +275,11 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
                     if (g.edge(singleEdge).label) {
                         edgeLabel = g.edge(singleEdge).label;
                     }
-                    newStage.stageData.edges.push({"edgeStart": singleEdge.v, "edgeEnd": singleEdge.w, "edgeLabel": edgeLabel});
+                    newStage.stageData.edges.push({
+                        "edgeStart": singleEdge.v,
+                        "edgeEnd": singleEdge.w,
+                        "edgeLabel": edgeLabel
+                    });
                 });
 
             }
@@ -282,11 +287,11 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
             nodeToPush = g.node(d);
 
             // Check if its the current node, if yes set it as current node
-            var tempClass = nodeToPush.class.replace(/current/g,'').replace(/normal/g,'').replace(/highlight/g,'').replace(/fade/g,'').trim();
+            var tempClass = nodeToPush.class.replace(/current/g, '').replace(/normal/g, '').replace(/highlight/g, '').replace(/fade/g, '').trim();
             if (nodeToPush.nodeId === currentNodeId) {
-                nodeToPush.class =  nodeToPush.class + " current";
+                nodeToPush.class = nodeToPush.class + " current";
             } else {
-                nodeToPush.class =  tempClass + " normal";
+                nodeToPush.class = tempClass + " normal";
             }
             newStage.stageData.nodes.push(_.clone(nodeToPush));
         });
@@ -298,7 +303,7 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
     rxSlider.slider("pips", "refresh");
 
 
-    if(threshold && rxSlider.slider('value') > +threshold && !isConfirmed){
+    if (threshold && rxSlider.slider('value') > +threshold && !isConfirmed) {
         // setCriStatus($('#cri-rec-status'), 1);
         // sendObjectToInspectedPage(
         //     {
@@ -318,7 +323,7 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
 var historyEntries = [];
 
 function saveHistory(stageId, type, value) {
-    if(type !== 'saveEdge'){
+    if (type !== 'saveEdge') {
         historyEntries.push({
             'stageId': stageId,
             'type': value.type,
@@ -327,7 +332,7 @@ function saveHistory(stageId, type, value) {
             'nodeValue': value.nodeValue
         })
 
-    }else{
+    } else {
         historyEntries.push({
             'stageId': stageId,
             'type': 'dependencyCreated',
@@ -341,9 +346,9 @@ function saveHistory(stageId, type, value) {
 
 // This sends an object to the background page 
 // where it can be relayed to the inspected page
-function sendObjectToInspectedPage(message,sendResponse) {
+function sendObjectToInspectedPage(message, sendResponse) {
     message.tabId = chrome.devtools.inspectedWindow.tabId;
-    chrome.extension.sendMessage(message,sendResponse);
+    chrome.extension.sendMessage(message, sendResponse);
 }
 
 // Listen to change in storage data

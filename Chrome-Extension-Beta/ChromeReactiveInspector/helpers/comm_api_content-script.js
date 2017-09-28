@@ -16,11 +16,11 @@ function sendObjectToDevTools(message, fileReadOver) {
     // This is added because chrome communication is asynchronous. Initially messages were not sent to panel page,
     // because of which it was not generating dependency graph as soon as we send message from analyzer.
     // it was affecting setting up break point when nodeCreated or dependencyCreated.
-    if(!fileReadOver){
+    if (!fileReadOver) {
         chrome.extension.sendMessage(message, function (message) {
             // console.log("message sent");
         });
-    }else{
+    } else {
         // check the config settings weather to record or not
         chrome.storage.sync.get('cri_config_rec_status', function (items) {
             if (items.cri_config_rec_status !== undefined) {
@@ -61,6 +61,6 @@ chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
         cri_config_rec_status = msg.content.status;
     }
     else if (msg.action === 'threshold') {
-        pauseNow =  msg.content.status;
+        pauseNow = msg.content.status;
     }
 });
