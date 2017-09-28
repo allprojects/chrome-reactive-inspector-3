@@ -7,7 +7,7 @@ This section provides in-depth knowledge of how we implemented chrome reactive i
  
 \begin{figure}[!h]
 	\centering
-	\includegraphics[scale=0.5,trim=0 0 0 0]{images/detailed-system-implementation.png}
+	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{images/detailed-system-implementation.png}
 	\caption{Detailed System Components}
 	\label{fig:detailed-system-implementation}
 \end{figure}
@@ -182,7 +182,7 @@ chrome.tabs.onRemoved.addListener(function (tabId) {
 
 \end{lstlisting}
 
-\section{CRI User Interface}
+\section{CRI User Interface} \label{section:cri-ui}
 The user interface(UI) of the CRI is a panel which can be seen when user opens chrome DevTools. After opening DevTools, CRI can be activated by clicking on ``Reactive-Inspector'' panel. The UI can be divided into 6 main parts as shown in Figure~\ref{fig:cri}. 
 
 \begin{figure}[!h]

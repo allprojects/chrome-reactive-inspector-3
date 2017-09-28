@@ -1,0 +1,11 @@
+
+Reactive programming is a programming paradigm designed to provide developers with the
+right abstractions for creating systems that uses streams of data. Reactive language abstractions are used to specify data dependencies between inputs and outputs. These dependencies are propagated by the language runtime, and thus reducing the burden on the user from managing dependencies. The execution of reactive programs is mostly driven by data flow, debugging such programs by traditional debuggers is hard. Due to lack of support for the provided abstractions, developers have to use the most readily available debug tool: console.log-debugging.
+
+
+\vspace*{0.05in}
+
+The lack of support from traditional debuggers created the need for a debugging tool that aids comprehension and debugging of reactive systems. 
+\textbf{Chrome Reactive inspector}(CRI), a Chrome extension, helps the debugging process of applications built using reactive javascript libraries
+(\textbf{RxJS} and \textbf{Bacon.js}). In this thesis, existing CRI is extended to provide extensive support for all the operators and Subjects from RxJS library. The extended version mentioned above also helps the user to query the history using query language and set up breakpoints. A user can also search for a particular node, to gain an understanding of its dependents and dependencies. There is an option for the user to specify node IDs to exclude from logging the values to dependency graph which reduces performance overhead. We present the evaluation based on several real-time applications that show how the extension provides an easier and intuitive way of understanding data streams, and how they mutate through the flow of the program.
+

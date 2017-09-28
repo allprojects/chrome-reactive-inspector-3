@@ -14,30 +14,30 @@ $dialog.hide();
 $dialog.dialog({
     autoOpen: false,
     modal: true,
-    buttons: {
-        "Confirm": function () {
-            // setCriStatus($('#cri-rec-status'), false);
-            sendObjectToInspectedPage(
-                {
-                    action: "threshold",
-                    content: {
-                        "status": false
-                    }
-                }
-            );
+    buttons : {
+        "Confirm" : function() {
+            //setCriStatus($('#cri-rec-status'), false);
+            // sendObjectToInspectedPage(
+            //     {
+            //         action: "threshold",
+            //         content: {
+            //             "status": false
+            //         }
+            //     }
+            // );
             $(this).dialog("close");
         },
         "Cancel": function () {
             configRecStatusButton.click();
             $(this).dialog("close");
-            sendObjectToInspectedPage(
-                {
-                    action: "threshold",
-                    content: {
-                        "status": false
-                    }
-                }
-            );
+            // sendObjectToInspectedPage(
+            //     {
+            //         action: "threshold",
+            //         content: {
+            //             "status": false
+            //         }
+            //     }
+            // );
         }
     }
 });
@@ -274,39 +274,41 @@ function setCricConfigFiles(val, fileName) {
     });
 }
 
-configIncludeFilesField.tokenfield();
-/**
- * This method is called whenever the user clicks on 'Pause' or 'Start' recording button.
- */
-configRecStatusButton.addEventListener('click', function () {
-    var currentStatus = $(this).attr('data-rec-status');
-    var temp = (currentStatus === 'true');
-    // $(this).data("rec-status",!currentStatus);
-    $(this).attr('data-rec-status', !temp);
-    setCriStatus($(this), !temp);
-});
 
-function setCriStatus(element, status) {
-    chrome.storage.sync.set({
-        'cri_config_rec_status': status
+    configIncludeFilesField.tokenfield();
+    /**
+     * This method is called whenever the user clicks on 'Pause' or 'Start' recording button.
+     */
+    configRecStatusButton.addEventListener('click', function () {
+        var currentStatus = $(this).attr('data-rec-status');
+        var temp = (currentStatus === 'true');
+        // $(this).data("rec-status",!currentStatus);
+        $(this).attr('data-rec-status', !temp);
+        setCriStatus($(this), !temp);
+
     });
-    sendObjectToInspectedPage(
-        {
-            action: "cri_config_rec_status",
-            content: {
-                "status": status
-            }
-        }
-    );
-    if (status) {
-        // isConfirmed = false;
-        element.text('Pause Recording');
-        element.addClass('btn-info');
-        element.removeClass('btn-danger');
-    } else {
-        element.text('Start Recording');
-        element.addClass('btn-danger');
-        element.removeClass('btn-info');
+
+    function setCriStatus(element, status){
+        chrome.storage.sync.set({
+            'cri_config_rec_status': status
+        });
+        // sendObjectToInspectedPage(
+        //     {
+        //         action: "cri_config_rec_status",
+        //         content: {
+        //             "status": status
+        //         }
+        //     }
+        // );
+        if (status){
+            // isConfirmed = false;
+            element.text('Pause Recording');
+            element.addClass('btn-info');
+            element.removeClass('btn-danger');
+        }else{
+            element.text('Start Recording');
+            element.addClass('btn-danger');
+            element.removeClass('btn-info');
     }
 }
 

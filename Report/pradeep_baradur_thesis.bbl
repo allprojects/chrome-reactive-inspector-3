@@ -77,6 +77,26 @@
     \field{title}{{ECMAScript}}
   \endentry
 
+  \entry{nodejs}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=AV}{%
+         family={Authors},
+         familyi={A\bibinitperiod},
+         given={Various},
+         giveni={V\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{AV1}
+    \strng{fullhash}{AV1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \field{howpublished}{\url{https://nodejs.org/en/}}
+    \field{note}{last accessed: 27-09-2017}
+    \field{title}{{NodeJS}}
+  \endentry
+
   \entry{reactiveManifesto}{misc}{}
     \name{author}{1}{}{%
       {{hash=AV}{%
@@ -262,6 +282,26 @@
     \warn{\item Invalid format of field 'month'}
   \endentry
 
+  \entry{jsprofiler}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=CG}{%
+         family={Chrome},
+         familyi={C\bibinitperiod},
+         given={Google},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{CG1}
+    \strng{fullhash}{CG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{C}
+    \field{sortinithash}{C}
+  \field{howpublished}{\url{https://developer.chrome.com/devtools/docs/profiles}}
+    \field{note}{last accessed: 27-09-2017}
+    \field{title}{{Javascript Profiler}}
+  \endentry
+
   \entry{Cooper2006}{inbook}{}
     \name{author}{2}{}{%
       {{hash=CGH}{%
@@ -430,6 +470,24 @@
     }
     \field{year}{2014}
     \warn{\item Can't use 'location' + 'address'}
+  \endentry
+
+  \entry{es5}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=E}{%
+         family={ECMAScript},
+         familyi={E\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{E1}
+    \strng{fullhash}{E1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{E}
+    \field{sortinithash}{E}
+  \field{howpublished}{\url{https://www.ecma-international.org/ecma-262/5.1/}}
+    \field{note}{last accessed: 27-09-2017}
+    \field{title}{{ECMAScript 5.1}}
   \endentry
 
   \entry{rxvision}{misc}{}
@@ -711,6 +769,24 @@
     \field{title}{{How Is Reactive Different From Procedural Programming?}}
   \endentry
 
+  \entry{esprima}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=J}{%
+         family={JQuery},
+         familyi={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{J1}
+    \strng{fullhash}{J1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{J}
+    \field{sortinithash}{J}
+    \field{howpublished}{\url{http://esprima.org/index.html}}
+    \field{note}{last accessed: 27-09-2017}
+    \field{title}{{Eprima}}
+  \endentry
+
   \entry{baconBlog}{misc}{}
     \name{author}{1}{}{%
       {{hash=KF}{%
@@ -728,7 +804,7 @@
     \field{sortinithash}{K}
   \field{howpublished}{\url{https://medium.com/@fknussel/event-streams-vs-properties-e55b53be8f42}}
     \field{note}{last accessed: 31-08-2017}
-    \field{title}{{BaconJsBlog}}
+    \field{title}{{BaconJs Blog}}
   \endentry
 
   \entry{Kristaly:2008:WTW:1389586.1389663}{inproceedings}{}
@@ -1297,6 +1373,24 @@
     }
     \field{year}{2014}
     \warn{\item Can't use 'location' + 'address'}
+  \endentry
+
+  \entry{jalangiissue}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=S}{%
+         family={Samsung},
+         familyi={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{S1}
+    \strng{fullhash}{S1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+  \field{howpublished}{\url{https://github.com/Samsung/jalangi2\#supported-ecmascript-versions}}
+    \field{note}{last accessed: 27-09-2017}
+    \field{title}{{Jalangi2 Supported ECMAScript versions}}
   \endentry
 
   \entry{Schuster:2016:RPR:2892664.2892666}{inproceedings}{}

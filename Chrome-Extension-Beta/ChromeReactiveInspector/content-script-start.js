@@ -22,7 +22,7 @@ function shouldBreakNow(currentEvent, param1, param2) {
                 }
             } else if ((currentEvent === "evaluationYielded") || (currentEvent === "dependencyCreated")) {
                 if ((currentBreakPoint.params[0] !== undefined) && (currentBreakPoint.params[1] !== undefined)) {
-                    if ((+currentBreakPoint.params[0] === param1) && (currentBreakPoint.params[1] == param2 || param2.includes(currentBreakPoint.params[1]) )) {
+                    if ((+currentBreakPoint.params[0] === param1) && (currentBreakPoint.params[1] == param2 || String(param2).includes(currentBreakPoint.params[1]) )) {
                         return true;
                     }
                 }

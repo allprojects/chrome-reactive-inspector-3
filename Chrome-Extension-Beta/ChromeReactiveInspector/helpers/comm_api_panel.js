@@ -46,13 +46,13 @@ var allEdges = [];
             rxGraphStages = [];
             historyEntries = [];
             isConfirmed = false;
-            chrome.storage.sync.get('cri_config_rec_status', function (items) {
-                if (items.cri_config_rec_status !== undefined) {
-                    if (!items.cri_config_rec_status) {
-                        configRecStatusButton.click();
-                    }
-                }
-            });
+            // chrome.storage.sync.get('cri_config_rec_status', function (items) {
+            //     if (items.cri_config_rec_status !== undefined) {
+            //         if (!items.cri_config_rec_status) {
+            //             configRecStatusButton.click();
+            //         }
+            //     }
+            // });
         }
 
         var currentNodeId = false;

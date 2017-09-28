@@ -14,6 +14,9 @@ var previousData= {
     nodeId: '',
     value: ''
 };
+var rxObsCounter = 0;
+var subscriberList = [];
+var variables = [];
 
 // Jalangi Analysis Start
 J$.analysis = {};
@@ -219,9 +222,7 @@ if (Bacon !== undefined) {
 if (Rx !== undefined) {
 
     const _lift = Rx.Observable.prototype.lift;
-    var rxObsCounter = 0;
-    var subscriberList = [];
-    var variables = [];
+
     /**
      * Below operators do Flattens an Observable-of-Observables
      * @type {Array}
@@ -359,36 +360,37 @@ if (Rx !== undefined) {
         }
         sink.obsType = obsType;
 
-
-        function getSouceId(source) {
+        function getSourceId(source) {
             if (source.source && source.source.id) {
-                getSouceId(source.source)
+                getSourceId(source.source)
             } else {
                 return source.id
             }
         }
 
         //for crop example
-        if (sink.parent && sink.parent._id && this.source && this.source.id) {
-            var tempSourceId = getSouceId(this.source);
-            if (sink.parent._id !== tempSourceId) {
-                if (!checkIfEdgeAlreadyExists(sink.parent._id, tempSourceId)) {
-                    logEdgeData(sink.parent._id, tempSourceId, sink._operatorName);
-                }
-                if (sink.parent._parent && sink.parent._parent._id) {
-                    if (!checkIfEdgeAlreadyExists(this.id, sink.parent._parent._id)) {
-                        sendObjectToDevTools({
-                            content: {
-                                "edgeStart": sink.parent._id,
-                                "edgeStartName": '',
-                                "edgeEnd": sink.parent._parent._id,
-                                "edgeEndName": '',
-                                "edgeLabel": sink._operatorName.replace('Operator', '')
-                            },
-                            action: "removeEdge",
-                            destination: "panel"
-                        });
-                        logEdgeData(this.id, sink.parent._parent._id, sink._operatorName);
+        if(sink.parent && sink.parent._id && this.source && this.source.id){
+            var tempSourceId = getSourceId(this.source);
+            if(tempSourceId){
+                if(sink.parent._id !== tempSourceId) {
+                    if(!checkIfEdgeAlreadyExists(sink.parent._id, tempSourceId)) {
+                        logEdgeData(sink.parent._id, tempSourceId, sink._operatorName);
+                    }
+                    if( sink.parent._parent && sink.parent._parent._id){
+                        if(!checkIfEdgeAlreadyExists(this.id, sink.parent._parent._id)){
+                            sendObjectToDevTools({
+                                content: {
+                                    "edgeStart": sink.parent._id,
+                                    "edgeStartName": '',
+                                    "edgeEnd": sink.parent._parent._id,
+                                    "edgeEndName": '',
+                                    "edgeLabel": sink._operatorName.replace('Operator','')
+                                },
+                                action: "removeEdge",
+                                destination: "panel"
+                            }, fileReadOver);
+                            logEdgeData(this.id, sink.parent._parent._id, sink._operatorName);
+                        }
                     }
                 }
             }
@@ -473,15 +475,14 @@ if (Rx !== undefined) {
                             }
                         }
                     }
-
-                    if (self.parent && self.parent._id) {
-                        if (!checkIfEdgeAlreadyExists(self._id, self.parent._id)) {
-                            if (self.parent._parent && self.parent._parent._id && !checkIfEdgeAlreadyExists(self._id, self.parent._parent._id)) {
-                                logEdgeData(self.parent._id, self._id, self._operatorName);
-                                logEdgeData(self._id, self.parent._parent._id, self._operatorName);
+                        if(self.parent && self.parent._id){
+                            if(!checkIfEdgeAlreadyExists(self._id, self.parent._id)){
+                                if(self.parent._parent && self.parent._parent._id && !checkIfEdgeAlreadyExists(self._id, self.parent._parent._id)){
+                                    // logEdgeData(self.parent._id, self._id, self._operatorName);
+                                    logEdgeData(self._id, self.parent._parent._id, self._operatorName);
+                                }
                             }
                         }
-                    }
                 } else if (self.outerValue && self.outerValue.id && self.outerValue.constructor.name === 'ScalarObservable') {
                     logNodeData(self.outerValue.id, self.outerValue.constructor.name, '', '', nextValue, '');
                 }
@@ -649,7 +650,7 @@ function logNodeData(id, type, method, name, value, lineNumber) {
                 'nodeValue': val,
                 'sourceCodeLine': lineNumber
             }, action: "saveNode", destination: "panel"
-        });
+        }, fileReadOver);
         previousData.nodeId = id;
         previousData.value = value;
     }
@@ -698,7 +699,7 @@ function logEdgeData(startId, endId, name) {
         },
         action: "saveEdge",
         destination: "panel"
-    });
+    }, fileReadOver);
     currentStep++;
     if (shouldBreakNow('dependencyCreated', startId, endId)) {
         debugger;
@@ -714,7 +715,7 @@ function updateNodeEdgeName(node) {
         },
         action: "updateSavedEdge",
         destination: "panel"
-    });
+    }, fileReadOver);
 }
 
 /**
@@ -775,7 +776,7 @@ function sendAllNodesAndEdges() {
         },
         action: "allNodesEdges",
         destination: "panel"
-    });
+    }, fileReadOver);
 }
 
 var tempConstructorName = '';
@@ -803,8 +804,15 @@ function getValue(value) {
                     value = JSON.stringify({'type': value.type,'screenX':value.screenX, 'screenY':value.screenY});
                 else if(value.type === 'keydown' || value.type === 'keyup')
                     value = value.key;
-                else
-                    value = value.type;
+                else{
+                    try {
+                        value = JSON.stringify(value);
+                    }
+                    catch(err) {
+                        // catches error - Error converting circular Json
+                        value = value.type;
+                    }
+                }
             }else{
                 value = JSON.stringify(value);
             }

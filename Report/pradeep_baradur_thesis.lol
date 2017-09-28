@@ -32,3 +32,21 @@
 \contentsline {lstlisting}{\numberline {5.1}RxJS - Operators example}{37}{lstlisting.5.1}
 \defcounter {refsection}{0}\relax 
 \contentsline {lstlisting}{\numberline {5.2}RxJS - Databinding example}{38}{lstlisting.5.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {lstlisting}{\numberline {5.3}RxJS - Animation Test example}{40}{lstlisting.5.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {lstlisting}{\numberline {5.4}RxJS - Drawing example}{41}{lstlisting.5.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {lstlisting}{\numberline {5.5}RxJS - Stopwatch example}{44}{lstlisting.5.5}
+\defcounter {refsection}{0}\relax 
+\contentsline {lstlisting}{\numberline {5.6}BaconJS - Drag-n-Drop Example}{46}{lstlisting.5.6}
+\defcounter {refsection}{0}\relax 
+\contentsline {lstlisting}{\numberline {5.7}RxJS - Live updates from Wikipedia}{49}{lstlisting.5.7}
+\defcounter {refsection}{0}\relax 
+\contentsline {lstlisting}{\numberline {5.8}RxJS - Letter Count}{50}{lstlisting.5.8}
+\defcounter {refsection}{0}\relax 
+\contentsline {lstlisting}{\numberline {5.9}Previous implementation}{51}{lstlisting.5.9}
+\defcounter {refsection}{0}\relax 
+\contentsline {lstlisting}{\numberline {5.10}Current implementation}{52}{lstlisting.5.10}
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
