@@ -6,44 +6,86 @@
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.1}{\ignorespaces UML Class Diagram of the Observer Pattern\relax }}{7}{figure.caption.9}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces UML Class Diagram of the Observer Pattern\relax }}{7}{figure.caption.12}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Marble diagram\relax }}{13}{figure.caption.10}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Marble diagram\relax }}{13}{figure.caption.13}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Subject\relax }}{13}{figure.caption.11}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Subject\relax }}{13}{figure.caption.14}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Jalangi framework components\relax }}{18}{figure.caption.12}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Jalangi framework components\relax }}{18}{figure.caption.15}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.5}{\ignorespaces Chrome Developer Tools\relax }}{18}{figure.caption.13}
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Chrome Developer Tools\relax }}{18}{figure.caption.16}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.6}{\ignorespaces Chrome Extension Architecture\relax }}{19}{figure.caption.14}
-\defcounter {refsection}{0}\relax 
-\addvspace {10\p@ }
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Overview of system design\relax }}{24}{figure.caption.15}
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.2}{\ignorespaces System Architecture\relax }}{25}{figure.caption.16}
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Analyzer Design\relax }}{25}{figure.caption.17}
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.4}{\ignorespaces RxJS Dependency Graph Example\relax }}{26}{figure.caption.18}
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Chrome Extension Architecture\relax }}{19}{figure.caption.17}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Detailed System Components\relax }}{29}{figure.caption.19}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Overview of system design\relax }}{24}{figure.caption.18}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Chrome Reactive Inspector\relax }}{35}{figure.caption.20}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces System Architecture\relax }}{25}{figure.caption.19}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {4.3}{\ignorespaces History Query\relax }}{36}{figure.caption.21}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Analyzer Design\relax }}{25}{figure.caption.20}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.4}{\ignorespaces RxJS Dependency Graph Example\relax }}{27}{figure.caption.21}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Dependency graph - RxJS Operators example\relax }}{38}{figure.caption.22}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Detailed System Components\relax }}{29}{figure.caption.22}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Dependency graph evolution - RxJS Operators example\relax }}{38}{figure.caption.23}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Chrome Reactive Inspector\relax }}{35}{figure.caption.23}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Simple Data-binding example - RxJS\relax }}{39}{figure.caption.24}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces History Query\relax }}{36}{figure.caption.24}
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Dependency graph - RxJS Operators example\relax }}{38}{figure.caption.25}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Dependency graph evolution - RxJS Operators example\relax }}{38}{figure.caption.26}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Simple Data-binding example - RxJS\relax }}{39}{figure.caption.27}
 \defcounter {refsection}{0}\relax 
 \contentsline {subfigure}{\numberline {(a)}{\ignorespaces {UI}}}{39}{subfigure.3.1}
 \defcounter {refsection}{0}\relax 
 \contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Dependency graph}}}{39}{subfigure.3.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.4}{\ignorespaces UI - Animation Test\relax }}{41}{figure.caption.28}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Dependency graph - Animation Test\relax }}{41}{figure.caption.29}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.6}{\ignorespaces UI - Drawing example\relax }}{42}{figure.caption.30}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Dependency graph - Drawing example\relax }}{43}{figure.caption.31}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Setup Breakpoint - Drawing example\relax }}{44}{figure.caption.32}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.9}{\ignorespaces After Breakpoint is hit\relax }}{44}{figure.caption.33}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.10}{\ignorespaces Dependency graph - Drawing example\relax }}{45}{figure.caption.34}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.11}{\ignorespaces Search feature\relax }}{46}{figure.caption.35}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.12}{\ignorespaces Highlighting Dependent nodes\relax }}{46}{figure.caption.36}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.13}{\ignorespaces Highlighting dependencies of a node\relax }}{46}{figure.caption.37}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.14}{\ignorespaces BaconJS - Drag-n-Drop UI\relax }}{47}{figure.caption.38}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.15}{\ignorespaces BaconJS - Drag-n-Drop Dependency graph\relax }}{47}{figure.caption.39}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.16}{\ignorespaces History Queries example\relax }}{48}{figure.caption.40}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.17}{\ignorespaces UI - Wikipedia updates\relax }}{50}{figure.caption.41}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.18}{\ignorespaces Dependency graph - Wikipedia updates\relax }}{51}{figure.caption.42}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.19}{\ignorespaces RxJS - Letter Count example\relax }}{51}{figure.caption.43}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.20}{\ignorespaces CRI - Previous version\relax }}{52}{figure.caption.44}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.21}{\ignorespaces CRI - Current version\relax }}{53}{figure.caption.45}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.22}{\ignorespaces Javascript profiling - without CRI\relax }}{53}{figure.caption.46}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.23}{\ignorespaces Javascript profiling - with CRI\relax }}{53}{figure.caption.47}
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
