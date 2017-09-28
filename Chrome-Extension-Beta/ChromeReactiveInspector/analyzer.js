@@ -789,8 +789,16 @@ function getValue(value) {
                     value = JSON.stringify({'type': value.type,'screenX':value.screenX, 'screenY':value.screenY});
                 else if(value.type === 'keydown' || value.type === 'keyup')
                     value = value.key;
-                else
-                    value = value.type;
+                else{
+                    try {
+                        value = JSON.stringify(value);
+                    }
+                    catch(err) {
+                        // catches error - Error converting circular Json
+                        value = value.type;
+                    }
+                }
+
             }else{
                 value = JSON.stringify(value);
             }

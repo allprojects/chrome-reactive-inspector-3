@@ -16,7 +16,7 @@ $("#dialog").dialog({
     modal: true,
     buttons : {
         "Confirm" : function() {
-            setCriStatus($('#cri-rec-status'), false);
+            //setCriStatus($('#cri-rec-status'), false);
             // sendObjectToInspectedPage(
             //     {
             //         action: "threshold",
