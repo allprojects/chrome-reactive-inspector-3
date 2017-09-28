@@ -1,5 +1,5 @@
 var anon = function() {
-  alert('I am anonymous');
+  alert('I an anonymous function');
 };
 anon();
 setTimeout(function() {

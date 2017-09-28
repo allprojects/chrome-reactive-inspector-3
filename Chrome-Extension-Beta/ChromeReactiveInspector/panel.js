@@ -622,7 +622,6 @@ $('#cri-history-query-prev').click(function () {
         redrawGraphToStage(firstFoundStageId);
         $("#cri-history-current-step").text(nextStepToAccess + 1);
     }
-
 });
 $('#cri-history-query-next').click(function () {
     var currentStepFromHistoryQuery = $("#cri-history-current-step").text();
@@ -665,7 +664,7 @@ $('#cri-breakpoint-query-submit').click(function () {
 
 
         // NOW we have query and parameter
-        // check which query to apply , find data from current stages
+        // check which query to apply, find data from current stages
         var breakPointToStore = {
             query: historyQuery,
             params: matches
@@ -673,7 +672,6 @@ $('#cri-breakpoint-query-submit').click(function () {
         storeBreakPoint(breakPointToStore);
     }
 });
-
 
 // This method append breakpoint object to local storage
 function storeBreakPoint(breakPointToStore) {

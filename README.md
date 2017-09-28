@@ -16,10 +16,11 @@ Contains packed extension ready for installation.
 #### 3. Documentation
 Contains thesis and slides by Waqas Abbas.
 
-#### 4. TestApplications
+#### 4. Report
+Contains thesis and slides by Pradeep Baradur.
+
+#### 5. TestApplications
 Contains test applications.
-
-
 
 
 ## Installation Instructions
@@ -30,6 +31,7 @@ For more detail please go to [Chrome-Extension-Stable](Chrome-Extension-Stable/R
 #### 2. Download and configure Test application from "TestApplications" directory
 For more detail please go to [TestApplications](TestApps/README.md) directory. 
 
+
 ## Usage
 After Successful installation you can go to Chrome devtools and there you will see new panel called  "Reative Inspector"
 
@@ -39,7 +41,8 @@ It was continued as a Master Thesis by Pradeep Baradur.
 This project is done as extension to the work of [Reative Inspector](https://github.com/guidosalva/reactive-inspector)
 
 ### Contributions
-Waqas Abbas, Pradeep Baradur, [Prof. Dr Guido Salvaneschi](http://www.guidosalvaneschi.com/)
+Waqas Abbas, Pradeep Baradur, [Prof. Dr Guido Salvaneschi](http://www.guidosalvaneschi.com/),
+Benedikt Gross
 
 ## For Developers:
 
@@ -54,6 +57,11 @@ For development in Chrome version 35.0 or higher
 
 Now the extensions is loaded, but Chrome will ask at every start to disable the extension.
 Click Cancel in the dialog that pops up and proceed.
+
+## Credits
+I would like to thank my supervisor Guido Salvaneschi for his continuous support, his feedback
+and his patience.
+
 
 ### Debugging:
  * To debug the Reactive Inspector itself, press CTRL-Shift-I on the devtools page for the Reactive Inspector. Then navigate to the Sources Tab in the devtools window.

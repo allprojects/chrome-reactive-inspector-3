@@ -438,29 +438,31 @@ if (Rx !== undefined) {
 
                     nextValue = value;
                 }
-                else if (value === undefined)
-                    nextValue = 'undefined';
-                //Todo check for other type of events or similar kind
 
-                if (self._id) {
-                    // Added this condition for animation test example
-                    // Make sure it does not affect other
-                    if (self._parent && self._parent.constructor.name === 'Subscriber' && !self._operatorName) {
-                        if (self._parent.destination && self._parent.destination._complete && !self._parent.destination._id)
-                            logNodeData(this._parent._id, self._parent.obsType, '', '', nextValue, '');
-                    }
-                    logNodeData(self._id, self.obsType, '', '', nextValue, '');
-                    // Test case 35
-                    if (self._subscriptions && self._subscriptions.length) {
-                        self._subscriptions.forEach(function (subscription) {
-                            if (subscription._id && subscriberNames.includes(subscription.constructor.name)) {
-                                logNodeData(subscription._id, subscription.constructor.name, '', '', nextValue, '');
-                            }
-                        })
-                    }
-                    if (self.destination._id && checkIfNodeAlreadyExists(self.destination._id, '', 'Subscriber')) {
-                        logNodeData(self.destination._id, 'Subscriber', '', '', nextValue, '');
-                    }
+                else
+                    if(value === undefined)
+                        nextValue = 'undefined';
+                    //Todo check for other type of events or similar kind
+
+                    if(self._id){
+                        logNodeData(self._id, self.obsType, '', '', nextValue, '');
+                        // Added this condition for animation test example
+                        // Make sure it does not affect other
+                        // if(self._parent && self._parent.constructor.name === 'Subscriber' && !self._operatorName){
+                        //     if(self._parent.destination && self._parent.destination._complete && !self._parent.destination._id)
+                        //         logNodeData(this._parent._id, self._parent.obsType, '', '', nextValue, '');
+                        // }
+                        // Test case 35
+                        if(self._subscriptions && self._subscriptions.length){
+                            self._subscriptions.forEach(function (subscription) {
+                                if(subscription._id && subscriberNames.includes(subscription.constructor.name)){
+                                    logNodeData(subscription._id, subscription.constructor.name, '', '', nextValue, '');
+                                }
+                            })
+                        }
+                        if(self.destination._id && checkIfNodeAlreadyExists(self.destination._id, '', 'Subscriber')){
+                            logNodeData(self.destination._id, 'Subscriber', '', '', nextValue, '');
+                        }
 
                     // for animation example
                     else if (self.destination.constructor.name === 'SafeSubscriber' && !self.destination._id) {
@@ -784,7 +786,10 @@ function getValue(value) {
         tempConstructorName = value.constructor.name;
     switch(tempConstructorName){
         case 'KeyboardEvent':
-            value = value.currentTarget.value;
+            value = value.currentTarget.value || value.key;
+            if(value === undefined){
+                value = JSON.stringify(value);
+            }
             break;
         case 'Number':
             value = JSON.stringify(value);
@@ -793,14 +798,14 @@ function getValue(value) {
             value = value.toString();
             break;
         case 'Object':
-            if (value.hasOwnProperty('type')) {
-                if (value.type === 'mousemove' || value.type === 'mousedown' || value.type === 'mouseup' || value.type === 'mousehover' || value.type === 'click')
-                    value = JSON.stringify({'screenX': value.screenX, 'screenY': value.screenY});
-                else if (value.type === 'keydown' || value.type === 'keyup')
+            if(value.hasOwnProperty('type')){
+                if(value.type ==='mousemove' || value.type ==='mousedown' || value.type ==='mouseup' || value.type ==='mousehover' || value.type ==='click')
+                    value = JSON.stringify({'type': value.type,'screenX':value.screenX, 'screenY':value.screenY});
+                else if(value.type === 'keydown' || value.type === 'keyup')
                     value = value.key;
                 else
-                    value = JSON.stringify(value);
-            } else {
+                    value = value.type;
+            }else{
                 value = JSON.stringify(value);
             }
             break;

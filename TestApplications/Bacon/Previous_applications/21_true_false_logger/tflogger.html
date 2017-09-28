@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.js"></script>
+
+
+    <script src="../../js/Bacon.js"></script>
+
+    <style>
+        * {
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        span{
+            color:grey;
+        }
+
+        #swapi-ajax{
+            border: 1px solid;
+            padding: 10px;
+        }
+
+        #logger-wrapper{
+            background:pink;
+            margin: 10px 0px 0px 0px;
+        }
+
+        #display-wrapper{
+            display: inline-block;
+            border: 1px dotted;
+            padding: 50px;
+        }
+
+        #button-wrapper{
+            clear: left;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div id='button-wrapper'>
+    <button id='true'>True</button>
+    <button id='false'>False</button>
+</div>
+
+<div id='logger-wrapper'>
+    <p>Last TRUE @  <span id='log-true'></span></p>
+    <p>Last FALSE @  <span id='log-false'></span></p>
+</div>
+
+<div id='display-wrapper'>
+    <p>Trues:  <span id='count-true'></span></p>
+    <p>Falses:  <span id='count-false'></span></p>
+    <p>--------</p>
+    <p>Total:  <span id='count-total'></span></p>
+</div>
+
+<script type="text/javascript" src="index.js" charset="utf-8"></script>
+</body>
+</html>
