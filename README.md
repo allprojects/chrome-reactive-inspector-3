@@ -33,8 +33,8 @@ For more detail please go to **TestApplications** directory.
 After Successful installation you can go to Chrome devtools and there you will see new panel called  "Reative Inspector"
 
 ## History
-This project started as a Master thesis by Waqas Abbas at Tu Darmstadt Germany with collaboration of [Prof. Dr Guido Salvaneschi](http://www.guidosalvaneschi.com/)
-This project is done as extension to the work of [Reactive Inspector](https://github.com/guidosalva/reactive-inspector)
+This project started as a Master thesis by Waqas Abbas at Tu Darmstadt Germany with collaboration of [Prof. Dr Guido Salvaneschi](http://www.guidosalvaneschi.com/).
+This project is done as extension to the work of [Reactive Inspector](https://github.com/guidosalva/reactive-inspector).
 
 ## Credits
 I would like to thank my supervisor Guido Salvaneschi for his continuous support, his feedback
