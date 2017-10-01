@@ -1,12 +1,4 @@
-//console.log("instrumentor.js");
-
-// Get file names from configuration text field displayed in panel
-var filesShouldOnlyInstrument = false;
-chrome.storage.sync.get('criconfigincludes', function (items) {
-    if (items.criconfigincludes !== undefined) {
-        filesShouldOnlyInstrument = items.criconfigincludes;
-    }
-});
+var scriptCache = {};
 
 /** DOCUMENT LOAD INTERCEPTION Start ***/
 // load current document and
@@ -15,20 +7,18 @@ var request = new XMLHttpRequest();
 request.open('GET', location.href);
 
 var shouldReactiveDebuggerRun = true;
-// This is list of files that should skip while doing instrumentation
-// Later this should be overwritten from options page of extension
-var filesShouldNotInstrument = [ "underscore.js", "hammer.js" , "d3.v3.min.js" ];
 
 var filesShouldNotInclude = ["Rx.js", "rx.lite.js", "Bacon.js", "Bacon.UI.js", "jquery.js", "rx.all.js", "jquery-2.1.4.js"];
 var fileReadOver = false;
 request.onload = function (event) {
 
-    // here check if response text contain Bacon / Rxjs then continue otherwise do not do anything
     var respText = request.responseText;
     // check if this page contains bacon / rx , if not then debugger should not run
-    if ((respText.search("Rx.js") === -1) && (respText.search("Rx.js") === -1) && (respText.search("Bacon.js") === -1) && (respText.search("rx.lite.js") === -1) && (respText.search("rx.lite.compat.js") === -1) && (respText.search("rx.all.js") === -1)) {
-        shouldReactiveDebuggerRun = false;
-    }
+    var validFiles = ["Rx.js", "Bacon.js", "rx.lite.js", "rx.lite.compat.js", "rx.all.js"];
+
+    shouldReactiveDebuggerRun = _.some(validFiles, function (v) {
+        return respText.search(v) !== -1;
+    });
 };
 request.send(null);
 
@@ -46,58 +36,107 @@ if (shouldReactiveDebuggerRun === true) {
             //return setTimeout(callback, 0);
             return false;
         }
-        // if script tag contain source file
-        if (script.hasAttribute('src')) {
-            var filename = script.getAttribute('src').replace(/^.*[\\\/]/, '');
 
-            var request = new XMLHttpRequest();
-            request.open('GET', script.getAttribute('src'));
-            request.onload = function () {
-
-                if (filesShouldOnlyInstrument === false) {
-                    // NO CONFIG SET
-                    if (filesShouldNotInclude.indexOf(filename) !== -1) {}
-                    else if (_.contains(filesShouldOnlyInstrument, filename)) {
-                        eval(request.responseText);
-                    } else {
-                        var code = CriInstrument(request.responseText);
-                        eval(code);
-                        J$.W(-1, '', '', '');
-                        fileReadOver = true
-                    }
-                } else {
-                    // CONFIG SET SO only instrument files mentioned in config
-                    if (filesShouldNotInclude.indexOf(filename) !== -1) {}
-                    else if (_.contains(filesShouldOnlyInstrument, filename)) {
-                        var code = CriInstrument(request.responseText);
-                        eval(code);
-                        fileReadOver = true;
-                        J$.W(-1, '', '', '');
-                    } else {
-                        eval(request.responseText);
-                    }
-                }
-                setTimeout(next, 0, ++index);
-            };
-            request.send(null);
-        } else {
+        if (!script.hasAttribute('src')) {
             // script tag contains inline code.
-            var code = CriInstrument(script.textContent);
+            var code = instrumentInline(index, script.textContent);
             eval(code);
             fileReadOver = true;
             setTimeout(next, 0, ++index);
+            return;
         }
+
+        // if script tag contain source file
+        var filename = script.getAttribute('src').replace(/^.*[\\\/]/, '');
+
+        var request = new XMLHttpRequest();
+        request.open('GET', script.getAttribute('src'));
+        request.onload = function () {
+
+            // check if file should be included
+            if (filesShouldNotInclude.indexOf(filename) !== -1) {
+                setTimeout(next, 0, ++index);
+                return;
+            }
+
+            chrome.storage.sync.get('criconfigincludes', function (items) {
+                var filesToInstrument = items.criconfigincludes || false;
+
+                // check if file should be instrumented. If setting is not set, instrument all files.
+                if (filesToInstrument === false || _.contains(filesToInstrument, filename)) {
+
+
+                    chrome.storage.sync.get('developerMode', function (items) {
+                        var developerMode = items.developerMode;
+
+                        var code = instrumentFile(filename, request.responseText, developerMode);
+                        eval(code);
+                        J$.W(-1, '', '', '');
+                        fileReadOver = true;
+
+                        // next
+                        setTimeout(next, 0, ++index);
+                    });
+                } else {
+                    eval(request.responseText);
+                    // next
+                    setTimeout(next, 0, ++index);
+                }
+            });
+        };
+        request.send(null);
     }, 0, 0);
 
     /**     SEQUENTIAL Loader End    ***/
 
     /**
-     * This method will do instrumentation of given code using Jalangi
-     * If Jalangi did not found then it will return same code back
-     * @param code
+     * This method will do instrumentation of given code using Jalangi.
+     * If Jalangi is not found the original code will be returned.
+     * @param filename name/url of the script file
+     * @param code to instrument
      * @returns {string|*|Number|number|string|string}
      */
-    function CriInstrument(code) {
+    function instrumentFile(filename, code, developerMode) {
+        scriptCache[filename] = code;
+        var instrumented = getInstrumentedCode(code);
+        if (developerMode) {
+
+            var instrumentedFileName = filename;
+            if (instrumentedFileName.lastIndexOf('.') !== -1) {
+                instrumentedFileName = instrumentedFileName.substring(0, instrumentedFileName.lastIndexOf('.')) + '_instrumented.js';
+            } else {
+                instrumentedFileName = instrumentedFileName + '_instrumented.js'
+            }
+
+            var documentDomain = document.URL;
+            if (documentDomain.lastIndexOf('/') !== -1) {
+                documentDomain = documentDomain.substring(0, documentDomain.lastIndexOf("/") + 1);
+            }
+
+            instrumented += '\n//# sourceURL=' + documentDomain + instrumentedFileName;
+        }
+        return instrumented;
+    }
+
+    /**
+     * This method will do instrumentation of given code using Jalangi.
+     * If Jalangi is not found the original code will be returned.
+     * @param scriptNumber index of the script tag on the page
+     * @param code to instrument
+     * @returns {string|*|Number|number|string|string}
+     */
+    function instrumentInline(scriptNumber, code) {
+        // collect all inline scripts under url name
+        if (scriptCache[document.domain] === undefined) {
+            scriptCache[document.domain] = code;
+        } else {
+            // double comment to prevent any mess up of inline code
+            scriptCache[document.domain] += "/*<!-- code from script tag with index " + scriptNumber + " -->*/  " + code
+        }
+        return getInstrumentedCode(code);
+    }
+
+    function getInstrumentedCode(code) {
         var instrumentedCode = code;
         if (J$.instrumentCode !== undefined) {
             instrumentedCode = J$.instrumentCode(code, {wrapProgram: false, isEval: false}).code;

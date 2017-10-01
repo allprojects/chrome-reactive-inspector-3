@@ -85,10 +85,6 @@ var currentStep = 0;
                     SourceLocationLine = SourceLocation[1];
 
                 if (val) {
-                    var tempId = '';
-                    if (!isNaN(val.id))
-                        tempId = val.id;
-
                     window.variables.push({'name': name, 'id': val.id, 'location': SourceLocationLine});
                     currentType = val.constructor.name;
                 }
@@ -131,7 +127,7 @@ var currentStep = 0;
                         else {
                             if (name) {
                                 val.destination._id = ++window.rxObsCounter;
-                                var tempVal = ''
+                                var tempVal = '';
                                 if (previousData.nodeId === val._id) {
                                     tempVal = previousData.value;
                                     previousData = {}

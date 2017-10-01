@@ -81,40 +81,11 @@ var allEdges = [];
                 var currentSourceCodeLine = message.content.sourceCodeLine;
 
 
-                var newRef = '';
-                if ((currentRef.length === 0) || (currentRef === undefined)) {
-                    newRef = prevRef;
-                } else {
-                    newRef = currentRef;
-                }
-
-                var newValue = '';
-                if (currentValue !== "") {
-                    newValue = currentValue;
-                } else {
-                    newValue = prevValue;
-                }
-
-                var newSourceCodeLine = '';
-                if (currentSourceCodeLine !== "") {
-                    newSourceCodeLine = currentSourceCodeLine;
-                } else {
-                    newSourceCodeLine = prevSourceCodeLine;
-                }
-
-                var newMethod = '';
-                if ((currentMethod.length === 0) || (currentMethod === undefined)) {
-                    newMethod = prevMethod;
-                } else {
-                    newMethod = currentMethod;
-                }
-
-                var newType = '';
-                if ((currentType.length === 0) || (currentType === undefined)) {
-                    newType = prevType;
-                } else {
-                    newType = currentType;
-                }
+                var newRef = getOrDefault(currentRef, prevRef);
+                var newValue = getOrDefault(currentValue, prevValue);
+                var newSourceCodeLine = getOrDefault(currentSourceCodeLine, prevSourceCodeLine);
+                var newMethod = getOrDefault(currentMethod, prevMethod);
+                var newType = getOrDefault(currentType, prevType);
 
 
                 if (newValue || newValue.constructor.name === 'Boolean') {
@@ -146,6 +117,7 @@ var allEdges = [];
                 tempNode.nodeValue = truncatedVal;
             }
             else {
+                currentAction = "newNode";
 
                 var currentClasses = "current";
                 if (message.content.nodeRef !== "") {
@@ -154,13 +126,12 @@ var allEdges = [];
                     currentClasses = "current nodeWithoutRef";
                 }
 
-                var tempVal = message.content.nodeValue
+                var tempVal = message.content.nodeValue;
                 if (tempVal || tempVal.constructor.name === 'Boolean') {
                     newValue = tempVal.toString();
                     truncatedVal = newValue.substring(0, 25);
                 }
 
-                currentAction = "newNode";
                 g.setNode(message.content.nodeId, {
                     label: "Id: " + message.content.nodeId + "<br /> Name:" + message.content.nodeRef + "<br /> Value: " + truncatedVal,
                     labelType: "html",
@@ -178,33 +149,8 @@ var allEdges = [];
                 tempNode.nodeValue = message.content.nodeValue;
             }
             render(d3.select("svg g"), g);
-            $("#svg-canvas rect").attr("rx", "5");
-            $("#svg-canvas rect").attr("ry", "5");
-
-            inner.selectAll("g.node")
-                .attr("title", function (v) {
-                    return styleTooltip(g.node(v).nodeId, g.node(v).ref, g.node(v).type, g.node(v).sourceCodeLine, g.node(v).method)
-                })
-                .each(function (v) {
-                    $(this).tipsy({gravity: "w", opacity: 1, html: true});
-                });
-
-            /**
-             * This will send node details to console whenever an user clicks on it.
-             */
-            svg.selectAll("g.node").on("click", function (id) {
-                _node = g.node(id);
-                sendObjectToInspectedPage(
-                    {
-                        action: "node_details",
-                        content: {
-                            "id": _node.nodeId,
-                            "value": _node.value,
-                            "source_line_number": _node.sourceCodeLine
-                        }
-                    }
-                );
-            });
+            applyRxRyAttribute();
+            applyNodeExtensions();
 
             // capture current dependency graph
             stageId = captureGraphAndSaveAsNewStage(currentAction, currentNodeId);
@@ -215,8 +161,8 @@ var allEdges = [];
                 label: message.content.edgeLabel
             });
             render(d3.select("svg g"), g);
-            $("#svg-canvas rect").attr("rx", "5");
-            $("#svg-canvas rect").attr("ry", "5");
+            applyRxRyAttribute();
+
             stageId = captureGraphAndSaveAsNewStage("saveEdge", false);
             saveHistory(stageId, "saveEdge", message.content)
         } else if (message.action === "updateSavedEdge") {
@@ -229,15 +175,14 @@ var allEdges = [];
                         history.startNodeName = message.content.name
                     }
                 }
-            })
+            });
         } else if (message.action === "allNodesEdges") {
             allNodes = message.content.nodes;
             allEdges = message.content.edges;
         } else if (message.action === 'removeEdge') {
             g.removeEdge(message.content.edgeStart, message.content.edgeEnd, message.content.edgeLabel);
             render(d3.select("svg g"), g);
-            $("#svg-canvas rect").attr("rx", "5");
-            $("#svg-canvas rect").attr("ry", "5");
+            applyRxRyAttribute();
             stageId = captureGraphAndSaveAsNewStage("saveEdge", false);
             saveHistory(stageId, "saveEdge", message.content)
         }
@@ -245,6 +190,13 @@ var allEdges = [];
     });
 
 }());
+
+function getOrDefault(newValue, defaultValue) {
+    if (!newValue || newValue.length === 0) {
+        return defaultValue
+    }
+    return newValue;
+}
 
 var isConfirmed = false;
 
@@ -357,7 +309,6 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
         console.log('Settings retrieved');
         console.log(items);
     });
-
 });
 
 

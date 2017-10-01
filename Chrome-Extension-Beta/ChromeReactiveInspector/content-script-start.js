@@ -66,8 +66,7 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
  */
 function printValues(currentStep, value, nodeId) {
     if (isPrintOptionSelected) {
-        console.log("------------------------------Value at step: " + currentStep + " of Node " + nodeId + " is----------------------------------------");
-        console.log(value);
+        console.log("-- Value at step: " + currentStep + " of Node " + nodeId + " is " + value + " --");
     }
 }
 

@@ -29,6 +29,8 @@
 <!-- for Canvas image to downloadable image -->
 <script src="libraries/simg.js"></script>
 
+<script src="helpers/optionsAccess.js"></script>
+
 <div id="dialog" title="Confirmation Required">
     The program has reached the threshold value you have set.
     Click on Confirm to continue logging the values or cancel to pause the logging.
@@ -46,10 +48,12 @@
     <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12 row">
         <div class="col-md-7 col-lg-7 col-sm-12 col-xs-12">
             <div class="col-sm-4 col-xs-5 col-md-5 col-lg-5 pd-left-5">
-                <input name="searchNode" placeholder="Type Node name" id="cri-node-search-val" class="form-control" style="max-width: 170px;">
+                <input name="searchNode" placeholder="Type Node name" id="cri-node-search-val" class="form-control"
+                       style="max-width: 170px;">
             </div>
             <div class="dropdown col-sm-5 col-xs-5 col-md-5 col-lg-5">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="featureType" data-toggle="dropdown">Select
+                <button class="btn btn-primary dropdown-toggle" type="button" id="featureType" data-toggle="dropdown">
+                    Select
                     <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     <li><a href="#">Search</a></li>
@@ -136,10 +140,9 @@
 <hr class="col-lg-12 col-md-12 col-xs-12 col-sm-12 row">
 <div class="col-md-12 col-lg-12">
     <h4>Dependency Graph</h4>
-    <svg id="svg-canvas" width="100%" ></svg>
+    <svg id="svg-canvas" width="100%"></svg>
     <div class="tooltip" id="cri-node-tooltip" style=""></div>
 </div>
-
 <script src="panel.js"></script>
 <script src="helpers/comm_api_panel.js"></script>
 </body>

@@ -1,31 +1,32 @@
 // Load the previous options
 document.addEventListener('DOMContentLoaded', restore_options);
 
+var $developerMode = $("#debug");
+var $threshold = $("#threshold");
+var $printAllValues = $('#printAllValues');
+
 // Saves options to chrome.storage
 function save_options() {
     chrome.storage.sync.set({
-        thresholdValue: $("#threshold").val()
-    }, function() {
-        dataSaved();
-    });
-    chrome.storage.sync.set({
-        printAllValue: $('#printAllValues').prop('checked')
-    }, function() {
+        thresholdValue: $threshold.val(),
+        printAllValue: $printAllValues.prop('checked'),
+        developerMode: $developerMode.prop('checked')
+    }, function () {
         dataSaved();
     });
 }
 
 var thresholdValue = '';
+
 function restore_options() {
     chrome.storage.sync.get({
-        thresholdValue: ''
-    }, function(items) {
-        $("#threshold").val(items.thresholdValue);
-    });
-    chrome.storage.sync.get({
-        printAllValue: ''
-    }, function(items) {
-        $('#printAllValues').prop('checked', items.printAllValue);
+        thresholdValue: '',
+        printAllValue: '',
+        developerMode: ''
+    }, function (items) {
+        $threshold.val(items.thresholdValue);
+        $printAllValues.prop('checked', items.printAllValue);
+        $developerMode.prop('checked', items.developerMode);
     });
     chrome.storage.sync.set({
         'nodesDoNotSave': []
@@ -35,21 +36,21 @@ function restore_options() {
 function dataSaved() {
     var status = document.getElementById('status');
     status.textContent = 'Options saved.';
-    setTimeout(function() {
+    setTimeout(function () {
         status.textContent = '';
     }, 750);
 }
 
-var nodeInput = $('#nodeId');
-jQuery( document ).ready(function( $ ) {
+var $nodeInput = $('#nodeId');
+jQuery(document).ready(function ($) {
 
-    nodeInput.tokenfield();
-    nodeInput
+    $nodeInput.tokenfield();
+    $nodeInput
         .on('tokenfield:createtoken', function (e) {
-            if(isNaN(e.attrs.value))
+            if (isNaN(e.attrs.value))
                 e.preventDefault();
             var existingTokens = $(this).tokenfield('getTokens');
-            $.each(existingTokens, function(index, token) {
+            $.each(existingTokens, function (index, token) {
                 if (token.value === e.attrs.value)
                     e.preventDefault();
             });
@@ -81,7 +82,7 @@ jQuery( document ).ready(function( $ ) {
 var previousNodes = [];
 chrome.storage.sync.get('nodesDoNotSave', function (items) {
     previousNodes = items.nodesDoNotSave || [];
-    nodeInput.value = $('#nodeId').tokenfield('setTokens', items.nodesDoNotSave) || '';
+    $nodeInput.value = $('#nodeId').tokenfield('setTokens', items.nodesDoNotSave) || '';
 });
 
 

@@ -41,11 +41,8 @@ function checkPauseNow() {
 
 // Listen message from background page s, that may be sent from panel
 chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
-    //console.log("message received to content script from background js");
-    if (msg.action === 'test') {
-        // console.log("Message received!" + msg.content);
-    }
-    else if (msg.action === 'node_details') {
+    // message received to content script from background js
+    if (msg.action === 'node_details') {
         console.log("Node details");
         console.log("Node id " + msg.content.id);
         console.log("Node value " + msg.content.value);

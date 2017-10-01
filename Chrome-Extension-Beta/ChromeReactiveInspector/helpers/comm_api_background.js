@@ -16,12 +16,7 @@ chrome.runtime.onConnect.addListener(function (port) {
             tabId = message.tabId;
             tabPorts[tabId] = port;
         }
-
-        chrome.tabs.executeScript(tabId, {file: "analyzer.js"}, function () {
-            chrome.tabs.executeScript(tabId, {file: "instrumentor.js"}, function () {
-                //all injected
-            });
-        });
+        injectScripts(tabId);
     });
 
     var extensionListener = function (message, sender, sendResponse) {
@@ -30,7 +25,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 
         const port = sender.tab && tabPorts[sender.tab.id];
         if (port && message.destination === "panel") {
-            // alert("background.js - destination is panel");
+            // destination is panel;
             port.postMessage(message);
 
         } else if (message.destination === "background") {
@@ -47,8 +42,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 
             if (message.tabId && message.content) {
 
-                //  alert("background.js - got from panel and send to content script");
-
+                // got from panel and send to content script");
                 chrome.tabs.sendMessage(message.tabId, message, sendResponse);
 
                 // This accepts messages from the inspectedPage and
@@ -89,11 +83,20 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
         chrome.tabs.sendMessage(tabId, {action: 'loading'}, function (response) {
         });
         if (tabPorts[tabId] !== undefined) {
-            chrome.tabs.executeScript(tabId, {file: "analyzer.js"}, function () {
-                chrome.tabs.executeScript(tabId, {file: "instrumentor.js"}, function () {
-                    //all injected
-                });
-            });
+            injectScripts(tabId);
         }
     }
 });
+
+function injectScripts(tabId) {
+    executeScriptsSync(tabId, ["analyzer.js", "instrumentor.js"], 0);
+}
+
+function executeScriptsSync(tabId, scripts, index) {
+    if (index === scripts.length)
+        return;
+
+    chrome.tabs.executeScript(tabId, {file: scripts[index]}, function () {
+        executeScriptsSync(tabId, scripts, ++index);
+    });
+}

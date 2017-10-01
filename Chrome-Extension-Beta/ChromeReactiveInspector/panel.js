@@ -45,10 +45,11 @@ $dialog.dialog({
 
 // Simple function to style the tooltip for the given node.
 var styleTooltip = function (id, name, type, source, method) {
+
     return "<div class='custom_tooltip'>" +
         "<p>" + 'Id: ' + id + "</p>" +
         "<p>" + 'Name: ' + name + "</p><p>" + 'Type: ' + type + "</p>" +
-        "<p>" + 'Source Code Line: ' + source + "</p> " +
+        "<p>" + 'Source Code Line: ' + source + "</p>" +
         "<p>" + 'Method: ' + method + "</p>" +
         "</div>";
 };
@@ -183,12 +184,18 @@ function redrawGraphToStage(stageToRedraw) {
 
     // draw graph with asked stage data
     render(d3.select("svg g"), g);
-    $("#svg-canvas rect").attr("rx", "5");
-    $("#svg-canvas rect").attr("ry", "5");
+    applyRxRyAttribute();
+    applyNodeExtensions();
+}
 
-    /**
-     * This will display node details on mouse hover.
-     */
+function applyRxRyAttribute() {
+    var $canvasRects = $("#svg-canvas").find("rect");
+    $canvasRects.attr("rx", "5");
+    $canvasRects.attr("ry", "5");
+}
+
+function applyNodeExtensions() {
+    // This will display node details on mouse hover.
     inner.selectAll("g.node")
         .attr("title", function (v) {
             return styleTooltip(g.node(v).nodeId, g.node(v).ref, g.node(v).type, g.node(v).sourceCodeLine, g.node(v).method)
@@ -202,16 +209,16 @@ function redrawGraphToStage(stageToRedraw) {
      */
     svg.selectAll("g.node").on("click", function (id) {
         _node = g.node(id);
-        sendObjectToInspectedPage(
-            {
-                action: "node_details",
-                content: {
-                    "id": _node.nodeId,
-                    "value": _node.value,
-                    "source_line_number": _node.sourceCodeLine
+            sendObjectToInspectedPage(
+                {
+                    action: "node_details",
+                    content: {
+                        "id": _node.nodeId,
+                        "value": _node.value,
+                        "source_line_number": _node.sourceCodeLine
+                    }
                 }
-            }
-        );
+            );
     });
 
 }
@@ -244,7 +251,7 @@ chrome.storage.sync.get('cri_config_rec_status', function (items) {
         }
     }
 });
-
+//TODO: Warning, this is not a synchronous call so threshold may not be set when its used
 chrome.storage.sync.get('thresholdValue', function (items) {
     threshold = items.thresholdValue;
 });
