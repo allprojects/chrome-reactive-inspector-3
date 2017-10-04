@@ -67,12 +67,13 @@ var allEdges = [];
 
             if (g.node(message.content.nodeId) !== undefined) {
                 currentAction = "updateNode";
+                var node = g.node(message.content.nodeId);
 
-                var prevRef = g.node(message.content.nodeId).ref;
-                var prevValue = g.node(message.content.nodeId).value;
-                var prevType = g.node(message.content.nodeId).type;
-                var prevMethod = g.node(message.content.nodeId).method;
-                var prevSourceCodeLine = g.node(message.content.nodeId).sourceCodeLine;
+                var prevRef = node.ref;
+                var prevValue = node.value;
+                var prevType = node.type;
+                var prevMethod = node.method;
+                var prevSourceCodeLine = node.sourceCodeLine;
 
                 var currentRef = message.content.nodeRef;
                 var currentValue = message.content.nodeValue;

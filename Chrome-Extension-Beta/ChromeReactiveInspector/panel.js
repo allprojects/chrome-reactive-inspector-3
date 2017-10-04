@@ -759,3 +759,31 @@ function refreshCurrentBreakPointsFrontEnd() {
 refreshCurrentBreakPointsFrontEnd();
 // })();
 
+$canvas = $('svg-canvas');
+$canvas.on('keydown', function(e){
+    toggleCodeInfo(e.ctrlKey);
+});
+$canvas.on('mouseenter',function(e){
+    toggleCodeInfo(e.ctrlKey);
+});
+
+function toggleCodeInfo(ctrlPressed) {
+    inner.selectAll("g.node")
+        .attr("title", function (v) {
+            if(ctrlPressed){
+                return createCodePreview(g);
+            }else{
+                return styleTooltip(g.node(v).nodeId, g.node(v).ref, g.node(v).type, g.node(v).sourceCodeLine, g.node(v).method)
+            }
+        })
+        .each(function (v) {
+            $(this).tipsy({gravity: "w", opacity: 1, html: true});
+        });
+}
+
+function createCodePreview(g) {
+    // call background comm api to get code async
+    // return tooltips and jquery the code preview on callback receive.
+    // check in callback if ctrl is pressed
+    return '';
+}
