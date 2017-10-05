@@ -73,88 +73,96 @@ var currentStep = 0;
         // this will log if any Observable being assigned to js variable
         this.write = function (iid, name, val, oldValue) {
             if (iid === -1) {
-                // console.log('End of file reading!');
+                // End of file reading;
                 sendAllNodesAndEdges();
+                return;
+            }
+
+            var currentType = "";
+            // console.log('writing variable operation intercept: ' + name);
+            SourceLocationLine = '';
+            // source location
+            SourceLocation = window.iidToLocationMap[iid];
+            if (SourceLocation) {
+                SourceLocationLine = SourceLocation[1];
+            }
+
+            if (val) {
+                window.variables.push({'name': name, 'id': val.id, 'location': SourceLocationLine});
+                currentType = val.constructor.name;
+            }
+
+            var currentTypeToDisplay = '';
+            if (val._isEventStream) {
+                currentTypeToDisplay = "Eventstream";
+
+            } else if (val._isProperty) {
+                currentTypeToDisplay = "Property";
+
             } else {
-                var currentType = "";
-                // console.log('writing variable operation intercept: ' + name);
-                SourceLocationLine = '';
-                // source location
-                SourceLocation = window.iidToLocationMap[iid];
-                if (SourceLocation)
-                    SourceLocationLine = SourceLocation[1];
+                currentTypeToDisplay = currentType;
+            }
 
-                if (val) {
-                    window.variables.push({'name': name, 'id': val.id, 'location': SourceLocationLine});
-                    currentType = val.constructor.name;
+            var currentTypeInSmall = currentType.toLowerCase();
+
+            if (currentTypeInSmall.search("observable") !== -1 || currentTypeInSmall.search("subject") !== -1) {
+                if (!(val.hasOwnProperty('operator') && val.operator === undefined)) {
+                    // bacon observer already has the id attribute
+                    val = checkAndAssignId(val);
+                    // log the node and update window.variables
+                    logNodeData(val.id, currentTypeToDisplay, '', name, '', SourceLocationLine);
+                    updatedVar = {'id': val.id, 'name': name};
+                    _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
+                    updateNodeEdgeName(updatedVar)
                 }
 
-                var currentTypeToDisplay = '';
-                if (val._isEventStream) {
-                    currentTypeToDisplay = "Eventstream";
-                }
-                else if (val._isProperty) {
-                    currentTypeToDisplay = "Property";
-                } else {
-                    currentTypeToDisplay = currentType;
+                return val;
+            }
+
+            if (val && val.constructor.name === 'Subscriber') {
+                if (!val.hasOwnProperty("_id")) {
+                    return val;
                 }
 
-                var currentTypeInSmall = currentType.toLowerCase();
-
-                if (currentTypeInSmall.search("observable") !== -1 || currentTypeInSmall.search("subject") !== -1) {
-                    if (!(val.hasOwnProperty('operator') && val.operator === undefined)) {
-                        // bacon observer already has the id attribute
-                        val = checkAndAssignId(val);
-                        // log the node and update window.variables
-                        logNodeData(val.id, currentTypeToDisplay, '', name, '', SourceLocationLine);
-                        updatedVar = {'id': val.id, 'name': name};
+                // test case 53
+                if (currentType === val.obsType) {
+                    // update name of subscriber and update window.variables
+                    if (!checkIfNodeAlreadyExists(val._id, name, currentType)) {
+                        logNodeData(val._id, currentTypeToDisplay, '', name, '', SourceLocationLine);
+                        updatedVar = {'id': val._id, 'name': name};
                         _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
                         updateNodeEdgeName(updatedVar)
                     }
                 }
-                else if (val && val.constructor.name === 'Subscriber') {
-                    if (val.hasOwnProperty("_id")) {
-                        // test case 53
-                        if (currentType === val.obsType) {
-                            // update name of subscriber and update window.variables
-                            if (!checkIfNodeAlreadyExists(val._id, name, currentType)) {
-                                logNodeData(val._id, currentTypeToDisplay, '', name, '', SourceLocationLine);
-                                updatedVar = {'id': val._id, 'name': name};
-                                _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
-                                updateNodeEdgeName(updatedVar)
-                            }
-                        }
-                        else {
-                            if (name) {
-                                val.destination._id = ++window.rxObsCounter;
-                                var tempVal = '';
-                                if (previousData.nodeId === val._id) {
-                                    tempVal = previousData.value;
-                                    previousData = {}
-                                }
-                                logNodeData(val.destination._id, currentTypeToDisplay, '', name, tempVal, SourceLocationLine);
-                                logEdgeData(val._id, val.destination._id, '')
-                            }
-                        }
-
-                        if (val._subscriptions && val._subscriptions.length) {
-                            val._subscriptions.forEach(function (subscription) {
-                                if (subscription._id) {
-                                    // Test case 41 - example 2
-                                    if (subscription._parent && subscription._parent._id)
-                                        if (!checkIfEdgeAlreadyExists(subscription._parent._id, subscription._id)) {
-                                            logEdgeData(subscription._id, subscription._parent._id, '')
-                                        }
-                                        else if (!checkIfEdgeAlreadyExists(val._id, subscription._id)) {
-                                            logEdgeData(val._id, subscription._id, '')
-                                        }
-                                }
-                            })
-                        }
+                else if (name) {
+                    val.destination._id = ++window.rxObsCounter;
+                    var tempVal = '';
+                    if (previousData.nodeId === val._id) {
+                        tempVal = previousData.value;
+                        previousData = {}
                     }
+                    logNodeData(val.destination._id, currentTypeToDisplay, '', name, tempVal, SourceLocationLine);
+                    logEdgeData(val._id, val.destination._id, '');
                 }
-                return val;
+
+                if (val._subscriptions && val._subscriptions.length) {
+                    val._subscriptions.forEach(function (subscription) {
+                        if (!subscription._id) {
+                            return;
+                        }
+                        // Test case 41 - example 2
+                        if (subscription._parent && subscription._parent._id)
+                            if (!checkIfEdgeAlreadyExists(subscription._parent._id, subscription._id)) {
+                                logEdgeData(subscription._id, subscription._parent._id, '')
+                            }
+                            else if (!checkIfEdgeAlreadyExists(val._id, subscription._id)) {
+                                logEdgeData(val._id, subscription._id, '')
+                            }
+                    });
+                }
+
             }
+            return val;
         };
     }
 
@@ -722,10 +730,7 @@ function updateNodeEdgeName(node) {
  */
 function checkIfNodeAlreadyExists(nodeId, name, type) {
     return _.some(allNodes, function (node) {
-        if (name)
-            return node.nodeId === nodeId && node.name === name && node.type === type;
-        else
-            return node.nodeId === nodeId && node.type === type;
+        return node.nodeId === nodeId && (!name || node.name === name) && node.type === type;
     });
 }
 
@@ -820,19 +825,19 @@ function getValue(value) {
             value = JSON.stringify(value);
             break;
         case 'String':
-            value = value;
+            // keep value
             break;
         case 'Boolean':
-            value = value;
+            // keep value
             break;
         case 'GroupedObservable':
             value = value.key;
             break;
         case 'Observable':
-            value = value;
+            // keep value
             break;
         case 'BehaviorSubject':
-            value = value;
+            // keep value
             break;
         case 'Function':
             var tempType = value.constructor.name;
