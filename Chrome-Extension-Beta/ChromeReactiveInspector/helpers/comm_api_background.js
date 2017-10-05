@@ -21,15 +21,15 @@ chrome.runtime.onConnect.addListener(function (port) {
 
     var extensionListener = function (message, sender, sendResponse) {
 
-        // alert("background.js extensionListener");
-
         const port = sender.tab && tabPorts[sender.tab.id];
+
         if (port && message.destination === "panel") {
             // destination is panel;
             port.postMessage(message);
 
         } else if (message.destination === "background") {
             if (message.action === "tabInfo") {
+
                 // retrieve url for download feature
                 chrome.tabs.get(tabId, function (tab) {
                     sendResponse({currentTabUrl: tab.url});
@@ -37,23 +37,22 @@ chrome.runtime.onConnect.addListener(function (port) {
                 // return true to enable async answer
                 return true;
             }
-            return false;
         } else {
 
             if (message.tabId && message.content) {
-
                 // got from panel and send to content script");
                 chrome.tabs.sendMessage(message.tabId, message, sendResponse);
+                // return true to enable async answer
+                return true;
 
-                // This accepts messages from the inspectedPage and
-                // sends them to the panel
             } else {
-                // alert("background.js - got from content script and send to panel script");
-                if (port)
+                // got from content script and send to panel script
+                if (port) {
                     port.postMessage(message);
-                else
+                }
+                else {
                     return false;
-
+                }
             }
 
         }
@@ -79,7 +78,9 @@ chrome.tabs.onReplaced.addListener(function (newTabId, oldTabId) {
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+
     if (changeInfo.status === 'loading') {
+
         chrome.tabs.sendMessage(tabId, {action: 'loading'}, function (response) {
         });
         if (tabPorts[tabId] !== undefined) {

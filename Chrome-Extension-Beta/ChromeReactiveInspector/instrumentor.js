@@ -143,4 +143,19 @@ if (shouldReactiveDebuggerRun === true) {
         }
         return instrumentedCode;
     }
+
+    function getCode(file, from, to) {
+        var code = scriptCache[file];
+        if (!code || code.length === 0) {
+            return ''
+        }
+
+        var lines = code.split(/\r?\n/g);
+        if (to > lines.length) {
+            to = lines.length;
+        }
+
+        var relevant = lines.slice(from, to);
+        return relevant.join('\n');
+    }
 }

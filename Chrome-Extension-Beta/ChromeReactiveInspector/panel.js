@@ -58,7 +58,8 @@ var g = '',
     render = '',
     svg = '',
     svgGroup = '',
-    inner = '';
+    inner = '',
+    $canvas = $("#svg-canvas");
 
 var initialiseGraph = function () {
     // Create the input graph
@@ -194,33 +195,88 @@ function applyRxRyAttribute() {
     $canvasRects.attr("ry", "5");
 }
 
+var codePreviewCanceled = [];
+
 function applyNodeExtensions() {
     // This will display node details on mouse hover.
     inner.selectAll("g.node")
+    /* clear all previous code previews */
+        .attr("nodeinfo", null)
+        /* add tooltips */
         .attr("title", function (v) {
             return styleTooltip(g.node(v).nodeId, g.node(v).ref, g.node(v).type, g.node(v).sourceCodeLine, g.node(v).method)
         })
-        .each(function (v) {
+        .each(function () {
             $(this).tipsy({gravity: "w", opacity: 1, html: true});
         });
 
-    /**
-     * This will send node details to console whenever an user clicks on it.
-     */
-    svg.selectAll("g.node").on("click", function (id) {
-        _node = g.node(id);
-            sendObjectToInspectedPage(
-                {
-                    action: "node_details",
-                    content: {
-                        "id": _node.nodeId,
-                        "value": _node.value,
-                        "source_line_number": _node.sourceCodeLine
-                    }
-                }
-            );
-    });
+    // add events for code previews
+    svg.selectAll("g.node")
+        .on("mouseenter.code", function (v) {
 
+            var that = d3.select(this);
+            var node = g.node(v);
+            if (d3.event.ctrlKey) {
+                initCodePreview(that, node);
+            }
+
+            $canvas.on("keydown.code", function () {
+                if (d3.event.ctrlKey) {
+                    initCodePreview(that, node);
+                }
+            });
+
+            that.on("mouseleave.code", function () {
+                // unregister events
+                that.on("mouseleave.code", null);
+                $canvas.off("keydown.code");
+                cancelCodePreview(that, node);
+            })
+        });
+}
+
+function initCodePreview(d3node, data) {
+
+    if (d3node.attr("nodeinfo")) {
+        // code preview is already displayed
+        return;
+    }
+    // set pending to prevent multiple code requests
+    d3node.attr("nodeinfo", "-pending-");
+
+    createCodePreview(data, function (answer) {
+
+        if (!answer.code) {
+            return;
+        }
+        // do not display code preview if user already moved the mouse outside of the node
+        if (codePreviewCanceled[data.nodeId]) {
+            codePreviewCanceled[data.node] = null;
+            d3node.attr("nodeinfo", null);
+            return;
+        }
+
+        var code = answer.code;
+
+        // switch tooltip with code preview
+        d3node.attr("nodeinfo", d3node.attr("original-title"));
+        d3node.attr("original-title", createCodePreviewHtml(code));
+    });
+}
+
+function cancelCodePreview(d3node, data) {
+    if (!d3node.attr("nodeinfo")) {
+        return;
+    }
+    if (d3node.attr("nodeinfo") === "-pending-") {
+        // signal pending request to cancel
+        codePreviewCanceled[data.nodeId] = true;
+        return;
+    }
+
+    // restore normal tooltip
+    d3node.attr("title", d3node.attr("nodeinfo"));
+    d3node.attr("nodeinfo", null);
 }
 
 var configIncludeFilesField = $('#cri-config-includes');
@@ -757,33 +813,23 @@ function refreshCurrentBreakPointsFrontEnd() {
 }
 
 refreshCurrentBreakPointsFrontEnd();
+
 // })();
 
-$canvas = $('svg-canvas');
-$canvas.on('keydown', function(e){
-    toggleCodeInfo(e.ctrlKey);
-});
-$canvas.on('mouseenter',function(e){
-    toggleCodeInfo(e.ctrlKey);
-});
+function createCodePreview(node, callback) {
+    // check in callback if ctrl is pressed
+    if (!node.sourceCodeLine) return;
 
-function toggleCodeInfo(ctrlPressed) {
-    inner.selectAll("g.node")
-        .attr("title", function (v) {
-            if(ctrlPressed){
-                return createCodePreview(g);
-            }else{
-                return styleTooltip(g.node(v).nodeId, g.node(v).ref, g.node(v).type, g.node(v).sourceCodeLine, g.node(v).method)
-            }
-        })
-        .each(function (v) {
-            $(this).tipsy({gravity: "w", opacity: 1, html: true});
-        });
+    var from = node.sourceCodeLine - 3;
+    var to = node.sourceCodeLine + 3;
+
+    sendObjectToInspectedPage({
+        destination: 'instrumented',
+        action: 'getSourceCode',
+        content: {to: to, from: from}
+    }, callback);
 }
 
-function createCodePreview(g) {
-    // call background comm api to get code async
-    // return tooltips and jquery the code preview on callback receive.
-    // check in callback if ctrl is pressed
-    return '';
+function createCodePreviewHtml(code) {
+    return '<pre><code>' + _.escape(code) + '</code></pre>'
 }

@@ -60,4 +60,8 @@ chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
     else if (msg.action === 'threshold') {
         pauseNow = msg.content.status;
     }
+    else if (msg.action === 'getSourceCode') {
+        //TODO extract real filename from jalangi
+        sendResponse({code: getCode("index.js", msg.content.from, msg.content.to)});
+    }
 });
