@@ -45,13 +45,17 @@ $dialog.dialog({
 
 // Simple function to style the tooltip for the given node.
 var styleTooltip = function (id, name, type, source, method) {
-    return "<div class='custom_tooltip'>" +
-        "<p>" + 'Id: ' + id + "</p>" +
-        "<p>" + 'Name: ' + name + "</p><p>" + 'Type: ' + type + "</p>" +
-        "<p>" + 'Source Code Line: ' + source + "</p>" +
-        '<p class="tooltip-hint">Press CTRL to view source code.</p>' +
-        "<p>" + 'Method: ' + method + "</p>" +
-        "</div>";
+    // use jquery to construct html strings to prevent layout breaks
+    // if "weird" values are displayed. (also prevents xss)
+    return $("<div>")
+        .append($("<div>").addClass("custom_tooltip")
+            .append($("<p>").text('Id: ' + id))
+            .append($("<p>").text('Name: ' + name))
+            .append($("<p>").text('Type: ' + type))
+            .append($("<p>").text('Source Code Line: ' + source))
+            .append($("<p>").text('Press CTRL to view source code.').addClass("tooltip-hint"))
+            .append($("<p>").text('Method: ' + method))
+        ).html();
 };
 
 var g = '',
