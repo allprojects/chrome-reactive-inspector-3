@@ -2,13 +2,14 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="panel.css">
     <link rel="stylesheet" href="libraries/bootstrap-tokenfield.min.css">
     <link rel="stylesheet" href="libraries/tipsy.css">
     <link rel="stylesheet" href="libraries/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="libraries/jquery-ui.css">
     <link href="libraries/jquery-editable-select.min.css" rel="stylesheet">
     <link rel="stylesheet" href="libraries/jquery-ui-slider-pips.css">
+
+    <link rel="stylesheet" href="panel.css">
 </head>
 <body>
 
@@ -26,7 +27,7 @@
 <!-- for query search-->
 <script src="libraries/jquery-editable-select.min.js"></script>
 
-<!-- for Canvas image to downloadable image -->
+<!-- to convert svg to downloadable image -->
 <script src="libraries/simg.js"></script>
 
 <script src="helpers/optionsAccess.js"></script>
@@ -138,7 +139,8 @@
     </div>
 </div>
 <hr class="col-lg-12 col-md-12 col-xs-12 col-sm-12 row">
-<div class="col-md-12 col-lg-12">
+<!-- canvas-container needs tabindex to receive key events -->
+<div class="col-md-12 col-lg-12" id="canvas-container" tabindex="0">
     <h4>Dependency Graph</h4>
     <svg id="svg-canvas" width="100%"></svg>
     <div class="tooltip" id="cri-node-tooltip" style=""></div>

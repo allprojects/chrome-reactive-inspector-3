@@ -1,4 +1,5 @@
-$(document).ready(function () {
+var $document = $(document);
+$document.ready(function () {
     $(".dropdown-toggle").dropdown();
 });
 
@@ -8,7 +9,6 @@ $(".dropdown-menu li a").click(function () {
 });
 
 var $dialog = $("#dialog");
-
 $dialog.hide();
 
 $dialog.dialog({
@@ -45,11 +45,11 @@ $dialog.dialog({
 
 // Simple function to style the tooltip for the given node.
 var styleTooltip = function (id, name, type, source, method) {
-
     return "<div class='custom_tooltip'>" +
         "<p>" + 'Id: ' + id + "</p>" +
         "<p>" + 'Name: ' + name + "</p><p>" + 'Type: ' + type + "</p>" +
         "<p>" + 'Source Code Line: ' + source + "</p>" +
+        '<p class="tooltip-hint">Press CTRL to view source code.</p>' +
         "<p>" + 'Method: ' + method + "</p>" +
         "</div>";
 };
@@ -59,7 +59,7 @@ var g = '',
     svg = '',
     svgGroup = '',
     inner = '',
-    $canvas = $("#svg-canvas");
+    $canvasContainer = $("#canvas-container");
 
 var initialiseGraph = function () {
     // Create the input graph
@@ -200,47 +200,79 @@ var codePreviewCanceled = [];
 function applyNodeExtensions() {
     // This will display node details on mouse hover.
     inner.selectAll("g.node")
-    /* clear all previous code previews */
-        .attr("nodeinfo", null)
-        /* add tooltips */
+    /* add tooltips */
         .attr("title", function (v) {
-            return styleTooltip(g.node(v).nodeId, g.node(v).ref, g.node(v).type, g.node(v).sourceCodeLine, g.node(v).method)
+            var data = g.node(v);
+            return styleTooltip(data.nodeId, data.ref, data.type, data.sourceCodeLine, data.method)
         })
         .each(function () {
-            $(this).tipsy({gravity: "w", opacity: 1, html: true});
+            // add tooltips
+            $(this).tipsy({
+                gravity: "w", opacity: 1, html: true, title: function () {
+                    return getTooltip(d3.select(this));
+                }
+            });
         });
 
     // add events for code previews
     svg.selectAll("g.node")
         .on("mouseenter.code", function (v) {
+            var node = this;
+            var d3node = d3.select(node);
+            var data = g.node(v);
 
-            var that = d3.select(this);
-            var node = g.node(v);
             if (d3.event.ctrlKey) {
-                initCodePreview(that, node);
+                initCodePreview(d3node, data, $(node));
             }
 
-            $canvas.on("keydown.code", function () {
-                if (d3.event.ctrlKey) {
-                    initCodePreview(that, node);
-                }
-            });
+            $canvasContainer
+                .on("keydown.code", function (e) {
+                    if (e.ctrlKey) {
+                        initCodePreview(d3node, data, $(node));
+                    }
+                })
+                .on("keyup.code", function (e) {
+                    if (!e.ctrlKey) {
+                        cancelCodePreview(d3node, data);
+                        refreshTooltip($(node));
+                    }
+                });
 
-            that.on("mouseleave.code", function () {
+            d3node.on("mouseleave.code", function () {
+
                 // unregister events
-                that.on("mouseleave.code", null);
-                $canvas.off("keydown.code");
-                cancelCodePreview(that, node);
+                d3node.on("mouseleave.code", null);
+                $canvasContainer
+                    .off("keydown.code")
+                    .off("keyup.code");
+                cancelCodePreview(d3node, data, $(node));
             })
         });
 }
 
-function initCodePreview(d3node, data) {
+function getTooltip(d3node) {
+    if (d3node.classed("show-code")) {
+        return d3node.attr("nodeinfo");
+    } else {
+        return d3node.attr("original-title");
+    }
+}
 
-    if (d3node.attr("nodeinfo")) {
+function initCodePreview(d3node, data, $node) {
+
+    if (d3node.classed("show-code")) {
         // code preview is already displayed
         return;
     }
+
+    if (d3node.attr("nodeinfo")) {
+
+        // activate code preview
+        d3node.classed("show-code", true);
+        refreshTooltip($node);
+        return;
+    }
+
     // set pending to prevent multiple code requests
     d3node.attr("nodeinfo", "-pending-");
 
@@ -249,34 +281,39 @@ function initCodePreview(d3node, data) {
         if (!answer.code) {
             return;
         }
+
+        var code = answer.code;
+        var codeHtml = createCodePreviewHtml(code);
+        d3node.attr("nodeinfo", codeHtml);
+
         // do not display code preview if user already moved the mouse outside of the node
         if (codePreviewCanceled[data.nodeId]) {
             codePreviewCanceled[data.node] = null;
-            d3node.attr("nodeinfo", null);
             return;
         }
-
-        var code = answer.code;
-
-        // switch tooltip with code preview
-        d3node.attr("nodeinfo", d3node.attr("original-title"));
-        d3node.attr("original-title", createCodePreviewHtml(code));
+        // display code preview
+        d3node.classed("show-code", true);
+        refreshTooltip($node);
     });
 }
 
 function cancelCodePreview(d3node, data) {
-    if (!d3node.attr("nodeinfo")) {
+    var nodeinfo = d3node.attr("nodeinfo");
+    if (!nodeinfo) {
         return;
     }
-    if (d3node.attr("nodeinfo") === "-pending-") {
-        // signal pending request to cancel
+    if (nodeinfo === "-pending-") {
+        // signal pending request to not display code preview
         codePreviewCanceled[data.nodeId] = true;
-        return;
     }
 
-    // restore normal tooltip
-    d3node.attr("title", d3node.attr("nodeinfo"));
-    d3node.attr("nodeinfo", null);
+    // switch back to tooltip
+    d3node.classed("show-code", false);
+}
+
+function refreshTooltip($element) {
+    $element.tipsy("hide");
+    $element.tipsy("show");
 }
 
 var configIncludeFilesField = $('#cri-config-includes');
@@ -833,3 +870,14 @@ function createCodePreview(node, callback) {
 function createCodePreviewHtml(code) {
     return '<pre><code>' + _.escape(code) + '</code></pre>'
 }
+
+/* force focus on canvas on mouse over to enable ctrl capture on the canvas */
+$canvasContainer.on("mouseenter.focus", function () {
+    var scrollLeft = $document.scrollLeft();
+    var scrollTop = $document.scrollTop();
+
+    this.focus();
+
+    $document.scrollTop(scrollTop);
+    $document.scrollLeft(scrollLeft);
+});

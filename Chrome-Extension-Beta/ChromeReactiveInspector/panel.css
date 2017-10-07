@@ -6,7 +6,7 @@ g.type-TK > rect {
 
 g.current > rect {
     stroke: red;
-    stroke-width:5;
+    stroke-width: 5;
 }
 
 g.highlight > rect {
@@ -18,7 +18,6 @@ g.highlight > rect {
 g.fade > rect {
     opacity: 0.3;
 }
-
 
 g.nodeWithRef > rect {
     fill: #ddff99;
@@ -69,7 +68,7 @@ text {
 
 /**!*/
 /* This styles the title of the tooltip */
-.tipsy .custom_tooltip > p  {
+.tipsy .custom_tooltip > p {
     font-size: 1.5em;
     font-weight: bold;
     color: #60b1fc;
@@ -82,7 +81,6 @@ text {
 .tipsy .description {
     font-size: 1.2em;
 }
-
 
 .container {
     margin-bottom: 15px;
@@ -110,11 +108,12 @@ text {
     display: inline-block;
     width: 80%;
 }
-#svg-canvas{
+
+#svg-canvas {
     min-height: 800px;
 }
 
-.left-border{
+.left-border {
     border-left: 1px solid black;
 }
 
@@ -122,41 +121,28 @@ text {
     color: #000;
 }
 
-div.tooltip {
-    position: absolute;
-    text-align: left;
-
-    padding: 8px;
-    font: 14px sans-serif;
-    background: #ffff99;
-    border: solid 1px #aaa;
-    border-radius: 8px;
-    pointer-events: none;
-    opacity: 1;
-}
-
 hr {
     margin: 5px 0 !important;
 }
 
-.pd-left-0{
+.pd-left-0 {
     padding-left: 0 !important;
 }
 
-.pd-left-5{
+.pd-left-5 {
     padding-left: 5px !important;
 }
 
-.pd-right-0{
+.pd-right-0 {
     padding-right: 0 !important;
 }
 
-#cri-breakpoints-container{
+#cri-breakpoints-container {
     max-height: 105px;
     overflow-y: auto;
 }
 
-.bpoint-remove{
+.bpoint-remove {
     margin-right: 2px;
     background: red;
     color: white;
@@ -165,16 +151,16 @@ hr {
     cursor: pointer;
 }
 
-.ui-state-default, .ui-widget-content .ui-state-default{
+.ui-state-default, .ui-widget-content .ui-state-default {
     line-height: 1;
 }
 
-.ui-slider .ui-slider-handle{
+.ui-slider .ui-slider-handle {
     min-width: 1.2em;
     max-width: none !important;
 }
 
-.form-control.error{
+.form-control.error {
     border: 1px solid red;
 }
 
@@ -182,8 +168,17 @@ hr {
     text-align: left;
 }
 
-#cri-rec-status{
+#cri-rec-status {
     width: 134px;
+}
+
+#canvas-container:focus {
+    /*outline: none;*/
+}
+
+.tooltip-hint {
+    font-size: 10px !important;
+    color: darkgray !important;
 }
 
 
