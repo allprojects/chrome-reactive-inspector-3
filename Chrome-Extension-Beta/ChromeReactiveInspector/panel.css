@@ -68,6 +68,27 @@ text {
 
 /**!*/
 /* This styles the title of the tooltip */
+
+.code-tooltip .tipsy-inner {
+    width: 350px !important;
+    max-width: 350px !important;
+    text-align: left;
+}
+
+.code-tooltip .tipsy-inner code {
+    margin: 0;
+    padding: 0;
+}
+
+.code-tooltip .tipsy-inner p {
+    color: #60b1fc;
+    font-family: Andale Mono, AndaleMono, monospace;
+    font-size: 1.2em;
+    font-weight: normal;
+    margin: 0;
+    pointer-events: none;
+}
+
 .tipsy .custom_tooltip > p {
     font-size: 1.5em;
     font-weight: bold;

@@ -212,7 +212,9 @@ function applyNodeExtensions() {
         .each(function () {
             // add tooltips
             $(this).tipsy({
-                gravity: "w", opacity: 1, html: true, title: function () {
+                gravity: "w", opacity: 1, html: true, className: function () {
+                    return d3.select(this).classed("show-code") ? "code-tooltip" : "tooltip"
+                }, title: function () {
                     return getTooltip(d3.select(this));
                 }
             });
@@ -286,8 +288,8 @@ function initCodePreview(d3node, data, $node) {
             return;
         }
 
-        var code = answer.code;
-        var codeHtml = createCodePreviewHtml(code);
+        var codeInfo = answer.code;
+        var codeHtml = createCodePreviewHtml(codeInfo);
         d3node.attr("nodeinfo", codeHtml);
 
         // do not display code preview if user already moved the mouse outside of the node
@@ -857,6 +859,7 @@ refreshCurrentBreakPointsFrontEnd();
 
 // })();
 
+
 function createCodePreview(node, callback) {
     // check in callback if ctrl is pressed
     if (!node.sourceCodeLine) return;
@@ -871,8 +874,23 @@ function createCodePreview(node, callback) {
     }, callback);
 }
 
-function createCodePreviewHtml(code) {
-    return '<pre><code>' + _.escape(code) + '</code></pre>'
+/**
+ * Create html for code preview
+ * @param codeInfo object containing code lines, "from" and "to". "from" and "to" describe the actual
+ * used boundaries of the code snippet
+ * @returns {string}
+ */
+function createCodePreviewHtml(codeInfo) {
+    var tags = _.map(codeInfo.lines, function (line, i) {
+        var lineNumber = codeInfo.from + i;
+        return $("<p>").text("" + lineNumber + ": " + line);
+    });
+
+    var $container = $("<code>");
+    tags.forEach(function (p) {
+        $container.append(p);
+    });
+    return ($("<div>").append($container)).html();
 }
 
 /* force focus on canvas on mouse over to enable ctrl capture on the canvas */

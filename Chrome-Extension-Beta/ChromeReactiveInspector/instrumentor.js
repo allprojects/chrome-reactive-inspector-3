@@ -154,8 +154,13 @@ if (shouldReactiveDebuggerRun === true) {
         if (to > lines.length) {
             to = lines.length;
         }
+        if (from < 0) {
+            from = 0;
+        }
 
-        var relevant = lines.slice(from, to);
-        return relevant.join('\n');
+        return {
+            lines: lines.slice(from, to),
+            from: from, to: to
+        }
     }
 }
