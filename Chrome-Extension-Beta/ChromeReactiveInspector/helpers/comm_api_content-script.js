@@ -61,7 +61,6 @@ chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
         pauseNow = msg.content.status;
     }
     else if (msg.action === 'getSourceCode') {
-        //TODO extract real filename from jalangi
-        sendResponse({code: getCode("index.js", msg.content.from, msg.content.to)});
+        sendResponse({code: getCode(msg.content.filename, msg.content.from, msg.content.to)});
     }
 });

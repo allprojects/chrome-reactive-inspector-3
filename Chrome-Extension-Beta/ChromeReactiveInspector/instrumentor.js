@@ -94,11 +94,21 @@ if (shouldReactiveDebuggerRun === true) {
      * If Jalangi is not found the original code will be returned.
      * @param filename name/url of the script file
      * @param code to instrument
+     * @param developerMode If true, adds sourceFileName comment to instrumented file to make it visible in devtools.
      * @returns {string|*|Number|number|string|string}
      */
     function instrumentFile(filename, code, developerMode) {
         scriptCache[filename] = code;
-        var instrumented = getInstrumentedCode(code);
+        var instrumented = getInstrumentedCode(code, filename);
+
+        var escapedFileName = filename.replace("'", "").replace("\\", "");
+
+        // Wrap instrumented code in closure and replace write method of jalangi with a custom one that passes
+        // the current filename. This is not done for inline scripts due to possible performance impact if there are many.
+        instrumented =
+            "var X$ = window.J$;var J$ = jQuery.extend({}, X$);J$.W = function(iid, name, val, lhs, isGlobal, isPseudoGlobal){return X$.W(iid, name, val, lhs, isGlobal, isPseudoGlobal,'" + escapedFileName + "');};\n"
+            + instrumented;
+
         if (developerMode) {
 
             var instrumentedFileName = filename;
@@ -133,10 +143,10 @@ if (shouldReactiveDebuggerRun === true) {
             // double comment to prevent any mess up of inline code
             scriptCache[document.domain] += "/*<!-- code from script tag with index " + scriptNumber + " -->*/  " + code
         }
-        return getInstrumentedCode(code);
+        return getInstrumentedCode(code, document.domain);
     }
 
-    function getInstrumentedCode(code) {
+    function getInstrumentedCode(code, filename) {
         var instrumentedCode = code;
         if (J$.instrumentCode !== undefined) {
             instrumentedCode = J$.instrumentCode(code, {wrapProgram: false, isEval: false}).code;

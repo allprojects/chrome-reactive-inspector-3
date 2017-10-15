@@ -26,6 +26,7 @@ var currentStep = 0;
 (function (sandbox) {
     function AnalysisEngine() {
         var iidToLocation = sandbox.iidToLocation;
+        var sandboxRef = sandbox;
 
         function showLocation(iid) {
             // console.log('  Source Location iss: ' + iidToLocation(iid));
@@ -71,7 +72,7 @@ var currentStep = 0;
         // Use this Jalangi API to check if value being written to js var is an observable
         // if it is so then send message to dev tool to record variable name etc..
         // this will log if any Observable being assigned to js variable
-        this.write = function (iid, name, val, oldValue) {
+        this.write = function (iid, name, val, oldValue, filename) {
             if (iid === -1) {
                 // End of file reading;
                 sendAllNodesAndEdges();
@@ -79,7 +80,6 @@ var currentStep = 0;
             }
 
             var currentType = "";
-            // console.log('writing variable operation intercept: ' + name);
             SourceLocationLine = '';
             // source location
             SourceLocation = window.iidToLocationMap[iid];
@@ -106,11 +106,16 @@ var currentStep = 0;
             var currentTypeInSmall = currentType.toLowerCase();
 
             if (currentTypeInSmall.search("observable") !== -1 || currentTypeInSmall.search("subject") !== -1) {
-                if (!(val.hasOwnProperty('operator') && val.operator === undefined)) {
+                if (!val.hasOwnProperty('operator') || val.operator !== undefined) {
                     // bacon observer already has the id attribute
                     val = checkAndAssignId(val);
                     // log the node and update window.variables
-                    logNodeData(val.id, currentTypeToDisplay, '', name, '', SourceLocationLine);
+                    logNodeData({
+                        id: val.id,
+                        type: currentTypeToDisplay,
+                        name: name,
+                        location: {line: SourceLocationLine, filename: filename}
+                    });
                     updatedVar = {'id': val.id, 'name': name};
                     _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
                     updateNodeEdgeName(updatedVar)
@@ -128,7 +133,12 @@ var currentStep = 0;
                 if (currentType === val.obsType) {
                     // update name of subscriber and update window.variables
                     if (!checkIfNodeAlreadyExists(val._id, name, currentType)) {
-                        logNodeData(val._id, currentTypeToDisplay, '', name, '', SourceLocationLine);
+                        logNodeData({
+                            id: val._id,
+                            type: currentTypeToDisplay,
+                            name: name,
+                            location: {line: SourceLocationLine, filename: filename}
+                        });
                         updatedVar = {'id': val._id, 'name': name};
                         _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
                         updateNodeEdgeName(updatedVar)
@@ -141,7 +151,13 @@ var currentStep = 0;
                         tempVal = previousData.value;
                         previousData = {}
                     }
-                    logNodeData(val.destination._id, currentTypeToDisplay, '', name, tempVal, SourceLocationLine);
+                    logNodeData({
+                        id: val.destination._id,
+                        type: currentTypeToDisplay,
+                        name: name,
+                        value: tempVal,
+                        location: {line: SourceLocationLine, filename: filename}
+                    });
                     logEdgeData(val._id, val.destination._id, '');
                 }
 
@@ -192,7 +208,7 @@ if (Bacon !== undefined) {
         }
 
         var currentObsId = obs.id;
-        logNodeData(currentObsId, nodeType, nodeMethod, '', '', '');
+        logNodeData({id: currentObsId, type: nodeType, method: nodeMethod});
 
         // Log Observable dependencies
         obs.desc.deps().forEach(function (entry) {
@@ -210,8 +226,7 @@ if (Bacon !== undefined) {
                 constructorName = val.constructor.name;
             }
 
-            logNodeData(currentObsId, nodeType, '', '', val, '');
-
+            logNodeData({id: currentObsId, type: nodeType, value: val});
         });
 
         obs.onError(function (error) {
@@ -277,7 +292,7 @@ if (Rx !== undefined) {
     Rx.Subject.prototype.lift = function (operator) {
         var subject = new Rx.AnonymousSubject(this, this);
         subject = checkAndAssignId(subject);
-        logNodeData(subject.id, subject.constructor.name, '', '', '', '');
+        logNodeData({id: subject.id, type: subject.constructor.name});
         if (subject.source && subject.source.array && subject.source.array.length) {
             subject.source.array.forEach(function (sub) {
                 if (sub.id && !checkIfEdgeAlreadyExists(sub.id, subject.id)) {
@@ -450,7 +465,7 @@ if (Rx !== undefined) {
                 //Todo check for other type of events or similar kind
 
                 if (self._id) {
-                    logNodeData(self._id, self.obsType, '', '', nextValue, '');
+                    logNodeData({id: self._id, type: self.obsType, value: nextValue});
                     // Added this condition for animation test example
                     // Make sure it does not affect other
                     // if(self._parent && self._parent.constructor.name === 'Subscriber' && !self._operatorName){
@@ -461,20 +476,24 @@ if (Rx !== undefined) {
                     if (self._subscriptions && self._subscriptions.length) {
                         self._subscriptions.forEach(function (subscription) {
                             if (subscription._id && subscriberNames.includes(subscription.constructor.name)) {
-                                logNodeData(subscription._id, subscription.constructor.name, '', '', nextValue, '');
+                                logNodeData({
+                                    id: subscription._id,
+                                    type: subscription.constructor.name,
+                                    value: nextValue
+                                });
                             }
                         })
                     }
                     if (self.destination._id && checkIfNodeAlreadyExists(self.destination._id, '', 'Subscriber')) {
-                        logNodeData(self.destination._id, 'Subscriber', '', '', nextValue, '');
+                        logNodeData({id: self.destination._id, type: 'Subscriber', value: nextValue});
                     }
 
                     // for animation example
                     else if (self.destination.constructor.name === 'SafeSubscriber' && !self.destination._id) {
                         if (self._parent && this._parent._id) {
-                            logNodeData(self._parent._id, self._parent.obsType, '', '', nextValue, '');
+                            logNodeData({id: self._parent._id, type: self._parent.obsType, value: nextValue});
                             if (self._parent.destination && self._parent.destination._id) {
-                                logNodeData(self._parent.destination._id, 'Subscriber', '', '', nextValue, '');
+                                logNodeData({id: self._parent.destination._id, type: 'Subscriber', value: nextValue});
                             }
                         }
                     }
@@ -487,7 +506,7 @@ if (Rx !== undefined) {
                         }
                     }
                 } else if (self.outerValue && self.outerValue.id && self.outerValue.constructor.name === 'ScalarObservable') {
-                    logNodeData(self.outerValue.id, self.outerValue.constructor.name, '', '', nextValue, '');
+                    logNodeData({id: self.outerValue.id, type: self.outerValue.constructor.name, value: nextValue});
                 }
             }
             this._next(value);
@@ -497,7 +516,7 @@ if (Rx !== undefined) {
     Rx.Subscriber.prototype.error = function (err) {
         if (!this.isStopped) {
             if (this._id) {
-                logNodeData(this._id, this.obsType, '', '', JSON.stringify(err), '');
+                logNodeData({id: this._id, type: this.obsType, value: JSON.stringify(err)});
             }
             this.isStopped = true;
             this._error(err);
@@ -534,7 +553,7 @@ if (Rx !== undefined) {
         }
         // create nodes for source and des obs
 
-        logNodeData(obsResult.id, resultNodeType, '', '', '', '');
+        logNodeData({id: obsResult.id, type: resultNodeType});
 
         var name = '';
         var res = '';
@@ -565,9 +584,13 @@ if (Rx !== undefined) {
                 temp_val = '';
                 if (tempObsSource.id) {
                     if (tempObsSource.constructor.name === 'ScalarObservable' && tempObsSource.value !== undefined)
-                        logNodeData(tempObsSource.id, tempObsSource.constructor.name, '', '', tempObsSource.value, '');
+                        logNodeData({
+                            id: tempObsSource.id,
+                            type: tempObsSource.constructor.name,
+                            value: tempObsSource.value
+                        });
                     if (!checkIfNodeAlreadyExists(tempObsSource.id, '', tempObsSource.constructor.name)) {
-                        logNodeData(tempObsSource.id, tempObsSource.constructor.name, '', '', temp_val, '')
+                        logNodeData({id: tempObsSource.id, type: tempObsSource.constructor.name, value: temp_val});
                     }
                     logEdgeData(tempObsSource.id, obsResult.id, operName);
                 }
@@ -588,7 +611,7 @@ if (Rx !== undefined) {
             }
         } else {
             if (!checkIfNodeAlreadyExists(obsSource.id, name, sourceNodeType)) {
-                logNodeData(obsSource.id, sourceNodeType, '', name, '', location);
+                logNodeData({id: obsSource.id, type: sourceNodeType, name: name, location: {line: location}});
                 //for mario game example
                 if (operName === 'ScanOperator') {
                     if (obsSource.source && obsSource.source.id) {
@@ -604,7 +627,11 @@ if (Rx !== undefined) {
             if (flattenOperators.includes(operName)) {
                 if (obsResult.operator) {
                     if (obsResult.operator.ish && obsResult.operator.ish.id) {
-                        logNodeData(obsResult.operator.ish.id, obsResult.operator.ish.constructor.name, '', '', obsResult.operator.ish.value, '')
+                        logNodeData({
+                            id: obsResult.operator.ish.id,
+                            type: obsResult.operator.ish.constructor.name,
+                            value: obsResult.operator.ish.value
+                        });
                         logEdgeData(obsResult.operator.ish.id, obsResult.id, operName);
                     }
                 }
@@ -621,6 +648,7 @@ if (Rx !== undefined) {
         }
     }
 }
+
 // Rx-js Analysis End
 
 /**
@@ -629,14 +657,23 @@ if (Rx !== undefined) {
 
 /**
  * This method will log node data.
- * @param id
- * @param type
- * @param method
- * @param name
- * @param value
- * @param lineNumber
+ * @param data data is an object that contains all or partial node info. It's structure is as follows
+ * [id, type, method, name, value, location:{line,column,filename}}
  */
-function logNodeData(id, type, method, name, value, lineNumber) {
+function logNodeData(data) {
+    var id = getValueOrEmpty(data.id);
+    var type = getValueOrEmpty(data.type);
+    var method = getValueOrEmpty(data.method);
+    var name = getValueOrEmpty(data.name);
+    var value = getValueOrEmpty(data.value);
+
+    var sourceLine = '', sourceColumn = '', sourceFilename = '';
+    // do not pass the source info object itself to prevent undefined fields
+    if (data.location) {
+        sourceLine = getValueOrEmpty(data.location.line);
+        sourceColumn = getValueOrEmpty(data.location.column);
+        sourceFilename = getValueOrEmpty(data.location.filename);
+    }
     if (!shouldSaveNodeValue(fileReadOver, id)) {
         // if(checkPauseNow()){
         //     debugger;
@@ -651,7 +688,7 @@ function logNodeData(id, type, method, name, value, lineNumber) {
                 'nodeMethod': method,
                 'nodeRef': name,
                 'nodeValue': val,
-                'sourceCodeLine': lineNumber
+                'sourceInfo': {line: sourceLine, column: sourceColumn, filename: sourceFilename}
             }, action: "saveNode", destination: "panel"
         }, fileReadOver);
         previousData.nodeId = id;
@@ -801,7 +838,11 @@ function getValue(value) {
         case 'Object':
             if (value.hasOwnProperty('type')) {
                 if (value.type === 'mousemove' || value.type === 'mousedown' || value.type === 'mouseup' || value.type === 'mousehover' || value.type === 'click')
-                    value = JSON.stringify({'type': value.type, 'screenX': value.screenX, 'screenY': value.screenY});
+                    value = JSON.stringify({
+                        'type': value.type,
+                        'screenX': value.screenX,
+                        'screenY': value.screenY
+                    });
                 else if (value.type === 'keydown' || value.type === 'keyup')
                     value = value.key;
                 else {
@@ -852,4 +893,12 @@ function getValue(value) {
     }
 
     return value;
+}
+
+function getValueOrEmpty(value) {
+    if (typeof value === 'undefined') {
+        return '';
+    } else {
+        return value;
+    }
 }

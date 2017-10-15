@@ -73,18 +73,16 @@ var allEdges = [];
                 var prevValue = node.value;
                 var prevType = node.type;
                 var prevMethod = node.method;
-                var prevSourceCodeLine = node.sourceCodeLine;
 
                 var currentRef = message.content.nodeRef;
                 var currentValue = message.content.nodeValue;
                 var currentMethod = message.content.nodeMethod;
                 var currentType = message.content.nodeType;
-                var currentSourceCodeLine = message.content.sourceCodeLine;
 
 
                 var newRef = getOrDefault(currentRef, prevRef);
                 var newValue = getOrDefault(currentValue, prevValue);
-                var newSourceCodeLine = getOrDefault(currentSourceCodeLine, prevSourceCodeLine);
+                var newSourceInfo = getOrDefault(message.content.sourceInfo, node.sourceInfo);
                 var newMethod = getOrDefault(currentMethod, prevMethod);
                 var newType = getOrDefault(currentType, prevType);
 
@@ -107,7 +105,7 @@ var allEdges = [];
                     value: newValue,
                     type: newType,
                     method: newMethod || '-',
-                    sourceCodeLine: newSourceCodeLine,
+                    sourceInfo: newSourceInfo,
                     nodeId: message.content.nodeId,
                     class: currentClasses
                 });
@@ -141,7 +139,7 @@ var allEdges = [];
                     type: message.content.nodeType,
                     method: message.content.nodeMethod || '-',
                     nodeId: message.content.nodeId,
-                    sourceCodeLine: message.content.sourceCodeLine,
+                    sourceInfo: message.content.sourceInfo,
                     class: currentClasses
                 });
                 tempNode.type = 'nodeCreated';

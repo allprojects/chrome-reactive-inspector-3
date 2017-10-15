@@ -44,15 +44,23 @@ $dialog.dialog({
 
 
 // Simple function to style the tooltip for the given node.
-var styleTooltip = function (id, name, type, source, method) {
+var styleTooltip = function (id, name, type, method, sourceInfo) {
     // use jquery to construct html strings to prevent layout breaks
     // if "weird" values are displayed. (also prevents xss)
+
+    var sourceInfoText = sourceInfo.line;
+    if (sourceInfo.column) {
+        sourceInfoText += ':' + sourceInfo.column;
+    }
+    // if filename is not set the source code is inline of the html
+    sourceInfoText += ' ' + (sourceInfo.filename ? '(' + sourceInfo.filename + ')' : 'html');
+
     return $("<div>")
         .append($("<div>").addClass("custom_tooltip")
             .append($("<p>").text('Id: ' + id))
             .append($("<p>").text('Name: ' + name))
             .append($("<p>").text('Type: ' + type))
-            .append($("<p>").text('Source Code Line: ' + source))
+            .append($("<p>").text('Location: ' + sourceInfoText))
             .append($("<p>").text('Press CTRL to view source code.').addClass("tooltip-hint"))
             .append($("<p>").text('Method: ' + method))
         ).html();
@@ -207,7 +215,7 @@ function applyNodeExtensions() {
     /* add tooltips */
         .attr("title", function (v) {
             var data = g.node(v);
-            return styleTooltip(data.nodeId, data.ref, data.type, data.sourceCodeLine, data.method)
+            return styleTooltip(data.nodeId, data.ref, data.type, data.method, data.sourceInfo)
         })
         .each(function () {
             // add tooltips
@@ -862,15 +870,16 @@ refreshCurrentBreakPointsFrontEnd();
 
 function createCodePreview(node, callback) {
     // check in callback if ctrl is pressed
-    if (!node.sourceCodeLine) return;
+    if (!node.sourceInfo.line || !node.sourceInfo.filename) return;
 
-    var from = node.sourceCodeLine - 3;
-    var to = node.sourceCodeLine + 3;
+    var from = node.sourceInfo.line - 3;
+    var to = node.sourceInfo.line + 3;
+    var filename = node.sourceInfo.filename;
 
     sendObjectToInspectedPage({
         destination: 'instrumented',
         action: 'getSourceCode',
-        content: {to: to, from: from}
+        content: {to: to, from: from, filename: filename}
     }, callback);
 }
 
