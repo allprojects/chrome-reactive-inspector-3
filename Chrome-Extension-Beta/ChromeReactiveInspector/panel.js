@@ -297,7 +297,7 @@ function initCodePreview(d3node, data, $node) {
         }
 
         var codeInfo = answer.code;
-        var codeHtml = createCodePreviewHtml(codeInfo);
+        var codeHtml = createCodePreviewHtml(data.sourceInfo.line, codeInfo);
         d3node.attr("nodeinfo", codeHtml);
 
         // do not display code preview if user already moved the mouse outside of the node
@@ -872,27 +872,40 @@ function createCodePreview(node, callback) {
     // check in callback if ctrl is pressed
     if (!node.sourceInfo.line || !node.sourceInfo.filename) return;
 
-    var from = node.sourceInfo.line - 3;
-    var to = node.sourceInfo.line + 3;
-    var filename = node.sourceInfo.filename;
+    chrome.storage.sync.get('codePreviewSize', function (items) {
+        var codePreviewSize = items.codePreviewSize;
+        if (!codePreviewSize) {
+            codePreviewSize = 4;
+        }
 
-    sendObjectToInspectedPage({
-        destination: 'instrumented',
-        action: 'getSourceCode',
-        content: {to: to, from: from, filename: filename}
-    }, callback);
+        var from = node.sourceInfo.line - codePreviewSize - 1;
+        var to = node.sourceInfo.line + codePreviewSize;
+        var filename = node.sourceInfo.filename;
+
+        sendObjectToInspectedPage({
+            destination: 'instrumented',
+            action: 'getSourceCode',
+            content: {to: to, from: from, filename: filename}
+        }, callback);
+    });
 }
 
 /**
  * Create html for code preview
  * @param codeInfo object containing code lines, "from" and "to". "from" and "to" describe the actual
  * used boundaries of the code snippet
+ * @param actualLine number of the line which contained the node
  * @returns {string}
  */
-function createCodePreviewHtml(codeInfo) {
+function createCodePreviewHtml(actualLine, codeInfo) {
     var tags = _.map(codeInfo.lines, function (line, i) {
         var lineNumber = codeInfo.from + i;
-        return $("<p>").text("" + lineNumber + ": " + line);
+        var $currentLine = $("<p>").text("" + lineNumber + ": " + line);
+
+        if (lineNumber === actualLine - 1) {
+            $currentLine.addClass("highlighted-code")
+        }
+        return $currentLine;
     });
 
     var $container = $("<code>");

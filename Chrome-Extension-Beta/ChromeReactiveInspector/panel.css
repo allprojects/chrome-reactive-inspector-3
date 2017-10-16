@@ -202,5 +202,8 @@ hr {
     color: darkgray !important;
 }
 
+.highlighted-code {
+    color: red !important;
+}
 
 

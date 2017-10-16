@@ -143,10 +143,10 @@ if (shouldReactiveDebuggerRun === true) {
             // double comment to prevent any mess up of inline code
             scriptCache[document.domain] += "/*<!-- code from script tag with index " + scriptNumber + " -->*/  " + code
         }
-        return getInstrumentedCode(code, document.domain);
+        return getInstrumentedCode(code);
     }
 
-    function getInstrumentedCode(code, filename) {
+    function getInstrumentedCode(code) {
         var instrumentedCode = code;
         if (J$.instrumentCode !== undefined) {
             instrumentedCode = J$.instrumentCode(code, {wrapProgram: false, isEval: false}).code;
