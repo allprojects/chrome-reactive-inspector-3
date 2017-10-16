@@ -89,6 +89,11 @@ text {
     pointer-events: none;
 }
 
+.code-tooltip .tipsy-inner p em {
+    color: red !important;
+    font-style: normal;
+}
+
 .tipsy .custom_tooltip > p {
     font-size: 1.5em;
     font-weight: bold;
@@ -200,10 +205,6 @@ hr {
 .tooltip-hint {
     font-size: 10px !important;
     color: darkgray !important;
-}
-
-.highlighted-code {
-    color: red !important;
 }
 
 

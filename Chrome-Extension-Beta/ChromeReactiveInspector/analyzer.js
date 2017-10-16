@@ -8,8 +8,6 @@
 var allNodes = [];
 var allEdges = [];
 var updatedVar = {};
-var SourceLocation;
-var SourceLocationLine;
 var previousData = {
     nodeId: '',
     value: ''
@@ -80,15 +78,19 @@ var currentStep = 0;
             }
 
             var currentType = "";
-            SourceLocationLine = '';
+            var sourceInfo = '';
             // source location
-            SourceLocation = window.iidToLocationMap[iid];
+            var SourceLocation = window.iidToLocationMap[iid];
             if (SourceLocation) {
-                SourceLocationLine = SourceLocation[1];
+                sourceInfo = {
+                    begin: {line: SourceLocation[1], column: SourceLocation[2]},
+                    end: {line: SourceLocation[3], column: SourceLocation[4]},
+                    filename: filename
+                };
             }
 
             if (val) {
-                window.variables.push({'name': name, 'id': val.id, 'location': SourceLocationLine});
+                window.variables.push({'name': name, 'id': val.id, 'location': sourceInfo.begin.line});
                 currentType = val.constructor.name;
             }
 
@@ -114,7 +116,7 @@ var currentStep = 0;
                         id: val.id,
                         type: currentTypeToDisplay,
                         name: name,
-                        location: {line: SourceLocationLine, filename: filename}
+                        location: sourceInfo
                     });
                     updatedVar = {'id': val.id, 'name': name};
                     _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
@@ -137,7 +139,7 @@ var currentStep = 0;
                             id: val._id,
                             type: currentTypeToDisplay,
                             name: name,
-                            location: {line: SourceLocationLine, filename: filename}
+                            location: sourceInfo
                         });
                         updatedVar = {'id': val._id, 'name': name};
                         _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
@@ -156,7 +158,7 @@ var currentStep = 0;
                         type: currentTypeToDisplay,
                         name: name,
                         value: tempVal,
-                        location: {line: SourceLocationLine, filename: filename}
+                        location: sourceInfo
                     });
                     logEdgeData(val._id, val.destination._id, '');
                 }
@@ -667,13 +669,6 @@ function logNodeData(data) {
     var name = getValueOrEmpty(data.name);
     var value = getValueOrEmpty(data.value);
 
-    var sourceLine = '', sourceColumn = '', sourceFilename = '';
-    // do not pass the source info object itself to prevent undefined fields
-    if (data.location) {
-        sourceLine = getValueOrEmpty(data.location.line);
-        sourceColumn = getValueOrEmpty(data.location.column);
-        sourceFilename = getValueOrEmpty(data.location.filename);
-    }
     if (!shouldSaveNodeValue(fileReadOver, id)) {
         // if(checkPauseNow()){
         //     debugger;
@@ -688,7 +683,7 @@ function logNodeData(data) {
                 'nodeMethod': method,
                 'nodeRef': name,
                 'nodeValue': val,
-                'sourceInfo': {line: sourceLine, column: sourceColumn, filename: sourceFilename}
+                'sourceInfo': data.location
             }, action: "saveNode", destination: "panel"
         }, fileReadOver);
         previousData.nodeId = id;

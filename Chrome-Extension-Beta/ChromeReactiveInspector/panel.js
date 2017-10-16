@@ -48,12 +48,16 @@ var styleTooltip = function (id, name, type, method, sourceInfo) {
     // use jquery to construct html strings to prevent layout breaks
     // if "weird" values are displayed. (also prevents xss)
 
-    var sourceInfoText = sourceInfo.line;
-    if (sourceInfo.column) {
-        sourceInfoText += ':' + sourceInfo.column;
+    var sourceInfoText = '';
+    if (sourceInfo && sourceInfo.begin) {
+        sourceInfoText = sourceInfo.begin.line;
+        if (sourceInfo.begin.column) {
+            sourceInfoText += ':' + sourceInfo.begin.column;
+        }
+
+        // if filename is not set the source code is inline of the html
+        sourceInfoText += ' (' + (sourceInfo.filename ? sourceInfo.filename : 'html') + ')';
     }
-    // if filename is not set the source code is inline of the html
-    sourceInfoText += ' ' + (sourceInfo.filename ? '(' + sourceInfo.filename + ')' : 'html');
 
     return $("<div>")
         .append($("<div>").addClass("custom_tooltip")
@@ -297,7 +301,7 @@ function initCodePreview(d3node, data, $node) {
         }
 
         var codeInfo = answer.code;
-        var codeHtml = createCodePreviewHtml(data.sourceInfo.line, codeInfo);
+        var codeHtml = createCodePreviewHtml(data.sourceInfo.begin, data.sourceInfo.end, codeInfo);
         d3node.attr("nodeinfo", codeHtml);
 
         // do not display code preview if user already moved the mouse outside of the node
@@ -870,16 +874,21 @@ refreshCurrentBreakPointsFrontEnd();
 
 function createCodePreview(node, callback) {
     // check in callback if ctrl is pressed
-    if (!node.sourceInfo.line || !node.sourceInfo.filename) return;
+    if (!node.sourceInfo) return;
 
-    chrome.storage.sync.get('codePreviewSize', function (items) {
-        var codePreviewSize = items.codePreviewSize;
-        if (!codePreviewSize) {
-            codePreviewSize = 4;
+    chrome.storage.sync.get({codePreviewScope: '', codePreviewMax: ''}, function (items) {
+        var codePreviewScope = items.codePreviewScope;
+        if (!codePreviewScope) {
+            codePreviewScope = 4;
+        }
+        // cap the maximum scope to be displayed
+        var codeLength = (node.sourceInfo.end.line - node.sourceInfo.begin.line)
+        if (items.codePreviewMax && codeLength + 2 * codePreviewScope > items.codePreviewMax) {
+            codePreviewScope = (codePreviewMax - codeLength) / 2
         }
 
-        var from = node.sourceInfo.line - codePreviewSize - 1;
-        var to = node.sourceInfo.line + codePreviewSize;
+        var from = node.sourceInfo.begin.line - codePreviewScope;
+        var to = node.sourceInfo.end.line + codePreviewScope;
         var filename = node.sourceInfo.filename;
 
         sendObjectToInspectedPage({
@@ -894,18 +903,36 @@ function createCodePreview(node, callback) {
  * Create html for code preview
  * @param codeInfo object containing code lines, "from" and "to". "from" and "to" describe the actual
  * used boundaries of the code snippet
- * @param actualLine number of the line which contained the node
+ * @param begin object with line and column info
+ * @param end object with line and column info
  * @returns {string}
  */
-function createCodePreviewHtml(actualLine, codeInfo) {
-    var tags = _.map(codeInfo.lines, function (line, i) {
+function createCodePreviewHtml(begin, end, codeInfo) {
+    var tags = _.map(codeInfo.lines, function (currentLine, i) {
         var lineNumber = codeInfo.from + i;
-        var $currentLine = $("<p>").text("" + lineNumber + ": " + line);
+        var $p = $("<p>");
 
-        if (lineNumber === actualLine - 1) {
-            $currentLine.addClass("highlighted-code")
+        if (lineNumber === begin.line && lineNumber === end.line) {
+            // start and end in the same line
+            return $p.append("" + lineNumber + ": " + currentLine.substring(0, begin.column - 1)
+                + "<em>" + currentLine.substring(begin.column - 1, end.column - 1) + "</em>"
+                + currentLine.substring(end.column - 1, currentLine.length));
+
+        } else if (lineNumber === begin.line) {
+            $p.text("" + lineNumber + ": " + currentLine.substring(0, begin.column - 1));
+            return $p.append($("<em>").text(currentLine.substring(begin.column - 1, currentLine.length)));
+
+        } else if (lineNumber === end.line) {
+            $p.text(currentLine.substring(begin.column - 1, currentLine.length));
+            return $p.prepend($("<em>").text("" + lineNumber + ": " + currentLine.substring(0, begin.column - 1)));
+
+        } else if (lineNumber > begin.line && lineNumber < end.line) {
+            // inside multiline write statement
+            return $p.append($("<em>").text("" + lineNumber + ": " + currentLine));
+
+        } else {
+            return $p.text("" + lineNumber + ": " + currentLine);
         }
-        return $currentLine;
     });
 
     var $container = $("<code>");

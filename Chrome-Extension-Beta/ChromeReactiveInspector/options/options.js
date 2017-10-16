@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', restore_options);
 var $developerMode = $("#debug");
 var $threshold = $("#threshold");
 var $printAllValues = $('#printAllValues');
-var $codePreviewSize = $('#codePreviewSize');
+var $codePreviewScope = $('#codePreviewScope');
+var $codePreviewMax = $('#codePreviewMax');
 
 // Saves options to chrome.storage
 function save_options() {
@@ -12,7 +13,8 @@ function save_options() {
         thresholdValue: $threshold.val(),
         printAllValue: $printAllValues.prop('checked'),
         developerMode: $developerMode.prop('checked'),
-        codePreviewSize: $codePreviewSize.val()
+        codePreviewScope: $codePreviewScope.val(),
+        codePreviewMax: $codePreviewMax.val()
     }, function () {
         dataSaved();
     });
@@ -25,12 +27,14 @@ function restore_options() {
         thresholdValue: '',
         printAllValue: false,
         developerMode: false,
-        codePreviewSize: 4
+        codePreviewScope: 4,
+        codePreviewMax: 10
     }, function (items) {
         $threshold.val(items.thresholdValue);
         $printAllValues.prop('checked', items.printAllValue);
         $developerMode.prop('checked', items.developerMode);
-        $codePreviewSize.val(items.codePreviewSize);
+        $codePreviewScope.val(items.codePreviewScope);
+        $codePreviewMax.val(items.codePreviewMax);
     });
     chrome.storage.sync.set({
         'nodesDoNotSave': []

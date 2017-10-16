@@ -154,6 +154,13 @@ if (shouldReactiveDebuggerRun === true) {
         return instrumentedCode;
     }
 
+    /**
+     *
+     * @param file
+     * @param from 1 based and included
+     * @param to included
+     * @returns {*}
+     */
     function getCode(file, from, to) {
         var code = scriptCache[file];
         if (!code || code.length === 0) {
@@ -164,12 +171,12 @@ if (shouldReactiveDebuggerRun === true) {
         if (to > lines.length) {
             to = lines.length;
         }
-        if (from < 0) {
-            from = 0;
+        if (from < 1) {
+            from = 1;
         }
 
         return {
-            lines: lines.slice(from, to),
+            lines: lines.slice(from - 1, to),
             from: from, to: to
         }
     }
