@@ -48,7 +48,7 @@ var styleTooltip = function (id, name, type, method, sourceInfo) {
     // use jquery to construct html strings to prevent layout breaks
     // if "weird" values are displayed. (also prevents xss)
 
-    var sourceInfoText = '';
+    var sourceInfoText = 'unknown';
     if (sourceInfo && sourceInfo.begin) {
         sourceInfoText = sourceInfo.begin.line;
         if (sourceInfo.begin.column) {
@@ -59,15 +59,18 @@ var styleTooltip = function (id, name, type, method, sourceInfo) {
         sourceInfoText += ' (' + (sourceInfo.filename ? sourceInfo.filename : 'html') + ')';
     }
 
+    var $tooltip = $("<div>").addClass("custom_tooltip")
+        .append($("<p>").text('Id: ' + id))
+        .append($("<p>").text('Name: ' + name))
+        .append($("<p>").text('Type: ' + type))
+        .append($("<p>").text('Location: ' + sourceInfoText));
+    if (sourceInfoText !== "unknown") {
+        $tooltip.append($("<p>").text('Press CTRL to view source code.').addClass("tooltip-hint"));
+    }
+    $tooltip.append($("<p>").text('Method: ' + method));
+
     return $("<div>")
-        .append($("<div>").addClass("custom_tooltip")
-            .append($("<p>").text('Id: ' + id))
-            .append($("<p>").text('Name: ' + name))
-            .append($("<p>").text('Type: ' + type))
-            .append($("<p>").text('Location: ' + sourceInfoText))
-            .append($("<p>").text('Press CTRL to view source code.').addClass("tooltip-hint"))
-            .append($("<p>").text('Method: ' + method))
-        ).html();
+        .append($tooltip).html();
 };
 
 var g = '',
@@ -272,7 +275,7 @@ function getTooltip(d3node) {
     if (d3node.classed("show-code")) {
         var nodeinfo = d3node.attr("nodeinfo");
         if (nodeinfo === "-pending-") {
-            // using jquery to construct html makes sure it is properly constructed.
+            // create loading icon as placeholder
             return $("<div>").append(
                 $("<img>").attr("src", chrome.extension.getURL("resources/loading.gif")).addClass("code-placeholder")
             ).html();
@@ -285,6 +288,13 @@ function getTooltip(d3node) {
 }
 
 function initCodePreview(d3node, data, $node) {
+    if (!data.sourceInfo) {
+        // source info is not set yet, so no code preview can be shown
+
+        //TODO: replace this with a message being displayed in the tooltip
+        // telling the user about this
+        return;
+    }
 
     if (d3node.classed("show-code")) {
         // code preview is already displayed
@@ -292,7 +302,7 @@ function initCodePreview(d3node, data, $node) {
     }
 
     if (d3node.attr("nodeinfo")) {
-
+        // code info is already loaded
         // activate code preview
         d3node.classed("show-code", true);
         refreshTooltip($node);
@@ -302,7 +312,7 @@ function initCodePreview(d3node, data, $node) {
     // set pending to prevent multiple code requests
     d3node.attr("nodeinfo", "-pending-");
 
-    createCodePreview(data, function (answer) {
+    requestCodePreview(data, function (answer) {
 
         if (!answer.code) {
             return;
@@ -880,10 +890,7 @@ refreshCurrentBreakPointsFrontEnd();
 // })();
 
 
-function createCodePreview(node, callback) {
-    // check in callback if ctrl is pressed
-    if (!node.sourceInfo) return;
-
+function requestCodePreview(node, callback) {
     chrome.storage.sync.get({codePreviewScope: '', codePreviewMax: ''}, function (items) {
         var codePreviewScope = items.codePreviewScope ? parseInt(items.codePreviewScope) : 4;
         var codePreviewMax = items.codePreviewMax ? parseInt(items.codePreviewMax) : -1;
