@@ -877,14 +877,14 @@ function createCodePreview(node, callback) {
     if (!node.sourceInfo) return;
 
     chrome.storage.sync.get({codePreviewScope: '', codePreviewMax: ''}, function (items) {
-        var codePreviewScope = items.codePreviewScope;
-        if (!codePreviewScope) {
-            codePreviewScope = 4;
-        }
+        var codePreviewScope = items.codePreviewScope ? parseInt(items.codePreviewScope) : 4;
+        var codePreviewMax = items.codePreviewMax ? parseInt(items.codePreviewMax) : -1;
+
         // cap the maximum scope to be displayed
-        var codeLength = (node.sourceInfo.end.line - node.sourceInfo.begin.line)
-        if (items.codePreviewMax && codeLength + 2 * codePreviewScope > items.codePreviewMax) {
-            codePreviewScope = (codePreviewMax - codeLength) / 2
+        var codeLength = (node.sourceInfo.end.line - node.sourceInfo.begin.line);
+        if (codePreviewMax && codeLength + 2 * codePreviewScope > codePreviewMax) {
+            codePreviewScope = Math.round((codePreviewMax - codeLength) / 2);
+            if (codePreviewScope < 0) codePreviewScope = 0;
         }
 
         var from = node.sourceInfo.begin.line - codePreviewScope;
