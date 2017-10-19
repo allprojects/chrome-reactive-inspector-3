@@ -270,7 +270,15 @@ function applyNodeExtensions() {
 
 function getTooltip(d3node) {
     if (d3node.classed("show-code")) {
-        return d3node.attr("nodeinfo");
+        var nodeinfo = d3node.attr("nodeinfo");
+        if (nodeinfo === "-pending-") {
+            // using jquery to construct html makes sure it is properly constructed.
+            return $("<div>").append(
+                $("<img>").attr("src", chrome.extension.getURL("resources/loading.gif")).addClass("code-placeholder")
+            ).html();
+        } else {
+            return nodeinfo;
+        }
     } else {
         return d3node.attr("original-title");
     }
