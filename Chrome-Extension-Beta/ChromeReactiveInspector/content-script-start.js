@@ -77,6 +77,15 @@ chrome.storage.sync.get({nodesDoNotSave: []}, function (result) {
     nodesDoNotSave = result.nodesDoNotSave;
 });
 
+chrome.storage.onChanged.addListener(function(changes, namespace) {
+    for (key in changes) {
+        var storageChange = changes[key];
+        if(key === 'nodesDoNotSave'){
+            nodesDoNotSave = storageChange.newValue;
+        }
+    }
+});
+
 // returns true if query matches
 function shouldSaveNodeValue(fileReadOver, nodeId) {
     if(!fileReadOver){
