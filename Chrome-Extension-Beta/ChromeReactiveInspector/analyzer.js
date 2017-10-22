@@ -27,7 +27,6 @@ chromeReactiveInspector.analyzer = (function (window) {
     (function (sandbox) {
         function AnalysisEngine() {
             var iidToLocation = sandbox.iidToLocation;
-            var sandboxRef = sandbox;
 
             function showLocation(iid) {
                 // console.log('  Source Location iss: ' + iidToLocation(iid));
@@ -80,7 +79,11 @@ chromeReactiveInspector.analyzer = (function (window) {
                     return;
                 }
 
-                var currentType = "";
+                // just return value if value is not set or type can not be inferred from constructor name
+                if (!val || !val.constructor) {
+                    return val;
+                }
+
                 var sourceInfo = '';
                 // source location
                 var SourceLocation = window.iidToLocationMap[iid];
@@ -92,11 +95,9 @@ chromeReactiveInspector.analyzer = (function (window) {
                     };
                 }
 
-                if (val) {
-                    window.variables.push({'name': name, 'id': val.id, 'location': sourceInfo.begin.line});
-                    currentType = val.constructor.name;
-                }
+                window.variables.push({'name': name, 'id': val.id, 'location': sourceInfo.begin.line});
 
+                var currentType = val.constructor.name || "";
                 var currentTypeToDisplay = '';
                 if (val._isEventStream) {
                     currentTypeToDisplay = "Eventstream";
@@ -129,7 +130,7 @@ chromeReactiveInspector.analyzer = (function (window) {
                     return val;
                 }
 
-                if (val && val.constructor.name === 'Subscriber') {
+                if (currentType === 'Subscriber') {
                     if (!val.hasOwnProperty("_id")) {
                         return val;
                     }
