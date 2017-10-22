@@ -228,7 +228,7 @@ function applyNodeExtensions() {
             // add tooltips
             $(this).tipsy({
                 gravity: "w", opacity: 1, html: true, className: function () {
-                    return d3.select(this).classed("show-code") ? "code-tooltip" : "tooltip"
+                    return d3.select(this).classed("show-code") ? "code-tooltip" : "node-tooltip"
                 }, title: function () {
                     return getTooltip(d3.select(this));
                 }
