@@ -1,34 +1,37 @@
-var scriptCache = {};
+// closure to prevent intervention with pages javascripts since this is a content script
+var chromeReactiveInspector = chromeReactiveInspector || {};
 
-/** DOCUMENT LOAD INTERCEPTION Start ***/
-// load current document and
-// All scripts will be rendered inert,
-var request = new XMLHttpRequest();
-request.open('GET', location.href);
+chromeReactiveInspector.instrumentor = (function (window) {
+    var scriptCache = {};
+    /* DOCUMENT LOAD INTERCEPTION Start  */
+    // load current document and
+    // All scripts will be rendered inert,
+    var request = new XMLHttpRequest();
+    request.open('GET', location.href);
 
-var shouldReactiveDebuggerRun = true;
+    var shouldReactiveDebuggerRun = true;
 
-var filesShouldNotInclude = ["Rx.js", "rx.lite.js", "Bacon.js", "Bacon.UI.js", "jquery.js", "rx.all.js", "jquery-2.1.4.js"];
-var fileReadOver = false;
-request.onload = function (event) {
+    var filesShouldNotInclude = ["Rx.js", "rx.lite.js", "Bacon.js", "Bacon.UI.js", "jquery.js", "rx.all.js", "jquery-2.1.4.js"];
+    var fileReadOver = false;
+    request.onload = function () {
 
-    var respText = request.responseText;
-    // check if this page contains bacon / rx , if not then debugger should not run
-    var validFiles = ["Rx.js", "Bacon.js", "rx.lite.js", "rx.lite.compat.js", "rx.all.js"];
+        var respText = request.responseText;
+        // check if this page contains bacon / rx , if not then debugger should not run
+        var validFiles = ["Rx.js", "Bacon.js", "rx.lite.js", "rx.lite.compat.js", "rx.all.js"];
 
-    shouldReactiveDebuggerRun = _.some(validFiles, function (v) {
-        return respText.search(v) !== -1;
-    });
-};
-request.send(null);
+        shouldReactiveDebuggerRun = _.some(validFiles, function (v) {
+            return respText.search(v) !== -1;
+        });
+    };
+    request.send(null);
+    /* DOCUMENT LOAD INTERCEPTION End */
 
-
-/** DOCUMENT LOAD INTERCEPTION End ***/
-
-if (shouldReactiveDebuggerRun === true) {
+    if (shouldReactiveDebuggerRun === false) {
+        return;
+    }
     /**     SEQUENTIAL Loader Start    ***/
-//Sequential loader To get all scripts and insert in document after instrumentation
-// script can be with source or without source (in page JS code)
+    //Sequential loader To get all scripts and insert in document after instrumentation
+    // script can be with source or without source (in page JS code)
     setTimeout(function next(index) {
 
         var script = document.scripts[index];
@@ -40,7 +43,7 @@ if (shouldReactiveDebuggerRun === true) {
         if (!script.hasAttribute('src')) {
             // script tag contains inline code.
             var code = instrumentInline(index, script.textContent);
-            eval(code);
+            executeInContext(code);
             fileReadOver = true;
             setTimeout(next, 0, ++index);
             return;
@@ -70,7 +73,7 @@ if (shouldReactiveDebuggerRun === true) {
                         var developerMode = items.developerMode;
 
                         var code = instrumentFile(filename, request.responseText, developerMode);
-                        eval(code);
+                        executeInContext(code);
                         J$.W(-1, '', '', '');
                         fileReadOver = true;
 
@@ -78,7 +81,7 @@ if (shouldReactiveDebuggerRun === true) {
                         setTimeout(next, 0, ++index);
                     });
                 } else {
-                    eval(request.responseText);
+                    executeInContext(request.responseText);
                     // next
                     setTimeout(next, 0, ++index);
                 }
@@ -180,4 +183,17 @@ if (shouldReactiveDebuggerRun === true) {
             from: from, to: to
         }
     }
-}
+
+    /**
+     * Execute code with original page context.
+     * @param code
+     */
+    function executeInContext(code) {
+        var fun = new Function(code);
+        fun.call(window);
+    }
+
+    return {
+        getCode: getCode
+    };
+})(this);
