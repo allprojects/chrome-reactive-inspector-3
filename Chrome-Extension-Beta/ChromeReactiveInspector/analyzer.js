@@ -95,7 +95,7 @@ chromeReactiveInspector.analyzer = (function (window) {
                     };
                 }
 
-                window.variables.push({'name': name, 'id': val.id, 'location': sourceInfo.begin.line});
+                window.variables.push({'name': name, 'id': val.id, 'location': sourceInfo});
 
                 var currentType = val.constructor.name || "";
                 var currentTypeToDisplay = '';
@@ -621,7 +621,7 @@ chromeReactiveInspector.analyzer = (function (window) {
                 }
             } else {
                 if (!checkIfNodeAlreadyExists(obsSource.id, name, sourceNodeType)) {
-                    logNodeData({id: obsSource.id, type: sourceNodeType, name: name, location: {line: location}});
+                    logNodeData({id: obsSource.id, type: sourceNodeType, name: name, location: location});
                     //for mario game example
                     if (operName === 'ScanOperator') {
                         if (obsSource.source && obsSource.source.id) {
