@@ -1,9 +1,9 @@
 \chapter{System Design} \label{chap:System Design}
-In this chapter, we discuss high-level requirements for the system to be developed in this thesis and the system architecture is explained in detail. 
+In this chapter, we discuss the high-level requirements for the system to be developed in this thesis and the system architecture is explained in detail. 
 At the end of the chapter, we will discuss the design choices and system features.
 
 \section{System Requirements}
-The requirements for the system developed in this thesis are analyzed according to the idea that the dependency graph visualization and history improve the debugging process of an application based on reactive javascript libraries. We identified following requirements expressed in terms of functionalities available to the end user.
+The requirements for the system developed in this thesis are analyzed according to the idea that the dependency graph visualization and history, improve the debugging process of an application based on reactive javascript libraries. We identified following requirements expressed in terms of functionalities available to the end user.
 
 \leavevmode
 \\
@@ -51,7 +51,7 @@ System provides following additional features to the developer.
 \end{itemize}
 
 \section{System Architecture Overview}
-The overall system design is illustrated in Figure~\ref{fig:system-design}. There are two system components: One is Chrome extension which provides extended debugging functionality for reactive applications and another one is client code which needs to be debugged. The general interaction between client code and extension is shown in the figure~\ref{fig:system-design}. 
+The overall system design is illustrated in Figure~\ref{fig:system-design}. There are two system components: one is chrome extension which provides extended debugging functionality for reactive applications and another one is client code which needs to be debugged. The general interaction between client code and extension is shown in the figure~\ref{fig:system-design}. 
 
 \begin{figure}[!h]
 	\centering
@@ -72,7 +72,7 @@ The detailed system architecture is depicted in figure~\ref{fig:system-architect
 \subsection{Analyzer}
 As we said earlier, Analyzer is the main building block of our system. It receives all the events and analyzes them. We will now look into how Analyzer is designed in detail.
 
-RxJS library does not provide any interfaces to the developer for debugging purpose yet. But BaconJS provides a user an interface in the form of \textbf{Bacon.spy} method. Using this method, the developer can catch all the events emitted by clients' BaconJS code. Keeping these in mind, we designed Analyzer as shown in the figure~\ref{fig:analyzer-design}. 
+RxJS library does not provide any interfaces to the developer for debugging purpose yet. But BaconJS provides the user an interface in the form of \textbf{Bacon.spy} method. Using this method, the developer can catch all the events emitted by clients' BaconJS code. Keeping these in mind, we designed Analyzer as shown in the figure~\ref{fig:analyzer-design}. 
 
 \begin{figure}[!h]
 	\centering
@@ -81,7 +81,7 @@ RxJS library does not provide any interfaces to the developer for debugging purp
 	\label{fig:analyzer-design}
 \end{figure}
 
-Here, we intercept and rewrite the required functions of both the libraries using prototype\cite{prototype}. Every object in javascript has an internal property called Prototype. Using this property, we are overriding required function calls of both libraries. We capture the required information and handover the call to original library call for further computations. Overriding all the function calls is not feasible and scalable. We observed that calls to various operators returned respective new observables. For instance, map operator returns MapObservable in RxJS. All types of observables call their respective subscribe functions which internally calls parent subscribe method. Thus, we only override parent subscribe method instead of individual subscribe methods. 
+Here, we intercept and rewrite the required functions of both the libraries using prototype\cite{prototype}. Every object in javascript has an internal property called Prototype. Using this property, we are overriding required function calls of both libraries. We capture the required information and handover the call to original library call for further computations. Overriding all the function calls is not feasible and scalable. We observed that calls to various operators returned respective new observables. For instance, map operator returns \textit{MapObservable} in RxJS. All types of observables call their respective subscribe functions which internally calls parent subscribe method. Thus, we only override parent subscribe method instead of individual subscribe methods. 
 
 \section{System Architecture Details}
 \subsection{Dependency Graph Visualization}
@@ -111,7 +111,7 @@ The visualization of a graph is not only updated whenever an event occurs, but i
 \\
 \textbf{History Navigation}
 \\
-One way is to simply use back and forth buttons provided, which jump to the point in time directly before or after the current point of time.
+One way is to simply use back and forth buttons provided, which jumps to the point in time directly before or after the current point of time.
 \\
 \textbf{Direct Access}
 \\

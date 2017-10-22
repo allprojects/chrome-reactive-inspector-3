@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.7.4)  28 SEP 2017 00:11
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.7.4)  28 SEP 2017 17:19
 entering extended mode
 **./pradeep_baradur_thesis.tex
 (pradeep_baradur_thesis.tex
@@ -2655,7 +2655,7 @@ LaTeX Font Info:    Font shape `T1/txtt/b/n' in size <10> not available
  [5
 
  <./images/transformational-systems.png> <./images/reactive-systems.png>] [6]
-<images/observer-uml.png, id=425, 1003.75pt x 414.54875pt>
+<images/observer-uml.png, id=426, 1003.75pt x 414.54875pt>
 File: images/observer-uml.png Graphic file (type png)
 
 <use images/observer-uml.png>
@@ -2725,7 +2725,7 @@ LaTeX Font Info:    Font shape `OML/mdput/m/it' will be
 LaTeX Font Info:    Font shape `OML/mdput/m/it' will be
 (Font)              scaled to size 5.92201pt on input line 172.
 
-<images/operator-marble-diagram.png, id=503, 611.28375pt x 268.00125pt>
+<images/operator-marble-diagram.png, id=504, 611.28375pt x 268.00125pt>
 File: images/operator-marble-diagram.png Graphic file (type png)
 
 <use images/operator-marble-diagram.png>
@@ -2736,7 +2736,7 @@ Package pdftex.def Info: images/operator-marble-diagram.png used on input line
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [12]
-<images/subjects.png, id=515, 362.35374pt x 181.67876pt>
+<images/subjects.png, id=516, 362.35374pt x 181.67876pt>
 File: images/subjects.png Graphic file (type png)
 
 <use images/subjects.png>
@@ -2750,7 +2750,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [16]
-<images/jalangi-components.png, id=586, 560.8453pt x 341.77687pt>
+<images/jalangi-components.png, id=587, 560.8453pt x 341.77687pt>
 File: images/jalangi-components.png Graphic file (type png)
 
 <use images/jalangi-components.png>
@@ -2764,14 +2764,14 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 Underfull \vbox (badness 2818) has occurred while \output is active []
 
  [17]
-<images/chrome-devtools.png, id=594, 910.15031pt x 278.54062pt>
+<images/chrome-devtools.png, id=595, 910.15031pt x 278.54062pt>
 File: images/chrome-devtools.png Graphic file (type png)
 
 <use images/chrome-devtools.png>
 Package pdftex.def Info: images/chrome-devtools.png used on input line 279.
 (pdftex.def)             Requested size: 455.07405pt x 139.26996pt.
  [18 <./images/jalangi-components.png> <./images/chrome-devtools.png>]
-<images/chrome-extension-architecture.png, id=608, 663.47874pt x 442.65375pt>
+<images/chrome-extension-architecture.png, id=609, 663.47874pt x 442.65375pt>
 File: images/chrome-extension-architecture.png Graphic file (type png)
 
 <use images/chrome-extension-architecture.png>
@@ -2787,28 +2787,28 @@ gn.tex
 
 ]
 chapter 3.
-[23] <images/system-design.png, id=654, 282.05376pt x 221.82875pt>
+[23] <images/system-design.png, id=655, 282.05376pt x 221.82875pt>
 File: images/system-design.png Graphic file (type png)
 
 <use images/system-design.png>
 Package pdftex.def Info: images/system-design.png used on input line 58.
 (pdftex.def)             Requested size: 169.23355pt x 133.09825pt.
 
-<images/system-architecture.png, id=656, 387.4475pt x 322.20375pt>
+<images/system-architecture.png, id=657, 387.4475pt x 322.20375pt>
 File: images/system-architecture.png Graphic file (type png)
 
 <use images/system-architecture.png>
 Package pdftex.def Info: images/system-architecture.png used on input line 67.
 (pdftex.def)             Requested size: 232.47029pt x 193.32373pt.
  [24 <./images/system-design.png>]
-<images/analyzer-design.png, id=666, 462.72874pt x 312.16624pt>
+<images/analyzer-design.png, id=667, 462.72874pt x 312.16624pt>
 File: images/analyzer-design.png Graphic file (type png)
 
 <use images/analyzer-design.png>
 Package pdftex.def Info: images/analyzer-design.png used on input line 79.
 (pdftex.def)             Requested size: 277.63939pt x 187.3012pt.
  [25 <./images/system-architecture.png> <./images/analyzer-design.png>]
-<images/rxjs-dependency-graph-example.png, id=676, 337.26pt x 342.27875pt>
+<images/rxjs-dependency-graph-example.png, id=677, 337.26pt x 342.27875pt>
 File: images/rxjs-dependency-graph-example.png Graphic file (type png)
 
 <use images/rxjs-dependency-graph-example.png>
@@ -2823,7 +2823,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 (chapters/4_Implementation.tex [28]
 chapter 4.
 
-<images/detailed-system-implementation.png, id=705, 984.67876pt x 532.99126pt>
+<images/detailed-system-implementation.png, id=706, 984.67876pt x 532.99126pt>
 File: images/detailed-system-implementation.png Graphic file (type png)
 
 <use images/detailed-system-implementation.png>
@@ -2833,7 +2833,7 @@ t line 10.
  [29
 
  <./images/detailed-system-implementation.png>] [30] [31] [32] [33]
-<images/cri.png, id=813, 974.89218pt x 372.64218pt>
+<images/cri.png, id=814, 974.89218pt x 372.64218pt>
 File: images/cri.png Graphic file (type png)
  <use images/cri.png>
 Package pdftex.def Info: images/cri.png used on input line 190.
@@ -2842,7 +2842,7 @@ Package pdftex.def Info: images/cri.png used on input line 190.
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [34]
-<images/language-query.png, id=854, 218.31563pt x 134.75343pt>
+<images/language-query.png, id=855, 218.31563pt x 134.75343pt>
 File: images/language-query.png Graphic file (type png)
 
 <use images/language-query.png>
@@ -2857,7 +2857,7 @@ y.png>]
 chapter 5.
 [37
 
-] <images/RxJS-operators/final.png, id=890, 531.48563pt x 48.93282pt>
+] <images/RxJS-operators/final.png, id=891, 531.48563pt x 48.93282pt>
 File: images/RxJS-operators/final.png Graphic file (type png)
 
 <use images/RxJS-operators/final.png>
@@ -2865,7 +2865,7 @@ Package pdftex.def Info: images/RxJS-operators/final.png used on input line 26.
 
 (pdftex.def)             Requested size: 372.0374pt x 34.25272pt.
 
-<images/RxJS-operators/steps-all.png, id=893, 737.00343pt x 319.1925pt>
+<images/RxJS-operators/steps-all.png, id=894, 737.00343pt x 319.1925pt>
 File: images/RxJS-operators/steps-all.png Graphic file (type png)
 
 <use images/RxJS-operators/steps-all.png>
@@ -2879,7 +2879,7 @@ Overfull \hbox (17.97563pt too wide) in paragraph at lines 35--36
 
 [38 <./images/RxJS-operators/final.png> <./images/RxJS-operators/steps-all.png>
 ]
-<images/simple-data-binding/simple-db-UI.png, id=911, 239.39438pt x 188.20313pt
+<images/simple-data-binding/simple-db-UI.png, id=912, 239.39438pt x 188.20313pt
 >
 File: images/simple-data-binding/simple-db-UI.png Graphic file (type png)
  <use images/simple-data-binding/simple-db-UI.png>
@@ -2887,7 +2887,7 @@ Package pdftex.def Info: images/simple-data-binding/simple-db-UI.png used on in
 put line 74.
 (pdftex.def)             Requested size: 199.16626pt x 156.579pt.
 
-<images/simple-data-binding/sd-dg.png, id=912, 286.82156pt x 218.31563pt>
+<images/simple-data-binding/sd-dg.png, id=913, 286.82156pt x 218.31563pt>
 File: images/simple-data-binding/sd-dg.png Graphic file (type png)
 
 <use images/simple-data-binding/sd-dg.png>
@@ -2898,7 +2898,7 @@ e 76.
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [39 <./images/simple-data-binding/simple-db-UI.png> <./images/simple-data-bind
-ing/sd-dg.png>] <images/animation-test/at-ui.png, id=947, 1165.35374pt x 468.75
+ing/sd-dg.png>] <images/animation-test/at-ui.png, id=948, 1165.35374pt x 468.75
 125pt>
 File: images/animation-test/at-ui.png Graphic file (type png)
 
@@ -2910,7 +2910,7 @@ Package pdftex.def Info: images/animation-test/at-ui.png used on input line 122
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/animation-test/at-dg.png, id=948, 1258.7025pt x 231.86626pt>
+<images/animation-test/at-dg.png, id=949, 1258.7025pt x 231.86626pt>
 File: images/animation-test/at-dg.png Graphic file (type png)
 
 <use images/animation-test/at-dg.png>
@@ -2925,7 +2925,7 @@ Overfull \hbox (5.54883pt too wide) in paragraph at lines 128--129
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[40] <images/draw/draw-ui.png, id=992, 778.91pt x 634.37pt>
+[40] <images/draw/draw-ui.png, id=993, 778.91pt x 634.37pt>
 File: images/draw/draw-ui.png Graphic file (type png)
 
 <use images/draw/draw-ui.png>
@@ -2937,14 +2937,14 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [41 <./images/animation-test/at-ui.png> <./images/animation-test/at-dg.png>]
 [42 <./images/draw/draw-ui.png>]
-<images/draw/draw-dg.png, id=1040, 1870.99pt x 1013.7875pt>
+<images/draw/draw-dg.png, id=1041, 1870.99pt x 1013.7875pt>
 File: images/draw/draw-dg.png Graphic file (type png)
 
 <use images/draw/draw-dg.png>
 Package pdftex.def Info: images/draw/draw-dg.png used on input line 185.
 (pdftex.def)             Requested size: 497.92262pt x 269.79713pt.
 
-<images/draw/breakpoint-example-1.png, id=1045, 1874.00125pt x 961.5925pt>
+<images/draw/breakpoint-example-1.png, id=1046, 1874.00125pt x 961.5925pt>
 File: images/draw/breakpoint-example-1.png Graphic file (type png)
 
 <use images/draw/breakpoint-example-1.png>
@@ -2955,7 +2955,7 @@ e 194.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<images/draw/breakpoint-example-2.png, id=1046, 1613.02625pt x 232.87pt>
+<images/draw/breakpoint-example-2.png, id=1047, 1613.02625pt x 232.87pt>
 File: images/draw/breakpoint-example-2.png Graphic file (type png)
 
 <use images/draw/breakpoint-example-2.png>
@@ -2976,7 +2976,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [43 <./images/draw/draw-dg.png>] [44 <./images/draw/breakpoint-example-1.png> <
 ./images/draw/breakpoint-example-2.png>]
-<images/stopwatch/search.png, id=1080, 944.7797pt x 271.0125pt>
+<images/stopwatch/search.png, id=1081, 944.7797pt x 271.0125pt>
 File: images/stopwatch/search.png Graphic file (type png)
 
 <use images/stopwatch/search.png>
@@ -2986,7 +2986,7 @@ Package pdftex.def Info: images/stopwatch/search.png used on input line 257.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/stopwatch/dependents.png, id=1083, 1001.99344pt x 237.88875pt>
+<images/stopwatch/dependents.png, id=1084, 1001.99344pt x 237.88875pt>
 File: images/stopwatch/dependents.png Graphic file (type png)
 
 <use images/stopwatch/dependents.png>
@@ -2997,7 +2997,7 @@ Package pdftex.def Info: images/stopwatch/dependents.png used on input line 266
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/stopwatch/dependencies.png, id=1084, 1001.99344pt x 265.74281pt>
+<images/stopwatch/dependencies.png, id=1085, 1001.99344pt x 265.74281pt>
 File: images/stopwatch/dependencies.png Graphic file (type png)
 
 <use images/stopwatch/dependencies.png>
@@ -3012,7 +3012,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [45]
-<images/drag-drop/drag-drop-ui.png, id=1101, 650.43pt x 119.69719pt>
+<images/drag-drop/drag-drop-ui.png, id=1102, 650.43pt x 119.69719pt>
 File: images/drag-drop/drag-drop-ui.png Graphic file (type png)
 
 <use images/drag-drop/drag-drop-ui.png>
@@ -3023,7 +3023,7 @@ Package pdftex.def Info: images/drag-drop/drag-drop-ui.png used on input line 2
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/drag-drop/drag-drop-dg.png, id=1102, 988.44281pt x 289.08pt>
+<images/drag-drop/drag-drop-dg.png, id=1103, 988.44281pt x 289.08pt>
 File: images/drag-drop/drag-drop-dg.png Graphic file (type png)
 
 <use images/drag-drop/drag-drop-dg.png>
@@ -3037,7 +3037,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 [46 <./images/stopwatch/search.png> <./images/stopwatch/dependents.png> <./imag
 es/stopwatch/dependencies.png>] [47 <./images/drag-drop/drag-drop-ui.png> <./im
 ages/drag-drop/drag-drop-dg.png>]
-<images/drag-drop/drag-drop-hq.png, id=1147, 408.02437pt x 299.61937pt>
+<images/drag-drop/drag-drop-hq.png, id=1148, 408.02437pt x 299.61937pt>
 File: images/drag-drop/drag-drop-hq.png Graphic file (type png)
 
 <use images/drag-drop/drag-drop-hq.png>
@@ -3045,7 +3045,7 @@ Package pdftex.def Info: images/drag-drop/drag-drop-hq.png used on input line 3
 43.
 (pdftex.def)             Requested size: 285.61511pt x 209.73212pt.
  [48 <./images/drag-drop/drag-drop-hq.png>] [49]
-<images/wiki-updates/wiki-updates-ui.png, id=1219, 999.735pt x 632.3625pt>
+<images/wiki-updates/wiki-updates-ui.png, id=1220, 999.735pt x 632.3625pt>
 File: images/wiki-updates/wiki-updates-ui.png Graphic file (type png)
 
 <use images/wiki-updates/wiki-updates-ui.png>
@@ -3053,7 +3053,7 @@ Package pdftex.def Info: images/wiki-updates/wiki-updates-ui.png used on input
 line 403.
 (pdftex.def)             Requested size: 497.92892pt x 314.95505pt.
 
-<images/wiki-updates/wiki-updates-dg.png, id=1220, 1239.63126pt x 451.6875pt>
+<images/wiki-updates/wiki-updates-dg.png, id=1221, 1239.63126pt x 451.6875pt>
 File: images/wiki-updates/wiki-updates-dg.png Graphic file (type png)
 
 <use images/wiki-updates/wiki-updates-dg.png>
@@ -3065,7 +3065,7 @@ line 409.
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [50 <./images/wiki-updates/wiki-updates-ui.png>]
-<images/improvisations/initial-ui.png, id=1240, 313.17pt x 83.5622pt>
+<images/improvisations/initial-ui.png, id=1241, 313.17pt x 83.5622pt>
 File: images/improvisations/initial-ui.png Graphic file (type png)
 
 <use images/improvisations/initial-ui.png>
@@ -3074,7 +3074,7 @@ e 433.
 (pdftex.def)             Requested size: 219.21748pt x 58.49312pt.
  [51 <./images/wiki-updates/wiki-updates-dg.png> <./images/improvisations/initi
 al-ui.png>]
-<images/improvisations/previous.png, id=1268, 932.73468pt x 167.12437pt>
+<images/improvisations/previous.png, id=1269, 932.73468pt x 167.12437pt>
 File: images/improvisations/previous.png Graphic file (type png)
 
 <use images/improvisations/previous.png>
@@ -3082,7 +3082,7 @@ Package pdftex.def Info: images/improvisations/previous.png used on input line
 476.
 (pdftex.def)             Requested size: 497.91936pt x 89.21556pt.
 
-<images/improvisations/new.png, id=1269, 964.35281pt x 177.66376pt>
+<images/improvisations/new.png, id=1270, 964.35281pt x 177.66376pt>
 File: images/improvisations/new.png Graphic file (type png)
 
 <use images/improvisations/new.png>
@@ -3093,7 +3093,7 @@ Package pdftex.def Info: images/improvisations/new.png used on input line 482.
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [52 <./images/improvisations/previous.png>]
-<images/profiling/without-cri.png, id=1297, 1028.34187pt x 164.11313pt>
+<images/profiling/without-cri.png, id=1298, 1028.34187pt x 164.11313pt>
 File: images/profiling/without-cri.png Graphic file (type png)
 
 <use images/profiling/without-cri.png>
@@ -3101,7 +3101,7 @@ Package pdftex.def Info: images/profiling/without-cri.png used on input line 49
 2.
 (pdftex.def)             Requested size: 497.92928pt x 79.46454pt.
 
-<images/profiling/with-cri.png, id=1298, 1028.34187pt x 206.27063pt>
+<images/profiling/with-cri.png, id=1299, 1028.34187pt x 206.27063pt>
 File: images/profiling/with-cri.png Graphic file (type png)
 
 <use images/profiling/with-cri.png>
@@ -3194,9 +3194,9 @@ tex/latex/%PROGRAMFILES%/tuddesign/fonts/type1/softmake/frontpage/5fpm8a.pfb><C
 :/Users/prade/Documents/latex/latex/%PROGRAMFILES%/tuddesign/fonts/type1/softma
 ke/frontpage/5fpr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/txfonts
 /t1xbtt.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/txfonts/t1xtt.pfb>
-Output written on pradeep_baradur_thesis.pdf (72 pages, 1291640 bytes).
+Output written on pradeep_baradur_thesis.pdf (72 pages, 1292015 bytes).
 PDF statistics:
- 1685 PDF objects out of 1728 (max. 8388607)
+ 1686 PDF objects out of 1728 (max. 8388607)
  673 named destinations out of 1000 (max. 500000)
  672 words of extra memory for PDF output out of 10000 (max. 10000000)
 
