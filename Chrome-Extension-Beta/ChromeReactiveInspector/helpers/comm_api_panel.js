@@ -104,7 +104,7 @@ var allEdges = [];
                     ref: newRef,
                     value: newValue,
                     type: newType,
-                    method: newMethod || '-',
+                    method: newMethod,
                     sourceInfo: newSourceInfo,
                     nodeId: message.content.nodeId,
                     class: currentClasses
@@ -137,7 +137,7 @@ var allEdges = [];
                     ref: message.content.nodeRef,
                     value: message.content.nodeValue,
                     type: message.content.nodeType,
-                    method: message.content.nodeMethod || '-',
+                    method: message.content.nodeMethod,
                     nodeId: message.content.nodeId,
                     sourceInfo: message.content.sourceInfo,
                     class: currentClasses

@@ -48,7 +48,7 @@ var styleTooltip = function (id, name, type, method, sourceInfo) {
     // use jquery to construct html strings to prevent layout breaks
     // if "weird" values are displayed. (also prevents xss)
 
-    var sourceInfoText = 'unknown';
+    var sourceInfoText = '';
     if (sourceInfo && sourceInfo.begin) {
         sourceInfoText = sourceInfo.begin.line;
         if (sourceInfo.begin.column) {
@@ -59,15 +59,23 @@ var styleTooltip = function (id, name, type, method, sourceInfo) {
         sourceInfoText += ' (' + (sourceInfo.filename ? sourceInfo.filename : 'html') + ')';
     }
 
-    var $tooltip = $("<div>").addClass("custom_tooltip")
-        .append($("<p>").text('Id: ' + id))
-        .append($("<p>").text('Name: ' + name))
-        .append($("<p>").text('Type: ' + type))
-        .append($("<p>").text('Location: ' + sourceInfoText));
-    if (sourceInfoText !== "unknown") {
+    var $tooltip = $("<div>").addClass("custom_tooltip");
+    if (id) {
+        $tooltip.append($("<p>").text('Id: ' + id));
+    }
+    if (name) {
+        $tooltip.append($("<p>").text('Name: ' + name));
+    }
+    if (type) {
+        $tooltip.append($("<p>").text('Type: ' + type));
+    }
+    if (sourceInfoText) {
+        $tooltip.append($("<p>").text('Location: ' + sourceInfoText));
         $tooltip.append($("<p>").text('Press CTRL to view source code.').addClass("tooltip-hint"));
     }
-    $tooltip.append($("<p>").text('Method: ' + method));
+    if (method) {
+        $tooltip.append($("<p>").text('Method: ' + method));
+    }
 
     return $("<div>")
         .append($tooltip).html();
