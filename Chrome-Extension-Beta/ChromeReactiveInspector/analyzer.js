@@ -8,6 +8,8 @@
 var chromeReactiveInspector = chromeReactiveInspector || {};
 
 var variables = [];
+var rxObsCounter = 0;
+
 chromeReactiveInspector.analyzer = (function (window) {
     var allNodes = [];
     var allEdges = [];
@@ -16,7 +18,6 @@ chromeReactiveInspector.analyzer = (function (window) {
         nodeId: '',
         value: ''
     };
-    var rxObsCounter = 0;
     var subscriberList = [];
 
     // Jalangi Analysis Start
