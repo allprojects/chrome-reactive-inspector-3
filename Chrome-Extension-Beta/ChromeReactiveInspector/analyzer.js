@@ -29,44 +29,32 @@ chromeReactiveInspector.analyzer = (function (window) {
         function AnalysisEngine() {
             var iidToLocation = sandbox.iidToLocation;
 
-            function showLocation(iid) {
-                // console.log('  Source Location iss: ' + iidToLocation(iid));
-            }
-
             this.literal = function (iid, val) {
-                // console.log('creating literal operation intercepted: ' + val);
-                showLocation(iid);
                 return val;
             };
 
             this.invokeFunPre = function (iid, f, base, args, isConstructor) {
-                // console.log('function call intercepted before invoking');
-                // console.log(f);
-                // console.log(f.constructor.name);
-                showLocation(iid);
+                // function call intercepted before invoking
+                // f.constructor.name;
             };
 
             this.invokeFun = function (iid, f, base, args, val, isConstructor) {
-                // console.log('function call intercepted after invoking');
-                showLocation(iid);
+                // function call intercepted after invoking
                 return val;
             };
 
             this.getField = function (iid, base, offset, val) {
-                // console.log('get field operation intercepted: ' + offset);
-                showLocation(iid);
+                // get field operation intercepted (offset)
                 return val;
             };
 
             this.read = function (iid, name, val, isGlobal) {
-                // console.log('reading variable operation intercepted: ' + name);
-                showLocation(iid);
+                // reading variable operation intercepted (name)
                 return val;
             };
 
             this.binary = function (iid, op, left, right, result_c) {
-                // console.log('binary operation intercepted: ' + op);
-                showLocation(iid);
+                // binary operation intercepted (op)
                 return result_c;
             };
 
@@ -86,7 +74,6 @@ chromeReactiveInspector.analyzer = (function (window) {
                 }
 
                 var sourceInfo = '';
-                // source location
                 var SourceLocation = window.iidToLocationMap[iid];
                 if (SourceLocation) {
                     sourceInfo = {
@@ -99,35 +86,11 @@ chromeReactiveInspector.analyzer = (function (window) {
                 window.variables.push({'name': name, 'id': val.id, 'location': sourceInfo});
 
                 var currentType = val.constructor.name || "";
-                var currentTypeToDisplay = '';
-                if (val._isEventStream) {
-                    currentTypeToDisplay = "Eventstream";
-
-                } else if (val._isProperty) {
-                    currentTypeToDisplay = "Property";
-
-                } else {
-                    currentTypeToDisplay = currentType;
-                }
-
+                var currentTypeToDisplay = getTypeToDisplay(val) || currentType;
                 var currentTypeInSmall = currentType.toLowerCase();
 
                 if (currentTypeInSmall.search("observable") !== -1 || currentTypeInSmall.search("subject") !== -1) {
-                    if (!val.hasOwnProperty('operator') || val.operator !== undefined) {
-                        // bacon observer already has the id attribute
-                        val = checkAndAssignId(val);
-                        // log the node and update window.variables
-                        logNodeData({
-                            id: val.id,
-                            type: currentTypeToDisplay,
-                            name: name,
-                            location: sourceInfo
-                        });
-                        updatedVar = {'id': val.id, 'name': name};
-                        _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
-                        updateNodeEdgeName(updatedVar)
-                    }
-
+                    checkObservableForMeta(val, name, sourceInfo);
                     return val;
                 }
 
@@ -187,6 +150,66 @@ chromeReactiveInspector.analyzer = (function (window) {
                 }
                 return val;
             };
+
+            function getTypeToDisplay(val) {
+                if (val._isEventStream) {
+                    return "Eventstream";
+                } else if (val._isProperty) {
+                    return "Property";
+
+                } else if (val._isScalar) {
+                    return "Scalar";
+                } else {
+                    return null;
+                }
+            }
+
+            /**
+             * Checks if the value is an observable and has an operator. If not, recursively checks until
+             * an observable is found in the values source property that does have an operator.
+             * @param val
+             * @param name
+             * @param sourceInfo
+             */
+            function checkObservableForMeta(val, name, sourceInfo) {
+                //TODO refactor: many lines overlap with the write method. This causes unnecessary computations.
+                if (!val || !val.constructor.name) {
+                    return;
+                }
+
+                var currentType = val.constructor.name || "";
+                var currentTypeToDisplay = getTypeToDisplay(val) || currentType;
+                var currentTypeToLower = currentType.toLowerCase();
+
+                if (currentTypeToLower.search("observable") !== -1 || currentTypeToLower.search("subject") !== -1) {
+                    if (!val.hasOwnProperty('operator') || val.operator !== undefined) {
+                        // this will not be executed twice, only if all previous values did not have an operator
+
+                        // bacon observer already has the id attribute
+                        val = checkAndAssignId(val);
+                        // log the node and update window.variables
+                        logNodeData({
+                            id: val.id,
+                            type: currentTypeToDisplay,
+                            name: name,
+                            location: sourceInfo
+                        });
+                        updatedVar = {'id': val.id, 'name': name};
+                        _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
+                        updateNodeEdgeName(updatedVar)
+                    } else if (val.hasOwnProperty("source") && val.source.constructor.name.toLowerCase().search("observable") !== -1) {
+                        // if val has no operator it does not provide valuable information, but its source may not
+                        // have extended info (name and location info) provided by jalangi yet.
+                        // (See Rx.js test apps son-father-wallet "eventClick" variable)
+
+                        // add variable to window.variables here because it is already done for val before
+                        window.variables.push({'name': name, 'id': val.source.id, 'location': sourceInfo});
+                        //TODO: remove ~ from name, currently there to help detect newly added jalangi info
+                        checkObservableForMeta(val.source, "~" + name, sourceInfo);
+                    }
+                }
+            }
+
         }
 
         sandbox.analysis = new AnalysisEngine();
@@ -517,7 +540,11 @@ chromeReactiveInspector.analyzer = (function (window) {
                             }
                         }
                     } else if (self.outerValue && self.outerValue.id && self.outerValue.constructor.name === 'ScalarObservable') {
-                        logNodeData({id: self.outerValue.id, type: self.outerValue.constructor.name, value: nextValue});
+                        logNodeData({
+                            id: self.outerValue.id,
+                            type: self.outerValue.constructor.name,
+                            value: nextValue
+                        });
                     }
                 }
                 this._next(value);
@@ -601,7 +628,11 @@ chromeReactiveInspector.analyzer = (function (window) {
                                 value: tempObsSource.value
                             });
                         if (!checkIfNodeAlreadyExists(tempObsSource.id, '', tempObsSource.constructor.name)) {
-                            logNodeData({id: tempObsSource.id, type: tempObsSource.constructor.name, value: temp_val});
+                            logNodeData({
+                                id: tempObsSource.id,
+                                type: tempObsSource.constructor.name,
+                                value: temp_val
+                            });
                         }
                         logEdgeData(tempObsSource.id, obsResult.id, operName);
                     }
