@@ -7,13 +7,13 @@
 // closure to prevent intervention with pages javascripts since this is a content script
 var chromeReactiveInspector = chromeReactiveInspector || {};
 
-var variables = [];
 var rxObsCounter = 0;
 
 chromeReactiveInspector.analyzer = (function (window) {
     var allNodes = [];
     var allEdges = [];
     var updatedVar = {};
+    var nodesWithDetails = [];
     var previousData = {
         nodeId: '',
         value: ''
@@ -46,7 +46,7 @@ chromeReactiveInspector.analyzer = (function (window) {
 
                 if (val.id && isObservable(val)) {
                     var sourceInfo = getSourceInfo(iid, filename);
-                    submitJalangiNodeInfo(val, name, sourceInfo);
+                    submitJalangiNodeInfo(val, '', sourceInfo);
                 }
 
                 return val;
@@ -93,15 +93,14 @@ chromeReactiveInspector.analyzer = (function (window) {
                 }
 
                 if (currentType === 'Subscriber') {
-                    window.variables.push({'name': name, 'id': val.id, 'location': sourceInfo});
-
+                    addOrUpdatDetails(val.id, name);
                     if (!val.hasOwnProperty("_id")) {
                         return val;
                     }
 
                     // test case 53
                     if (currentType === val.obsType) {
-                        // update name of subscriber and update window.variables
+                        // update name of subscriber and update nodesWithDetails
                         if (!checkIfNodeAlreadyExists(val._id, name, currentType)) {
                             logNodeData({
                                 id: val._id,
@@ -109,9 +108,8 @@ chromeReactiveInspector.analyzer = (function (window) {
                                 name: name,
                                 location: sourceInfo
                             });
-                            updatedVar = {'id': val._id, 'name': name};
-                            _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
-                            updateNodeEdgeName(updatedVar)
+                            addOrUpdatDetails(val._id, name);
+                            updateNodeEdgeName(val._id, name)
                         }
                     }
                     else if (name) {
@@ -188,20 +186,20 @@ chromeReactiveInspector.analyzer = (function (window) {
             function submitJalangiNodeInfo(val, name, sourceInfo) {
 
                 var currentTypeToDisplay = getTypeToDisplay(val) || val.constructor.name || "";
-                window.variables.push({'name': name, 'id': val.id, 'location': sourceInfo});
-
                 // bacon observer already has the id attribute
                 val = checkAndAssignId(val);
-                // log the node and update window.variables
+
+                // submit data even though node already existed, because every submit from inside invokeFunction
+                // has no name
+                addOrUpdatDetails(val.id, name);
+
                 logNodeData({
                     id: val.id,
                     type: currentTypeToDisplay,
                     name: name,
                     location: sourceInfo
                 });
-                updatedVar = {'id': val.id, 'name': name};
-                _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
-                updateNodeEdgeName(updatedVar)
+                updateNodeEdgeName(val.id, name);
             }
 
             /**
@@ -224,8 +222,7 @@ chromeReactiveInspector.analyzer = (function (window) {
                     // have extended info (name and location info) provided by jalangi yet.
                     // (See Rx.js test apps son-father-wallet "eventClick" variable)
 
-                    //TODO: remove ~ from name, currently there to help detect newly added jalangi info
-                    checkObservableForMeta(val.source, "~" + name, sourceInfo);
+                    checkObservableForMeta(val.source, name, sourceInfo);
                 }
 
             }
@@ -617,17 +614,21 @@ chromeReactiveInspector.analyzer = (function (window) {
             var res = '';
             var location = '';
             if (obsSource.sourceObj && obsSource.sourceObj.id && !isNaN(obsSource.sourceObj.id)) {
-                res = _.find(window.variables, {id: obsSource.sourceObj.id});
+                res = _.find(nodesWithDetails, {id: obsSource.sourceObj.id});
                 if (res) {
                     name = res.name;
                     location = res.location;
+
+                    // remove id from variable (reason unknown)
                     updatedVar = {'id': '', 'name': name};
-                    _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
+                    _.extend(_.findWhere(nodesWithDetails, {name: updatedVar.name}), updatedVar);
                 }
             } else if (obsSource.id) {
-                res = _.find(window.variables, {id: obsSource.id});
-                if (res)
+                res = _.find(nodesWithDetails, {id: obsSource.id});
+                if (res) {
                     name = res.name;
+                    location = res.location;
+                }
             }
 
             // source obs are the dependencies of resultant obs
@@ -772,20 +773,14 @@ chromeReactiveInspector.analyzer = (function (window) {
     function logEdgeData(startId, endId, name) {
         name = name.replace('Operator', '');
         allEdges.push({'startId': startId, 'endId': endId});
-        var edgeStart = _.find(window.variables, {id: startId});
-        var edgeStartName = '';
-        if (edgeStart)
-            edgeStartName = edgeStart.name;
-        var edgeEnd = _.find(window.variables, {id: endId});
-        var edgeEndName = '';
-        if (edgeEnd)
-            edgeEndName = edgeEnd.name;
+        var edgeStart = _.find(nodesWithDetails, {id: startId});
+        var edgeEnd = _.find(nodesWithDetails, {id: endId});
         chromeReactiveInspector.sendObjectToDevTools({
             content: {
                 "edgeStart": startId,
-                "edgeStartName": edgeStartName,
+                "edgeStartName": edgeStart ? edgeStart.name : '',
                 "edgeEnd": endId,
-                "edgeEndName": edgeEndName,
+                "edgeEndName": edgeEnd ? edgeEnd.name : '',
                 "edgeLabel": name
             },
             action: "saveEdge",
@@ -798,11 +793,11 @@ chromeReactiveInspector.analyzer = (function (window) {
     }
 
 
-    function updateNodeEdgeName(node) {
+    function updateNodeEdgeName(id, name) {
         chromeReactiveInspector.sendObjectToDevTools({
             content: {
-                "id": node.id,
-                "name": node.name
+                "id": id,
+                "name": name
             },
             action: "updateSavedEdge",
             destination: "panel"
@@ -952,6 +947,55 @@ chromeReactiveInspector.analyzer = (function (window) {
         } else {
             return value;
         }
+    }
+
+    /**
+     * Add variable to variableCache or updated the existing one. Prevents multiple variables with same values in cache.
+     * @param id id of the observable variable
+     * @param name name of the observable variable
+     */
+    function addOrUpdatDetails(id, name) {
+        var existing = hasDetails(id, name);
+
+        // update or add new variable
+        if (existing) {
+            if (id) {
+                _.extend(existing, {id: id});
+            }
+            if (name) {
+                _.extend(existing, {name: name});
+            }
+        } else {
+            nodesWithDetails.push({id: id, name: name});
+        }
+    }
+
+    /**
+     * Returns the the details object if there is one.
+     */
+    function hasDetails(id, name) {
+        var existing = "";
+        var result = _.filter(nodesWithDetails, function (v) {
+            return v.id === id || v.name === name
+        });
+        var idResult = _.find(result, {id: id});
+        var nameResults = _.filter(result, {name: name});
+
+        // check id and name to prevent finding of variables with id or name set to undefined
+        if (id && idResult) {
+            // found one with id so take it
+            existing = idResult;
+        }
+        else if (name && nameResults.length > 0) {
+            if (nameResults.length === 1) {
+                existing = nameResults[0];
+            } else {
+                //TODO: implement support for multiple variables with the same name
+                // or one variable been assigned a value a second time.
+                throw "Multiple variables with same name. This is currently not supported!";
+            }
+        }
+        return existing;
     }
 
     return {};
