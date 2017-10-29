@@ -621,17 +621,13 @@ chromeReactiveInspector.analyzer = (function (window) {
                 if (res) {
                     name = res.name;
                     location = res.location;
-                    if (!isNaN(obsSource.sourceObj.id)) {
-                        updatedVar = {'id': '', 'name': name};
-                        _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
-                    }
+                    updatedVar = {'id': '', 'name': name};
+                    _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
                 }
-            } else {
-                if (obsSource.id) {
-                    res = _.find(window.variables, {id: obsSource.id});
-                    if (res)
-                        name = res.name;
-                }
+            } else if (obsSource.id) {
+                res = _.find(window.variables, {id: obsSource.id});
+                if (res)
+                    name = res.name;
             }
 
             // source obs are the dependencies of resultant obs
