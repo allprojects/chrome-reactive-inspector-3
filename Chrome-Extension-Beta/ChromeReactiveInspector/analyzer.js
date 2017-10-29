@@ -189,9 +189,15 @@ chromeReactiveInspector.analyzer = (function (window) {
                 // bacon observer already has the id attribute
                 val = checkAndAssignId(val);
 
-                // submit data even though node already existed, because every submit from inside invokeFunction
-                // has no name
                 addOrUpdatDetails(val.id, name);
+
+                // Check if there was already details submitted with a name.
+                // If so, the submitted details came from write which has greater position precision than
+                // from invoke function.
+                var existing = _.find(nodesWithDetails, {id: val.id});
+                if (!name && existing && existing.name) {
+                    return;
+                }
 
                 logNodeData({
                     id: val.id,
