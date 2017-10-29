@@ -99,7 +99,7 @@ var allEdges = [];
                 }
 
                 g.setNode(message.content.nodeId, {
-                    label: "Id: " + message.content.nodeId + "<br /> Name:" + newRef + "<br /> Value: " + truncatedVal,
+                    label: getNodeLabel(message.content.nodeId, newRef, truncatedVal),
                     labelType: "html",
                     ref: newRef,
                     value: newValue,
@@ -132,7 +132,7 @@ var allEdges = [];
                 }
 
                 g.setNode(message.content.nodeId, {
-                    label: "Id: " + message.content.nodeId + "<br /> Name:" + message.content.nodeRef + "<br /> Value: " + truncatedVal,
+                    label: getNodeLabel(message.content.nodeId, message.content.nodeRef, truncatedVal),
                     labelType: "html",
                     ref: message.content.nodeRef,
                     value: message.content.nodeValue,
@@ -293,6 +293,21 @@ function saveHistory(stageId, type, value) {
             'endNodeId': value.edgeEnd
         })
     }
+}
+
+function getNodeLabel(id, name, value) {
+    var lines = [];
+    if (id) {
+        lines.push("Id: " + id);
+    }
+    if (name) {
+        lines.push("Name: " + name);
+    }
+    if (value) {
+        lines.push("Value: " + value)
+    }
+    // wrap in html to ensure valid html
+    return $("<div>").append(lines.join("<br />")).html();
 }
 
 // This sends an object to the background page 
