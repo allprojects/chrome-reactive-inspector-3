@@ -38,8 +38,17 @@ chromeReactiveInspector.analyzer = (function (window) {
                 // f.constructor.name;
             };
 
-            this.invokeFun = function (iid, f, base, args, val, isConstructor) {
+            this.invokeFun = function (iid, f, base, args, val, isConstructor, filename) {
                 // function call intercepted after invoking
+                if (!val || !val.constructor || !val.constructor.name) {
+                    return val;
+                }
+
+                if (val.id && isObservable(val)) {
+                    var sourceInfo = getSourceInfo(iid, filename);
+                    submitJalangiNodeInfo(val, name, sourceInfo);
+                }
+
                 return val;
             };
 
@@ -73,28 +82,19 @@ chromeReactiveInspector.analyzer = (function (window) {
                     return val;
                 }
 
-                var sourceInfo = '';
-                var SourceLocation = window.iidToLocationMap[iid];
-                if (SourceLocation) {
-                    sourceInfo = {
-                        begin: {line: SourceLocation[1], column: SourceLocation[2]},
-                        end: {line: SourceLocation[3], column: SourceLocation[4]},
-                        filename: filename
-                    };
-                }
-
-                window.variables.push({'name': name, 'id': val.id, 'location': sourceInfo});
+                var sourceInfo = getSourceInfo(iid, filename);
 
                 var currentType = val.constructor.name || "";
                 var currentTypeToDisplay = getTypeToDisplay(val) || currentType;
-                var currentTypeInSmall = currentType.toLowerCase();
 
-                if (currentTypeInSmall.search("observable") !== -1 || currentTypeInSmall.search("subject") !== -1) {
+                if (isObservable(val)) {
                     checkObservableForMeta(val, name, sourceInfo);
                     return val;
                 }
 
                 if (currentType === 'Subscriber') {
+                    window.variables.push({'name': name, 'id': val.id, 'location': sourceInfo});
+
                     if (!val.hasOwnProperty("_id")) {
                         return val;
                     }
@@ -164,6 +164,46 @@ chromeReactiveInspector.analyzer = (function (window) {
                 }
             }
 
+            function getSourceInfo(iid, filename) {
+                var sourceInfo = '';
+                var SourceLocation = window.iidToLocationMap[iid];
+                if (SourceLocation) {
+                    sourceInfo = {
+                        begin: {line: SourceLocation[1], column: SourceLocation[2]},
+                        end: {line: SourceLocation[3], column: SourceLocation[4]},
+                        filename: filename
+                    };
+                }
+                return sourceInfo;
+            }
+
+            function isObservable(val) {
+                if (!val || !val.constructor.name) {
+                    return false;
+                }
+                var typeToLower = val.constructor.name.toLowerCase();
+                return (typeToLower.search("observable") !== -1 || typeToLower.search("subject") !== -1);
+            }
+
+            function submitJalangiNodeInfo(val, name, sourceInfo) {
+
+                var currentTypeToDisplay = getTypeToDisplay(val) || val.constructor.name || "";
+                window.variables.push({'name': name, 'id': val.id, 'location': sourceInfo});
+
+                // bacon observer already has the id attribute
+                val = checkAndAssignId(val);
+                // log the node and update window.variables
+                logNodeData({
+                    id: val.id,
+                    type: currentTypeToDisplay,
+                    name: name,
+                    location: sourceInfo
+                });
+                updatedVar = {'id': val.id, 'name': name};
+                _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
+                updateNodeEdgeName(updatedVar)
+            }
+
             /**
              * Checks if the value is an observable and has an operator. If not, recursively checks until
              * an observable is found in the values source property that does have an operator.
@@ -172,42 +212,22 @@ chromeReactiveInspector.analyzer = (function (window) {
              * @param sourceInfo
              */
             function checkObservableForMeta(val, name, sourceInfo) {
-                //TODO refactor: many lines overlap with the write method. This causes unnecessary computations.
-                if (!val || !val.constructor.name) {
+                if (!isObservable(val)) {
                     return;
                 }
 
-                var currentType = val.constructor.name || "";
-                var currentTypeToDisplay = getTypeToDisplay(val) || currentType;
-                var currentTypeToLower = currentType.toLowerCase();
+                if (!val.hasOwnProperty('operator') || val.operator !== undefined) {
+                    // this will not be executed twice, only if all previous values did not have an operator
+                    submitJalangiNodeInfo(val, name, sourceInfo);
+                } else if (val.hasOwnProperty("source") && isObservable(val.source)) {
+                    // if val has no operator it does not provide valuable information, but its source may not
+                    // have extended info (name and location info) provided by jalangi yet.
+                    // (See Rx.js test apps son-father-wallet "eventClick" variable)
 
-                if (currentTypeToLower.search("observable") !== -1 || currentTypeToLower.search("subject") !== -1) {
-                    if (!val.hasOwnProperty('operator') || val.operator !== undefined) {
-                        // this will not be executed twice, only if all previous values did not have an operator
-
-                        // bacon observer already has the id attribute
-                        val = checkAndAssignId(val);
-                        // log the node and update window.variables
-                        logNodeData({
-                            id: val.id,
-                            type: currentTypeToDisplay,
-                            name: name,
-                            location: sourceInfo
-                        });
-                        updatedVar = {'id': val.id, 'name': name};
-                        _.extend(_.findWhere(window.variables, {name: updatedVar.name}), updatedVar);
-                        updateNodeEdgeName(updatedVar)
-                    } else if (val.hasOwnProperty("source") && val.source.constructor.name.toLowerCase().search("observable") !== -1) {
-                        // if val has no operator it does not provide valuable information, but its source may not
-                        // have extended info (name and location info) provided by jalangi yet.
-                        // (See Rx.js test apps son-father-wallet "eventClick" variable)
-
-                        // add variable to window.variables here because it is already done for val before
-                        window.variables.push({'name': name, 'id': val.source.id, 'location': sourceInfo});
-                        //TODO: remove ~ from name, currently there to help detect newly added jalangi info
-                        checkObservableForMeta(val.source, "~" + name, sourceInfo);
-                    }
+                    //TODO: remove ~ from name, currently there to help detect newly added jalangi info
+                    checkObservableForMeta(val.source, "~" + name, sourceInfo);
                 }
+
             }
 
         }

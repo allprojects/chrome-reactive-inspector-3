@@ -106,11 +106,9 @@ chromeReactiveInspector.instrumentor = (function (window) {
 
         var escapedFileName = filename.replace("'", "").replace("\\", "");
 
-        // Wrap instrumented code in closure and replace write method of jalangi with a custom one that passes
+        // Wrap instrumented code in closure and replace method of jalangi with a custom one that passes
         // the current filename. This is not done for inline scripts due to possible performance impact if there are many.
-        instrumented =
-            "var X$ = window.J$;var J$ = jQuery.extend({}, X$);J$.W = function(iid, name, val, lhs, isGlobal, isPseudoGlobal){return X$.W(iid, name, val, lhs, isGlobal, isPseudoGlobal,'" + escapedFileName + "');};\n"
-            + instrumented;
+        instrumented = jalangiOverrideSnippet.replace(/PLACEHOLDER/g, escapedFileName) + instrumented;
 
         if (developerMode) {
 
@@ -192,6 +190,15 @@ chromeReactiveInspector.instrumentor = (function (window) {
         var fun = new Function(code);
         fun.call(window);
     }
+
+    /**
+     * For formatted version see FilenameHookSnippet.js
+     * @type {string}
+     */
+    var jalangiOverrideSnippet = "var X$ = window.J$;var J$ = jQuery.extend({}, X$);J$.W = function (iid, name, val, lhs,"
+        + "isGlobal, isPseudoGlobal) {return X$.W(iid, name, val, lhs, isGlobal, isPseudoGlobal, 'PLACEHOLDER');};J$.M ="
+        + "function (iid, base, offset, isConstructor) {return X$.M(iid, base, offset, isConstructor, 'PLACEHOLDER');};"
+        + "J$.F = function (iid, f, isConstructor) {return X$.F(iid, f, isConstructor, 'PLACEHOLDER');};\n";
 
     return {
         getCode: getCode

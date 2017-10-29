@@ -51,7 +51,6 @@ $.extend(chromeReactiveInspector, (function (window) {
             console.log("Node details");
             console.log("Node id " + msg.content.id);
             console.log("Node value " + msg.content.value);
-            console.log("Source Code Line No. " + msg.content.source_line_number);
         }
         else if (msg.action === 'loading') {
             chrome.extension.sendMessage(msg, function (msg) {

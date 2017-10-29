@@ -12167,8 +12167,12 @@ window = {String: String, Array: Array, Error: Error, Number: Number, Date: Date
                 }
             }
 
-
-            function invokeFun(iid, base, f, args, isConstructor, isMethod) {
+            //------------------------------- EDIT -------------------------------
+            // EDIT jalangi orignial code to allow filename info to be passed
+            // Original code:
+            // "function invokeFun(iid, base, f, args, isConstructor, isMethod){"
+            //------------------------------- EDIT -------------------------------
+            function invokeFun(iid, base, f, args, isConstructor, isMethod, filename) {
                 // debugger;
                 var g, invoke, val, ic, tmp_rrEngine, tmpIsConstructorCall, tmpIsInstrumentedCaller, idx,
                     tmpIsMethodCall;
@@ -12244,7 +12248,12 @@ window = {String: String, Array: Array, Error: Error, Number: Number, Date: Date
                     tmp_rrEngine = rrEngine;
                     rrEngine = null;
                     try {
-                        val = sandbox.analysis.invokeFun(iid, f, base, args, val, isConstructor);
+                        //------------------------------- EDIT -------------------------------
+                        // EDIT jalangi orignial code to allow filename info to be passed
+                        // Original code:
+                        // "val = sandbox.analysis.invokeFun(iid, f, base, args, val, isConstructor)"
+                        //------------------------------- EDIT -------------------------------
+                        val = sandbox.analysis.invokeFun(iid, f, base, args, val, isConstructor, filename);
                     } catch (e) {
                         clientAnalysisException(e);
                     }
@@ -12357,19 +12366,39 @@ window = {String: String, Array: Array, Error: Error, Number: Number, Date: Date
             }
 
             // Function call (e.g., f())
-            function F(iid, f, isConstructor) {
+            //------------------------------- EDIT -------------------------------
+            // EDIT jalangi orignial code to allow filename info to be passed
+            // Original code:
+            // "function W(iid, name, val, lhs, isGlobal, isPseudoGlobal) {"
+            //------------------------------- EDIT -------------------------------
+            function F(iid, f, isConstructor, filename) {
                 //debugger;
                 return function () {
                     var base = this;
-                    return invokeFun(iid, base, f, arguments, isConstructor, false);
+                    //------------------------------- EDIT -------------------------------
+                    // EDIT jalangi orignial code to allow filename info to be passed
+                    // Original code:
+                    // "return invokeFun(iid, base, f, arguments, isConstructor, false);"
+                    //------------------------------- EDIT -------------------------------
+                    return invokeFun(iid, base, f, arguments, isConstructor, false, filename);
                 }
             }
 
             // Method call (e.g., e.f())
-            function M(iid, base, offset, isConstructor) {
+            //------------------------------- EDIT -------------------------------
+            // EDIT jalangi orignial code to allow filename info to be passed
+            // Original code:
+            // "function M(iid, base, offset, isConstructor)  {"
+            //------------------------------- EDIT -------------------------------
+            function M(iid, base, offset, isConstructor, filename) {
                 return function () {
                     var f = G(iid + 2, base, offset);
-                    return invokeFun(iid, base, f, arguments, isConstructor, true);
+                    //------------------------------- EDIT -------------------------------
+                    // EDIT jalangi orignial code to allow filename info to be passed
+                    // Original code:
+                    // "return invokeFun(iid, base, f, arguments, isConstructor, true);"
+                    //------------------------------- EDIT -------------------------------
+                    return invokeFun(iid, base, f, arguments, isConstructor, true, filename);
                 };
             }
 
@@ -12597,8 +12626,7 @@ window = {String: String, Array: Array, Error: Error, Number: Number, Date: Date
 
             // variable write
             //------------------------------- EDIT -------------------------------
-            // EDIT jalangi orignial code
-            // to allow filename info to be passed
+            // EDIT jalangi orignial code to allow filename info to be passed
             // Original code:
             // "function W(iid, name, val, lhs, isGlobal, isPseudoGlobal) {"
             //------------------------------- EDIT -------------------------------
@@ -12617,8 +12645,7 @@ window = {String: String, Array: Array, Error: Error, Number: Number, Date: Date
                     try {
 
                         //------------------------------- EDIT -------------------------------
-                        // EDIT jalangi orignial code
-                        // to allow filename info to be passed
+                        // EDIT jalangi orignial code to allow filename info to be passed
                         // Original code:
                         // "val = sandbox.analysis.write(iid, name, val, lhs);"
                         //------------------------------- EDIT -------------------------------
