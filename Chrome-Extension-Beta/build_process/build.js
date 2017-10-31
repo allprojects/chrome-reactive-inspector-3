@@ -7,7 +7,8 @@ const targetdir = '../dist/';
 
 const excluded = [
     '.idea',
-    '.gitignore'];
+    '.gitignore',
+    'jalangi-framework-with-comments.js'];
 
 (function build() {
     tasks.clear(targetdir);
