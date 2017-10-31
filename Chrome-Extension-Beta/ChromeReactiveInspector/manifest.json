@@ -4,11 +4,11 @@
   "version": "2.0",
   "description": "This is an extension to devtool for debugging Reactive JS libraries like Bacon.JS , RX-JS Version 5 ",
   "author": "Waqas Abbas and Pradeep Baradur with supervision from Dr.Guido Salvaneschi at TU - Darmstadt",
-  "devtools_page": "devtools.html",
+  "devtools_page": "panel/devtools.html",
   "background": {
     "scripts": [
-      "helpers/comm_api_background.js",
-      "background.js"
+      "background/background-communication.js",
+      "background/background.js"
     ]
   },
   "permissions": [
@@ -24,32 +24,22 @@
       ],
       "js": [
         "libraries/jquery.js",
-        "content-script-start.js",
-        "helpers/comm_api_content-script.js",
+        "content-scripts/content-scripts-start.js",
+        "content-scripts/content-script-communication.js",
         "jalangi-framework.js",
         "libraries/underscore.js",
-        "Bacon.js",
-        "Rx.js"
+        "libraries/Bacon.js",
+        "libraries/Rx.js"
       ],
       "run_at": "document_start",
-      "all_frames": false
-    },
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "content-script-end.js"
-      ],
-      "run_at": "document_end",
       "all_frames": false
     }
   ],
   "icons": {
-    "128": "icon.png"
+    "128": "resources/icon.png"
   },
   "web_accessible_resources": [
-    "panel.js"
+    "panel/panel.js"
   ],
   "options_page": "options/options.html"
 }
