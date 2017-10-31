@@ -777,6 +777,12 @@ chromeReactiveInspector.analyzer = (function (window) {
      * @param name
      */
     function logEdgeData(startId, endId, name) {
+        if (!startId || !endId) {
+            // this caused exceptions in RxJs canvas painting example, because an edge was added with one
+            // target being undefined.
+            console.log("Prevented logging of edge because either start or end id was undefined.");
+            return;
+        }
         name = name.replace('Operator', '');
         allEdges.push({'startId': startId, 'endId': endId});
         var edgeStart = _.find(nodesWithDetails, {id: startId});
