@@ -26,7 +26,7 @@
         "libraries/jquery.js",
         "content-scripts/content-scripts-start.js",
         "content-scripts/content-script-communication.js",
-        "jalangi-framework.js",
+        "content-scripts/jalangi-framework.js",
         "libraries/underscore.js",
         "libraries/Bacon.js",
         "libraries/Rx.js"
