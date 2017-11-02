@@ -946,8 +946,8 @@ function createCodePreviewHtml(begin, end, codeInfo) {
             return $p.append($("<em>").text(currentLine.substring(begin.column - 1, currentLine.length)));
 
         } else if (lineNumber === end.line) {
-            $p.text(currentLine.substring(begin.column - 1, currentLine.length));
-            return $p.prepend($("<em>").text("" + lineNumber + ": " + currentLine.substring(0, begin.column - 1)));
+            $p.text(currentLine.substring(end.column - 1, currentLine.length));
+            return $p.prepend($("<em>").text("" + lineNumber + ": " + currentLine.substring(0, end.column - 1)));
 
         } else if (lineNumber > begin.line && lineNumber < end.line) {
             // inside multiline write statement
