@@ -76,7 +76,7 @@ _.extend(cri, (function (window) {
         function requestCodeSnippetAsync(sourceInfo, callback) {
             chrome.storage.sync.get({codePreviewScope: '', codePreviewMax: ''}, function (items) {
                 var codePreviewScope = items.codePreviewScope ? parseInt(items.codePreviewScope) : 4;
-                var codePreviewMax = items.codePreviewMax ? parseInt(items.codePreviewMax) : -1;
+                var codePreviewMax = items.codePreviewMax ? parseInt(items.codePreviewMax) : Number.POSITIVE_INFINITY;
 
                 // cap the maximum scope to be displayed
                 var codeLength = (sourceInfo.end.line - sourceInfo.begin.line);
