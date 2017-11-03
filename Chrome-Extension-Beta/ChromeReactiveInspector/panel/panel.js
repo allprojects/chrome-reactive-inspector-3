@@ -59,7 +59,7 @@ var styleTooltip = function (id, name, type, method, sourceInfo) {
         sourceInfoText += ' (' + (sourceInfo.filename ? sourceInfo.filename : 'html') + ')';
     }
 
-    var $tooltip = $("<div>").addClass("custom_tooltip");
+    var $tooltip = $("<div>").addClass("custom-tooltip");
     if (id) {
         $tooltip.append($("<p>").text('Id: ' + id));
     }
@@ -356,7 +356,6 @@ function cancelCodePreview(d3node, data) {
 }
 
 function refreshTooltip($element) {
-    $element.tipsy("hide");
     $element.tipsy("show");
 }
 
@@ -958,7 +957,7 @@ function createCodePreviewHtml(begin, end, codeInfo) {
         }
     });
 
-    var $container = $("<code>");
+    var $container = $("<div class='custom-tooltip'>");
     tags.forEach(function (p) {
         $container.append(p);
     });
