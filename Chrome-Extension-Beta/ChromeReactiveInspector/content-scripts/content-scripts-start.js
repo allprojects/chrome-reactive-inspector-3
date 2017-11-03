@@ -1,4 +1,5 @@
 // closure to prevent intervention with pages javascripts since this is a content script
+// Do not use "cri" as namespace here, because it may be ambiguous.
 var chromeReactiveInspector = chromeReactiveInspector || {};
 
 $.extend(chromeReactiveInspector, (function (window) {
