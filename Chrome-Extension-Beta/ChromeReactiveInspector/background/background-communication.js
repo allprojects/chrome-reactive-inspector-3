@@ -90,7 +90,11 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 });
 
 function injectScripts(tabId) {
-    executeScriptsSync(tabId, ["content-scripts/analysis/analyzer.js", "content-scripts/analysis/instrumentor.js"], 0);
+    executeScriptsSync(tabId, ["content-scripts/analysis/recording.js",
+        "content-scripts/analysis/jalangi-analysis.js",
+        "content-scripts/analysis/bacon-interception.js",
+        "content-scripts/analysis/rx-interception.js",
+        "content-scripts/analysis/instrumentor.js"], 0);
 }
 
 function executeScriptsSync(tabId, scripts, index) {

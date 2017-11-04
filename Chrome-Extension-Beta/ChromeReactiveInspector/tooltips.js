@@ -24,10 +24,7 @@ _.extend(cri, (function (window) {
 
         function initCodePreview(d3node, data, $node) {
             if (!data.sourceInfo) {
-                // source info is not set yet, so no code preview can be shown
-
-                //TODO: replace this with a message being displayed in the tooltip
-                // telling the user about this
+                // source info is not set yet, so no code preview can be show
                 return;
             }
 
