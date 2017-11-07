@@ -1,3 +1,7 @@
+if(!cri) {
+    throw "cri namespace not initialized. something went wrong during loading of js files";
+}
+
 var $document = $(document);
 $document.ready(function () {
     $(".dropdown-toggle").dropdown();
@@ -315,6 +319,7 @@ $('#cri-download-graph').click(function () {
         // Replace the current SVG with an image version of it.
         // simg.replace();
         // And trigger a download of the rendered image.
+        //TODO: currently wont trigger a download from chrome
         simg.download('dependency_graph_' + filename);
     });
 });
@@ -341,6 +346,8 @@ setSearchNode();
 
 var nodeFound = false;
 $("#cri-node-search-val").on('change keyup paste', function () {
+    //TODO: if keyup and blur right after, this will fire twice with same values
+    // same for paste + blur
     if (!searchNode) {
         setSearchNode();
     }
@@ -583,7 +590,6 @@ $('#cri-history-query-submit').click(function () {
     }
 });
 
-
 $('#cri-history-query-prev').click(function () {
     var currentStepFromHistoryQuery = $("#cri-history-current-step").text();
     var nextStepToAccess = parseInt(currentStepFromHistoryQuery) - 2;
@@ -594,6 +600,7 @@ $('#cri-history-query-prev').click(function () {
         $("#cri-history-current-step").text(nextStepToAccess + 1);
     }
 });
+
 $('#cri-history-query-next').click(function () {
     var currentStepFromHistoryQuery = $("#cri-history-current-step").text();
     var nextStepToAccess = parseInt(currentStepFromHistoryQuery);
@@ -608,119 +615,20 @@ $('#cri-history-query-next').click(function () {
 /**
  * Reactive Breakpoints feature
  */
-$('#cri-breakpoint-select').editableSelect({filter: false});
-var allBreakPoints = [];
+var $breakpointContainer = $('#cri-breakpoints-container');
+var reactiveBreakpointManager = new cri.ReactiveBreakpointManager($breakpointContainer);
+
+var $breakpointSelect = $('#cri-breakpoint-select');
+$breakpointSelect.editableSelect({filter: false});
 
 $('#cri-breakpoint-query-submit').click(function () {
-
-    var historyQuery, param1, param2 = '';
-
-    var currentHistoryQuery = $('#cri-breakpoint-select').val();
-
-    historyQuery = currentHistoryQuery.substring(0, currentHistoryQuery.indexOf('['));
-
-    var matches = currentHistoryQuery.match(/\[(.*?)\]/g).map(function (val) {
-        return val.replace('[', '').replace(']', '');
-    });
-
-    if (matches) {
-        param1 = matches[0];
-        if (matches[1]) {
-            param2 = matches[1];
-            if (param2 === 'nodeId')
-                return false
-        }
-        if (param1 === 'nodeId')
-            return false;
-
-
-        // NOW we have query and parameter
-        // check which query to apply, find data from current stages
-        var breakPointToStore = {
-            query: historyQuery,
-            params: matches
-        };
-        storeBreakPoint(breakPointToStore);
-    }
+    reactiveBreakpointManager.submitBreakpoints($breakpointSelect.val());
 });
 
-// This method append breakpoint object to local storage
-function storeBreakPoint(breakPointToStore) {
-    // by passing an object you can define default values e.g.: []
-    chrome.storage.sync.get({criReactiveBreakPoints: []}, function (result) {
-        // the input argument is ALWAYS an object containing the queried keys
-        // so we select the key we need
-        var currentBreakPoints = result.criReactiveBreakPoints;
-
-        var alreadyExists = _.some(currentBreakPoints, function (bp) {
-            if (bp.params[0] === breakPointToStore.params[0] && bp.query === breakPointToStore.query) {
-                if (breakPointToStore.params.length > 1) {
-                    return bp.params.length > 1 && breakPointToStore.params[1] === bp.params[1];
-                }
-                return true;
-            }
-            return false;
-        });
-        if (!alreadyExists) {
-            currentBreakPoints.push(breakPointToStore);
-            // set the new array value to the same key
-            chrome.storage.sync.set({criReactiveBreakPoints: currentBreakPoints}, function () {
-                // refresh front end , where we list current breakpoints
-                refreshCurrentBreakPointsFrontEnd();
-            });
-        }
-    });
-}
-
-function removeBreakPointByIndex(index) {
-    chrome.storage.sync.get({criReactiveBreakPoints: []}, function (result) {
-        // the input argument is ALWAYS an object containing the queried keys
-        // so we select the key we need
-        var currentBreakPoints = result.criReactiveBreakPoints;
-        currentBreakPoints.splice(index, 1);
-        // set the new array value to the same key
-        chrome.storage.sync.set({criReactiveBreakPoints: currentBreakPoints}, function () {
-            // refresh front end , where we list current breakpoints
-            refreshCurrentBreakPointsFrontEnd();
-        });
-    });
-
-}
-
-$("#cri-breakpoints-container").on("click", "span.bpoint-remove", function () {
+$breakpointContainer.on("click", "span.bpoint-remove", function () {
     var bpointIndexToRemove = $(this).data('bpoint-index');
-    removeBreakPointByIndex(bpointIndexToRemove);
+    reactiveBreakpointManager.removeBreakPointByIndex(bpointIndexToRemove);
 });
-
-
-function refreshCurrentBreakPointsFrontEnd() {
-    // remove everything
-    $('#cri-breakpoints-container').html("");
-    // get current breakpoints from storage and list down
-
-    chrome.storage.sync.get({criReactiveBreakPoints: []}, function (result) {
-        // the input argument is ALWAYS an object containing the queried keys
-        // so we select the key we need
-        var currentBreakPoints = result.criReactiveBreakPoints;
-        for (var index in currentBreakPoints) {
-            var currentBreakPoint = currentBreakPoints[index];
-            var currentBreakPointQuery = currentBreakPoint.query;
-            if (currentBreakPoint.params[0] !== undefined) {
-                currentBreakPointQuery = currentBreakPointQuery + "[" + currentBreakPoint.params[0] + "]";
-            }
-            if (currentBreakPoint.params[1] !== undefined) {
-                currentBreakPointQuery = currentBreakPointQuery + "[" + currentBreakPoint.params[1] + "]";
-            }
-            var bPointHtml = "<div class='bpoint-entry'><span data-bpoint-index='" + index + "' class='bpoint-remove'>X</span><span class='bpoint-query'>" + currentBreakPointQuery + "</span></div>";
-            $('#cri-breakpoints-container').append(bPointHtml);
-        }
-
-    });
-}
-
-refreshCurrentBreakPointsFrontEnd();
-
-// })();
 
 function applyNodeExtensions() {
     tooltipManager.initializeTooltips(svg.selectAll("g.node"));
