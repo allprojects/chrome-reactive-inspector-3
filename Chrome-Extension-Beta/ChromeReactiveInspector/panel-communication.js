@@ -18,7 +18,7 @@ var allEdges = [];
 (function createChannel() {
     console.log("creating channel in messaging js that is part of panel ");
     //Create a port with background page for continuous message communication
-    var port = chrome.extension.connect({
+    let port = chrome.extension.connect({
         name: "reactive-debugger" //Given a Name
     });
 
@@ -32,162 +32,191 @@ var allEdges = [];
 
     // Listen to messages from the background page
     port.onMessage.addListener(function (message) {
-        /**
-         * If the user refreshes the page, then reset the graph and slider and load it again.
-         */
-        if (message.action === 'loading') {
-            if (rxSlider) {
-                rxSlider.slider("option", "min", 0);
-                rxSlider.slider("option", "max", 0);
-                rxSlider.slider("option", "value", 0);
-                rxSlider.slider("pips", "refresh");
-            }
-            initialiseGraph();
-            rxGraphStages = [];
-            historyEntries = [];
-            isConfirmed = false;
-            // chrome.storage.sync.get('cri_config_rec_status', function (items) {
-            //     if (items.cri_config_rec_status !== undefined) {
-            //         if (!items.cri_config_rec_status) {
-            //             configRecStatusButton.click();
-            //         }
-            //     }
-            // });
+
+        switch (message.action) {
+            case "loading":
+                // If the user refreshes the page, then reset the graph and slider and load it again.
+                handleLoading();
+                break;
+            case "saveNode":
+                handleSaveNode(message);
+                break;
+            case "saveEdge":
+                handleSaveEdge(message);
+                break;
+            case "updateSavedEdge":
+                handleUpdateSavedEdge(message);
+                break;
+            case "allNodesEdges":
+                handleAllNodesAndEdges(message);
+                break;
+            case "removeEdge":
+                handleRemoveEdge(message);
+                break;
+            default:
+                console.warn("Unknown message received. '" + message.action + "' is not implemented. (panel)");
         }
-
-        var currentNodeId = false;
-        var stageId = 0;
-        var truncatedVal = "";
-        if (message.action === "saveNode") {
-
-            if (message.content.nodeId) {
-                currentNodeId = message.content.nodeId;
-            }
-
-
-            if (g.node(message.content.nodeId) !== undefined) {
-                currentAction = "updateNode";
-                var node = g.node(message.content.nodeId);
-
-                var prevRef = node.ref;
-                var prevValue = node.value;
-                var prevType = node.type;
-                var prevMethod = node.method;
-
-                var currentRef = message.content.nodeRef;
-                var currentValue = message.content.nodeValue;
-                var currentMethod = message.content.nodeMethod;
-                var currentType = message.content.nodeType;
-
-
-                var newRef = getOrDefault(currentRef, prevRef);
-                var newValue = getOrDefault(currentValue, prevValue);
-                var newSourceInfo = getOrDefault(message.content.sourceInfo, node.sourceInfo);
-                var newMethod = getOrDefault(currentMethod, prevMethod);
-                var newType = getOrDefault(currentType, prevType);
-
-
-                if (newValue || newValue.constructor.name === 'Boolean') {
-                    newValue = newValue.toString();
-                    truncatedVal = newValue.substring(0, 25);
-                }
-                var currentClasses = "current";
-                if (newRef !== "") {
-                    currentClasses = currentClasses + " nodeWithRef";
-                } else {
-                    currentClasses = currentClasses + " nodeWithoutRef";
-                }
-
-                g.setNode(message.content.nodeId, {
-                    label: getNodeLabel(message.content.nodeId, newRef, truncatedVal),
-                    labelType: "html",
-                    ref: newRef,
-                    value: newValue,
-                    type: newType,
-                    method: newMethod,
-                    sourceInfo: newSourceInfo,
-                    nodeId: message.content.nodeId,
-                    class: currentClasses
-                });
-
-                tempNode.type = 'nodeUpdated';
-                tempNode.nodeId = message.content.nodeId;
-                tempNode.nodeName = newRef;
-                tempNode.nodeValue = truncatedVal;
-            }
-            else {
-                currentAction = "newNode";
-
-                var currentClasses = "current";
-                if (message.content.nodeRef !== "") {
-                    currentClasses = "current nodeWithRef";
-                } else {
-                    currentClasses = "current nodeWithoutRef";
-                }
-
-                var tempVal = message.content.nodeValue;
-                if (tempVal || tempVal.constructor.name === 'Boolean') {
-                    newValue = tempVal.toString();
-                    truncatedVal = newValue.substring(0, 25);
-                }
-
-                g.setNode(message.content.nodeId, {
-                    label: getNodeLabel(message.content.nodeId, message.content.nodeRef, truncatedVal),
-                    labelType: "html",
-                    ref: message.content.nodeRef,
-                    value: message.content.nodeValue,
-                    type: message.content.nodeType,
-                    method: message.content.nodeMethod,
-                    nodeId: message.content.nodeId,
-                    sourceInfo: message.content.sourceInfo,
-                    class: currentClasses
-                });
-                tempNode.type = 'nodeCreated';
-                tempNode.nodeId = message.content.nodeId;
-                tempNode.nodeName = message.content.nodeRef;
-                tempNode.nodeValue = message.content.nodeValue;
-            }
-            render(d3.select("svg g"), g);
-            applyRxRyAttribute();
-            applyNodeExtensions();
-
-            // capture current dependency graph
-            stageId = captureGraphAndSaveAsNewStage(currentAction, currentNodeId);
-            saveHistory(stageId, currentAction, tempNode)
-        }
-        else if (message.action === "saveEdge") {
-            g.setEdge(message.content.edgeStart, message.content.edgeEnd, {
-                label: message.content.edgeLabel
-            });
-            render(d3.select("svg g"), g);
-            applyRxRyAttribute();
-
-            stageId = captureGraphAndSaveAsNewStage("saveEdge", false);
-            saveHistory(stageId, "saveEdge", message.content)
-        } else if (message.action === "updateSavedEdge") {
-            var match = _.find(historyEntries, function (history) {
-                if (history.type === 'dependencyCreated') {
-                    if (history.endNodeId === message.content.id) {
-                        history.endNodeName = message.content.name
-                    }
-                    else if (history.startNodeId === message.content.id) {
-                        history.startNodeName = message.content.name
-                    }
-                }
-            });
-        } else if (message.action === "allNodesEdges") {
-            allNodes = message.content.nodes;
-            allEdges = message.content.edges;
-        } else if (message.action === 'removeEdge') {
-            g.removeEdge(message.content.edgeStart, message.content.edgeEnd, message.content.edgeLabel);
-            render(d3.select("svg g"), g);
-            applyRxRyAttribute();
-            stageId = captureGraphAndSaveAsNewStage("saveEdge", false);
-            saveHistory(stageId, "saveEdge", message.content)
-        }
-
     });
 
+    function handleLoading() {
+        if (rxSlider) {
+            rxSlider.slider("option", "min", 0);
+            rxSlider.slider("option", "max", 0);
+            rxSlider.slider("option", "value", 0);
+            rxSlider.slider("pips", "refresh");
+        }
+        initialiseGraph();
+        rxGraphStages = [];
+        historyEntries = [];
+        isConfirmed = false;
+        // chrome.storage.sync.get('cri_config_rec_status', function (items) {
+        //     if (items.cri_config_rec_status !== undefined) {
+        //         if (!items.cri_config_rec_status) {
+        //             configRecStatusButton.click();
+        //         }
+        //     }
+        // });
+    }
+
+    function handleSaveNode(message) {
+        let currentNodeId = false;
+        let truncatedVal = "";
+
+        if (message.content.nodeId) {
+            currentNodeId = message.content.nodeId;
+        }
+
+        if (g.node(message.content.nodeId) !== undefined) {
+            currentAction = "updateNode";
+            let node = g.node(message.content.nodeId);
+
+            let prevRef = node.ref;
+            let prevValue = node.value;
+            let prevType = node.type;
+            let prevMethod = node.method;
+
+            let currentRef = message.content.nodeRef;
+            let currentValue = message.content.nodeValue;
+            let currentMethod = message.content.nodeMethod;
+            let currentType = message.content.nodeType;
+
+
+            let newRef = getOrDefault(currentRef, prevRef);
+            let newValue = getOrDefault(currentValue, prevValue);
+            let newSourceInfo = getOrDefault(message.content.sourceInfo, node.sourceInfo);
+            let newMethod = getOrDefault(currentMethod, prevMethod);
+            let newType = getOrDefault(currentType, prevType);
+
+
+            if (newValue || newValue.constructor.name === 'Boolean') {
+                newValue = newValue.toString();
+                truncatedVal = newValue.substring(0, 25);
+            }
+            let currentClasses = "current";
+            if (newRef !== "") {
+                currentClasses = currentClasses + " nodeWithRef";
+            } else {
+                currentClasses = currentClasses + " nodeWithoutRef";
+            }
+
+            g.setNode(message.content.nodeId, {
+                label: getNodeLabel(message.content.nodeId, newRef, truncatedVal),
+                labelType: "html",
+                ref: newRef,
+                value: newValue,
+                type: newType,
+                method: newMethod,
+                sourceInfo: newSourceInfo,
+                nodeId: message.content.nodeId,
+                class: currentClasses
+            });
+
+            tempNode.type = 'nodeUpdated';
+            tempNode.nodeId = message.content.nodeId;
+            tempNode.nodeName = newRef;
+            tempNode.nodeValue = truncatedVal;
+        }
+        else {
+            currentAction = "newNode";
+
+            let currentClasses = "current";
+            if (message.content.nodeRef !== "") {
+                currentClasses = "current nodeWithRef";
+            } else {
+                currentClasses = "current nodeWithoutRef";
+            }
+
+            let tempVal = message.content.nodeValue;
+            if (tempVal || tempVal.constructor.name === 'Boolean') {
+                let newValue = tempVal.toString();
+                truncatedVal = newValue.substring(0, 25);
+            }
+
+            g.setNode(message.content.nodeId, {
+                label: getNodeLabel(message.content.nodeId, message.content.nodeRef, truncatedVal),
+                labelType: "html",
+                ref: message.content.nodeRef,
+                value: message.content.nodeValue,
+                type: message.content.nodeType,
+                method: message.content.nodeMethod,
+                nodeId: message.content.nodeId,
+                sourceInfo: message.content.sourceInfo,
+                class: currentClasses
+            });
+            tempNode.type = 'nodeCreated';
+            tempNode.nodeId = message.content.nodeId;
+            tempNode.nodeName = message.content.nodeRef;
+            tempNode.nodeValue = message.content.nodeValue;
+        }
+        render(d3.select("svg g"), g);
+        applyRxRyAttribute();
+        applyNodeExtensions();
+
+        // capture current dependency graph
+        let stageId = captureGraphAndSaveAsNewStage(currentAction, currentNodeId);
+        saveHistory(stageId, currentAction, tempNode)
+    }
+
+    function handleSaveEdge(message) {
+        if (!message.content.edgeStart || !message.content.edgeEnd) {
+            console.error("Tried to save edge with start or end not set.");
+        }
+
+        g.setEdge(message.content.edgeStart, message.content.edgeEnd, {
+            label: message.content.edgeLabel
+        });
+        render(d3.select("svg g"), g);
+        applyRxRyAttribute();
+
+        let stageId = captureGraphAndSaveAsNewStage("saveEdge", false);
+        saveHistory(stageId, "saveEdge", message.content)
+    }
+
+    function handleUpdateSavedEdge(message) {
+        _.find(historyEntries, function (history) {
+            if (history.type === 'dependencyCreated') {
+                if (history.endNodeId === message.content.id) {
+                    history.endNodeName = message.content.name
+                }
+                else if (history.startNodeId === message.content.id) {
+                    history.startNodeName = message.content.name
+                }
+            }
+        });
+    }
+
+    function handleAllNodesAndEdges(message) {
+        allNodes = message.content.nodes;
+        allEdges = message.content.edges;
+    }
+
+    function handleRemoveEdge(message) {
+        g.removeEdge(message.content.edgeStart, message.content.edgeEnd, message.content.edgeLabel);
+        render(d3.select("svg g"), g);
+        applyRxRyAttribute();
+        let stageId = captureGraphAndSaveAsNewStage("saveEdge", false);
+        saveHistory(stageId, "saveEdge", message.content)
+    }
 }());
 
 function getOrDefault(newValue, defaultValue) {
@@ -296,7 +325,7 @@ function saveHistory(stageId, type, value) {
 }
 
 function getNodeLabel(id, name, value) {
-    var lines = [];
+    let lines = [];
     if (id) {
         lines.push("Id: " + id);
     }
