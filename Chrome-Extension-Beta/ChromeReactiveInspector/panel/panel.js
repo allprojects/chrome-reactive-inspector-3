@@ -1,4 +1,4 @@
-if(!cri) {
+if (!cri) {
     throw "cri namespace not initialized. something went wrong during loading of js files";
 }
 
@@ -47,7 +47,7 @@ $dialog.dialog({
 });
 
 var g = '',
-    render = '',
+    render = new dagreD3.render(),
     svg = '',
     svgGroup = '',
     inner = '';
@@ -63,13 +63,17 @@ var initialiseGraph = function () {
             return {};
         });
 
-    // Create the renderer
-    render = new dagreD3.render();
-
     // Set up an SVG group so that we can translate the final graph.
-    svg = d3.select("svg");
-    svgGroup = svg.append("g");
-    inner = svg.select("g");
+
+    inner = d3.select("svg g");
+    if (inner.size() === 1) {
+        // clear previous nodes
+        inner.html("");
+    } else {
+        svg = d3.select("svg");
+        svgGroup = svg.append("g");
+        inner = svg.select("g");
+    }
 };
 
 initialiseGraph();

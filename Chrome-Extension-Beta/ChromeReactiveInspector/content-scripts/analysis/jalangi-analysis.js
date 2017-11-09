@@ -31,6 +31,9 @@ cri.analysis.jalangi = (function (window) {
                 if (!val || !val.constructor || !val.constructor.name) {
                     return val;
                 }
+                //TODO submit nodeinfo to update nodes but do not add new step to history.
+                // also a step makes sense because something changes, it is not visible to the user and
+                // the extra step provides no real value.
 
                 if (val.id && isObservable(val)) {
                     var sourceInfo = getSourceInfo(iid, filename);
