@@ -2,13 +2,12 @@
     Use Bacon.spy to log all internal activities of Bacon.js
  */
 
-// closure to prevent intervention with pages javascripts since this is a content script
-var chromeReactiveInspector = chromeReactiveInspector || {};
-chromeReactiveInspector.analysis = chromeReactiveInspector.analysis || {};
+var cri = cri || {};
+cri.analysis = cri.analysis || {};
 
-chromeReactiveInspector.analysis.bacon = (function (window) {
+cri.analysis.bacon = (function (window) {
     // remap pseudo include to shorten calls
-    var recording = chromeReactiveInspector.analysis.recording;
+    var recording = cri.analysis.recording;
 
     if (Bacon !== undefined) {
         // https://baconjs.github.io/api.html#bacon-spy

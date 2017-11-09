@@ -2,14 +2,13 @@
     Jalangi is used to get reference to js variable names and source code location information.
  */
 
-// closure to prevent intervention with pages javascripts since this is a content script
-var chromeReactiveInspector = chromeReactiveInspector || {};
-chromeReactiveInspector.analysis = chromeReactiveInspector.analysis || {};
+var cri = cri || {};
+cri.analysis = cri.analysis || {};
 
 
-chromeReactiveInspector.analysis.jalangi = (function (window) {
+cri.analysis.jalangi = (function (window) {
     // remap pseudo include to shorten calls
-    var recording = chromeReactiveInspector.analysis.recording;
+    var recording = cri.analysis.recording;
 
     // Jalangi Analysis Start
     J$.analysis = {};

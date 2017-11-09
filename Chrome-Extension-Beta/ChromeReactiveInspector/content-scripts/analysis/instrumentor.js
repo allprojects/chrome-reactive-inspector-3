@@ -1,23 +1,22 @@
-// closure to prevent intervention with pages javascripts since this is a content script
-var chromeReactiveInspector = chromeReactiveInspector || {};
+var cri = cri || {};
 
-chromeReactiveInspector.instrumentor = (function (window) {
-    var scriptCache = {};
+cri.instrumentor = (function (window) {
+    let scriptCache = {};
     /* DOCUMENT LOAD INTERCEPTION Start  */
     // load current document and
     // All scripts will be rendered inert,
-    var request = new XMLHttpRequest();
+    let request = new XMLHttpRequest();
     request.open('GET', location.href);
 
-    var shouldReactiveDebuggerRun = true;
+    let shouldReactiveDebuggerRun = true;
 
-    var filesShouldNotInclude = ["Rx.js", "rx.lite.js", "Bacon.js", "Bacon.UI.js", "jquery.js", "rx.all.js", "jquery-2.1.4.js"];
-    var fileReadOver = false;
+    let filesShouldNotInclude = ["Rx.js", "rx.lite.js", "Bacon.js", "Bacon.UI.js", "jquery.js", "rx.all.js", "jquery-2.1.4.js"];
+    let fileReadOver = false;
     request.onload = function () {
 
-        var respText = request.responseText;
+        let respText = request.responseText;
         // check if this page contains bacon / rx , if not then debugger should not run
-        var validFiles = ["Rx.js", "Bacon.js", "rx.lite.js", "rx.lite.compat.js", "rx.all.js"];
+        let validFiles = ["Rx.js", "Bacon.js", "rx.lite.js", "rx.lite.compat.js", "rx.all.js"];
 
         shouldReactiveDebuggerRun = _.some(validFiles, function (v) {
             return respText.search(v) !== -1;
@@ -34,7 +33,7 @@ chromeReactiveInspector.instrumentor = (function (window) {
     // script can be with source or without source (in page JS code)
     setTimeout(function next(index) {
 
-        var script = document.scripts[index];
+        let script = document.scripts[index];
         if (script === null || script === undefined) {
             //return setTimeout(callback, 0);
             return false;
@@ -42,7 +41,7 @@ chromeReactiveInspector.instrumentor = (function (window) {
 
         if (!script.hasAttribute('src')) {
             // script tag contains inline code.
-            var code = instrumentInline(index, script.textContent);
+            let code = instrumentInline(index, script.textContent);
             executeInContext(code);
             fileReadOver = true;
             setTimeout(next, 0, ++index);
@@ -50,9 +49,9 @@ chromeReactiveInspector.instrumentor = (function (window) {
         }
 
         // if script tag contain source file
-        var filename = script.getAttribute('src').replace(/^.*[\\\/]/, '');
+        let filename = script.getAttribute('src').replace(/^.*[\\\/]/, '');
 
-        var request = new XMLHttpRequest();
+        let request = new XMLHttpRequest();
         request.open('GET', script.getAttribute('src'));
         request.onload = function () {
 
@@ -63,16 +62,16 @@ chromeReactiveInspector.instrumentor = (function (window) {
             }
 
             chrome.storage.sync.get('criconfigincludes', function (items) {
-                var filesToInstrument = items.criconfigincludes || false;
+                let filesToInstrument = items.criconfigincludes || false;
 
                 // check if file should be instrumented. If setting is not set, instrument all files.
                 if (filesToInstrument === false || _.contains(filesToInstrument, filename)) {
 
 
                     chrome.storage.sync.get('developerMode', function (items) {
-                        var developerMode = items.developerMode;
+                        let developerMode = items.developerMode;
 
-                        var code = instrumentFile(filename, request.responseText, developerMode);
+                        let code = instrumentFile(filename, request.responseText, developerMode);
                         executeInContext(code);
                         J$.W(-1, '', '', '');
                         fileReadOver = true;
@@ -102,9 +101,9 @@ chromeReactiveInspector.instrumentor = (function (window) {
      */
     function instrumentFile(filename, code, developerMode) {
         scriptCache[filename] = code;
-        var instrumented = getInstrumentedCode(code, filename);
+        let instrumented = getInstrumentedCode(code, filename);
 
-        var escapedFileName = filename.replace("'", "").replace("\\", "");
+        let escapedFileName = filename.replace("'", "").replace("\\", "");
 
         // Wrap instrumented code in closure and replace method of jalangi with a custom one that passes
         // the current filename. This is not done for inline scripts due to possible performance impact if there are many.
@@ -112,14 +111,14 @@ chromeReactiveInspector.instrumentor = (function (window) {
 
         if (developerMode) {
 
-            var instrumentedFileName = filename;
+            let instrumentedFileName = filename;
             if (instrumentedFileName.lastIndexOf('.') !== -1) {
                 instrumentedFileName = instrumentedFileName.substring(0, instrumentedFileName.lastIndexOf('.')) + '_instrumented.js';
             } else {
                 instrumentedFileName = instrumentedFileName + '_instrumented.js'
             }
 
-            var documentDomain = document.URL;
+            let documentDomain = document.URL;
             if (documentDomain.lastIndexOf('/') !== -1) {
                 documentDomain = documentDomain.substring(0, documentDomain.lastIndexOf("/") + 1);
             }
@@ -148,7 +147,7 @@ chromeReactiveInspector.instrumentor = (function (window) {
     }
 
     function getInstrumentedCode(code) {
-        var instrumentedCode = code;
+        let instrumentedCode = code;
         if (J$.instrumentCode !== undefined) {
             instrumentedCode = J$.instrumentCode(code, {wrapProgram: false, isEval: false}).code;
         }
@@ -163,12 +162,12 @@ chromeReactiveInspector.instrumentor = (function (window) {
      * @returns {*}
      */
     function getCode(file, from, to) {
-        var code = scriptCache[file];
+        let code = scriptCache[file];
         if (!code || code.length === 0) {
             return ''
         }
 
-        var lines = code.split(/\r?\n/g);
+        let lines = code.split(/\r?\n/g);
         if (to > lines.length) {
             to = lines.length;
         }
@@ -187,7 +186,7 @@ chromeReactiveInspector.instrumentor = (function (window) {
      * @param code
      */
     function executeInContext(code) {
-        var fun = new Function(code);
+        let fun = new Function(code);
         fun.call(window);
     }
 
@@ -195,7 +194,7 @@ chromeReactiveInspector.instrumentor = (function (window) {
      * For formatted version see FilenameHookSnippet.js
      * @type {string}
      */
-    var jalangiOverrideSnippet = "var X$ = window.J$;var J$ = jQuery.extend({}, X$);J$.W = function (iid, name, val, lhs,"
+    let jalangiOverrideSnippet = "var X$ = window.J$;var J$ = jQuery.extend({}, X$);J$.W = function (iid, name, val, lhs,"
         + "isGlobal, isPseudoGlobal) {return X$.W(iid, name, val, lhs, isGlobal, isPseudoGlobal, 'PLACEHOLDER');};J$.M ="
         + "function (iid, base, offset, isConstructor) {return X$.M(iid, base, offset, isConstructor, 'PLACEHOLDER');};"
         + "J$.F = function (iid, f, isConstructor) {return X$.F(iid, f, isConstructor, 'PLACEHOLDER');};\n";
@@ -203,4 +202,4 @@ chromeReactiveInspector.instrumentor = (function (window) {
     return {
         getCode: getCode
     };
-})(this);
+})(window);

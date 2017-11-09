@@ -1,8 +1,7 @@
-// closure to prevent intervention with pages javascripts since this is a content script
-var chromeReactiveInspector = chromeReactiveInspector || {};
-chromeReactiveInspector.analysis = chromeReactiveInspector.analysis || {};
+var cri = cri || {};
+cri.analysis = cri.analysis || {};
 
-chromeReactiveInspector.analysis.recording = (function (window) {
+cri.analysis.recording = (function (window) {
     var allNodes = [];
     var allEdges = [];
     var nodesWithDetails = [];
@@ -26,14 +25,14 @@ chromeReactiveInspector.analysis.recording = (function (window) {
         var name = getValueOrEmpty(data.name);
         var value = getValueOrEmpty(data.value);
 
-        if (!chromeReactiveInspector.shouldSaveNodeValue(fileReadOver, id)) {
+        if (!cri.shouldSaveNodeValue(fileReadOver, id)) {
             // if(checkPauseNow()){
             //     debugger;
             // }
             ++currentStep;
-            chromeReactiveInspector.printValues(currentStep, value, id);
+            cri.printValues(currentStep, value, id);
             var val = getValue(value);
-            chromeReactiveInspector.sendObjectToDevTools({
+            cri.sendObjectToDevTools({
                 content: {
                     'nodeId': id,
                     'nodeType': type,
@@ -49,15 +48,15 @@ chromeReactiveInspector.analysis.recording = (function (window) {
 
 
         if (!checkIfNodeAlreadyExists(id, '', type)) {
-            if (chromeReactiveInspector.shouldBreakNow('nodeCreated', id, false)) {
+            if (cri.shouldBreakNow('nodeCreated', id, false)) {
                 debugger;
             }
         } else {
-            if (chromeReactiveInspector.shouldBreakNow('nodeUpdated', id, false)) {
+            if (cri.shouldBreakNow('nodeUpdated', id, false)) {
                 debugger;
             }
 
-            if (chromeReactiveInspector.shouldBreakNow('evaluationYielded', id, val)) {
+            if (cri.shouldBreakNow('evaluationYielded', id, val)) {
                 debugger;
             }
         }
@@ -81,7 +80,7 @@ chromeReactiveInspector.analysis.recording = (function (window) {
         allEdges.push({'startId': startId, 'endId': endId});
         var edgeStart = _.find(nodesWithDetails, {id: startId});
         var edgeEnd = _.find(nodesWithDetails, {id: endId});
-        chromeReactiveInspector.sendObjectToDevTools({
+        cri.sendObjectToDevTools({
             content: {
                 "edgeStart": startId,
                 "edgeStartName": edgeStart ? edgeStart.name : '',
@@ -93,14 +92,14 @@ chromeReactiveInspector.analysis.recording = (function (window) {
             destination: "panel"
         }, fileReadOver);
         currentStep++;
-        if (chromeReactiveInspector.shouldBreakNow('dependencyCreated', startId, endId)) {
+        if (cri.shouldBreakNow('dependencyCreated', startId, endId)) {
             debugger;
         }
     }
 
 
     function updateNodeEdgeName(id, name) {
-        chromeReactiveInspector.sendObjectToDevTools({
+        cri.sendObjectToDevTools({
             content: {
                 "id": id,
                 "name": name
@@ -152,11 +151,11 @@ chromeReactiveInspector.analysis.recording = (function (window) {
         return obj;
     }
 
-    var fileReadOver = false;
+    let fileReadOver = false;
 
     function sendAllNodesAndEdges() {
         fileReadOver = true;
-        chromeReactiveInspector.sendObjectToDevTools({
+        cri.sendObjectToDevTools({
             content: {
                 "nodes": allNodes,
                 "edges": allEdges
@@ -274,6 +273,9 @@ chromeReactiveInspector.analysis.recording = (function (window) {
         resetPreviousData: function () {
             previousData = {};
         },
-        getNextId: getNextId
+        getNextId: getNextId,
+        getFileReadOver: function () {
+            return fileReadOver;
+        }
     };
 })(window);

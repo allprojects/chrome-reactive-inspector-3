@@ -1,8 +1,6 @@
-// closure to prevent intervention with pages javascripts since this is a content script
-// Do not use "cri" as namespace here, because it may be ambiguous.
-var chromeReactiveInspector = chromeReactiveInspector || {};
+var cri = cri || {};
 
-$.extend(chromeReactiveInspector, (function (window) {
+$.extend(cri, (function (window) {
     var reactiveBreakPoints;
     chrome.storage.sync.get({criReactiveBreakPoints: []}, function (result) {
         // the input argument is ALWAYS an object containing the queried keys
@@ -95,7 +93,7 @@ $.extend(chromeReactiveInspector, (function (window) {
             return false;
         }
         else {
-            var found = false;
+            let found = false;
             nodesDoNotSave.forEach(function (node) {
                 if (+node === nodeId)
                     found = true
@@ -110,4 +108,4 @@ $.extend(chromeReactiveInspector, (function (window) {
         shouldBreakNow: shouldBreakNow,
         setPrintOptionValue: setPrintOptionValue
     };
-})(this));
+})(window));

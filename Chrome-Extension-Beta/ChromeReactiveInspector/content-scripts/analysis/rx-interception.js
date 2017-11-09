@@ -2,12 +2,12 @@
  Rx lift override is used to log Rx internal activities.
  */
 // closure to prevent intervention with pages javascripts since this is a content script
-var chromeReactiveInspector = chromeReactiveInspector || {};
-chromeReactiveInspector.analysis = chromeReactiveInspector.analysis || {};
+var cri = cri || {};
+cri.analysis = cri.analysis || {};
 
-chromeReactiveInspector.analysis.bacon = (function (window) {
+cri.analysis.bacon = (function (window) {
     // remap pseudo include to shorten calls
-    var recording = chromeReactiveInspector.analysis.recording;
+    var recording = cri.analysis.recording;
 
     var updatedVar = {};
     var subscriberList = [];
@@ -163,7 +163,7 @@ chromeReactiveInspector.analysis.bacon = (function (window) {
 
             //for crop example
             if (sink.parent && sink.parent._id && this.source && this.source.id) {
-                var tempSourceId = getSourceId(this.source);
+                let tempSourceId = getSourceId(this.source);
                 if (tempSourceId) {
                     if (sink.parent._id !== tempSourceId) {
                         if (!recording.checkIfEdgeAlreadyExists(sink.parent._id, tempSourceId)) {
@@ -171,7 +171,7 @@ chromeReactiveInspector.analysis.bacon = (function (window) {
                         }
                         if (sink.parent._parent && sink.parent._parent._id) {
                             if (!recording.checkIfEdgeAlreadyExists(this.id, sink.parent._parent._id)) {
-                                chromeReactiveInspector.sendObjectToDevTools({
+                                cri.sendObjectToDevTools({
                                     content: {
                                         "edgeStart": sink.parent._id,
                                         "edgeStartName": '',
@@ -181,7 +181,7 @@ chromeReactiveInspector.analysis.bacon = (function (window) {
                                     },
                                     action: "removeEdge",
                                     destination: "panel"
-                                }, fileReadOver);
+                                }, recording.getFileReadOver());
                                 recording.logEdgeData(this.id, sink.parent._parent._id, sink._operatorName);
                             }
                         }

@@ -6,10 +6,9 @@
 // method to send object to dev tool via background page
 // will be only recieved if dev tool + panel  is opened
 
-// closure to prevent intervention with pages javascripts since this is a content script
-var chromeReactiveInspector = chromeReactiveInspector || {};
+var cri = cri || {};
 
-$.extend(chromeReactiveInspector, (function (window) {
+$.extend(cri, (function (window) {
     var cri_config_rec_status = '';
     var pauseNow = false;
     // chrome.storage.sync.get('cri_config_rec_status', function (items) {
@@ -66,7 +65,7 @@ $.extend(chromeReactiveInspector, (function (window) {
         }
         else if (msg.action === 'getSourceCode') {
             sendResponse({
-                code: chromeReactiveInspector.instrumentor.getCode(msg.content.filename, msg.content.from, msg.content.to)
+                code: cri.instrumentor.getCode(msg.content.filename, msg.content.from, msg.content.to)
             });
         }
     });
