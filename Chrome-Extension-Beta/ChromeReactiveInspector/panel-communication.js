@@ -2,7 +2,6 @@
 // the inspectedPage and the dev tools panel.
 
 // channel is created when we open dev tool and move to our panel
-var rxGraphStages = [];
 var _node = '';
 var currentAction = "";
 var tempNode = {
@@ -22,7 +21,6 @@ var allEdges = [];
         name: "reactive-debugger" //Given a Name
     });
 
-    console.log(rxGraphStages);
     // Send current tabId to background page
     port.postMessage(
         Object.assign({
@@ -66,7 +64,7 @@ var allEdges = [];
             rxSlider.slider("pips", "refresh");
         }
         initialiseGraph();
-        rxGraphStages = [];
+        history.clear();
         historyEntries = [];
         isConfirmed = false;
         // chrome.storage.sync.get('cri_config_rec_status', function (items) {
@@ -80,94 +78,59 @@ var allEdges = [];
 
     function handleSaveNode(message) {
         let currentNodeId = false;
-        let truncatedVal = "";
 
         if (message.content.nodeId) {
             currentNodeId = message.content.nodeId;
         }
 
-        if (g.node(message.content.nodeId) !== undefined) {
+        let id = message.content.nodeId;
+        let node = {};
+        let previousNode = g.node(id);
+
+        if (previousNode !== undefined) {
+            // node already existed
+            node = previousNode;
             currentAction = "updateNode";
-            let node = g.node(message.content.nodeId);
-
-            let prevRef = node.ref;
-            let prevValue = node.value;
-            let prevType = node.type;
-            let prevMethod = node.method;
-
-            let currentRef = message.content.nodeRef;
-            let currentValue = message.content.nodeValue;
-            let currentMethod = message.content.nodeMethod;
-            let currentType = message.content.nodeType;
-
-
-            let newRef = getOrDefault(currentRef, prevRef);
-            let newValue = getOrDefault(currentValue, prevValue);
-            let newSourceInfo = getOrDefault(message.content.sourceInfo, node.sourceInfo);
-            let newMethod = getOrDefault(currentMethod, prevMethod);
-            let newType = getOrDefault(currentType, prevType);
-
-
-            if (newValue || newValue.constructor.name === 'Boolean') {
-                newValue = newValue.toString();
-                truncatedVal = newValue.substring(0, 25);
-            }
-            let currentClasses = "current";
-            if (newRef !== "") {
-                currentClasses = currentClasses + " nodeWithRef";
-            } else {
-                currentClasses = currentClasses + " nodeWithoutRef";
-            }
-
-            g.setNode(message.content.nodeId, {
-                label: getNodeLabel(message.content.nodeId, newRef, truncatedVal),
-                labelType: "html",
-                ref: newRef,
-                value: newValue,
-                type: newType,
-                method: newMethod,
-                sourceInfo: newSourceInfo,
-                nodeId: message.content.nodeId,
-                class: currentClasses
-            });
-
-            tempNode.type = 'nodeUpdated';
-            tempNode.nodeId = message.content.nodeId;
-            tempNode.nodeName = newRef;
-            tempNode.nodeValue = truncatedVal;
-        }
-        else {
+        } else {
             currentAction = "newNode";
-
-            let currentClasses = "current";
-            if (message.content.nodeRef !== "") {
-                currentClasses = "current nodeWithRef";
-            } else {
-                currentClasses = "current nodeWithoutRef";
-            }
-
-            let tempVal = message.content.nodeValue;
-            if (tempVal || tempVal.constructor.name === 'Boolean') {
-                let newValue = tempVal.toString();
-                truncatedVal = newValue.substring(0, 25);
-            }
-
-            g.setNode(message.content.nodeId, {
-                label: getNodeLabel(message.content.nodeId, message.content.nodeRef, truncatedVal),
-                labelType: "html",
-                ref: message.content.nodeRef,
-                value: message.content.nodeValue,
-                type: message.content.nodeType,
-                method: message.content.nodeMethod,
-                nodeId: message.content.nodeId,
-                sourceInfo: message.content.sourceInfo,
-                class: currentClasses
-            });
-            tempNode.type = 'nodeCreated';
-            tempNode.nodeId = message.content.nodeId;
-            tempNode.nodeName = message.content.nodeRef;
-            tempNode.nodeValue = message.content.nodeValue;
         }
+
+        // fill with new data
+
+        let truncatedVal = "";
+        let value = getOrDefault(message.content.nodeValue, node.value);
+        if (value || typeof value !== "undefined" && typeof value.toString === "function") {
+            // "0", "false" and "" are falsy but should be shown non the less.
+            value = value.toString();
+            truncatedVal = value.substring(0, 25);
+        }
+
+        node = {
+            label: "",
+            labelType: "html",
+            ref: getOrDefault(message.content.nodeRef, node.ref),
+            value: value,
+            type: getOrDefault(message.content.nodeType, node.type),
+            method: getOrDefault(message.content.nodeMethod, node.method),
+            nodeId: id,
+            sourceInfo: getOrDefault(message.content.sourceInfo, node.sourceInfo),
+            class: ""
+        };
+
+        // the new or updated node will have the class "current"
+        node.class = "current " + (node.ref ? "nodeWithRef" : "nodeWithoutRef");
+        node.label = getNodeLabel(id, node.ref, truncatedVal);
+
+        // do not just remove from first to add some robustness if something goes wrong
+        d3.selectAll("g.node.current").classed("current", false);
+        g.setNode(id, node);
+
+        // update tempNode
+        tempNode.type = previousNode !== undefined ? 'nodeUpdated' : 'nodeCreated';
+        tempNode.nodeId = id;
+        tempNode.nodeName = node.ref;
+        tempNode.nodeValue = truncatedVal;
+
         render(d3.select("svg g"), g);
         applyRxRyAttribute();
         applyNodeExtensions();
@@ -228,58 +191,16 @@ function getOrDefault(newValue, defaultValue) {
 
 var isConfirmed = false;
 
-// this method is to capture all nodes and edges and add this as new stage in rxGraphStages
+// this method is to capture all nodes and edges save the graph to the history.
 function captureGraphAndSaveAsNewStage(event, currentNodeId) {
-    var tempStageId = '';
-    var newStage = {
-        "stageId": '',
-        "stageEvent": '',
-        "stageData": {
-            "nodes": [],
-            "edges": []
-        }
-    };
+    let stageId = history.saveStage(g, event);
 
-    newStage.stageEvent = event;
-    newStage.stageId = rxGraphStages.length + 1;
-    tempStageId = newStage.stageId;
+    let lastStageId = history.getStageCount();
 
-    var nodeToPush = {};
-    // get current nodes from graph
-    d3.selectAll('g.node')
-        .each(function (d) {
-            var currentNodeEdges = g.nodeEdges(d);
-            if (currentNodeEdges.length > 0) {
-                currentNodeEdges.forEach(function (singleEdge) {
-                    var edgeLabel = "";
-                    if (g.edge(singleEdge).label) {
-                        edgeLabel = g.edge(singleEdge).label;
-                    }
-                    newStage.stageData.edges.push({
-                        "edgeStart": singleEdge.v,
-                        "edgeEnd": singleEdge.w,
-                        "edgeLabel": edgeLabel
-                    });
-                });
-
-            }
-
-            nodeToPush = g.node(d);
-
-            // Check if its the current node, if yes set it as current node
-            var tempClass = nodeToPush.class.replace(/current/g, '').replace(/normal/g, '').replace(/highlight/g, '').replace(/fade/g, '').trim();
-            if (nodeToPush.nodeId === currentNodeId) {
-                nodeToPush.class = nodeToPush.class + " current";
-            } else {
-                nodeToPush.class = tempClass + " normal";
-            }
-            newStage.stageData.nodes.push(_.clone(nodeToPush));
-        });
-    rxGraphStages.push(_.clone(newStage));
     // Here we should increase steps count in step slider
     rxSlider.slider("option", "min", 0);
-    rxSlider.slider("option", "max", rxSlider.slider("option", "max") + 1);
-    rxSlider.slider("option", "value", rxSlider.slider("option", "max"));
+    rxSlider.slider("option", "max", lastStageId);
+    rxSlider.slider("option", "value", lastStageId);
     rxSlider.slider("pips", "refresh");
 
 
@@ -297,7 +218,7 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
         $("#dialog").dialog("open");
         isConfirmed = true
     }
-    return tempStageId
+    return stageId;
 }
 
 var historyEntries = [];

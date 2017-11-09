@@ -46,14 +46,15 @@ $dialog.dialog({
     }
 });
 
-var g = '',
+let g = '',
     render = new dagreD3.render(),
     svg = '',
     svgGroup = '',
     inner = '';
 
-var $canvasContainer = $("#canvas-container");
-var tooltipManager = new cri.TooltipManager($canvasContainer);
+let $canvasContainer = $("#canvas-container");
+let tooltipManager = new cri.TooltipManager($canvasContainer);
+let history = new cri.graphHistory.History();
 
 var initialiseGraph = function () {
     // Create the input graph
@@ -68,7 +69,7 @@ var initialiseGraph = function () {
     inner = d3.select("svg g");
     if (inner.size() === 1) {
         // clear previous nodes
-        inner.html("");
+        inner.html(null);
     } else {
         svg = d3.select("svg");
         svgGroup = svg.append("g");
@@ -119,7 +120,7 @@ var rxSlider = $("#slider")
     })
     .slider("pips");
 
-var debouncedRedrawGraph = _.debounce(redrawGraphFromUI, 250);
+let debouncedRedrawGraph = _.debounce(redrawGraphFromUI, 250);
 
 var lastDrawnStep = null;
 
@@ -158,26 +159,15 @@ function redrawGraphToStage(stageToRedraw) {
     initialiseGraph();
 
     // get data for asked stage
-    var stageDataToDraw = '';
-    var nodesToDraw = '';
-    var edgesToDraw = '';
     if (stageToRedraw) {
-        stageDataToDraw = rxGraphStages[stageToRedraw - 1].stageData;
-        nodesToDraw = stageDataToDraw.nodes;
-        edgesToDraw = stageDataToDraw.edges;
+        let stage = history.loadStage(stageToRedraw);
 
-        nodesToDraw.forEach(function (node) {
+        stage.nodes.forEach(function (node) {
             g.setNode(node.nodeId, node);
         });
 
-        edgesToDraw.forEach(function (edge) {
-            var edgeLabel = "";
-            if (edge.edgeLabel) {
-                edgeLabel = edge.edgeLabel;
-            }
-            g.setEdge(edge.edgeStart, edge.edgeEnd, {
-                label: edgeLabel
-            });
+        stage.edges.forEach(function (edge) {
+            g.setEdge(edge.from, edge.to, {label: edge.label ? edge.label : ""});
         });
     }
 
@@ -301,7 +291,8 @@ $("#cri-reset").click(function () {
     rxSlider.slider("pips", "refresh");
 
     // remove saved data
-    rxGraphStages = [];
+    history.clear();
+    historyEntries = [];
     isConfirmed = false
 });
 
