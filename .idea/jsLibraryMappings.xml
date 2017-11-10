@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{chrome-DefinitelyTyped, jquery-DefinitelyTyped, jqueryui-DefinitelyTyped, underscore-DefinitelyTyped}" />
+    <file url="PROJECT" libraries="{Bacon.js, Bootstrap, Rx.js, chrome-DefinitelyTyped, d3.v3.min.js, dagre-d3.js, jQuery 1.9.1, jquery-editable-select.min.js, jquery-ui-slider-pips.js, jquery-ui.js, jquery.js 1.11.3, tipsy.js, underscore.js}" />
   </component>
 </project>
