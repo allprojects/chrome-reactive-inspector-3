@@ -77,12 +77,6 @@ var allEdges = [];
     }
 
     function handleSaveNode(message) {
-        let currentNodeId = false;
-
-        if (message.content.nodeId) {
-            currentNodeId = message.content.nodeId;
-        }
-
         let id = message.content.nodeId;
         let node = {};
         let previousNode = g.node(id);
@@ -121,8 +115,13 @@ var allEdges = [];
         node.class = "current " + (node.ref ? "nodeWithRef" : "nodeWithoutRef");
         node.label = getNodeLabel(id, node.ref, truncatedVal);
 
-        // do not just remove from first to add some robustness if something goes wrong
-        d3.selectAll("g.node.current").classed("current", false);
+        // clear current from previous nodes
+        _.each(g.nodes(), function (n) {
+            let node = g.node(n);
+            // replace class on graph node, not just via DOM to make it persistent
+            node.class = node.class.replace(/current/g, "");
+        });
+
         g.setNode(id, node);
 
         // update tempNode
@@ -131,13 +130,9 @@ var allEdges = [];
         tempNode.nodeName = node.ref;
         tempNode.nodeValue = truncatedVal;
 
-        render(d3.select("svg g"), g);
-        applyRxRyAttribute();
-        applyNodeExtensions();
-
         // capture current dependency graph
-        let stageId = captureGraphAndSaveAsNewStage(currentAction, currentNodeId);
-        saveHistory(stageId, currentAction, tempNode)
+        let stageId = saveStageAndAdvance(currentAction);
+        saveHistory(stageId, currentAction, tempNode);
     }
 
     function handleSaveEdge(message) {
@@ -151,7 +146,7 @@ var allEdges = [];
         render(d3.select("svg g"), g);
         applyRxRyAttribute();
 
-        let stageId = captureGraphAndSaveAsNewStage("saveEdge", false);
+        let stageId = saveStageAndAdvance("saveEdge");
         saveHistory(stageId, "saveEdge", message.content)
     }
 
@@ -177,7 +172,7 @@ var allEdges = [];
         g.removeEdge(message.content.edgeStart, message.content.edgeEnd, message.content.edgeLabel);
         render(d3.select("svg g"), g);
         applyRxRyAttribute();
-        let stageId = captureGraphAndSaveAsNewStage("saveEdge", false);
+        let stageId = saveStageAndAdvance("saveEdge");
         saveHistory(stageId, "saveEdge", message.content)
     }
 }());
@@ -192,7 +187,7 @@ function getOrDefault(newValue, defaultValue) {
 var isConfirmed = false;
 
 // this method is to capture all nodes and edges save the graph to the history.
-function captureGraphAndSaveAsNewStage(event, currentNodeId) {
+function saveStageAndAdvance(event) {
     let stageId = history.saveStage(g, event);
 
     let lastStageId = history.getStageCount();
@@ -200,6 +195,7 @@ function captureGraphAndSaveAsNewStage(event, currentNodeId) {
     // Here we should increase steps count in step slider
     rxSlider.slider("option", "min", 0);
     rxSlider.slider("option", "max", lastStageId);
+    // this will cause the value changed event to fire and thus load and render the new stage.
     rxSlider.slider("option", "value", lastStageId);
     rxSlider.slider("pips", "refresh");
 
