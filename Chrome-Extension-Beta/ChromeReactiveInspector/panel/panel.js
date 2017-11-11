@@ -84,9 +84,8 @@ var zoom = d3.behavior.zoom()
     .scale(1)
     .scaleExtent([-8, 8])
     .on('zoom', zoomed);
-//
-svg
-    .call(zoom) // delete this line to disable free zooming
+
+svg.call(zoom) // delete this line to disable free zooming
     .call(zoom.event);
 
 function zoomed() {
@@ -156,12 +155,13 @@ var _node = '';
 // This method redraw dependency graph to given stage
 function redrawGraphToStage(stageToRedraw) {
 
-    initialiseGraph();
 
     // get data for asked stage
     if (stageToRedraw) {
-
         history.loadStage(stageToRedraw, function (stage) {
+            // initialize here and not earlier to prevent flickering of the ui if the loading takes a few milliseconds.
+            initialiseGraph();
+
             stage.nodes.forEach(function (node) {
                 g.setNode(node.nodeId, node);
             });
@@ -176,6 +176,8 @@ function redrawGraphToStage(stageToRedraw) {
             applyNodeExtensions();
         });
     } else {
+        initialiseGraph();
+
         // draw graph with asked stage data
         render(d3.select("svg g"), g);
         applyRxRyAttribute();

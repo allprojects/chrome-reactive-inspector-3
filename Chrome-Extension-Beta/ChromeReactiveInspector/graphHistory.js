@@ -59,6 +59,7 @@ cri.graphHistory = (function (window) {
             cri.stageStorage.storeOnDisk(this.storage);
             cri.stageStorage.loadFromDisk(lowerBounds, upperBounds, function (stages) {
                 self.storage = stages;
+                self.storageOffset = self.storage[0].id;
                 callback(_.find(self.storage, function (s) {
                     return s.id === stageId;
                 }));
@@ -78,6 +79,7 @@ cri.graphHistory = (function (window) {
     History.prototype.clear = function () {
         this.nextStageId = 0;
         this.storage = [];
+        this.storageOffset = 0;
         cri.stageStorage.clear();
     };
 

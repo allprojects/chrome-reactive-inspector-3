@@ -20,7 +20,12 @@ cri.stageStorage = (function (window) {
 
         // set highest to storage as well in case the extension closes unexpectedly.
         if (oldHighest !== highestId) {
-            chrome.storage.local.set({highestStageId: highestId});
+            chrome.storage.local.set({highestStageId: highestId}, function () {
+                if (chrome.runtime.lastError) {
+                    console.error("Chrome local storage api threw an exception. This is possibly because the local" +
+                        " storage ran out of capacity.")
+                }
+            });
         }
 
         queueStorageOperation(operation);
@@ -77,7 +82,10 @@ cri.stageStorage = (function (window) {
         let toDelete = _.map(_.range(1, highest + 1), function (i) {
             return "stage" + i;
         });
-        chrome.storage.local.remove(toDelete);
+
+        chrome.storage.local.remove(toDelete, function () {
+            chrome.storage.local.remove("highestStageId");
+        });
     }
 
     function initialize() {
