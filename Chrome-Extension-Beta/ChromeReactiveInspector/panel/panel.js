@@ -160,21 +160,27 @@ function redrawGraphToStage(stageToRedraw) {
 
     // get data for asked stage
     if (stageToRedraw) {
-        let stage = history.loadStage(stageToRedraw);
 
-        stage.nodes.forEach(function (node) {
-            g.setNode(node.nodeId, node);
-        });
+        history.loadStage(stageToRedraw, function (stage) {
+            stage.nodes.forEach(function (node) {
+                g.setNode(node.nodeId, node);
+            });
 
-        stage.edges.forEach(function (edge) {
-            g.setEdge(edge.from, edge.to, {label: edge.label ? edge.label : ""});
+            stage.edges.forEach(function (edge) {
+                g.setEdge(edge.from, edge.to, {label: edge.label ? edge.label : ""});
+            });
+
+            // draw graph with asked stage data
+            render(d3.select("svg g"), g);
+            applyRxRyAttribute();
+            applyNodeExtensions();
         });
+    } else {
+        // draw graph with asked stage data
+        render(d3.select("svg g"), g);
+        applyRxRyAttribute();
+        applyNodeExtensions();
     }
-
-    // draw graph with asked stage data
-    render(d3.select("svg g"), g);
-    applyRxRyAttribute();
-    applyNodeExtensions();
 }
 
 function applyRxRyAttribute() {
