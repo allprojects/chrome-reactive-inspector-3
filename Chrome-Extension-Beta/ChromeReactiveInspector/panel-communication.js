@@ -61,6 +61,8 @@ let allEdges = [];
             rxSlider.slider("option", "max", 0);
             rxSlider.slider("option", "value", 0);
             rxSlider.slider("pips", "refresh");
+        } else {
+            console.log("cri: rxSlider was not initialized yet!");
         }
         initialiseGraph();
         history.clear();
@@ -261,13 +263,5 @@ function sendObjectToInspectedPage(message, sendResponse) {
     message.tabId = chrome.devtools.inspectedWindow.tabId;
     chrome.extension.sendMessage(message, sendResponse);
 }
-
-// Listen to change in storage data
-chrome.storage.onChanged.addListener(function (changes, namespace) {
-    chrome.storage.sync.get("graphData", function (items) {
-        console.log('Settings retrieved');
-        console.log(items);
-    });
-});
 
 

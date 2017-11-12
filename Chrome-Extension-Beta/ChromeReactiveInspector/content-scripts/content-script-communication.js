@@ -74,4 +74,4 @@ $.extend(cri, (function (window) {
         sendObjectToDevTools: sendObjectToDevTools,
         checkPauseNow: checkPauseNow
     };
-})(this));
+})(window));

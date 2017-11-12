@@ -55,7 +55,16 @@ $.extend(cri, (function (window) {
 
     // Listen to change in storage data
     chrome.storage.onChanged.addListener(function (changes, namespace) {
-        setPrintOptionValue();
+        if (namespace !== "sync") return;
+
+        for (let key in changes) {
+            if (!changes.hasOwnProperty(key)) continue;
+
+            if (key === 'printAllValue') {
+                let storageChange = changes[key];
+                isPrintOptionSelected = storageChange.newValue;
+            }
+        }
     });
 
     /**
@@ -77,11 +86,13 @@ $.extend(cri, (function (window) {
     });
 
     chrome.storage.onChanged.addListener(function (changes, namespace) {
-        for (var key in changes) {
+        if (namespace !== "sync") return;
+
+        for (let key in changes) {
             if (!changes.hasOwnProperty(key)) continue;
 
-            var storageChange = changes[key];
             if (key === 'nodesDoNotSave') {
+                let storageChange = changes[key];
                 nodesDoNotSave = storageChange.newValue;
             }
         }

@@ -51,8 +51,12 @@ cri.graphHistory = (function (window) {
             let upperBounds = stageId + cacheSize / 2;
             if (upperBounds >= this.nextStageId) {
                 upperBounds = this.nextStageId;
-                // increase lower bounds to prevent instant need to reload from disk if a new step is generated.
-                lowerBounds += 10;
+
+                if (upperBounds - lowerBounds >= cacheSize - 10) {
+                    // increase lower bounds to prevent instant need to reload from disk if a new step is generated,
+                    // but only increase if a (nearly) full cache is to be loaded.
+                    lowerBounds += 10;
+                }
             }
 
             // stage is not in cache, retrieve a block from local disk where the requested stage is in the middle
@@ -79,8 +83,9 @@ cri.graphHistory = (function (window) {
     History.prototype.clear = function () {
         this.nextStageId = 0;
         this.storage = [];
-        this.storageOffset = 0;
+        this.storageOffset = 1;
         cri.stageStorage.clear();
+        console.log("cri: history cleared")
     };
 
     function Stage(id, event, nodes, edges) {
