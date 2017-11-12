@@ -41,6 +41,21 @@
     Click on Confirm to continue logging the values or cancel to pause the logging.
 </div>
 
+<div id="menu-bar">
+    <ul>
+        <li class="submenu">
+            <div class="dropbtn">Recording</div>
+            <div class="submenu-content">
+                <div id="cri-reset">Reset Graph</div>
+                <div id="cri-download-graph">Download Graph</div>
+            </div>
+        </li>
+        <li class="menuitem">
+            <div id="cri-rec-status" data-rec-status="true">Pause Recording</div>
+        </li>
+    </ul>
+</div>
+
 <div class="clearfix">
     <h4 class="col-md-12 col-lg-12">Configuration</h4>
     <div class="form-inline col-md-4 col-lg-4 col-sm-12 col-xs-12 bs-example">
@@ -52,28 +67,22 @@
     <hr class="hidden-lg hidden-md col-xs-12 col-sm-12 row">
     <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12 row">
         <div class="col-md-7 col-lg-7 col-sm-12 col-xs-12">
-            <div class="col-sm-4 col-xs-5 col-md-5 col-lg-5 pd-left-5">
+            <div style="display: inline-block">
                 <input name="searchNode" placeholder="Type Node name" id="cri-node-search-val" class="form-control"
                        style="max-width: 170px;">
             </div>
-            <div class="dropdown col-sm-5 col-xs-5 col-md-5 col-lg-5">
+            <div class="dropdown" style="display: inline-block">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="featureType" data-toggle="dropdown">
                     Select
-                    <span class="caret"></span></button>
+                    <span class="caret"></span>
+                </button>
                 <ul class="dropdown-menu">
                     <li><a href="#">Search</a></li>
                     <li><a href="#">Dependents</a></li>
                     <li><a href="#">Dependencies</a></li>
                 </ul>
             </div>
-            <button id="cri-find-btn" type="button" class="btn col-sm-2 col-xs-2 col-md-2 col-lg-2">Find</button>
-        </div>
-        <hr class="hidden-lg hidden-md col-xs-12 col-sm-12 row">
-        <div class="col-md-5 col-lg-5 col-sm-12 col-xs-12">
-            <button id="cri-reset" type="button" class="btn btn-info">Reset Graph</button>
-            <button id="cri-rec-status" data-rec-status="true" type="button" class="btn btn-info">Pause Recording
-            </button>
-            <button id="cri-download-graph" type="button" class="btn">Download</button>
+            <button id="cri-find-btn" class="btn" style="display: inline-block" type="button">Find</button>
         </div>
     </div>
 </div>
