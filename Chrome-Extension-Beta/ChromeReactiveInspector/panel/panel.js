@@ -2,7 +2,7 @@ if (!cri) {
     throw "cri namespace not initialized. something went wrong during loading of js files";
 }
 
-var $document = $(document);
+let $document = $(document);
 $document.ready(function () {
     $(".dropdown-toggle").dropdown();
 });
@@ -12,9 +12,7 @@ $(".dropdown-menu li a").click(function () {
     $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
 });
 
-var $dialog = $("#dialog");
-$dialog.hide();
-
+let $dialog = $("#dialog").hide();
 $dialog.dialog({
     autoOpen: false,
     modal: true,
@@ -46,17 +44,17 @@ $dialog.dialog({
     }
 });
 
-let g = '',
-    render = new dagreD3.render(),
-    svg = '',
-    svgGroup = '',
-    inner = '';
+let g = '';
+let render = new dagreD3.render();
+let svg = '';
+let svgGroup = '';
+let inner = '';
 
 let $canvasContainer = $("#canvas-container");
 let tooltipManager = new cri.TooltipManager($canvasContainer);
 let history = new cri.graphHistory.History();
 
-var initialiseGraph = function () {
+let initialiseGraph = function () {
     // Create the input graph
     g = new dagreD3.graphlib.Graph()
         .setGraph({rankdir: "LR"})
@@ -65,7 +63,6 @@ var initialiseGraph = function () {
         });
 
     // Set up an SVG group so that we can translate the final graph.
-
     inner = d3.select("svg g");
     if (inner.size() === 1) {
         // clear previous nodes
@@ -79,7 +76,7 @@ var initialiseGraph = function () {
 
 initialiseGraph();
 // Set up zoom support
-var zoom = d3.behavior.zoom()
+let zoom = d3.behavior.zoom()
     .translate([0, 0])
     .scale(1)
     .scaleExtent([-8, 8])
@@ -102,7 +99,7 @@ render(d3.select("svg g"), g);
  * Slider to navigate the steps in the dependency graph.
  * @type {jQuery}
  */
-var rxSlider = $("#slider")
+let rxSlider = $("#slider")
     .slider({
         min: 0,
         max: 0,
@@ -120,8 +117,7 @@ var rxSlider = $("#slider")
     .slider("pips");
 
 let debouncedRedrawGraph = _.debounce(redrawGraphFromUI, 250);
-
-var lastDrawnStep = null;
+let lastDrawnStep = null;
 
 /**
  * Prevent unnecessary redraws of the dependency graph.
@@ -150,7 +146,7 @@ rxSlider.slider("option", "min", 0);
 rxSlider.slider("option", "max", 0);
 rxSlider.slider("option", "value", 0);
 rxSlider.slider("pips", "refresh");
-var _node = '';
+let _node = '';
 
 // This method redraw dependency graph to given stage
 function redrawGraphToStage(stageToRedraw) {
@@ -186,15 +182,15 @@ function redrawGraphToStage(stageToRedraw) {
 }
 
 function applyRxRyAttribute() {
-    var $canvasRects = $("#svg-canvas").find("rect");
+    let $canvasRects = $("#svg-canvas").find("rect");
     $canvasRects.attr("rx", "5");
     $canvasRects.attr("ry", "5");
 }
 
-var configIncludeFilesField = $('#cri-config-includes');
-var previousConfigFiles = [];
-var threshold = '';
-var configRecStatusButton = document.getElementById('cri-rec-status');
+let configIncludeFilesField = $('#cri-config-includes');
+let previousConfigFiles = [];
+let threshold = '';
+let configRecStatusButton = document.getElementById('cri-rec-status');
 // (function () {
 // populate
 chrome.storage.sync.get('criconfigincludes', function (items) {
@@ -205,7 +201,7 @@ chrome.storage.sync.get('criconfigincludes', function (items) {
 });
 chrome.storage.sync.get('cri_config_rec_status', function (items) {
     if (items.cri_config_rec_status !== undefined) {
-        var recStatusFromStorage = items.cri_config_rec_status;
+        let recStatusFromStorage = items.cri_config_rec_status;
         configRecStatusButton.setAttribute('data-rec-status', recStatusFromStorage);
         $(this).data("rec-status", recStatusFromStorage);
         if (recStatusFromStorage) {
@@ -255,8 +251,8 @@ configIncludeFilesField.tokenfield();
  * This method is called whenever the user clicks on 'Pause' or 'Start' recording button.
  */
 configRecStatusButton.addEventListener('click', function () {
-    var currentStatus = $(this).attr('data-rec-status');
-    var temp = (currentStatus === 'true');
+    let currentStatus = $(this).attr('data-rec-status');
+    let temp = (currentStatus === 'true');
     // $(this).data("rec-status",!currentStatus);
     $(this).attr('data-rec-status', !temp);
     setCriStatus($(this), !temp);
@@ -306,19 +302,19 @@ $("#cri-reset").click(function () {
 
 $('#cri-download-graph').click(function () {
     sendObjectToInspectedPage({destination: "background", action: "tabInfo"}, function (response) {
-        var currentTabUrl = response.currentTabUrl;
+        let currentTabUrl = response.currentTabUrl;
         if (!currentTabUrl) {
             console.log('Error retrieving url of current inspected tab.');
             return;
         }
 
-        var filename = currentTabUrl.substring(currentTabUrl.lastIndexOf('/') + 1);
+        let filename = currentTabUrl.substring(currentTabUrl.lastIndexOf('/') + 1);
         if (!filename || filename === "") {
             return;
         }
 
-        var svgElement = document.getElementById('svg-canvas');
-        var simg = new Simg(svgElement);
+        let svgElement = document.getElementById('svg-canvas');
+        let simg = new Simg(svgElement);
         // Replace the current SVG with an image version of it.
         // simg.replace();
         // And trigger a download of the rendered image.
@@ -329,7 +325,7 @@ $('#cri-download-graph').click(function () {
 
 
 $('#cri-find-btn').click(function () {
-    var type = $('#featureType').text().trim();
+    let type = $('#featureType').text().trim();
     if (type === 'Search')
         searchNodeFunction();
     else if (type === 'Dependents')
@@ -339,7 +335,7 @@ $('#cri-find-btn').click(function () {
 });
 
 
-var searchNode = '';
+let searchNode = '';
 
 function setSearchNode() {
     searchNode = $("#cri-node-search-val");
@@ -347,14 +343,14 @@ function setSearchNode() {
 
 setSearchNode();
 
-var nodeFound = false;
+let nodeFound = false;
 $("#cri-node-search-val").on('change keyup paste', function () {
     //TODO: if keyup and blur right after, this will fire twice with same values
     // same for paste + blur
     if (!searchNode) {
         setSearchNode();
     }
-    var searchNodeVal = searchNode.val();
+    let searchNodeVal = searchNode.val();
     if (searchNodeVal === '') {
         redrawGraphToStage(rxSlider.slider('value'))
     }
@@ -367,11 +363,11 @@ $("#cri-node-search-val").on('change keyup paste', function () {
  */
 function searchNodeFunction() {
     searchNode.removeClass('error');
-    var all_nodes = Object.keys(g._nodes).map(function (key) {
+    let all_nodes = Object.keys(g._nodes).map(function (key) {
         return g._nodes[key];
     });
 
-    var searchNodeVal = searchNode.val();
+    let searchNodeVal = searchNode.val();
     if (searchNodeVal) {
         nodeFound = false;
         all_nodes.forEach(function (node) {
@@ -386,7 +382,7 @@ function searchNodeFunction() {
         if (nodeFound) {
             searchNode.removeClass('error');
             render(d3.select("svg g"), g);
-            var $rect = $("#svg-canvas rect");
+            let $rect = $("#svg-canvas rect");
             $rect.attr("rx", "5");
             $rect.attr("ry", "5");
         } else {
@@ -399,12 +395,12 @@ function searchNodeFunction() {
 }
 
 function dependency(type) {
-    var all_nodes = Object.keys(g._nodes).map(function (key) {
+    let all_nodes = Object.keys(g._nodes).map(function (key) {
         return g._nodes[key];
     });
-    var searchNodeVal = searchNode.val();
-    var tempNode = '';
-    var edges = [];
+    let searchNodeVal = searchNode.val();
+    let tempNode = '';
+    let edges = [];
     if (searchNodeVal) {
         nodeFound = false;
         all_nodes.forEach(function (node) {
@@ -432,9 +428,9 @@ function dependency(type) {
         }
     });
     if (edges.length) {
-        var tempArray = [];
+        let tempArray = [];
         if (type === 'dependencies') {
-            var allEdgesReverse = allEdges.slice().reverse();
+            let allEdgesReverse = allEdges.slice().reverse();
             allEdgesReverse.forEach(function (edge) {
                 if (_.contains(edges, edge.endId))
                     edges.push(edge.startId);
@@ -475,7 +471,7 @@ function dependency(type) {
         }
     });
     render(d3.select("svg g"), g);
-    var $rect = $("#svg-canvas rect");
+    let $rect = $("#svg-canvas rect");
     $rect.attr("rx", "5");
     $rect.attr("ry", "5");
 }
@@ -487,12 +483,12 @@ $('#cri-findnode-select').editableSelect({filter: false});
 $("#cri-history-current-step").text(0);
 $("#cri-history-last-step").text(0);
 
-var stage = '';
+let stage = '';
 $('#cri-history-query-submit').click(function () {
-    var historyQuery, param1, param2 = '';
-    var currentHistoryQuery = $('#cri-findnode-select').val();
+    let historyQuery, param1, param2 = '';
+    let currentHistoryQuery = $('#cri-findnode-select').val();
     historyQuery = currentHistoryQuery.substring(0, currentHistoryQuery.indexOf('['));
-    var matches = currentHistoryQuery.match(/\[(.*?)\]/g).map(function (val) {
+    let matches = currentHistoryQuery.match(/\[(.*?)\]/g).map(function (val) {
         return val.replace('[', '').replace(']', '');
     });
 
@@ -502,7 +498,7 @@ $('#cri-history-query-submit').click(function () {
             param2 = matches[1];
         }
         if (historyQuery === "nodeCreated") {
-            var _tNode = _.find(allNodes, {name: param1});
+            let _tNode = _.find(allNodes, {name: param1});
             if (_tNode) {
                 stage = historyEntries.filter(function (history) {
                     if (history.type === 'nodeCreated' && history.nodeId === _tNode.nodeId)
@@ -541,12 +537,12 @@ $('#cri-history-query-submit').click(function () {
             }
 
         } else if (historyQuery === "dependencyCreated") {
-            var nodeNameSource = param1;
-            var nodeNameDest = param2;
-            var result;
-            var tempResult = [];
+            let nodeNameSource = param1;
+            let nodeNameDest = param2;
+            let result;
+            let tempResult = [];
             stage = '';
-            var filteredHistoryEntries = _.filter(historyEntries, function (history) {
+            let filteredHistoryEntries = _.filter(historyEntries, function (history) {
                 return history.type === 'dependencyCreated'
             });
 
@@ -594,10 +590,10 @@ $('#cri-history-query-submit').click(function () {
 });
 
 $('#cri-history-query-prev').click(function () {
-    var currentStepFromHistoryQuery = $("#cri-history-current-step").text();
-    var nextStepToAccess = parseInt(currentStepFromHistoryQuery) - 2;
+    let currentStepFromHistoryQuery = $("#cri-history-current-step").text();
+    let nextStepToAccess = parseInt(currentStepFromHistoryQuery) - 2;
     if (stage && stage.length && nextStepToAccess > -1) {
-        var firstFoundStageId = stage[nextStepToAccess].stageId;
+        let firstFoundStageId = stage[nextStepToAccess].stageId;
         rxSlider.slider('value', firstFoundStageId, rxSlider.slider("option", "step"));
         redrawGraphToStage(firstFoundStageId);
         $("#cri-history-current-step").text(nextStepToAccess + 1);
@@ -605,10 +601,10 @@ $('#cri-history-query-prev').click(function () {
 });
 
 $('#cri-history-query-next').click(function () {
-    var currentStepFromHistoryQuery = $("#cri-history-current-step").text();
-    var nextStepToAccess = parseInt(currentStepFromHistoryQuery);
+    let currentStepFromHistoryQuery = $("#cri-history-current-step").text();
+    let nextStepToAccess = parseInt(currentStepFromHistoryQuery);
     if (stage && (stage.length > 1) && stage.length > nextStepToAccess) {
-        var firstFoundStageId = stage[nextStepToAccess].stageId;
+        let firstFoundStageId = stage[nextStepToAccess].stageId;
         rxSlider.slider('value', firstFoundStageId, rxSlider.slider("option", "step"));
         redrawGraphToStage(firstFoundStageId);
         $("#cri-history-current-step").text(nextStepToAccess + 1);
@@ -618,10 +614,10 @@ $('#cri-history-query-next').click(function () {
 /**
  * Reactive Breakpoints feature
  */
-var $breakpointContainer = $('#cri-breakpoints-container');
-var reactiveBreakpointManager = new cri.ReactiveBreakpointManager($breakpointContainer);
+let $breakpointContainer = $('#cri-breakpoints-container');
+let reactiveBreakpointManager = new cri.ReactiveBreakpointManager($breakpointContainer);
 
-var $breakpointSelect = $('#cri-breakpoint-select');
+let $breakpointSelect = $('#cri-breakpoint-select');
 $breakpointSelect.editableSelect({filter: false});
 
 $('#cri-breakpoint-query-submit').click(function () {
@@ -629,7 +625,7 @@ $('#cri-breakpoint-query-submit').click(function () {
 });
 
 $breakpointContainer.on("click", "span.bpoint-remove", function () {
-    var bpointIndexToRemove = $(this).data('bpoint-index');
+    let bpointIndexToRemove = $(this).data('bpoint-index');
     reactiveBreakpointManager.removeBreakPointByIndex(bpointIndexToRemove);
 });
 
@@ -639,8 +635,8 @@ function applyNodeExtensions() {
 
 /* force focus on canvas on mouse over to enable ctrl capture on the canvas */
 $canvasContainer.on("mouseenter.focus", function () {
-    var scrollLeft = $document.scrollLeft();
-    var scrollTop = $document.scrollTop();
+    let scrollLeft = $document.scrollLeft();
+    let scrollTop = $document.scrollTop();
 
     this.focus();
 

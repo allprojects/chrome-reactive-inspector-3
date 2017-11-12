@@ -2,17 +2,16 @@
 // the inspectedPage and the dev tools panel.
 
 // channel is created when we open dev tool and move to our panel
-var _node = '';
-var currentAction = "";
-var tempNode = {
+let currentAction = "";
+let tempNode = {
     'type': '',
     'nodeName': '',
     'nodeId': '',
     'nodeValue': ''
 };
 
-var allNodes = [];
-var allEdges = [];
+let allNodes = [];
+let allEdges = [];
 
 (function createChannel() {
     console.log("creating channel in messaging js that is part of panel ");
@@ -184,7 +183,7 @@ function getOrDefault(newValue, defaultValue) {
     return newValue;
 }
 
-var isConfirmed = false;
+let isConfirmed = false;
 
 // this method is to capture all nodes and edges save the graph to the history.
 function saveStageAndAdvance(event) {
@@ -217,7 +216,7 @@ function saveStageAndAdvance(event) {
     return stageId;
 }
 
-var historyEntries = [];
+let historyEntries = [];
 
 function saveHistory(stageId, type, value) {
     if (type !== 'saveEdge') {
