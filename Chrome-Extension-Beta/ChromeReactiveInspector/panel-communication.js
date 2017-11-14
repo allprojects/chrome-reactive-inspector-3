@@ -144,8 +144,6 @@ let allEdges = [];
         g.setEdge(message.content.edgeStart, message.content.edgeEnd, {
             label: message.content.edgeLabel
         });
-        render(d3.select("svg g"), g);
-        applyRxRyAttribute();
 
         let stageId = saveStageAndAdvance("saveEdge");
         saveHistory(stageId, "saveEdge", message.content)
@@ -171,8 +169,6 @@ let allEdges = [];
 
     function handleRemoveEdge(message) {
         g.removeEdge(message.content.edgeStart, message.content.edgeEnd, message.content.edgeLabel);
-        render(d3.select("svg g"), g);
-        applyRxRyAttribute();
         let stageId = saveStageAndAdvance("saveEdge");
         saveHistory(stageId, "saveEdge", message.content)
     }

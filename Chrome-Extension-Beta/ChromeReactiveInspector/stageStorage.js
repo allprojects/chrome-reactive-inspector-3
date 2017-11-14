@@ -15,7 +15,10 @@ cri.stageStorage = (function (window) {
         });
 
         let operation = function (callBackQueue) {
-            chrome.storage.local.set(storageObject, callBackQueue);
+            chrome.storage.local.set(storageObject, function () {
+                console.log("cri: stored stages on disk.");
+                callBackQueue();
+            });
         };
 
         // set highest to storage as well in case the extension closes unexpectedly.
@@ -39,6 +42,7 @@ cri.stageStorage = (function (window) {
         let operation = function (callBackQueue) {
 
             chrome.storage.local.get(toRetrieve, function (items) {
+                console.log("cri: received stages from disk.");
                 let stages = [];
                 for (let key in items) {
                     if (!items.hasOwnProperty(key)) continue;
@@ -69,6 +73,7 @@ cri.stageStorage = (function (window) {
 
     function queueProgressCallback() {
         storageQueue.shift();
+        console.log("cri: storage operation completed. Remaining: " + storageQueue.length);
         if (storageQueue.length > 0) {
             storageQueue[0](queueProgressCallback);
         }
