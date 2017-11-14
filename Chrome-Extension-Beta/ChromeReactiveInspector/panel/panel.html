@@ -56,41 +56,17 @@
     </ul>
 </div>
 
-<div class="clearfix">
-    <h4 class="col-md-12 col-lg-12">Configuration</h4>
-    <div class="form-inline col-md-4 col-lg-4 col-sm-12 col-xs-12 bs-example">
-        <label for="cri-config-includes" class="col-sm-4 col-xs-4 col-md-6 col-lg-5 row">Instrument Files</label>
-        <div class="col-sm-8 col-xs-8 col-md-6 col-lg-7 pd-left-5">
-            <input id="cri-config-includes" class="row">
-        </div>
-    </div>
-    <hr class="hidden-lg hidden-md col-xs-12 col-sm-12 row">
-    <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12 row">
-        <div class="col-md-7 col-lg-7 col-sm-12 col-xs-12">
-            <div style="display: inline-block">
-                <input name="searchNode" placeholder="Type Node name" id="cri-node-search-val" class="form-control"
-                       style="max-width: 170px;">
-            </div>
-            <div class="dropdown" style="display: inline-block">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="featureType" data-toggle="dropdown">
-                    Select
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Search</a></li>
-                    <li><a href="#">Dependents</a></li>
-                    <li><a href="#">Dependencies</a></li>
-                </ul>
-            </div>
-            <button id="cri-find-btn" class="btn" style="display: inline-block" type="button">Find</button>
-        </div>
+<div class="clearfix" style="margin: 5px">
+    <h4 class="col-lg-2 col-md-2 col-sm-12 col-xs-12">Instrument Files</h4>
+    <div class="col-md-10 col-lg-10 col-sm-12 col-xs-12 pd-left-5">
+        <input id="cri-config-includes" type="text" class="form-control"/>
     </div>
 </div>
 <hr>
 
 <div class="cri-helpers-wrapper col-md-12 col-lg-12 clearfix">
-    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12 row">
-        <h4>History Queries</h4>
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 row">
+        <h4 class="col-sm-12 col-xs-12">History Queries</h4>
         <div class="col-md-6 col-lg-6 col-xs-6 row">
             <select class="form-control cri-findnode-select" id="cri-findnode-select">
                 <option value="nodeCreated">nodeCreated[nodeName]</option>
@@ -109,11 +85,10 @@
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
         </div>
-        <hr class="hidden-lg hidden-md col-xs-12 col-sm-12 row">
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 row">
-        <div class="col-md-8 col-lg-8 col-sm-8 col-xs-8 row">
-            <h4>Reactive Breakpoints</h4>
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 row">
+        <h4>Reactive Breakpoints</h4>
+        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 row">
             <div class="col-md-9 col-lg-11 col-xs-10 col-sm-10 row">
                 <select class="form-control cri-breakpoint-select" id="cri-breakpoint-select">
                     <option>nodeCreated[nodeId]</option>
@@ -128,6 +103,27 @@
         </div>
         <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
             <div id="cri-breakpoints-container"></div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 row">
+        <h4 class="col-sm-12 col-xs-12">Search</h4>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 row">
+            <input name="searchNode" placeholder="Type Node name" id="cri-node-search-val" class="form-control"
+                   style="max-width: 170px;">
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="dropdown" style="display: inline-block">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="featureType" data-toggle="dropdown">
+                    Select
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Search</a></li>
+                    <li><a href="#">Dependents</a></li>
+                    <li><a href="#">Dependencies</a></li>
+                </ul>
+            </div>
+            <button id="cri-find-btn" class="btn" style="display: inline-block" type="button">Find</button>
         </div>
     </div>
 </div>

@@ -187,17 +187,15 @@ function applyRxRyAttribute() {
     $canvasRects.attr("ry", "5");
 }
 
-let configIncludeFilesField = $('#cri-config-includes');
+let $configIncludeFilesField = $('#cri-config-includes');
 let previousConfigFiles = [];
 let threshold = '';
 let configRecStatusButton = document.getElementById('cri-rec-status');
 // (function () {
 // populate
 chrome.storage.sync.get('criconfigincludes', function (items) {
-    // console.log("config from storage");
-    // console.log(items.criconfigincludes);
     previousConfigFiles = items.criconfigincludes || [];
-    configIncludeFilesField.value = $('#cri-config-includes').tokenfield('setTokens', items.criconfigincludes) || '';
+    $configIncludeFilesField.value = $configIncludeFilesField.tokenfield('setTokens', items.criconfigincludes) || '';
 });
 chrome.storage.sync.get('cri_config_rec_status', function (items) {
     if (items.cri_config_rec_status !== undefined) {
@@ -220,7 +218,7 @@ chrome.storage.sync.get('thresholdValue', function (items) {
     threshold = items.thresholdValue;
 });
 
-configIncludeFilesField
+$configIncludeFilesField
     .on('tokenfield:createtoken', function (e) {
         setCricConfigFiles(1, e.attrs.value)
     })
@@ -245,8 +243,6 @@ function setCricConfigFiles(val, fileName) {
     });
 }
 
-
-configIncludeFilesField.tokenfield();
 /**
  * This method is called whenever the user clicks on 'Pause' or 'Start' recording button.
  */
