@@ -10,9 +10,17 @@ cri.stageStorage = (function (window) {
         let storageObject = {};
         let oldHighest = highestId;
         stages.forEach(function (s) {
-            storageObject["stage" + s.id] = s;
-            if (s.id > highestId) highestId = s.id;
+            if (s.id > highestId) {
+                highestId = s.id;
+                storageObject["stage" + s.id] = s;
+            }
+            // no need to save if id is not new
         });
+
+        // abort if all stages have been saved previously
+        if (Object.keys(storageObject).length === 0) {
+            return;
+        }
 
         let operation = function (callBackQueue) {
             chrome.storage.local.set(storageObject, function () {
