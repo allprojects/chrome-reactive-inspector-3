@@ -88,6 +88,9 @@ cri.graphHistory = (function (window) {
         console.log("cri: history cleared")
     };
 
+    // if Stage should get a real prototype sometime, be sure to go to stageStorage.loadFromDisk
+    // and comment in the initialization of the stages with the correct type. Currently all stages are
+    // just key:value collections after loading.
     function Stage(id, event, nodes, edges) {
         this.id = id;
         this.event = event;

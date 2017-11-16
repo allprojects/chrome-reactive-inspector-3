@@ -57,9 +57,16 @@ cri.stageStorage = (function (window) {
 
                     let stage = items[key];
                     if (typeof stage !== "undefined") {
+                        /* # Comment in if loaded stage objects should be of type cri.graphHistory.Stage
+                           # currently not necessary, because cri.graphHistory.Stage has no prototype.
+                        let typedStage = Object.create(cri.graphHistory.Stage, stage);
+                        stages.push(typedStage);
+                        */
                         stages.push(stage);
                     }
                 }
+                // release items storage, because due to the callback chains it may be kept longer than necessary
+                items = {};
                 callback(stages);
                 callBackQueue();
             });
