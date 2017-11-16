@@ -28,14 +28,18 @@ cri.instrumentor = (function (window) {
     if (shouldReactiveDebuggerRun === false) {
         return;
     }
+
+    let scriptNames = [];
+
     /**     SEQUENTIAL Loader Start    ***/
     //Sequential loader To get all scripts and insert in document after instrumentation
     // script can be with source or without source (in page JS code)
-    setTimeout(function next(index) {
 
+    function next(index, finishedCallback) {
         let script = document.scripts[index];
         if (script === null || script === undefined) {
-            //return setTimeout(callback, 0);
+            // all scripts handled now
+            finishedCallback();
             return false;
         }
 
@@ -44,12 +48,17 @@ cri.instrumentor = (function (window) {
             let code = instrumentInline(index, script.textContent);
             executeInContext(code);
             fileReadOver = true;
-            setTimeout(next, 0, ++index);
+            setTimeout(next, 0, ++index, finishedCallback);
             return;
         }
 
         // if script tag contain source file
+
         let filename = script.getAttribute('src').replace(/^.*[\\\/]/, '');
+        if (filesShouldNotInclude.indexOf(filename) === -1) {
+            // prevents Rx.js etc. to show up in suggestions
+            scriptNames.push(filename);
+        }
 
         let request = new XMLHttpRequest();
         request.open('GET', script.getAttribute('src'));
@@ -57,7 +66,7 @@ cri.instrumentor = (function (window) {
 
             // check if file should be included
             if (filesShouldNotInclude.indexOf(filename) !== -1) {
-                setTimeout(next, 0, ++index);
+                setTimeout(next, 0, ++index, finishedCallback);
                 return;
             }
 
@@ -66,7 +75,6 @@ cri.instrumentor = (function (window) {
 
                 // check if file should be instrumented. If setting is not set, instrument all files.
                 if (filesToInstrument === false || _.contains(filesToInstrument, filename)) {
-
 
                     chrome.storage.sync.get('developerMode', function (items) {
                         let developerMode = items.developerMode;
@@ -77,17 +85,25 @@ cri.instrumentor = (function (window) {
                         fileReadOver = true;
 
                         // next
-                        setTimeout(next, 0, ++index);
+                        setTimeout(next, 0, ++index, finishedCallback);
                     });
                 } else {
                     executeInContext(request.responseText);
                     // next
-                    setTimeout(next, 0, ++index);
+                    setTimeout(next, 0, ++index, finishedCallback);
                 }
             });
         };
         request.send(null);
-    }, 0, 0);
+    }
+
+    // iterate scripts and execute sequentially
+    setTimeout(next, 0, 0, function () {
+        cri.sendObjectToDevTools({
+            content: {names: scriptNames},
+            action: "scriptNames", destination: "panel"
+        });
+    });
 
     /**     SEQUENTIAL Loader End    ***/
 

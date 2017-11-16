@@ -50,6 +50,9 @@ let allEdges = [];
             case "removeEdge":
                 handleRemoveEdge(message);
                 break;
+            case "scriptNames":
+                handleScriptNames(message);
+                break;
             default:
                 console.warn("Unknown message received. '" + message.action + "' is not implemented. (panel)");
         }
@@ -171,6 +174,23 @@ let allEdges = [];
         g.removeEdge(message.content.edgeStart, message.content.edgeEnd, message.content.edgeLabel);
         let stageId = saveStageAndAdvance("saveEdge");
         saveHistory(stageId, "saveEdge", message.content)
+    }
+
+    function handleScriptNames(message) {
+        let scriptNames = message.content.names;
+        chrome.storage.sync.get('criconfigincludes', function (items) {
+            let includes = items.criconfigincludes;
+
+            previousConfigFiles = includes || [];
+            $configIncludeFilesField.tokenfield({
+                tokens: includes,
+                autocomplete: {
+                    source: scriptNames,
+                    delay: 100
+                },
+                showAutocompleteOnFocus: true
+            });
+        });
     }
 }());
 

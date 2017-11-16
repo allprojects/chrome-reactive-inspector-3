@@ -193,10 +193,6 @@ let threshold = '';
 let configRecStatusButton = document.getElementById('cri-rec-status');
 // (function () {
 // populate
-chrome.storage.sync.get('criconfigincludes', function (items) {
-    previousConfigFiles = items.criconfigincludes || [];
-    $configIncludeFilesField.value = $configIncludeFilesField.tokenfield('setTokens', items.criconfigincludes) || '';
-});
 chrome.storage.sync.get('cri_config_rec_status', function (items) {
     if (items.cri_config_rec_status !== undefined) {
         let recStatusFromStorage = items.cri_config_rec_status;
@@ -224,8 +220,7 @@ $configIncludeFilesField
     })
     .on('tokenfield:removedtoken', function (e) {
         setCricConfigFiles(0, e.attrs.value)
-    })
-    .tokenfield();
+    });
 
 function setCricConfigFiles(val, fileName) {
     if (val) {
