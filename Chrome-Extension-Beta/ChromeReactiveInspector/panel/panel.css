@@ -250,3 +250,7 @@ hr {
 #menu-bar .submenu:hover .submenu-content {
     display: block;
 }
+
+#dependency-graph-header {
+    position: absolute;
+}

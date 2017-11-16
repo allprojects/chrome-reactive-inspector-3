@@ -75,9 +75,10 @@ let initialiseGraph = function () {
 };
 
 initialiseGraph();
+
 // Set up zoom support
 let zoom = d3.behavior.zoom()
-    .translate([0, 0])
+    .translate([20, 70])
     .scale(1)
     .scaleExtent([-8, 8])
     .on('zoom', zoomed);
