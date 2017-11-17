@@ -1,19 +1,41 @@
 var cri = cri || {};
 
 cri.graphHistory = (function (window) {
-    const cacheSize = 60;
+    const cacheMax = 5;
+    const cacheMin = 2;
+    const deltaWindowSize = 10;
 
     function History() {
         this.nextStageId = 0;
         this.storage = [];
-        this.storageOffset = 1;
+        this.currentBase = null;
+        this.currentStageId = 0;
     }
 
     cri.stageStorage.initialize();
 
-    History.prototype.saveStage = function (graph, event) {
+    History.prototype.saveStage = function (graph, change) {
+        // its very important to keep this function fast, because it will directly affect the recording
+
         let stageId = ++this.nextStageId;
 
+        if (isBaseStageId(stageId)) {
+            let stage = new BaseStage(createStage(stageId, graph));
+            this.currentBase = stage;
+            this.storage.push(stage);
+        } else {
+            this.currentBase.deltas.push(new DeltaStage(change));
+        }
+
+        if (this.storage.length > cacheMax) {
+            let toPersist = this.storage.splice(0, this.storage.length - cacheMin);
+            cri.stageStorage.storeOnDisk(toPersist);
+        }
+        this.currentStageId = stageId;
+        return stageId;
+    };
+
+    function createStage(id, graph) {
         let edges = _.map(graph.edges(), function (e) {
             return new Edge(e.v, e.w, graph.edge(e).label);
         });
@@ -29,52 +51,82 @@ cri.graphHistory = (function (window) {
             return uiNode;
         });
 
-        let stage = new Stage(stageId, event, nodes, edges);
+        return new Stage(id, nodes, edges);
+    }
 
-        this.storage.push(stage);
-        if (this.storage.length > cacheSize) {
-            let toPersist = this.storage.splice(0, cacheSize / 2);
-            cri.stageStorage.storeOnDisk(toPersist);
-            this.storageOffset = this.storage[0].id;
-        }
-        return stageId;
-    };
+    function isBaseStageId(id) {
+        return (id - 1) % deltaWindowSize === 0;
+    }
 
+    function getBaseIndex(id) {
+        return Math.floor((id - 1) / deltaWindowSize);
+    }
+
+    function belongsToBase(stageId, baseStageId) {
+        return getBaseIndex(stageId) === getBaseIndex(baseStageId);
+    }
+
+    /**
+     * Calls the callback with a restored graph
+     * @param stageId
+     * @param callback
+     */
     History.prototype.loadStage = function (stageId, callback) {
         let self = this;
-        if (stageId < this.storageOffset || stageId > this.storageOffset + this.storage.length - 1) {
-            let lowerBounds = stageId - cacheSize / 2;
-            if (lowerBounds < 1) {
-                lowerBounds = 1;
-            }
 
-            let upperBounds = stageId + cacheSize / 2;
-            if (upperBounds >= this.nextStageId) {
-                upperBounds = this.nextStageId;
-
-                if (upperBounds - lowerBounds >= cacheSize - 10) {
-                    // increase lower bounds to prevent instant need to reload from disk if a new step is generated,
-                    // but only increase if a (nearly) full cache is to be loaded.
-                    lowerBounds += 10;
-                }
-            }
-
-            // stage is not in cache, retrieve a block from local disk where the requested stage is in the middle
-            cri.stageStorage.storeOnDisk(this.storage);
-            cri.stageStorage.loadFromDisk(lowerBounds, upperBounds, function (stages) {
-                self.storage = stages;
-                self.storageOffset = self.storage[0].id;
-                callback(_.find(self.storage, function (s) {
-                    return s.id === stageId;
-                }));
+        if (isBaseStageId(stageId)) {
+            // case: is base id, so always load
+            loadBaseStage(this, stageId, function () {
+                callback(self.currentBase.stage, null);
             });
+        } else if (belongsToBase(stageId, this.currentBase.stage.id)) {
+            let deltaOffset = this.currentBase.deltas.slice(0, (stageId - 1) % deltaWindowSize);
+            if (this.currentStageId < stageId) {
+                // case: direction is forward and the requested stageId is not a base stage. just apply changes
+                callback(null, deltaOffset)
+            } else {
+                // case: direction is NOT forward, but the requested stageId belongs to the current base stage
+                callback(this.currentBase.stage, deltaOffset)
+            }
         } else {
-            // stage is in storage so just return it
-            callback(_.find(this.storage, function (s) {
-                return s.id === stageId;
-            }));
+            // case: not base and not the current
+            loadBaseStage(this, getBaseIndex(stageId) * deltaWindowSize + 1, function () {
+                callback(self.currentBase.stage, self.currentBase.deltas.slice(0, (stageId - 1) % deltaWindowSize));
+            });
         }
     };
+
+    function loadBaseStage(self, stageId, callback) {
+
+        let isInStorage = _.find(self.storage, function (base) {
+            return base.stage.id === stageId;
+        });
+
+        if (isInStorage) {
+            self.currentBase = isInStorage;
+            callback();
+        } else {
+            let baseIndex = getBaseIndex(stageId);
+            let lower = baseIndex - Math.floor(cacheMax / 2);
+            let upper = baseIndex + Math.floor(cacheMax / 2);
+            let highest = getBaseIndex(this.highestStageId);
+
+            if (lower < 0) {
+                lower = 0;
+                upper = highest > cacheMax ? cacheMax : highest;
+            } else if (upper > highest) {
+                upper = highest;
+            }
+
+            cri.stageStorage.loadFromDisk(lower, upper, function (baseStages) {
+                self.storage = baseStages;
+                self.currentBase = _.find(self.storage, function (base) {
+                    return base.stage.id === stageId;
+                });
+                callback();
+            });
+        }
+    }
 
     History.prototype.getStageCount = function () {
         return this.nextStageId;
@@ -83,7 +135,7 @@ cri.graphHistory = (function (window) {
     History.prototype.clear = function () {
         this.nextStageId = 0;
         this.storage = [];
-        this.storageOffset = 1;
+        this.currentBase = null;
         cri.stageStorage.clear();
         console.log("cri: history cleared")
     };
@@ -91,11 +143,22 @@ cri.graphHistory = (function (window) {
     // if Stage should get a real prototype sometime, be sure to go to stageStorage.loadFromDisk
     // and comment in the initialization of the stages with the correct type. Currently all stages are
     // just key:value collections after loading.
-    function Stage(id, event, nodes, edges) {
+    function Stage(id, nodes, edges) {
         this.id = id;
-        this.event = event;
         this.nodes = nodes;
         this.edges = edges;
+    }
+
+    function BaseStage(stage) {
+        this.stage = stage;
+        this.deltas = [];
+    }
+
+    function DeltaStage(change) {
+        // used for easy check if an object is a delta stage. This is useful, because serialization will
+        // recreate objects without a linked prototype.
+        this.isDelta = true;
+        this.change = change;
     }
 
     function Edge(from, to, label) {

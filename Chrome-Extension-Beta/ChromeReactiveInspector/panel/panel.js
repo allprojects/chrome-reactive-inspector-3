@@ -8,8 +8,9 @@ $document.ready(function () {
 });
 
 $(".dropdown-menu li a").click(function () {
-    $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
-    $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+    $(this).parents(".dropdown").find('.btn')
+        .html($(this).text() + ' <span class="caret"></span>')
+        .val($(this).data('value'));
 });
 
 let $dialog = $("#dialog").hide();
@@ -44,37 +45,19 @@ $dialog.dialog({
     }
 });
 
-let g = '';
-let render = new dagreD3.render();
-let svg = '';
-let svgGroup = '';
-let inner = '';
-
 let $canvasContainer = $("#canvas-container");
+let $graphContainer = $("#svg-canvas");
+
 let tooltipManager = new cri.TooltipManager($canvasContainer);
 let history = new cri.graphHistory.History();
+let graphManager = new cri.dependencyGraph.GraphManager($graphContainer, history,
+    function () { // after changed callback
+        tooltipManager.initializeTooltips(d3.selectAll("svg g.node"));
+    }, function () { // after reset callback
+        historyEntries = [];
+        isConfirmed = false
+    });
 
-let initialiseGraph = function () {
-    // Create the input graph
-    g = new dagreD3.graphlib.Graph()
-        .setGraph({rankdir: "LR"})
-        .setDefaultEdgeLabel(function () {
-            return {};
-        });
-
-    // Set up an SVG group so that we can translate the final graph.
-    inner = d3.select("svg g");
-    if (inner.size() === 1) {
-        // clear previous nodes
-        inner.html(null);
-    } else {
-        svg = d3.select("svg");
-        svgGroup = svg.append("g");
-        inner = svg.select("g");
-    }
-};
-
-initialiseGraph();
 
 // Set up zoom support
 let zoom = d3.behavior.zoom()
@@ -83,18 +66,15 @@ let zoom = d3.behavior.zoom()
     .scaleExtent([-8, 8])
     .on('zoom', zoomed);
 
-svg.call(zoom) // delete this line to disable free zooming
+d3.select("svg").call(zoom) // delete this line to disable free zooming
     .call(zoom.event);
 
 function zoomed() {
-    inner.attr("transform",
+    graphManager.$graphElement.attr("transform",
         "translate(" + zoom.translate() + ")" +
         "scale(" + zoom.scale() + ")"
     );
 }
-
-// Run the renderer. This is what draws the final graph.
-render(d3.select("svg g"), g);
 
 /**
  * Slider to navigate the steps in the dependency graph.
@@ -108,7 +88,7 @@ let rxSlider = $("#slider")
             // The delay is smaller than the delay for graph updates via the slider,
             // because the buttons allow for a much more fine grained navigation in big graphs.
             $('.ui-slider-handle').text(ui.value);
-            redrawGraphFromUI(ui.value);
+            drawStageFromUI(ui.value);
         },
         slide: function (event, ui) {
             $('.ui-slider-handle').text(ui.value);
@@ -117,22 +97,19 @@ let rxSlider = $("#slider")
     })
     .slider("pips");
 
-let debouncedRedrawGraph = _.debounce(redrawGraphFromUI, 250);
-let lastDrawnStep = null;
+let debouncedRedrawGraph = _.debounce(drawStageFromUI, 250);
 
 /**
  * Prevent unnecessary redraws of the dependency graph.
- * This catches debounced calls from causing a redraw for a single stage twice.
- * @param stage
+ * This catches debounced calls from causing a redraw for a single stageId twice.
+ * @param stageId
  */
-function redrawGraphFromUI(stage) {
+function drawStageFromUI(stageId) {
 
-    if (lastDrawnStep !== null && lastDrawnStep === stage) {
+    if (graphManager.currentStage !== null && graphManager.currentStage === stageId) {
         return;
     }
-
-    lastDrawnStep = stage;
-    redrawGraphToStage(stage);
+    graphManager.drawStage(stageId);
 }
 
 // slider controls
@@ -147,46 +124,6 @@ rxSlider.slider("option", "min", 0);
 rxSlider.slider("option", "max", 0);
 rxSlider.slider("option", "value", 0);
 rxSlider.slider("pips", "refresh");
-let _node = '';
-
-// This method redraw dependency graph to given stage
-function redrawGraphToStage(stageToRedraw) {
-
-
-    // get data for asked stage
-    if (stageToRedraw) {
-        history.loadStage(stageToRedraw, function (stage) {
-            // initialize here and not earlier to prevent flickering of the ui if the loading takes a few milliseconds.
-            initialiseGraph();
-
-            stage.nodes.forEach(function (node) {
-                g.setNode(node.nodeId, node);
-            });
-
-            stage.edges.forEach(function (edge) {
-                g.setEdge(edge.from, edge.to, {label: edge.label ? edge.label : ""});
-            });
-
-            // draw graph with asked stage data
-            render(d3.select("svg g"), g);
-            applyRxRyAttribute();
-            applyNodeExtensions();
-        });
-    } else {
-        initialiseGraph();
-
-        // draw graph with asked stage data
-        render(d3.select("svg g"), g);
-        applyRxRyAttribute();
-        applyNodeExtensions();
-    }
-}
-
-function applyRxRyAttribute() {
-    let $canvasRects = $("#svg-canvas").find("rect");
-    $canvasRects.attr("rx", "5");
-    $canvasRects.attr("ry", "5");
-}
 
 let $configIncludeFilesField = $('#cri-config-includes');
 let previousConfigFiles = [];
@@ -277,19 +214,13 @@ function setCriStatus(element, status) {
 
 // Reset everything
 $("#cri-reset").click(function () {
-    d3.selectAll("svg g").remove();
-    initialiseGraph();
+    graphManager.clearGraph();
 
     //2 reset step slider
     rxSlider.slider("option", "min", 0);
     rxSlider.slider("option", "max", 0);
     rxSlider.slider("option", "value", 0);
     rxSlider.slider("pips", "refresh");
-
-    // remove saved data
-    history.clear();
-    historyEntries = [];
-    isConfirmed = false
 });
 
 $('#cri-download-graph').click(function () {
@@ -337,14 +268,17 @@ setSearchNode();
 
 let nodeFound = false;
 $("#cri-node-search-val").on('change keyup paste', function () {
-    //TODO: if keyup and blur right after, this will fire twice with same values
+    //TODO: if keyup and blur right after, this may fire twice with same values
     // same for paste + blur
     if (!searchNode) {
         setSearchNode();
     }
+    //TODO: check if this resets the search correctly.
     let searchNodeVal = searchNode.val();
     if (searchNodeVal === '') {
-        redrawGraphToStage(rxSlider.slider('value'))
+        // resets all search styles etc.
+        //TODO: make search solely with css instead of resetting the data.
+        graphManager.drawStage(graphManager.currentStage);
     }
     searchNode.removeClass('error');
 });
@@ -373,16 +307,12 @@ function searchNodeFunction() {
         });
         if (nodeFound) {
             searchNode.removeClass('error');
-            render(d3.select("svg g"), g);
-            let $rect = $("#svg-canvas rect");
-            $rect.attr("rx", "5");
-            $rect.attr("ry", "5");
+            graphManager.reRender();
         } else {
             searchNode.addClass('error');
         }
-
     } else {
-        redrawGraphToStage(rxSlider.slider('value'));
+        graphManager.drawStage(graphManager.currentStage);
     }
 }
 
@@ -462,10 +392,7 @@ function dependency(type) {
             node.class = node.class.replace(/highlight/g, '') + ' fade';
         }
     });
-    render(d3.select("svg g"), g);
-    let $rect = $("#svg-canvas rect");
-    $rect.attr("rx", "5");
-    $rect.attr("ry", "5");
+    graphManager.reRender();
 }
 
 /**
@@ -497,7 +424,7 @@ $('#cri-history-query-submit').click(function () {
                         return history.stageId;
                 });
                 if (stage.length) {
-                    redrawGraphToStage(stage[0].stageId);
+                    graphManager.drawStage(stage[0].stageId);
                     rxSlider.slider('value', stage[0].stageId, rxSlider.slider("option", "step"));
                     $("#cri-history-current-step").text(1);
                     $("#cri-history-last-step").text(stage.length);
@@ -509,7 +436,7 @@ $('#cri-history-query-submit').click(function () {
                     return history.stageId;
             });
             if (stage.length) {
-                redrawGraphToStage(stage[0].stageId);
+                graphManager.drawStage(stage[0].stageId);
                 rxSlider.slider('value', stage[0].stageId, rxSlider.slider("option", "step"));
                 $("#cri-history-current-step").text(1);
                 $("#cri-history-last-step").text(stage.length);
@@ -522,7 +449,7 @@ $('#cri-history-query-submit').click(function () {
                 }
             });
             if (stage.length) {
-                redrawGraphToStage(stage[0].stageId);
+                graphManager.drawStage(stage[0].stageId);
                 rxSlider.slider('value', stage[0].stageId, rxSlider.slider("option", "step"));
                 $("#cri-history-current-step").text(1);
                 $("#cri-history-last-step").text(stage.length);
@@ -572,7 +499,7 @@ $('#cri-history-query-submit').click(function () {
             }
 
             if (result) {
-                redrawGraphToStage(result.stageId);
+                graphManager.drawStage(result.stageId);
                 rxSlider.slider('value', result.stageId, rxSlider.slider("option", "step"));
                 $("#cri-history-current-step").text(1);
                 $("#cri-history-last-step").text(1);
@@ -587,7 +514,7 @@ $('#cri-history-query-prev').click(function () {
     if (stage && stage.length && nextStepToAccess > -1) {
         let firstFoundStageId = stage[nextStepToAccess].stageId;
         rxSlider.slider('value', firstFoundStageId, rxSlider.slider("option", "step"));
-        redrawGraphToStage(firstFoundStageId);
+        graphManager.drawStage(firstFoundStageId);
         $("#cri-history-current-step").text(nextStepToAccess + 1);
     }
 });
@@ -598,7 +525,7 @@ $('#cri-history-query-next').click(function () {
     if (stage && (stage.length > 1) && stage.length > nextStepToAccess) {
         let firstFoundStageId = stage[nextStepToAccess].stageId;
         rxSlider.slider('value', firstFoundStageId, rxSlider.slider("option", "step"));
-        redrawGraphToStage(firstFoundStageId);
+        graphManager.drawStage(firstFoundStageId);
         $("#cri-history-current-step").text(nextStepToAccess + 1);
     }
 });
@@ -621,11 +548,7 @@ $breakpointContainer.on("click", "span.bpoint-remove", function () {
     reactiveBreakpointManager.removeBreakPointByIndex(bpointIndexToRemove);
 });
 
-function applyNodeExtensions() {
-    tooltipManager.initializeTooltips(svg.selectAll("g.node"));
-}
-
-/* force focus on canvas on mouse over to enable ctrl capture on the canvas */
+/* force focus on canvas on mouse over to enable ctrl capture on the canvas used in code tooltips */
 $canvasContainer.on("mouseenter.focus", function () {
     let scrollLeft = $document.scrollLeft();
     let scrollTop = $document.scrollTop();

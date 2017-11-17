@@ -59,6 +59,7 @@ let allEdges = [];
     });
 
     function handleLoading() {
+        graphManager.clearGraph();
         if (rxSlider) {
             rxSlider.slider("option", "min", 0);
             rxSlider.slider("option", "max", 0);
@@ -67,10 +68,6 @@ let allEdges = [];
         } else {
             console.log("cri: rxSlider was not initialized yet!");
         }
-        initialiseGraph();
-        history.clear();
-        historyEntries = [];
-        isConfirmed = false;
         // chrome.storage.sync.get('cri_config_rec_status', function (items) {
         //     if (items.cri_config_rec_status !== undefined) {
         //         if (!items.cri_config_rec_status) {
@@ -83,7 +80,7 @@ let allEdges = [];
     function handleSaveNode(message) {
         let id = message.content.nodeId;
         let node = {};
-        let previousNode = g.node(id);
+        let previousNode = graphManager.graph.node(id);
 
         if (previousNode !== undefined) {
             // node already existed
@@ -120,13 +117,13 @@ let allEdges = [];
         node.label = getNodeLabel(id, node.ref, truncatedVal);
 
         // clear current from previous nodes
-        _.each(g.nodes(), function (n) {
-            let node = g.node(n);
+        _.each(graphManager.graph.nodes(), function (n) {
+            let node = graphManager.graph.node(n);
             // replace class on graph node, not just via DOM to make it persistent
             node.class = node.class.replace(/current/g, "");
         });
 
-        g.setNode(id, node);
+        graphManager.graph.setNode(id, node);
 
         // update tempNode
         tempNode.type = previousNode !== undefined ? 'nodeUpdated' : 'nodeCreated';
@@ -135,7 +132,7 @@ let allEdges = [];
         tempNode.nodeValue = truncatedVal;
 
         // capture current dependency graph
-        let stageId = saveStageAndAdvance(currentAction);
+        let stageId = saveStageAndAdvance(currentAction, node);
         saveHistory(stageId, currentAction, tempNode);
     }
 
@@ -144,11 +141,11 @@ let allEdges = [];
             console.error("Tried to save edge with start or end not set.");
         }
 
-        g.setEdge(message.content.edgeStart, message.content.edgeEnd, {
+        graphManager.graph.setEdge(message.content.edgeStart, message.content.edgeEnd, {
             label: message.content.edgeLabel
         });
 
-        let stageId = saveStageAndAdvance("saveEdge");
+        let stageId = saveStageAndAdvance("saveEdge", message.content);
         saveHistory(stageId, "saveEdge", message.content)
     }
 
@@ -171,9 +168,9 @@ let allEdges = [];
     }
 
     function handleRemoveEdge(message) {
-        g.removeEdge(message.content.edgeStart, message.content.edgeEnd, message.content.edgeLabel);
-        let stageId = saveStageAndAdvance("saveEdge");
-        saveHistory(stageId, "saveEdge", message.content)
+        graphManager.graph.removeEdge(message.content.edgeStart, message.content.edgeEnd, message.content.edgeLabel);
+        let stageId = saveStageAndAdvance("removeEdge", message.content);
+        saveHistory(stageId, "removeEdge", message.content)
     }
 
     function handleScriptNames(message) {
@@ -204,8 +201,8 @@ function getOrDefault(newValue, defaultValue) {
 let isConfirmed = false;
 
 // this method is to capture all nodes and edges save the graph to the history.
-function saveStageAndAdvance(event) {
-    let stageId = history.saveStage(g, event);
+function saveStageAndAdvance(event, data) {
+    let stageId = history.saveStage(g, _.extend({event: event}, data));
 
     let lastStageId = history.getStageCount();
 

@@ -4,7 +4,7 @@ cri.stageStorage = (function (window) {
 
     let storageQueue = [];
     // used to remember what to delete on clear()
-    let highestId = 0;
+    let highestId = -1;
 
     function storeOnDisk(stages) {
         let storageObject = {};
@@ -111,7 +111,7 @@ cri.stageStorage = (function (window) {
     function initialize() {
         // clean up local storage
         chrome.storage.local.get({highestStageId: null}, function (items) {
-            if (!items.highestStageId) return;
+            if (typeof items.highestStageId === "undefined" || items.highestStageId === -1) return;
             clearUpTo(items.highestStageId);
             chrome.storage.local.remove("highestStageId");
         });
