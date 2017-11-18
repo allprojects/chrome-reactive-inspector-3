@@ -56,18 +56,17 @@
     </ul>
 </div>
 
-<div class="clearfix" style="margin: 5px">
-    <h4 class="col-lg-2 col-md-2 col-sm-12 col-xs-12">Instrument Files</h4>
-    <div class="col-md-10 col-lg-10 col-sm-12 col-xs-12 pd-left-5">
-        <input id="cri-config-includes" type="text" class="form-control"/>
-    </div>
+<div class="clearfix flex-container" style="margin: 5px">
+    <h4>Instrument Files</h4>
+    <input id="cri-config-includes" type="text" class="form-control"/>
 </div>
+
 <hr>
 
-<div class="cri-helpers-wrapper col-md-12 col-lg-12 clearfix">
-    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 row">
-        <h4 class="col-sm-12 col-xs-12">History Queries</h4>
-        <div class="col-md-6 col-lg-6 col-xs-6 row">
+<div class="clearfix flex-container">
+    <div class="flex-child-centered flex-container">
+        <h4>History Queries</h4>
+        <div>
             <select class="form-control cri-findnode-select" id="cri-findnode-select">
                 <option value="nodeCreated">nodeCreated[nodeName]</option>
                 <option value="nodeUpdated">nodeUpdated[nodeName]</option>
@@ -75,7 +74,7 @@
                 <option value="dependencyCreated">dependencyCreated[nodeName][nodeName]</option>
             </select>
         </div>
-        <div class="col-md-6 col-lg-6 col-xs-6">
+        <div>
             <button type="button" class="btn" id="cri-history-query-submit">Submit Query</button>
             <span id="cri-history-current-step">0</span>/<span id="cri-history-last-step">0</span>
             <button type="button" id="cri-history-query-prev" class="btn btn-default btn-sm">
@@ -86,10 +85,10 @@
             </button>
         </div>
     </div>
-    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 row">
+    <div class="flex-child-centered flex-container">
         <h4>Reactive Breakpoints</h4>
-        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 row">
-            <div class="col-md-9 col-lg-11 col-xs-10 col-sm-10 row">
+        <div>
+            <div>
                 <select class="form-control cri-breakpoint-select" id="cri-breakpoint-select">
                     <option>nodeCreated[nodeId]</option>
                     <option>nodeUpdated[nodeId]</option>
@@ -97,21 +96,21 @@
                     <option>dependencyCreated[nodeId][nodeId]</option>
                 </select>
             </div>
-            <div class="col-md-1 col-lg-1 col-xs-2 col-sm-2">
+            <div>
                 <button type="button" class="btn" id="cri-breakpoint-query-submit">Add</button>
             </div>
         </div>
-        <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+        <div>
             <div id="cri-breakpoints-container"></div>
         </div>
     </div>
-    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 row">
-        <h4 class="col-sm-12 col-xs-12">Search</h4>
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 row">
+    <div class="flex-child-centered flex-container">
+        <h4>Search</h4>
+        <div>
             <input name="searchNode" placeholder="Type Node name" id="cri-node-search-val" class="form-control"
                    style="max-width: 170px;">
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div>
             <div class="dropdown" style="display: inline-block">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="featureType" data-toggle="dropdown">
                     Select
@@ -127,29 +126,29 @@
         </div>
     </div>
 </div>
-<hr class="col-lg-12 col-md-12 col-xs-12 col-sm-12 row">
+<hr>
 
-<div class="col-md-12 col-lg-12 clearfix">
+<div class="clearfix">
     <h4>History Navigator</h4>
-    <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 row">
-        <div class="col-lg-1 col-md-1 col-xs-1 pd-left-0" style="width: 5%;">
+    <div class="flex-container">
+        <div class="flex-child-centered">
             <button type="button" id="up" class="btn btn-default btn-sm">
                 <span class="glyphicon glyphicon glyphicon-chevron-left"></span>
             </button>
         </div>
-        <div class="column-center col-md-10 col-lg-10 col-xs-10" style="width: 90%;">
+        <div style="width: 90%; margin: 10px 10px 0 10px">
             <div id="slider"></div>
         </div>
-        <div class="col-lg-1 col-md-1 pd-right-0 col-xs-1" style="width: 5%;">
+        <div class="flex-child-centered">
             <button type="button" id="down" class="btn btn-default btn-sm">
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
         </div>
     </div>
 </div>
-<hr class="col-lg-12 col-md-12 col-xs-12 col-sm-12 row">
+<hr>
 <!-- canvas-container needs tabindex to receive key events -->
-<div class="col-md-12 col-lg-12" id="canvas-container" tabindex="0">
+<div id="canvas-container" tabindex="0">
     <h4 id="dependency-graph-header">Dependency Graph</h4>
     <svg id="svg-canvas" width="100%"></svg>
     <div class="tooltip" id="cri-node-tooltip" style=""></div>
