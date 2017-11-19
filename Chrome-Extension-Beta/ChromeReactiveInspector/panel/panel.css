@@ -254,3 +254,38 @@ hr {
 #dependency-graph-header {
     position: absolute;
 }
+
+.flex-container {
+    display: flex;
+
+}
+
+.flex-centered {
+    align-items: center;
+}
+
+.flex-child-centered {
+    margin: auto;
+}
+
+.flex-align-baseline {
+    align-items: baseline;
+}
+
+.flex-item-container {
+    display: flex;
+    align-items: baseline;
+}
+
+.flex-item-container > * {
+    margin: 5px 0px 5px 5px;
+}
+
+h4 {
+    white-space: nowrap;
+    margin: 10px;
+}
+
+#query-item-panel h4 {
+    margin: 5px 0 0 10px;
+}
