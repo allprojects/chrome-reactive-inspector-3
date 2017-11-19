@@ -58,59 +58,55 @@
 
 <div class="clearfix flex-container" style="margin: 5px">
     <h4>Instrument Files</h4>
-    <input id="cri-config-includes" type="text" class="form-control"/>
+    <input id="cri-config-includes" type="text" class="form-control" style="flex-grow: 1"/>
 </div>
 
 <hr>
 
-<div class="clearfix flex-container">
-    <div class="flex-child-centered flex-container">
+<div id="query-item-panel" class="clearfix flex-container" style="flex-wrap: wrap">
+    <div class="flex-child-centered">
         <h4>History Queries</h4>
-        <div>
+        <div class="flex-item-container">
             <select class="form-control cri-findnode-select" id="cri-findnode-select">
                 <option value="nodeCreated">nodeCreated[nodeName]</option>
                 <option value="nodeUpdated">nodeUpdated[nodeName]</option>
                 <option value="evaluationYielded">evaluationYielded[nodeName][value]</option>
                 <option value="dependencyCreated">dependencyCreated[nodeName][nodeName]</option>
             </select>
-        </div>
-        <div>
-            <button type="button" class="btn" id="cri-history-query-submit">Submit Query</button>
-            <span id="cri-history-current-step">0</span>/<span id="cri-history-last-step">0</span>
-            <button type="button" id="cri-history-query-prev" class="btn btn-default btn-sm">
-                <span class="glyphicon glyphicon glyphicon-chevron-left"></span>
-            </button>
-            <button type="button" id="cri-history-query-next" class="btn btn-default btn-sm">
-                <span class="glyphicon glyphicon-chevron-right"></span>
-            </button>
+            <button type="button" class="btn flex-child-centered" id="cri-history-query-submit">Submit Query</button>
+            <div class="flex-container flex-align-baseline">
+                <button type="button" id="cri-history-query-prev" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon glyphicon-chevron-left"></span>
+                </button>
+                <div style="margin: 5px">
+                    <span id="cri-history-current-step">0</span>/<span id="cri-history-last-step">0</span>
+                </div>
+                <button type="button" id="cri-history-query-next" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
+            </div>
         </div>
     </div>
-    <div class="flex-child-centered flex-container">
+    <div class="flex-child-centered">
         <h4>Reactive Breakpoints</h4>
-        <div>
-            <div>
+        <div class="flex-item-container">
+            <div class="flex-item-container" style="margin-top: 0">
                 <select class="form-control cri-breakpoint-select" id="cri-breakpoint-select">
                     <option>nodeCreated[nodeId]</option>
                     <option>nodeUpdated[nodeId]</option>
                     <option>evaluationYielded[nodeId][value]</option>
                     <option>dependencyCreated[nodeId][nodeId]</option>
                 </select>
-            </div>
-            <div>
                 <button type="button" class="btn" id="cri-breakpoint-query-submit">Add</button>
             </div>
-        </div>
-        <div>
-            <div id="cri-breakpoints-container"></div>
+            <div id="cri-breakpoints-container" class="flex-container"></div>
         </div>
     </div>
-    <div class="flex-child-centered flex-container">
+    <div class="flex-child-centered">
         <h4>Search</h4>
-        <div>
+        <div class="flex-item-container">
             <input name="searchNode" placeholder="Type Node name" id="cri-node-search-val" class="form-control"
                    style="max-width: 170px;">
-        </div>
-        <div>
             <div class="dropdown" style="display: inline-block">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="featureType" data-toggle="dropdown">
                     Select
@@ -136,7 +132,7 @@
                 <span class="glyphicon glyphicon glyphicon-chevron-left"></span>
             </button>
         </div>
-        <div style="width: 90%; margin: 10px 10px 0 10px">
+        <div style="margin: 10px 32px 0 18px; flex-grow: 1">
             <div id="slider"></div>
         </div>
         <div class="flex-child-centered">
