@@ -31,15 +31,19 @@ cri.instrumentor = (function (window) {
 
     let scriptNames = [];
 
+    function getFileName(scriptTag) {
+        return scriptTag.getAttribute('src').replace(/^.*[\\\/]/, '');
+    }
+
     /**     SEQUENTIAL Loader Start    ***/
     //Sequential loader To get all scripts and insert in document after instrumentation
     // script can be with source or without source (in page JS code)
 
     function next(index, finishedCallback) {
-        let script = document.scripts[index];
+        let script = window.document.scripts[index];
         if (script === null || script === undefined) {
             // all scripts handled now
-            finishedCallback();
+            if (finishedCallback) finishedCallback();
             return false;
         }
 
@@ -54,12 +58,7 @@ cri.instrumentor = (function (window) {
 
         // if script tag contain source file
 
-        let filename = script.getAttribute('src').replace(/^.*[\\\/]/, '');
-        if (filesShouldNotInclude.indexOf(filename) === -1) {
-            // prevents Rx.js etc. to show up in suggestions
-            scriptNames.push(filename);
-        }
-
+        let filename = getFileName(script);
         let request = new XMLHttpRequest();
         request.open('GET', script.getAttribute('src'));
         request.onload = function () {
@@ -97,13 +96,27 @@ cri.instrumentor = (function (window) {
         request.send(null);
     }
 
-    // iterate scripts and execute sequentially
-    setTimeout(next, 0, 0, function () {
+    // script names should be sent before execution to initialize the tokenfield on time.
+    (function sendFileNamesToPanel() {
+        let scriptTags = window.document.scripts;
+
+        let scriptNames = _.filter(scriptTags, function (s) {
+            // prevents Rx.js etc. to show up in suggestions
+            return typeof s !== "undefined" && s.hasAttribute('src');
+        }).map(function (s) {
+            return getFileName(s);
+        }).filter(function (f) {
+            return filesShouldNotInclude.indexOf(f) === -1;
+        });
+
         cri.sendObjectToDevTools({
             content: {names: scriptNames},
             action: "scriptNames", destination: "panel"
         });
-    });
+    })();
+
+    // iterate scripts and execute sequentially
+    setTimeout(next, 0, 0, null);
 
     /**     SEQUENTIAL Loader End    ***/
 
