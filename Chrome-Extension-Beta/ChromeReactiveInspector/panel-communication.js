@@ -175,19 +175,7 @@ let allEdges = [];
 
     function handleScriptNames(message) {
         let scriptNames = message.content.names;
-        chrome.storage.sync.get('criconfigincludes', function (items) {
-            let includes = items.criconfigincludes;
-
-            previousConfigFiles = includes || [];
-            $configIncludeFilesField.tokenfield({
-                tokens: includes,
-                autocomplete: {
-                    source: scriptNames,
-                    delay: 100
-                },
-                showAutocompleteOnFocus: true
-            });
-        });
+        initIncludeTokenField(scriptNames);
     }
 }());
 
@@ -202,7 +190,7 @@ let isConfirmed = false;
 
 // this method is to capture all nodes and edges save the graph to the history.
 function saveStageAndAdvance(event, data) {
-    let stageId = history.saveStage(g, _.extend({event: event}, data));
+    let stageId = history.saveStage(graphManager.graph, {event: event, data: data});
 
     let lastStageId = history.getStageCount();
 

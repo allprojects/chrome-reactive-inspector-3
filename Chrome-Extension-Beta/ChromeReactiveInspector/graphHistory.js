@@ -31,7 +31,6 @@ cri.graphHistory = (function (window) {
             let toPersist = this.storage.splice(0, this.storage.length - cacheMin);
             cri.stageStorage.storeOnDisk(toPersist);
         }
-        this.currentStageId = stageId;
         return stageId;
     };
 
@@ -73,6 +72,8 @@ cri.graphHistory = (function (window) {
      */
     History.prototype.loadStage = function (stageId, callback) {
         let self = this;
+        let previousStageId = this.currentStageId;
+        this.currentStageId = stageId;
 
         if (isBaseStageId(stageId)) {
             // case: is base id, so always load
@@ -80,12 +81,14 @@ cri.graphHistory = (function (window) {
                 callback(self.currentBase.stage, null);
             });
         } else if (belongsToBase(stageId, this.currentBase.stage.id)) {
-            let deltaOffset = this.currentBase.deltas.slice(0, (stageId - 1) % deltaWindowSize);
-            if (this.currentStageId < stageId) {
+            let upper = (stageId - 1) % deltaWindowSize;
+            if (previousStageId < stageId) {
                 // case: direction is forward and the requested stageId is not a base stage. just apply changes
+                let deltaOffset = this.currentBase.deltas.slice(previousStageId - 1, upper);
                 callback(null, deltaOffset)
             } else {
                 // case: direction is NOT forward, but the requested stageId belongs to the current base stage
+                let deltaOffset = this.currentBase.deltas.slice(0, upper);
                 callback(this.currentBase.stage, deltaOffset)
             }
         } else {

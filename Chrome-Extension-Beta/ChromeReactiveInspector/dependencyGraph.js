@@ -70,7 +70,7 @@ cri.dependencyGraph = (function () {
 
     function initializeGraph(self) {
         self.graph = createGraph();
-        self.$graphElement = $("g");
+        self.$graphElement = $("<g>");
         self.$container.append(self.$graphElement);
     }
 
@@ -87,8 +87,8 @@ cri.dependencyGraph = (function () {
         let edge = delta.change.data;
 
         switch (delta.change.event) {
-            case "nodeCreated":
-            case "nodeUpdated":
+            case "newNode":
+            case "updateNode":
                 self.graph.setNode(node.nodeId, node);
                 break;
             case "saveEdge":

@@ -152,13 +152,29 @@ chrome.storage.sync.get('thresholdValue', function (items) {
     threshold = items.thresholdValue;
 });
 
-$configIncludeFilesField
-    .on('tokenfield:createtoken', function (e) {
-        setCricConfigFiles(1, e.attrs.value)
-    })
-    .on('tokenfield:removedtoken', function (e) {
-        setCricConfigFiles(0, e.attrs.value)
+function initIncludeTokenField(scriptNames) {
+    chrome.storage.sync.get('criconfigincludes', function (items) {
+        let includes = items.criconfigincludes;
+
+        previousConfigFiles = includes || [];
+
+        // remove previous events (e.g. during reload the field is already initialized)
+        $configIncludeFilesField.off(".cri");
+
+        $configIncludeFilesField.tokenfield({
+            tokens: previousConfigFiles,
+            autocomplete: {
+                source: scriptNames,
+                delay: 100
+            },
+            showAutocompleteOnFocus: true
+        }).on('tokenfield:createtoken.cri', function (e) {
+            setCricConfigFiles(1, e.attrs.value)
+        }).on('tokenfield:removedtoken.cri', function (e) {
+            setCricConfigFiles(0, e.attrs.value)
+        });
     });
+}
 
 function setCricConfigFiles(val, fileName) {
     if (val) {
