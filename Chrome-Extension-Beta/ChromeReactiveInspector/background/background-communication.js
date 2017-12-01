@@ -7,6 +7,8 @@
 var tabPorts = {};
 
 chrome.runtime.onConnect.addListener(function (port) {
+    // connection from panel
+
     // come here when we click on our dev tool panel only once for the life of dev tool window
     // alert("chrome.extension.onConnect.addListener");
     var tabId;
@@ -16,7 +18,9 @@ chrome.runtime.onConnect.addListener(function (port) {
             tabId = message.tabId;
             tabPorts[tabId] = port;
         }
-        injectScripts(tabId);
+        if (message.action === "inject") {
+            injectScripts(tabId);
+        }
     });
 
     var extensionListener = function (message, sender, sendResponse) {
@@ -28,18 +32,16 @@ chrome.runtime.onConnect.addListener(function (port) {
             port.postMessage(message);
 
         } else if (message.destination === "background") {
-            if (message.action === "tabInfo") {
-
-                // retrieve url for download feature
-                chrome.tabs.get(tabId, function (tab) {
-                    sendResponse({currentTabUrl: tab.url});
-                });
-                // return true to enable async answer
-                return true;
+            switch (message.action) {
+                case "tabInfo":
+                    handleTabInfoRequestAsync(tabId, sendResponse);
+                    // return true to enable async answer
+                    return true;
             }
         } else {
 
             if (message.tabId && message.content) {
+                //TODO: rework this into the port communication and handle callbacks via question - answer messages.
                 // got from panel and send to content script");
                 chrome.tabs.sendMessage(message.tabId, message, sendResponse);
                 // return true to enable async answer
@@ -64,10 +66,16 @@ chrome.runtime.onConnect.addListener(function (port) {
 
     port.onDisconnect.addListener(function (port) {
         delete tabPorts[tabId];
-        chrome.extension.onMessage.removeListener(extensionListener);
+        chrome.runtime.onMessage.removeListener(extensionListener);
     });
 });
 
+function handleTabInfoRequestAsync(tabId, callback) {
+    // retrieve url for download feature
+    chrome.tabs.get(tabId, function (tab) {
+        callback({currentTabUrl: tab.url});
+    });
+}
 
 chrome.tabs.onRemoved.addListener(function (tabId) {
     delete tabPorts[tabId];
@@ -79,12 +87,13 @@ chrome.tabs.onReplaced.addListener(function (newTabId, oldTabId) {
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
+    // this will be called on ANY tab that is updated, so check if it is an active
+    // cri devtools tab.
     if (changeInfo.status === 'loading') {
-
-        chrome.tabs.sendMessage(tabId, {action: 'loading'}, function (response) {
-        });
-        if (tabPorts[tabId] !== undefined) {
-            injectScripts(tabId);
+        let port = tabPorts[tabId];
+        if (port !== undefined) {
+            port.postMessage({action: "loading"});
+            // this will result in a "inject" response from the panel once it has finished resetting.
         }
     }
 });

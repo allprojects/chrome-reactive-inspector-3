@@ -16,16 +16,15 @@ let allEdges = [];
 (function createChannel() {
     console.log("creating channel in messaging js that is part of panel ");
     //Create a port with background page for continuous message communication
-    let port = chrome.extension.connect({
+    let port = chrome.runtime.connect({
         name: "reactive-debugger" //Given a Name
     });
 
-    // Send current tabId to background page
-    port.postMessage(
-        Object.assign({
-            tabId: chrome.devtools.inspectedWindow.tabId
-        })
-    );
+    // Send current tabId to background page. Also trigger injection.
+    port.postMessage({
+        tabId: chrome.devtools.inspectedWindow.tabId,
+        action: "inject"
+    });
 
     // Listen to messages from the background page
     port.onMessage.addListener(function (message) {
@@ -34,6 +33,8 @@ let allEdges = [];
             case "loading":
                 // If the user refreshes the page, then reset the graph and slider and load it again.
                 handleLoading();
+                // signal background page that everything is cleaned up and the injection can begin.
+                port.postMessage({action: "inject"});
                 break;
             case "saveNode":
                 handleSaveNode(message);

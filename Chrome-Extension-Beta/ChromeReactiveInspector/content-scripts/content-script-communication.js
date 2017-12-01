@@ -21,7 +21,7 @@ $.extend(cri, (function (window) {
         // because of which it was not generating dependency graph as soon as we send message from analyzer.
         // it was affecting setting up break point when nodeCreated or dependencyCreated.
         if (!fileReadOver) {
-            chrome.extension.sendMessage(message, function (message) {
+            chrome.runtime.sendMessage(message, function (message) {
                 // console.log("message sent");
             });
         } else {
@@ -29,7 +29,7 @@ $.extend(cri, (function (window) {
             chrome.storage.sync.get('cri_config_rec_status', function (items) {
                 if (items.cri_config_rec_status !== undefined) {
                     if (items.cri_config_rec_status && fileReadOver) {
-                        chrome.extension.sendMessage(message, function (message) {
+                        chrome.runtime.sendMessage(message, function (message) {
                             // console.log("message sent");
                         });
                     }
@@ -51,12 +51,6 @@ $.extend(cri, (function (window) {
             console.log("Node id " + msg.content.id);
             console.log("Node value " + msg.content.value);
         }
-        else if (msg.action === 'loading') {
-            chrome.extension.sendMessage(msg, function (msg) {
-                // console.log("Page reload message sent!");
-            });
-        }
-
         else if (msg.action === 'cri_config_rec_status') {
             cri_config_rec_status = msg.content.status;
         }

@@ -10,6 +10,7 @@ cri.instrumentor = (function (window) {
 
     let shouldReactiveDebuggerRun = true;
 
+    //TODO: move this to a changeable setting 'default ignores'.
     let filesShouldNotInclude = ["Rx.js", "rx.lite.js", "Bacon.js", "Bacon.UI.js", "jquery.js", "rx.all.js", "jquery-2.1.4.js"];
     let fileReadOver = false;
     request.onload = function () {
@@ -28,8 +29,6 @@ cri.instrumentor = (function (window) {
     if (shouldReactiveDebuggerRun === false) {
         return;
     }
-
-    let scriptNames = [];
 
     function getFileName(scriptTag) {
         return scriptTag.getAttribute('src').replace(/^.*[\\\/]/, '');
