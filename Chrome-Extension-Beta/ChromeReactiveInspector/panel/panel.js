@@ -46,11 +46,10 @@ $dialog.dialog({
 });
 
 let $canvasContainer = $("#canvas-container");
-let $graphContainer = $("#svg-canvas");
 
 let tooltipManager = new cri.TooltipManager($canvasContainer);
 let history = new cri.graphHistory.History();
-let graphManager = new cri.dependencyGraph.GraphManager($graphContainer, history,
+let graphManager = new cri.dependencyGraph.GraphManager(d3.select("svg"), history,
     function () { // after changed callback
         tooltipManager.initializeTooltips(d3.selectAll("svg g.node"));
     }, function () { // after reset callback
@@ -70,7 +69,7 @@ d3.select("svg").call(zoom) // delete this line to disable free zooming
     .call(zoom.event);
 
 function zoomed() {
-    graphManager.$graphElement.attr("transform",
+    graphManager.graphElement.attr("transform",
         "translate(" + zoom.translate() + ")" +
         "scale(" + zoom.scale() + ")"
     );

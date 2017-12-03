@@ -1,22 +1,22 @@
 var cri = cri || {};
 
 cri.dependencyGraph = (function () {
-    function GraphManager($container, history, afterChangedCallback, afterResetCallback) {
-        this.$container = $container;
+    function GraphManager(d3container, history, afterChangedCallback, afterResetCallback) {
+        this.container = d3container;
         this.graph = null;
         this.history = history;
         this.currentStage = null;
         this.render = new dagreD3.render();
         this.afterChangedCallback = afterChangedCallback;
         this.afterResetCallback = afterResetCallback;
-        this.$graphElement = null;
+        this.graphElement = null;
         initializeGraph(this);
         return this;
     }
 
     GraphManager.prototype.clearGraph = function () {
         // clear graph
-        this.$graphElement.html(null);
+        this.graphElement.select("*").remove();
         this.graph = createGraph();
 
         // remove saved data
@@ -69,13 +69,13 @@ cri.dependencyGraph = (function () {
     //TODO: make this function obsolete and remove it. Rendering should not be directly influenced from
     // outside this class
     GraphManager.prototype.reRender = function () {
-        this.render(d3.select("svg g"), this.graph);
+        this.render(this.graphElement, this.graph);
     };
 
     function initializeGraph(self) {
+        // do not use jquery for any access to the svg or g elements - it behaves unexpectedly with svg elements.
         self.graph = createGraph();
-        self.$graphElement = $("<g>");
-        self.$container.append(self.$graphElement);
+        self.graphElement = self.container.append("g");
     }
 
     function createGraph() {
