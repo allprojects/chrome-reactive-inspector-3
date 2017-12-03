@@ -15,3 +15,7 @@ Documentation for tipsy tooltip usage that is not included in the official docum
 ## available properties
 * title
 * className
+
+## Changes
+Changed the application of css classes to tipsy. This was due to an already known bug that is not implemented
+in the main sources, because tipsy is discontinued.

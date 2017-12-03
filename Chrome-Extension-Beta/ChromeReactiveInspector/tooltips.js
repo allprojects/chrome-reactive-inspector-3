@@ -156,38 +156,60 @@ _.extend(cri, (function (window) {
      * @returns {string}
      */
     function createCodeTooltipContent(begin, end, codeInfo) {
-        var tags = _.map(codeInfo.lines, function (currentLine, i) {
-            var lineNumber = codeInfo.from + i;
-            var $p = $("<p>");
+
+        let padding = end.line.toString().length;
+        let tags = _.map(codeInfo.lines, function (currentLine, i) {
+            let lineNumber = codeInfo.from + i;
+            let $p = $("<p>");
 
             if (lineNumber === begin.line && lineNumber === end.line) {
-                // start and end in the same line
-                return $p.append("" + lineNumber + ": " + currentLine.substring(0, begin.column - 1)
-                    + "<em>" + currentLine.substring(begin.column - 1, end.column - 1) + "</em>"
-                    + currentLine.substring(end.column - 1, currentLine.length));
+                return $p.html(cri.utils.createMixed(
+                    createLineNumber(lineNumber, padding),
+                    currentLine.substring(0, begin.column - 1),
+                    $("<em>").text(currentLine.substring(begin.column - 1, end.column - 1)),
+                    currentLine.substring(end.column - 1, currentLine.length)
+                ));
 
             } else if (lineNumber === begin.line) {
-                $p.text("" + lineNumber + ": " + currentLine.substring(0, begin.column - 1));
-                return $p.append($("<em>").text(currentLine.substring(begin.column - 1, currentLine.length)));
+                return $p.html(cri.utils.createMixed(
+                    createLineNumber(lineNumber, padding),
+                    currentLine.substring(0, begin.column - 1),
+                    $("<em>").text(currentLine.substring(begin.column - 1, currentLine.length))
+                ));
 
             } else if (lineNumber === end.line) {
-                $p.text(currentLine.substring(end.column - 1, currentLine.length));
-                return $p.prepend($("<em>").text("" + lineNumber + ": " + currentLine.substring(0, end.column - 1)));
+                return $p.html(cri.utils.createMixed(
+                    createLineNumber(lineNumber, padding),
+                    $("<em>").text(currentLine.substring(0, end.column - 1)),
+                    currentLine.substring(end.column - 1, currentLine.length)
+                ));
 
             } else if (lineNumber > begin.line && lineNumber < end.line) {
                 // inside multiline write statement
-                return $p.append($("<em>").text("" + lineNumber + ": " + currentLine));
+
+                return $p.html(cri.utils.createMixed(
+                    createLineNumber(lineNumber, padding),
+                    $("<em>").text(currentLine)
+                ));
 
             } else {
-                return $p.text("" + lineNumber + ": " + currentLine);
+                return $p.html(cri.utils.createMixed(
+                    createLineNumber(lineNumber, padding),
+                    currentLine));
             }
         });
 
-        var $container = $("<div class='custom-tooltip'>");
+        let $container = $("<div class='custom-tooltip'>");
         tags.forEach(function (p) {
             $container.append(p);
         });
         return ($("<div>").append($container)).html();
+    }
+
+    function createLineNumber(number, padding) {
+        return $("<span>")
+            .html("" + cri.utils.pad(number, padding) + " ")
+            .addClass("line-number");
     }
 
     function refreshTooltip($element) {
@@ -210,7 +232,7 @@ _.extend(cri, (function (window) {
             .each(function () {
                 // add tooltips
                 $(this).tipsy({
-                    gravity: "w", opacity: 1, html: true, className: function () {
+                    gravity: "w", opacity: 1, html: true, delayOut: 5000, className: function () {
                         return d3.select(this).classed("show-code") ? "code-tooltip" : "node-tooltip"
                     }, title: function () {
                         return getTooltip(d3.select(this));
