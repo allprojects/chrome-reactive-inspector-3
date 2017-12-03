@@ -22,14 +22,16 @@ cri.dependencyGraph = (function () {
         // remove saved data
         this.history.clear();
         this.afterResetCallback();
+        console.log("cleared graph",);
     };
 
     GraphManager.prototype.drawStage = function (stageId) {
         let self = this;
 
         if (!stageId) {
-            this.clearGraph();
-            self.render(d3.select(self.$graphElement.get(0)), self.graph);
+            self.graph = createGraph();
+            //this.clearGraph();
+            self.reRender();
             self.afterChangedCallback();
             return;
         }
@@ -41,7 +43,8 @@ cri.dependencyGraph = (function () {
             if (baseStage) {
 
                 // clear graph here and not earlier to prevent flickering of the ui if the loading takes a few milliseconds.
-                self.clearGraph();
+                //self.clearGraph();
+                self.graph = createGraph();
 
                 baseStage.nodes.forEach(function (node) {
                     self.graph.setNode(node.nodeId, node);
@@ -58,14 +61,15 @@ cri.dependencyGraph = (function () {
             }
 
             // draw graph with asked stage data
-            self.render(d3.select(self.$graphElement.get(0)), self.graph);
+            self.reRender();
             self.afterChangedCallback();
         });
     };
 
-    //TODO: make this function obsolete and remove it
+    //TODO: make this function obsolete and remove it. Rendering should not be directly influenced from
+    // outside this class
     GraphManager.prototype.reRender = function () {
-        this.render(d3.select(this.$graphElement.get(0)), this.graph);
+        this.render(d3.select("svg g"), this.graph);
     };
 
     function initializeGraph(self) {

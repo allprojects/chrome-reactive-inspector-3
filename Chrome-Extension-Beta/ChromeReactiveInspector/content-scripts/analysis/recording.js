@@ -1,17 +1,18 @@
 var cri = cri || {};
 cri.analysis = cri.analysis || {};
 
-cri.analysis.recording = (function (window) {
-    var allNodes = [];
-    var allEdges = [];
-    var nodesWithDetails = [];
-    var previousData = {
+cri.analysis.recording = (function () {
+
+    let allNodes = [];
+    let allEdges = [];
+    let nodesWithDetails = [];
+    let previousData = {
         nodeId: '',
         value: ''
     };
 
-    var currentStep = 0;
-    var rxObsCounter = 0;
+    let currentStep = 0;
+    let rxObsCounter = 0;
 
     /**
      * This method will log node data.
@@ -278,4 +279,4 @@ cri.analysis.recording = (function (window) {
             return fileReadOver;
         }
     };
-})(window);
+})();
