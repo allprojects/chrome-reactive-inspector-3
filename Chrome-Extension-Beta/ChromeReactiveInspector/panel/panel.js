@@ -47,7 +47,7 @@ $dialog.dialog({
 
 let $canvasContainer = $("#canvas-container");
 
-let tooltipManager = new cri.TooltipManager($canvasContainer);
+let tooltipManager = null;
 let history = new cri.graphHistory.History();
 let graphManager = new cri.dependencyGraph.GraphManager(d3.select("svg"), history,
     function () { // after changed callback
@@ -56,7 +56,7 @@ let graphManager = new cri.dependencyGraph.GraphManager(d3.select("svg"), histor
         historyEntries = [];
         isConfirmed = false
     });
-
+tooltipManager = new cri.TooltipManager($canvasContainer, graphManager);
 
 // Set up zoom support
 let zoom = d3.behavior.zoom()

@@ -66,6 +66,10 @@ cri.dependencyGraph = (function () {
         });
     };
 
+    GraphManager.prototype.getNode = function (id) {
+        return this.graph.node(id);
+    };
+
     //TODO: make this function obsolete and remove it. Rendering should not be directly influenced from
     // outside this class
     GraphManager.prototype.reRender = function () {
