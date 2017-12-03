@@ -289,3 +289,8 @@ h4 {
 #query-item-panel h4 {
     margin: 5px 0 0 10px;
 }
+
+#svg-canvas rect {
+    rx: 5;
+    ry: 5;
+}
