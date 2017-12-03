@@ -1,26 +1,32 @@
 // Load the previous options
 document.addEventListener('DOMContentLoaded', restore_options);
 
-var $developerMode = $("#debug");
-var $threshold = $("#threshold");
-var $printAllValues = $('#printAllValues');
-var $codePreviewScope = $('#codePreviewScope');
-var $codePreviewMax = $('#codePreviewMax');
+let $developerMode = $("#debug");
+let $threshold = $("#threshold");
+let $printAllValues = $('#printAllValues');
+let $codePreviewScope = $('#codePreviewScope');
+let $codePreviewMax = $('#codePreviewMax');
+let $defaultIgnores = $('#defaultIgnores');
+
+const defaultDefaultIgnores = ["Rx.js", "rx.lite.js", "Bacon.js", "Bacon.UI.js",
+    "jquery.js", "rx.all.js", "jquery-2.1.4.js"];
 
 // Saves options to chrome.storage
 function save_options() {
     chrome.storage.sync.set({
-        thresholdValue: $threshold.val(),
-        printAllValue: $printAllValues.prop('checked'),
-        developerMode: $developerMode.prop('checked'),
-        codePreviewScope: $codePreviewScope.val(),
-        codePreviewMax: $codePreviewMax.val()
-    }, function () {
-        dataSaved();
-    });
+            thresholdValue: $threshold.val(),
+            printAllValue: $printAllValues.prop('checked'),
+            developerMode: $developerMode.prop('checked'),
+            codePreviewScope: $codePreviewScope.val(),
+            codePreviewMax: $codePreviewMax.val(),
+            defaultIgnores: $defaultIgnores.tokenfield('getTokens')
+        }, function () {
+            dataSaved();
+        }
+    );
 }
 
-var thresholdValue = '';
+let thresholdValue = '';
 
 function restore_options() {
     chrome.storage.sync.get({
@@ -28,13 +34,15 @@ function restore_options() {
         printAllValue: false,
         developerMode: false,
         codePreviewScope: 4,
-        codePreviewMax: 10
+        codePreviewMax: 10,
+        defaultIgnores: defaultDefaultIgnores
     }, function (items) {
         $threshold.val(items.thresholdValue);
         $printAllValues.prop('checked', items.printAllValue);
         $developerMode.prop('checked', items.developerMode);
         $codePreviewScope.val(items.codePreviewScope);
         $codePreviewMax.val(items.codePreviewMax);
+        $defaultIgnores.tokenfield("setTokens", items.defaultIgnores);
     });
     chrome.storage.sync.set({
         'nodesDoNotSave': []
@@ -42,14 +50,14 @@ function restore_options() {
 }
 
 function dataSaved() {
-    var status = document.getElementById('status');
+    let status = document.getElementById('status');
     status.textContent = 'Options saved.';
     setTimeout(function () {
         status.textContent = '';
-    }, 750);
+    }, 2000);
 }
 
-var $nodeInput = $('#nodeId');
+let $nodeInput = $('#nodeId');
 jQuery(document).ready(function ($) {
 
     $nodeInput.tokenfield();
@@ -57,7 +65,7 @@ jQuery(document).ready(function ($) {
         .on('tokenfield:createtoken', function (e) {
             if (isNaN(e.attrs.value))
                 e.preventDefault();
-            var existingTokens = $(this).tokenfield('getTokens');
+            let existingTokens = $(this).tokenfield('getTokens');
             $.each(existingTokens, function (index, token) {
                 if (token.value === e.attrs.value)
                     e.preventDefault();
@@ -87,7 +95,7 @@ jQuery(document).ready(function ($) {
 });
 
 
-var previousNodes = [];
+let previousNodes = [];
 chrome.storage.sync.get('nodesDoNotSave', function (items) {
     previousNodes = items.nodesDoNotSave || [];
     $nodeInput.value = $('#nodeId').tokenfield('setTokens', items.nodesDoNotSave) || '';
@@ -96,3 +104,11 @@ chrome.storage.sync.get('nodesDoNotSave', function (items) {
 
 $('#save').button().click(save_options);
 $('#reset').button().click(restore_options);
+$defaultIgnores.tokenfield({
+    autocomplete: {
+        source: defaultDefaultIgnores,
+        delay: 100
+    },
+    delimiter: ";",
+    showAutocompleteOnFocus: true
+});

@@ -4,68 +4,58 @@
     <meta charset="UTF-8">
     <title>Chrome Reactive Inspector</title>
 
-    <!-- Jquery Plugins -->
+    <link rel="stylesheet" href="../libraries/jquery-ui.css">
+    <link rel="stylesheet" href="../libraries/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../libraries/bootstrap-tokenfield.min.css">
+    <link rel="stylesheet" href="options.css">
+
+    <script src="../libraries/underscore.js"></script>
     <script src="../libraries/jquery-1.9.1.min.js"></script>
     <script src="../libraries/jquery-ui.js"></script>
-    <link rel="stylesheet" href="../libraries/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../libraries/jquery-ui.css">
-    <link rel="stylesheet" href="../libraries/bootstrap-tokenfield.min.css">
-
-    <link rel="stylesheet" href="options.css">
-    <script src="../libraries/jquery-1.9.1.min.js"></script>
-    <script src="../libraries/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../libraries/underscore.js"></script>
     <script src="../libraries/bootstrap-tokenfield.min.js"></script>
 </head>
 <body>
-<div class="col-lg-12">
-    <div class="col-lg-12">
-        <div id="status" class="alert-success text-center"></div>
-    </div>
-    <br>
-    <div class="clearfix text-center">
-        <h2>Here you can set additional options for the plugin.</h2>
-        <hr>
-    </div>
-    <div class="col-lg-12">
-        <div class="col-xs-5 col-xs-offset-4">
+<div class="flex-container">
+    <div id="options-list" class="flex-vertical-container flex-child-centered">
+        <div id="status" class="alert-success flex-child-left"></div>
+        <div class="flex-child-left">
+            <h2>Here you can set additional options for the plugin.</h2>
+            <hr>
+        </div>
+        <div class="flex-child-left">
             <label for="debug">CRI Developer Mode</label>
             <input type="checkbox" id="debug"/>
         </div>
-    </div>
-    <div class="col-lg-12">
-        <!--<div class="col-xs-5 col-xs-offset-4">-->
-        <!--<label for="threshold">Threshold value for logging:</label>-->
-        <!--<input class="input-sm" id="threshold"/>-->
-        <!--</div>-->
-    </div>
-    <div class="col-lg-12">
-        <div class="col-xs-5 col-xs-offset-4">
+        <div class="flex-child-left">
             <label for="printAllValues">Select checkbox to print all the values at each step on console</label>
             <input type="checkbox" id="printAllValues">
         </div>
-    </div>
 
-    <div class="col-lg-12 bs-example form-group">
-        <div class="col-xs-6 col-xs-offset-4">
-            <label for="printAllValues">Add node-ids(in below box) which should not be logged in the Graph.</label>
-            <input type="text" id="nodeId" class="form-control input-md js-tag-input">
+        <div class="flex-child-left">
+            <label for="nodeId">Add node-ids(in below box) which should not be logged in the Graph.</label>
+            <input type="text" id="nodeId">
         </div>
-    </div>
-    <div class="col-lg-12">
-        <div class="col-xs-5 col-xs-offset-4">
-            <label for="codePreviewScope">Scope: (Number of lines displayed before and after the relevant line in code
-                previews)</label>
-            <input class="input-sm" id="codePreviewScope"/>
-            <label for="codePreviewMax">Max code preview size: (including scope):</label>
-            <input class="input-sm" id="codePreviewMax"/>
+        <div class="flex-vertical-container flex-child-left" style="flex-direction: column">
+            <div>
+                <label for="codePreviewScope">Scope: (Number of lines displayed before and after the relevant line in
+                    code
+                    previews)</label>
+                <input class="input-sm" id="codePreviewScope"/>
+            </div>
+            <div><label for="codePreviewMax">Max code preview size: (including scope):</label>
+                <input class="input-sm" id="codePreviewMax"/>
+            </div>
         </div>
-    </div>
 
-    <div class="col-lg-12">
-        <div class="col-xs-5 col-xs-offset-4 text-center">
-            <button class="btn btn-primary" id="save">Save</button>
-            <button class="btn btn-default" id="reset">Reset</button>
+        <div class="flex-child-left flex-vertical-container">
+            <label for="defaultIgnores">Javascript files that should not be instrumented by default: (Separated by
+                ';')</label>
+            <input id="defaultIgnores"/>
+        </div>
+
+        <div class="flex-child-centered">
+            <button id="save">Save</button>
+            <button id="reset">Reset</button>
         </div>
     </div>
 </div>

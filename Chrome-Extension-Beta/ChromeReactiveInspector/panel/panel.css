@@ -257,7 +257,11 @@ hr {
 
 .flex-container {
     display: flex;
+}
 
+.flex-vertical-container {
+    flex-direction: column;
+    display: flex;
 }
 
 .flex-centered {

@@ -2,7 +2,8 @@ var optionKeys = {
     thresholdValue: 'thresholdValue',
     printAllValue: 'printAllValue',
     developerMode: 'developerMode',
-    criconfigincludes: 'criconfigincludes'
+    criconfigincludes: 'criconfigincludes',
+    defaultIgnores: 'defaultIgnores'
 };
 
 var optionsAccess = (function () {

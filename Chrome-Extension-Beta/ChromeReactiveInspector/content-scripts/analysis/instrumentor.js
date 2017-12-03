@@ -1,6 +1,7 @@
 var cri = cri || {};
 
-cri.instrumentor = (function (window) {
+
+let instrumentor = function (window, options) {
     let scriptCache = {};
     /* DOCUMENT LOAD INTERCEPTION Start  */
     // load current document and
@@ -10,8 +11,7 @@ cri.instrumentor = (function (window) {
 
     let shouldReactiveDebuggerRun = true;
 
-    //TODO: move this to a changeable setting 'default ignores'.
-    let filesShouldNotInclude = ["Rx.js", "rx.lite.js", "Bacon.js", "Bacon.UI.js", "jquery.js", "rx.all.js", "jquery-2.1.4.js"];
+    let filesShouldNotInclude = options.defaultIgnores;
     let fileReadOver = false;
     request.onload = function () {
 
@@ -68,29 +68,23 @@ cri.instrumentor = (function (window) {
                 return;
             }
 
-            chrome.storage.sync.get('criconfigincludes', function (items) {
-                let filesToInstrument = items.criconfigincludes || false;
+            let filesToInstrument = options.criconfigincludes || false;
 
-                // check if file should be instrumented. If setting is not set, instrument all files.
-                if (filesToInstrument === false || _.contains(filesToInstrument, filename)) {
+            // check if file should be instrumented. If setting is not set, instrument all files.
+            if (filesToInstrument === false || _.contains(filesToInstrument, filename)) {
 
-                    chrome.storage.sync.get('developerMode', function (items) {
-                        let developerMode = items.developerMode;
+                let code = instrumentFile(filename, request.responseText, options.developerMode);
+                executeInContext(code);
+                J$.W(-1, '', '', '');
+                fileReadOver = true;
 
-                        let code = instrumentFile(filename, request.responseText, developerMode);
-                        executeInContext(code);
-                        J$.W(-1, '', '', '');
-                        fileReadOver = true;
-
-                        // next
-                        setTimeout(next, 0, ++index, finishedCallback);
-                    });
-                } else {
-                    executeInContext(request.responseText);
-                    // next
-                    setTimeout(next, 0, ++index, finishedCallback);
-                }
-            });
+                // next
+                setTimeout(next, 0, ++index, finishedCallback);
+            } else {
+                executeInContext(request.responseText);
+                // next
+                setTimeout(next, 0, ++index, finishedCallback);
+            }
         };
         request.send(null);
     }
@@ -230,4 +224,14 @@ cri.instrumentor = (function (window) {
     return {
         getCode: getCode
     };
-})(window);
+};
+
+// set cri.instrument only after all settings are retrieved.
+chrome.storage.sync.get({
+    defaultIgnores: ["Rx.js", "rx.lite.js", "Bacon.js", "Bacon.UI.js",
+        "jquery.js", "rx.all.js", "jquery-2.1.4.js"],
+    developerMode: false,
+    criconfigincludes: []
+}, function (items) {
+    cri.instrumentor = instrumentor(window, items);
+});
