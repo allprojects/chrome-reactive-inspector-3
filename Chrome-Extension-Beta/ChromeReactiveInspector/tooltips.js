@@ -157,7 +157,7 @@ _.extend(cri, (function (window) {
      */
     function createCodeTooltipContent(begin, end, codeInfo) {
 
-        let padding = end.line.toString().length;
+        let padding = codeInfo.to.toString().length;
         let tags = _.map(codeInfo.lines, function (currentLine, i) {
             let lineNumber = codeInfo.from + i;
             let $p = $("<p>");
