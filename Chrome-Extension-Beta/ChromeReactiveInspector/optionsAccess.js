@@ -3,7 +3,8 @@ var optionKeys = {
     printAllValue: 'printAllValue',
     developerMode: 'developerMode',
     criconfigincludes: 'criconfigincludes',
-    defaultIgnores: 'defaultIgnores'
+    defaultIgnores: 'defaultIgnores',
+    reloadOnInstrument: 'reloadOnInstrument'
 };
 
 var optionsAccess = (function () {

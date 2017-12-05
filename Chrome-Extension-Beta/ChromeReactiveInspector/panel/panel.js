@@ -168,9 +168,20 @@ function initIncludeTokenField(scriptNames) {
             },
             showAutocompleteOnFocus: true
         }).on('tokenfield:createtoken.cri', function (e) {
-            setCricConfigFiles(1, e.attrs.value)
+            setCricConfigFiles(1, e.attrs.value);
+            optionsAccess.$getOption(optionKeys.reloadOnInstrument).done(function (shouldReload) {
+                if (shouldReload) {
+                    reload();
+                }
+            });
+            reload();
         }).on('tokenfield:removedtoken.cri', function (e) {
-            setCricConfigFiles(0, e.attrs.value)
+            setCricConfigFiles(0, e.attrs.value);
+            optionsAccess.$getOption(optionKeys.reloadOnInstrument).done(function (shouldReload) {
+                if (shouldReload) {
+                    reload();
+                }
+            });
         });
     });
 }
@@ -227,10 +238,12 @@ function setCriStatus(element, status) {
     }
 }
 
-$("#cri-reload").click(function () {
+$("#cri-reload").click(reload);
+
+function reload() {
     chrome.tabs.reload(chrome.devtools.inspectedWindow.tabId, {}, function () {
     });
-});
+}
 
 // Reset everything
 $("#cri-reset").click(function () {

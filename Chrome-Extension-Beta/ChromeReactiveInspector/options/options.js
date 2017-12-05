@@ -7,6 +7,7 @@ let $printAllValues = $('#printAllValues');
 let $codePreviewScope = $('#codePreviewScope');
 let $codePreviewMax = $('#codePreviewMax');
 let $defaultIgnores = $('#defaultIgnores');
+let $reloadOnInstrument = $('#reloadOnInstrument');
 
 const defaultDefaultIgnores = ["Rx.js", "rx.lite.js", "Bacon.js", "Bacon.UI.js",
     "jquery.js", "rx.all.js", "jquery-2.1.4.js"];
@@ -19,7 +20,8 @@ function save_options() {
             developerMode: $developerMode.prop('checked'),
             codePreviewScope: $codePreviewScope.val(),
             codePreviewMax: $codePreviewMax.val(),
-            defaultIgnores: $defaultIgnores.tokenfield('getTokens')
+            defaultIgnores: $defaultIgnores.tokenfield('getTokens'),
+            reloadOnInstrument: $reloadOnInstrument.prop('checked')
         }, function () {
             dataSaved();
         }
@@ -35,7 +37,8 @@ function restore_options() {
         developerMode: false,
         codePreviewScope: 4,
         codePreviewMax: 10,
-        defaultIgnores: defaultDefaultIgnores
+        defaultIgnores: defaultDefaultIgnores,
+        reloadOnInstrument: true
     }, function (items) {
         $threshold.val(items.thresholdValue);
         $printAllValues.prop('checked', items.printAllValue);
@@ -43,6 +46,7 @@ function restore_options() {
         $codePreviewScope.val(items.codePreviewScope);
         $codePreviewMax.val(items.codePreviewMax);
         $defaultIgnores.tokenfield("setTokens", items.defaultIgnores);
+        $reloadOnInstrument.prop('checked', items.reloadOnInstrument);
     });
     chrome.storage.sync.set({
         'nodesDoNotSave': []
