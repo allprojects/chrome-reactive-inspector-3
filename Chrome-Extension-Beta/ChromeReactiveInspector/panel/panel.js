@@ -227,6 +227,11 @@ function setCriStatus(element, status) {
     }
 }
 
+$("#cri-reload").click(function () {
+    chrome.tabs.reload(chrome.devtools.inspectedWindow.tabId, {}, function () {
+    });
+});
+
 // Reset everything
 $("#cri-reset").click(function () {
     graphManager.clearGraph();
