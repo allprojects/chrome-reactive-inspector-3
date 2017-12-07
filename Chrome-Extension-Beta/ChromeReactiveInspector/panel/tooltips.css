@@ -9,14 +9,14 @@
 }
 
 .tipsy.code-tooltip .custom-tooltip p em {
-    color: red !important;
+    color: #D97E00 !important;
     font-style: normal;
 }
 
 .tipsy .custom-tooltip > p {
     font-size: 1.5em;
     font-weight: bold;
-    color: #60b1fc;
+    color: #004C8C;
     margin: 0;
     text-align: left;
     pointer-events: none;

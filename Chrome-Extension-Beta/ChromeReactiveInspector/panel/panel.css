@@ -1,3 +1,22 @@
+.node rect {
+    border-radius: 10px;
+    stroke: #004C8C;
+    stroke-width: 1.5px;
+}
+
+.nodes .label {
+    color: #004C8C;
+}
+
+.edgePath path {
+    stroke: #004C8C;
+    stroke-width: 1.5px;
+}
+
+.edgeLabel .label {
+    fill: #004C8C;
+}
+
 /* This sets the color for "TK" nodes to a light blue green. */
 /*!**/
 g.type-TK > rect {
@@ -5,12 +24,12 @@ g.type-TK > rect {
 }
 
 g.current > rect {
-    stroke: red;
+    stroke: #FF9400;
     stroke-width: 5;
 }
 
 g.edgePath.current path {
-    stroke: red;
+    stroke: #FF9400;
 }
 
 g.highlight > rect {
@@ -24,46 +43,17 @@ g.fade > rect {
 }
 
 g.nodeWithRef > rect {
-    fill: #ddff99;
+    fill: #FFE9A4;
 }
 
 g.nodeWithoutRef > rect {
-    fill: #fff5cc;
+    fill: white;
 }
 
 text {
     font-weight: 300;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serf, serif;
     font-size: 14px;
-}
-
-.node rect {
-    stroke: #999;
-    fill: #fff;
-    stroke-width: 1.5px;
-    border-radius: 10px;
-}
-
-.edgePath path {
-    stroke: #333;
-    stroke-width: 1.5px;
-}
-
-text {
-    font-weight: 300;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
-    font-size: 14px;
-}
-
-.node rect {
-    stroke: #333;
-    fill: #fff;
-}
-
-.edgePath path {
-    stroke: #333;
-    fill: #333;
-    stroke-width: 1.5px;
 }
 
 .node text {
@@ -105,10 +95,6 @@ text {
     border-left: 1px solid black;
 }
 
-.nodes .label {
-    color: #000;
-}
-
 hr {
     margin: 5px 0 !important;
 }
@@ -139,7 +125,8 @@ hr {
     cursor: pointer;
 }
 
-.ui-state-default, .ui-widget-content .ui-state-default {
+.ui-state-default,
+.ui-widget-content .ui-state-default {
     line-height: 1;
 }
 
@@ -162,7 +149,7 @@ hr {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #337ab7;
+    background-color: #004C8C;
 }
 
 #menu-bar li {
@@ -180,7 +167,7 @@ hr {
 
 #menu-bar li .menuitem:hover,
 #menu-bar .submenu:hover .dropbtn {
-    background-color: #5bc0de;
+    background-color: #7AC3FF;
 }
 
 #menu-bar li.submenu {
@@ -243,7 +230,7 @@ hr {
 }
 
 .flex-item-container > * {
-    margin: 5px 0px 5px 5px;
+    margin: 5px 0 5px 5px;
 }
 
 h4 {
@@ -258,4 +245,12 @@ h4 {
 #svg-canvas rect {
     rx: 5;
     ry: 5;
+}
+
+.btn-info {
+    background-color: #004C8C;
+}
+
+.btn-info:hover {
+    background-color: #7AC3FF;
 }
