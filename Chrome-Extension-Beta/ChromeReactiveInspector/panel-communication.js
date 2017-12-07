@@ -142,7 +142,17 @@ let allEdges = [];
             console.error("Tried to save edge with start or end not set.");
         }
 
+        // clear current from previous nodes
+        _.each(graphManager.graph.edges(), function (e) {
+            let edge = graphManager.graph.edge(e);
+            if (edge.class) {
+                // replace class on graph edge, not just via DOM to make it persistent
+                edge.class = edge.class.replace(/current/g, "");
+            }
+        });
+
         graphManager.graph.setEdge(message.content.edgeStart, message.content.edgeEnd, {
+            class: "current",
             label: message.content.edgeLabel
         });
 

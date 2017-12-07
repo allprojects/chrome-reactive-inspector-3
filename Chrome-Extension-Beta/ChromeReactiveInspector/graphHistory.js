@@ -36,7 +36,7 @@ cri.graphHistory = (function (window) {
 
     function createStage(id, graph) {
         let edges = _.map(graph.edges(), function (e) {
-            return new Edge(e.v, e.w, graph.edge(e).label);
+            return new Edge(e.v, e.w, graph.edge(e));
         });
 
         let nodes = _.map(graph.nodes(), function (n) {
@@ -164,10 +164,10 @@ cri.graphHistory = (function (window) {
         this.change = change;
     }
 
-    function Edge(from, to, label) {
+    function Edge(from, to, data) {
         this.from = from;
         this.to = to;
-        this.label = label;
+        this.data = data;
     }
 
     return {

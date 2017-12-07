@@ -9,6 +9,10 @@ g.current > rect {
     stroke-width: 5;
 }
 
+g.edgePath.current path {
+    stroke: red;
+}
+
 g.highlight > rect {
     stroke: green;
     stroke-width: 5;

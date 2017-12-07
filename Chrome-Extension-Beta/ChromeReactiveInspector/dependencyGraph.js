@@ -51,12 +51,14 @@ cri.dependencyGraph = (function () {
                 });
 
                 baseStage.edges.forEach(function (edge) {
-                    self.graph.setEdge(edge.from, edge.to, {label: edge.label ? edge.label : ""});
+                    self.graph.setEdge(edge.from, edge.to, edge.data);
                 });
             }
             if (deltaStages) {
-                deltaStages.forEach(function (delta) {
-                    applyDeltaStage(self, delta);
+                // clear previously marked edges and nodes
+                self.container.selectAll("g.current").classed("current", false);
+                deltaStages.forEach(function (delta, index) {
+                    applyDeltaStage(self, delta, index === deltaStages.length - 1);
                 });
             }
 
@@ -90,17 +92,24 @@ cri.dependencyGraph = (function () {
             });
     }
 
-    function applyDeltaStage(self, delta) {
+    function applyDeltaStage(self, delta, isLast) {
         let node = delta.change.data;
         let edge = delta.change.data;
 
         switch (delta.change.event) {
             case "newNode":
             case "updateNode":
+                node.class = node.class.replace(/current/g, "");
+                if (isLast) {
+                    node.class += " current";
+                }
                 self.graph.setNode(node.nodeId, node);
                 break;
             case "saveEdge":
-                self.graph.setEdge(edge.edgeStart, edge.edgeEnd, {label: edge.edgeLabel});
+                self.graph.setEdge(edge.edgeStart, edge.edgeEnd, {
+                    label: edge.edgeLabel,
+                    class: isLast ? "current" : ""
+                });
                 break;
             case "removeEdge":
                 self.graph.removeEdge(edge.edgeStart, edge.edgeEnd, edge.edgeLabel);
