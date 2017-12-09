@@ -16,7 +16,7 @@ cri.dependencyGraph = (function () {
 
     GraphManager.prototype.clearGraph = function () {
         // clear graph
-        this.graphElement.select("*").remove();
+        this.graphElement.selectAll("*").remove();
         this.graph = createGraph();
 
         // remove saved data
@@ -40,10 +40,9 @@ cri.dependencyGraph = (function () {
         // get data for asked stage
         history.loadStage(stageId, function (baseStage, deltaStages) {
             self.currentStage = stageId;
-            if (baseStage) {
 
+            if (baseStage) {
                 // clear graph here and not earlier to prevent flickering of the ui if the loading takes a few milliseconds.
-                //self.clearGraph();
                 self.graph = createGraph();
 
                 baseStage.nodes.forEach(function (node) {
@@ -55,8 +54,7 @@ cri.dependencyGraph = (function () {
                 });
             }
             if (deltaStages) {
-                // clear previously marked edges and nodes
-                self.container.selectAll("g.current").classed("current", false);
+                self.clearClasses();
                 deltaStages.forEach(function (delta, index) {
                     applyDeltaStage(self, delta, index === deltaStages.length - 1);
                 });
@@ -70,6 +68,26 @@ cri.dependencyGraph = (function () {
 
     GraphManager.prototype.getNode = function (id) {
         return this.graph.node(id);
+    };
+
+    GraphManager.prototype.clearClasses = function () {
+        let self = this;
+
+        // clear previously marked edges and nodes
+        self.graph.nodes().forEach(function (n) {
+            let node = self.graph.node(n);
+            node.class = node.class.replace(/current/g, "");
+            // remove multiple spaces
+            node.class = node.class.replace(/ +(?= )/g, "");
+        });
+
+        self.graph.edges().forEach(function (e) {
+            let edge = self.graph.edge(e);
+            edge.class = edge.class.replace(/current/g, "");
+        });
+
+        // clear ui, because dagre-d3 does not clean up old classes properly
+        self.container.selectAll("g.current").classed("current", false);
     };
 
     //TODO: make this function obsolete and remove it. Rendering should not be directly influenced from
@@ -99,7 +117,6 @@ cri.dependencyGraph = (function () {
         switch (delta.change.event) {
             case "newNode":
             case "updateNode":
-                node.class = node.class.replace(/current/g, "");
                 if (isLast) {
                     node.class += " current";
                 }
