@@ -82,9 +82,10 @@ cri.graphHistory = (function (window) {
             });
         } else if (belongsToBase(stageId, this.currentBase.stage.id)) {
             let upper = (stageId - 1) % deltaWindowSize;
+            let lower = (previousStageId - 1) % deltaWindowSize;
             if (previousStageId < stageId) {
                 // case: direction is forward and the requested stageId is not a base stage. just apply changes
-                let deltaOffset = this.currentBase.deltas.slice(previousStageId - 1, upper);
+                let deltaOffset = this.currentBase.deltas.slice(lower, upper);
                 callback(null, deltaOffset)
             } else {
                 // case: direction is NOT forward, but the requested stageId belongs to the current base stage
