@@ -20,6 +20,8 @@ let allEdges = [];
         name: "reactive-debugger" //Given a Name
     });
 
+    // force clear. This is necessary if the inspector is closed and opened on the same page later.
+    handleLoading();
     // Send current tabId to background page. Also trigger injection.
     port.postMessage({
         tabId: chrome.devtools.inspectedWindow.tabId,
@@ -197,8 +199,6 @@ function getOrDefault(newValue, defaultValue) {
     return newValue;
 }
 
-let isConfirmed = false;
-
 // this method is to capture all nodes and edges save the graph to the history.
 function saveStageAndAdvance(event, data) {
     let stageId = history.saveStage(graphManager.graph, {event: event, data: data});
@@ -229,8 +229,6 @@ function saveStageAndAdvance(event, data) {
     }
     return stageId;
 }
-
-let historyEntries = [];
 
 function saveHistory(stageId, type, value) {
     if (type !== 'saveEdge') {

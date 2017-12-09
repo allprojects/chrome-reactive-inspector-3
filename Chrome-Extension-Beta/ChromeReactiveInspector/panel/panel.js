@@ -45,6 +45,9 @@ $dialog.dialog({
     }
 });
 
+let historyEntries = [];
+let isConfirmed = false;
+
 let $canvasContainer = $("#canvas-container");
 
 let tooltipManager = null;

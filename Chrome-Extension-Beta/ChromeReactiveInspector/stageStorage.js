@@ -96,6 +96,7 @@ cri.stageStorage = (function (window) {
 
     function clear() {
         clearUpTo(highestId);
+        highestId = -1;
     }
 
     function clearUpTo(highest) {
