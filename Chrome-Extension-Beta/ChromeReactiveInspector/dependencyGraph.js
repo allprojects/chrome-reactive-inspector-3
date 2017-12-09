@@ -70,6 +70,13 @@ cri.dependencyGraph = (function () {
         return this.graph.node(id);
     };
 
+    GraphManager.prototype.getNodes = function () {
+        let self = this;
+        return this.graph.nodes().map(function (n) {
+            return self.getNode(n);
+        });
+    };
+
     GraphManager.prototype.clearClasses = function () {
         let self = this;
 

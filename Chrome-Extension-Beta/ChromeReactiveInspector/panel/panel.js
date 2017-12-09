@@ -325,9 +325,7 @@ $("#cri-node-search-val").on('change keyup paste', function () {
  */
 function searchNodeFunction() {
     searchNode.removeClass('error');
-    let all_nodes = Object.keys(g._nodes).map(function (key) {
-        return g._nodes[key];
-    });
+    let all_nodes = graphManager.getNodes();
 
     let searchNodeVal = searchNode.val();
     if (searchNodeVal) {
@@ -353,9 +351,7 @@ function searchNodeFunction() {
 }
 
 function dependency(type) {
-    let all_nodes = Object.keys(g._nodes).map(function (key) {
-        return g._nodes[key];
-    });
+    let all_nodes = graphManager.getNodes();
     let searchNodeVal = searchNode.val();
     let tempNode = '';
     let edges = [];
