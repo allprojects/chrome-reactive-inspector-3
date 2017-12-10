@@ -48,8 +48,8 @@ cri.stageStorage = (function (window) {
         queueStorageOperation(operation);
     }
 
-    function loadFromDisk(fromId, toId, callback) {
-        let toRetrieve = _.map(_.range(fromId, toId + 1), function (i) {
+    function loadFromDisk(idsToLoad, callback) {
+        let toRetrieve = _.map(idsToLoad, function (i) {
             return "stage" + i;
         });
 

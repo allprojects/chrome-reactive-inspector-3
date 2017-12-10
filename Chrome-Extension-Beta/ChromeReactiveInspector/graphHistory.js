@@ -61,6 +61,10 @@ cri.graphHistory = (function (window) {
         return Math.floor((id - 1) / deltaWindowSize);
     }
 
+    function getStageIdForBaseIndex(index) {
+        return index * deltaWindowSize + 1
+    }
+
     function belongsToBase(stageId, baseStageId) {
         return getBaseIndex(stageId) === getBaseIndex(baseStageId);
     }
@@ -68,6 +72,13 @@ cri.graphHistory = (function (window) {
     function getBaseKey(baseStage) {
         return getBaseIndex(baseStage.stage.id);
     }
+
+    function findInStorage(self, stageId) {
+        return _.find(self.storage, function (base) {
+            return base.stage.id === stageId;
+        });
+    }
+
 
     /**
      * Calls the callback with a restored graph
@@ -106,10 +117,7 @@ cri.graphHistory = (function (window) {
 
     function loadBaseStage(self, stageId, callback) {
 
-        let isInStorage = _.find(self.storage, function (base) {
-            return base.stage.id === stageId;
-        });
-
+        let isInStorage = findInStorage(self, stageId);
         if (isInStorage) {
             self.currentBase = isInStorage;
             callback();
@@ -129,14 +137,24 @@ cri.graphHistory = (function (window) {
             } else if (upper > highest) {
                 upper = highest;
             }
-            //TODO: Prevent loading of stages that are already in storage. e.g. stage 3 should be loaded but is not in
-            //TODO: storage, but 4 and 5 are already loaded.
 
-            cri.stageStorage.loadFromDisk(lower, upper, function (baseStages) {
-                self.storage = baseStages;
-                self.currentBase = _.find(self.storage, function (base) {
-                    return base.stage.id === stageId;
+            let idsToLoad = _.range(lower, upper + 1);
+            let alreadyLoaded = _.filter(idsToLoad, function (id) {
+                return findInStorage(self, getStageIdForBaseIndex(id));
+            });
+
+            // prevent already loaded stages from being loaded again
+            idsToLoad = _.difference(idsToLoad, alreadyLoaded);
+
+            let stagesToKeep = _.where(self.storage, function (baseStage) {
+                return alreadyLoaded.indexOf(getBaseIndex(baseStage.stage.id)) !== -1;
+            });
+
+            cri.stageStorage.loadFromDisk(idsToLoad, function (baseStages) {
+                self.storage = _.sortBy(baseStages.concat(stagesToKeep), function (base) {
+                    return base.stage.id;
                 });
+                self.currentBase = findInStorage(self, stageId);
                 callback();
             });
         }
