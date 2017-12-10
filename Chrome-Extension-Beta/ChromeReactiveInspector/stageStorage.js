@@ -6,13 +6,19 @@ cri.stageStorage = (function (window) {
     // used to remember what to delete on clear()
     let highestId = -1;
 
-    function storeOnDisk(stages) {
+    /**
+     * Stores a set of BaseStages on disk.
+     * @param stages the set of stages
+     * @param getSequentialIdFunction a function returning the base index to a given BaseStage.
+     */
+    function storeOnDisk(stages, getSequentialIdFunction) {
         let storageObject = {};
         let oldHighest = highestId;
         stages.forEach(function (s) {
-            if (s.id > highestId) {
-                highestId = s.id;
-                storageObject["stage" + s.id] = s;
+            let id = getSequentialIdFunction(s);
+            if (id > highestId) {
+                highestId = id;
+                storageObject["stage" + id] = s;
             }
             // no need to save if id is not new
         });

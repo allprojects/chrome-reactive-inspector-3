@@ -29,7 +29,7 @@ cri.graphHistory = (function (window) {
 
         if (this.storage.length > cacheMax) {
             let toPersist = this.storage.splice(0, this.storage.length - cacheMin);
-            cri.stageStorage.storeOnDisk(toPersist);
+            cri.stageStorage.storeOnDisk(toPersist, getBaseKey);
         }
         return stageId;
     };
@@ -63,6 +63,10 @@ cri.graphHistory = (function (window) {
 
     function belongsToBase(stageId, baseStageId) {
         return getBaseIndex(stageId) === getBaseIndex(baseStageId);
+    }
+
+    function getBaseKey(baseStage) {
+        return getBaseIndex(baseStage.stage.id);
     }
 
     /**
@@ -110,10 +114,14 @@ cri.graphHistory = (function (window) {
             self.currentBase = isInStorage;
             callback();
         } else {
+            // store current storage on disk, because the last stages may not be stored yet.
+            cri.stageStorage.storeOnDisk(self.storage, getBaseKey);
+
             let baseIndex = getBaseIndex(stageId);
             let lower = baseIndex - Math.floor(cacheMax / 2);
             let upper = baseIndex + Math.floor(cacheMax / 2);
-            let highest = getBaseIndex(this.highestStageId);
+            // get the last BaseStage as a dynamic upper bound.
+            let highest = getBaseIndex(self.nextStageId);
 
             if (lower < 0) {
                 lower = 0;
@@ -121,6 +129,8 @@ cri.graphHistory = (function (window) {
             } else if (upper > highest) {
                 upper = highest;
             }
+            //TODO: Prevent loading of stages that are already in storage. e.g. stage 3 should be loaded but is not in
+            //TODO: storage, but 4 and 5 are already loaded.
 
             cri.stageStorage.loadFromDisk(lower, upper, function (baseStages) {
                 self.storage = baseStages;
