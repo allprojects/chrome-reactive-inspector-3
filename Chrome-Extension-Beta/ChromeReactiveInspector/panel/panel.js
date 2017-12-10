@@ -87,9 +87,9 @@ let rxSlider = $("#slider")
         min: 0,
         max: 0,
         change: function (event, ui) {
-            // The delay is smaller than the delay for graph updates via the slider,
-            // because the buttons allow for a much more fine grained navigation in big graphs.
             $('.ui-slider-handle').text(ui.value);
+
+            // throttle redraws to reduce performance impact on websites that generate changes really quick.
             drawStageFromUI(ui.value);
         },
         slide: function (event, ui) {
@@ -122,10 +122,19 @@ $('#up').click(function () {
     rxSlider.slider('value', rxSlider.slider('value') - rxSlider.slider("option", "step"));
 });
 
-rxSlider.slider("option", "min", 0);
-rxSlider.slider("option", "max", 0);
-rxSlider.slider("option", "value", 0);
-rxSlider.slider("pips", "refresh");
+let adjustSlider = _.throttle(function (value, max) {
+    if (rxSlider) {
+        rxSlider.slider("option", "min", 0);
+        rxSlider.slider("option", "max", max);
+        rxSlider.slider("option", "value", value);
+        rxSlider.slider("pips", "refresh");
+    }
+    else {
+        console.log("cri: rxSlider was not initialized yet!");
+    }
+}, 230);
+
+adjustSlider(0, 0);
 
 let $configIncludeFilesField = $('#cri-config-includes');
 let previousConfigFiles = [];
@@ -251,12 +260,7 @@ function reload() {
 // Reset everything
 $("#cri-reset").click(function () {
     graphManager.clearGraph();
-
-    //2 reset step slider
-    rxSlider.slider("option", "min", 0);
-    rxSlider.slider("option", "max", 0);
-    rxSlider.slider("option", "value", 0);
-    rxSlider.slider("pips", "refresh");
+    adjustSlider(0, 0);
 });
 
 $('#cri-download-graph').click(function () {

@@ -63,14 +63,7 @@ let allEdges = [];
 
     function handleLoading() {
         graphManager.clearGraph();
-        if (rxSlider) {
-            rxSlider.slider("option", "min", 0);
-            rxSlider.slider("option", "max", 0);
-            rxSlider.slider("option", "value", 0);
-            rxSlider.slider("pips", "refresh");
-        } else {
-            console.log("cri: rxSlider was not initialized yet!");
-        }
+        adjustSlider(0, 0);
         // chrome.storage.sync.get('cri_config_rec_status', function (items) {
         //     if (items.cri_config_rec_status !== undefined) {
         //         if (!items.cri_config_rec_status) {
@@ -206,11 +199,8 @@ function saveStageAndAdvance(event, data) {
     let lastStageId = history.getStageCount();
 
     // Here we should increase steps count in step slider
-    rxSlider.slider("option", "min", 0);
-    rxSlider.slider("option", "max", lastStageId);
     // this will cause the value changed event to fire and thus load and render the new stage.
-    rxSlider.slider("option", "value", lastStageId);
-    rxSlider.slider("pips", "refresh");
+    adjustSlider(lastStageId, lastStageId);
 
 
     if (threshold && rxSlider.slider('value') > +threshold && !isConfirmed) {
