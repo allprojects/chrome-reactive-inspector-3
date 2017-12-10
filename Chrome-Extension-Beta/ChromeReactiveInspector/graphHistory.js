@@ -3,7 +3,7 @@ var cri = cri || {};
 cri.graphHistory = (function (window) {
     const cacheMax = 5;
     const cacheMin = 2;
-    const deltaWindowSize = 10;
+    const deltaWindowSize = 100;
 
     function History() {
         this.nextStageId = 0;
