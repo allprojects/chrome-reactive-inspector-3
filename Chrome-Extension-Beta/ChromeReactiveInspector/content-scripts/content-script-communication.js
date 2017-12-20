@@ -26,13 +26,11 @@ $.extend(cri, (function (window) {
             });
         } else {
             // check the config settings weather to record or not
-            chrome.storage.sync.get('cri_config_rec_status', function (items) {
-                if (items.cri_config_rec_status !== undefined) {
-                    if (items.cri_config_rec_status && fileReadOver) {
-                        chrome.runtime.sendMessage(message, function (message) {
-                            // console.log("message sent");
-                        });
-                    }
+            chrome.storage.sync.get({cri_config_rec_status: true}, function (items) {
+                if (items.cri_config_rec_status && fileReadOver) {
+                    chrome.runtime.sendMessage(message, function (message) {
+                        // console.log("message sent");
+                    });
                 }
             });
         }

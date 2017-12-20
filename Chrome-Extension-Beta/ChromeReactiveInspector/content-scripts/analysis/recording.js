@@ -79,8 +79,8 @@ cri.analysis.recording = (function () {
         }
         name = name.replace('Operator', '');
         allEdges.push({'startId': startId, 'endId': endId});
-        var edgeStart = _.find(nodesWithDetails, {id: startId});
-        var edgeEnd = _.find(nodesWithDetails, {id: endId});
+        let edgeStart = _.find(nodesWithDetails, {id: startId});
+        let edgeEnd = _.find(nodesWithDetails, {id: endId});
         cri.sendObjectToDevTools({
             content: {
                 "edgeStart": startId,

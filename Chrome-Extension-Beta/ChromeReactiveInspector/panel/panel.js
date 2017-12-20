@@ -158,20 +158,18 @@ let threshold = '';
 let configRecStatusButton = document.getElementById('cri-rec-status');
 // (function () {
 // populate
-chrome.storage.sync.get('cri_config_rec_status', function (items) {
-    if (items.cri_config_rec_status !== undefined) {
-        let recStatusFromStorage = items.cri_config_rec_status;
-        configRecStatusButton.setAttribute('data-rec-status', recStatusFromStorage);
-        $(this).data("rec-status", recStatusFromStorage);
-        if (recStatusFromStorage) {
-            configRecStatusButton.innerText = 'Pause Recording';
-            configRecStatusButton.classList.add('btn-info');
-            configRecStatusButton.classList.remove('btn-danger');
-        } else {
-            configRecStatusButton.innerText = 'Start Recording';
-            configRecStatusButton.classList.remove('btn-info');
-            configRecStatusButton.classList.add('btn-danger');
-        }
+chrome.storage.sync.get({cri_config_rec_status: true}, function (items) {
+    let recStatusFromStorage = items.cri_config_rec_status;
+    configRecStatusButton.setAttribute('data-rec-status', recStatusFromStorage);
+    $(this).data("rec-status", recStatusFromStorage);
+    if (recStatusFromStorage) {
+        configRecStatusButton.innerText = 'Pause Recording';
+        configRecStatusButton.classList.add('btn-info');
+        configRecStatusButton.classList.remove('btn-danger');
+    } else {
+        configRecStatusButton.innerText = 'Start Recording';
+        configRecStatusButton.classList.remove('btn-info');
+        configRecStatusButton.classList.add('btn-danger');
     }
 });
 //TODO: Warning, this is not a synchronous call so threshold may not be set when its used
@@ -243,17 +241,7 @@ configRecStatusButton.addEventListener('click', function () {
 });
 
 function setCriStatus(element, status) {
-    chrome.storage.sync.set({
-        'cri_config_rec_status': status
-    });
-    // sendObjectToInspectedPage(
-    //     {
-    //         action: "cri_config_rec_status",
-    //         content: {
-    //             "status": status
-    //         }
-    //     }
-    // );
+    chrome.storage.sync.set({cri_config_rec_status: status});
     if (status) {
         // isConfirmed = false;
         element.text('Pause Recording');
@@ -315,6 +303,7 @@ $('#cri-find-btn').click(function () {
 
 
 let searchNode = '';
+
 
 function setSearchNode() {
     searchNode = $("#cri-node-search-val");
