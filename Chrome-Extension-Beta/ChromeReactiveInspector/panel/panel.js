@@ -353,10 +353,10 @@ function searchNodeFunction() {
         all_nodes.forEach(function (node) {
             if (node.ref && searchNodeVal && node.ref.includes(searchNodeVal)) {
                 nodeFound = true;
-                node.class = node.class.replace(/current/g, '').trim().replace(/normal/g, '').trim() + ' highlight';
+                node.class = applySearchClass(node.class, 'highlight', true);
             }
             else {
-                node.class = node.class.replace(/highlight/g, '') + ' fade';
+                node.class = applySearchClass(node.class, 'fade');
             }
         });
         if (nodeFound) {
@@ -438,13 +438,24 @@ function dependency(type) {
 
     all_nodes.forEach(function (node) {
         if (searchNodeVal && _.contains(edges, node.nodeId)) {
-            node.class = node.class.replace(/current/g, '').trim().replace(/normal/g, '').trim() + ' highlight';
+            node.class = applySearchClass(node.class, 'highlight', true);
         }
         else {
-            node.class = node.class.replace(/highlight/g, '') + ' fade';
+            node.class = applySearchClass(node.class, 'fade');
         }
     });
     graphManager.reRender();
+}
+
+function applySearchClass(nodeClass, classString, doClearCurrent = false) {
+    let newClassList = nodeClass
+        .replace(/normal/g, '').trim()
+        .replace(/fade/g, '').trim()
+        .replace(/highlight/g, '').trim();
+    if (doClearCurrent) {
+        newClassList = newClassList.replace(/current/g, '').trim();
+    }
+    return newClassList + " " + classString;
 }
 
 /**
