@@ -60,75 +60,82 @@
     </ul>
 </div>
 
-<div class="clearfix flex-container" style="margin: 5px">
-    <h4>Instrument Files</h4>
-    <input id="cri-config-includes" type="text" class="form-control" style="flex-grow: 1"/>
-</div>
-
-<hr>
-
-<div id="query-item-panel" class="clearfix flex-container" style="flex-wrap: wrap">
-    <div class="flex-child-centered">
-        <h4>History Queries</h4>
-        <div class="flex-item-container">
-            <select class="form-control cri-findnode-select" id="cri-findnode-select">
-                <option value="nodeCreated">nodeCreated[nodeName]</option>
-                <option value="nodeUpdated">nodeUpdated[nodeName]</option>
-                <option value="evaluationYielded">evaluationYielded[nodeName][value]</option>
-                <option value="dependencyCreated">dependencyCreated[nodeName][nodeName]</option>
-            </select>
-            <button type="button" class="btn flex-child-centered" id="cri-history-query-submit">Submit Query</button>
-            <div class="flex-container flex-align-baseline">
-                <button type="button" id="cri-history-query-prev" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon glyphicon-chevron-left"></span>
-                </button>
-                <div style="margin: 5px">
-                    <span id="cri-history-current-step">0</span>/<span id="cri-history-last-step">0</span>
-                </div>
-                <button type="button" id="cri-history-query-next" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </button>
-            </div>
-        </div>
+<button id="cri-tools-collapse" type="button" class="btn btn-default btn-sm"
+        style="position: absolute; right: 5px; margin-top: 5px">
+    <span class="glyphicon glyphicon glyphicon-chevron-down"></span>
+</button>
+<div id="cri-tools-container">
+    <div class="flex-container" style="margin: 5px">
+        <h4>Instrument Files</h4>
+        <input id="cri-config-includes" type="text" class="form-control" style="flex-grow: 1"/>
     </div>
-    <div class="flex-child-centered">
-        <h4>Reactive Breakpoints</h4>
-        <div class="flex-item-container">
-            <div class="flex-item-container" style="margin-top: 0">
-                <select class="form-control cri-breakpoint-select" id="cri-breakpoint-select">
-                    <option>nodeCreated[nodeId]</option>
-                    <option>nodeUpdated[nodeId]</option>
-                    <option>evaluationYielded[nodeId][value]</option>
-                    <option>dependencyCreated[nodeId][nodeId]</option>
+
+    <hr>
+    <div id="query-item-panel" class="flex-container collapse" style="flex-wrap: wrap">
+        <div class="flex-child-centered">
+            <h4>History Queries</h4>
+            <div class="flex-item-container">
+                <select class="form-control cri-findnode-select" id="cri-findnode-select">
+                    <option value="nodeCreated">nodeCreated[nodeName]</option>
+                    <option value="nodeUpdated">nodeUpdated[nodeName]</option>
+                    <option value="evaluationYielded">evaluationYielded[nodeName][value]</option>
+                    <option value="dependencyCreated">dependencyCreated[nodeName][nodeName]</option>
                 </select>
-                <button type="button" class="btn" id="cri-breakpoint-query-submit">Add</button>
-            </div>
-            <div id="cri-breakpoints-container" class="flex-container"></div>
-        </div>
-    </div>
-    <div class="flex-child-centered">
-        <h4>Search</h4>
-        <div class="flex-item-container">
-            <input name="searchNode" placeholder="Type Node name" id="cri-node-search-val" class="form-control"
-                   style="max-width: 170px;">
-            <div class="dropdown" style="display: inline-block">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="featureType" data-toggle="dropdown">
-                    Select
-                    <span class="caret"></span>
+                <button type="button" class="btn flex-child-centered" id="cri-history-query-submit">Submit Query
                 </button>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Search</a></li>
-                    <li><a href="#">Dependents</a></li>
-                    <li><a href="#">Dependencies</a></li>
-                </ul>
+                <div class="flex-container flex-align-baseline">
+                    <button type="button" id="cri-history-query-prev" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon glyphicon-chevron-left"></span>
+                    </button>
+                    <div style="margin: 5px">
+                        <span id="cri-history-current-step">0</span>/<span id="cri-history-last-step">0</span>
+                    </div>
+                    <button type="button" id="cri-history-query-next" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </button>
+                </div>
             </div>
-            <button id="cri-find-btn" class="btn" style="display: inline-block" type="button">Find</button>
+        </div>
+        <div class="flex-child-centered">
+            <h4>Reactive Breakpoints</h4>
+            <div class="flex-item-container">
+                <div class="flex-item-container" style="margin-top: 0">
+                    <select class="form-control cri-breakpoint-select" id="cri-breakpoint-select">
+                        <option>nodeCreated[nodeId]</option>
+                        <option>nodeUpdated[nodeId]</option>
+                        <option>evaluationYielded[nodeId][value]</option>
+                        <option>dependencyCreated[nodeId][nodeId]</option>
+                    </select>
+                    <button type="button" class="btn" id="cri-breakpoint-query-submit">Add</button>
+                </div>
+                <div id="cri-breakpoints-container" class="flex-container"></div>
+            </div>
+        </div>
+        <div class="flex-child-centered">
+            <h4>Search</h4>
+            <div class="flex-item-container">
+                <input name="searchNode" placeholder="Type Node name" id="cri-node-search-val" class="form-control"
+                       style="max-width: 170px;">
+                <div class="dropdown" style="display: inline-block">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="featureType"
+                            data-toggle="dropdown">
+                        Select
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Search</a></li>
+                        <li><a href="#">Dependents</a></li>
+                        <li><a href="#">Dependencies</a></li>
+                    </ul>
+                </div>
+                <button id="cri-find-btn" class="btn" style="display: inline-block" type="button">Find</button>
+            </div>
         </div>
     </div>
 </div>
-<hr>
 
-<div class="clearfix">
+<hr>
+<div>
     <h4>History Navigator</h4>
     <div class="flex-container">
         <div class="flex-child-centered">

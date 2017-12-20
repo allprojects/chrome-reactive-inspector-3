@@ -45,6 +45,22 @@ $dialog.dialog({
     }
 });
 
+let $criToolsContainer = $("#cri-tools-container");
+let toolsContainerVisible = true;
+let $criToolsCollapseButton = $("#cri-tools-collapse");
+$criToolsCollapseButton.click(function () {
+    toolsContainerVisible = !toolsContainerVisible;
+    if (toolsContainerVisible) {
+        $criToolsCollapseButton.find("span").removeClass("glyphicon-chevron-down")
+            .addClass("glyphicon-chevron-up");
+        $criToolsContainer.show();
+    } else {
+        $criToolsCollapseButton.find("span").removeClass("glyphicon-chevron-up")
+            .addClass("glyphicon-chevron-down");
+        $criToolsContainer.hide();
+    }
+});
+
 let historyEntries = [];
 let isConfirmed = false;
 
