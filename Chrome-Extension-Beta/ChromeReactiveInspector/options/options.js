@@ -10,7 +10,8 @@ let $defaultIgnores = $('#defaultIgnores');
 let $reloadOnInstrument = $('#reloadOnInstrument');
 
 const defaultDefaultIgnores = ["Rx.js", "rx.lite.js", "Bacon.js", "Bacon.UI.js",
-    "jquery.js", "rx.all.js", "jquery-2.1.4.js"];
+    "jquery.js", "rx.all.js", "jquery-2.1.4.js", "jquery-1.9.1.min.js", "jquery-1.12.4.min.js",
+    "underscore.js", "underscore-min.js"];
 
 // Saves options to chrome.storage
 function save_options() {

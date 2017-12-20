@@ -230,7 +230,8 @@ var cri = cri || {};
 // set cri.instrument only after all settings are retrieved.
     chrome.storage.sync.get({
         defaultIgnores: ["Rx.js", "rx.lite.js", "Bacon.js", "Bacon.UI.js",
-            "jquery.js", "rx.all.js", "jquery-2.1.4.js"],
+            "jquery.js", "rx.all.js", "jquery-2.1.4.js", "jquery-1.9.1.min.js", "jquery-1.12.4.min.js",
+            "underscore.js", "underscore-min.js"],
         developerMode: false,
         criconfigincludes: []
     }, function (items) {

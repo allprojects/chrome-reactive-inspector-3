@@ -23,11 +23,11 @@
         "<all_urls>"
       ],
       "js": [
-        "libraries/jquery.js",
+        "libraries/jquery-1.12.4.min.js",
         "content-scripts/content-scripts-start.js",
         "content-scripts/content-script-communication.js",
         "content-scripts/jalangi-framework.js",
-        "libraries/underscore.js",
+        "libraries/underscore-min.js",
         "libraries/Bacon.js",
         "libraries/Rx.js"
       ],
