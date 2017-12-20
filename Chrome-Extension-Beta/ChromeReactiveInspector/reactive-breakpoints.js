@@ -13,6 +13,10 @@ _.extend(cri, (function (window) {
 
         historyQuery = historyQueryString.substring(0, historyQueryString.indexOf('['));
 
+        if (!historyQuery) {
+            // this happens when the user typed in something without '['
+            return false;
+        }
         let matches = historyQueryString.match(/\[(.*?)\]/g).map(function (val) {
             return val.replace('[', '').replace(']', '');
         });
@@ -115,16 +119,20 @@ _.extend(cri, (function (window) {
         self.getBreakpointsAsync(function (data) {
             // remove everything
             self.$breakpointContainer.html("");
-
-            data.forEach(function (breakpoint) {
-                let $breakpoint = $("<div class='bpoint-entry'>")
-                    .append($("<span class='bpoint-remove'>")
-                        .attr("data-bpoint-index", breakpoint.index)
-                        .text("X"))
-                    .append($("<span class='bpoint-query'>")
-                        .text(breakpoint.query));
-                self.$breakpointContainer.append($breakpoint);
-            });
+            if (data.length === 0) {
+                self.$breakpointContainer.css("margin", "0");
+            } else {
+                self.$breakpointContainer.css("margin", "auto");
+                data.forEach(function (breakpoint) {
+                    let $breakpoint = $("<div class='bpoint-entry'>")
+                        .append($("<span class='bpoint-remove'>")
+                            .attr("data-bpoint-index", breakpoint.index)
+                            .text("X"))
+                        .append($("<span class='bpoint-query'>")
+                            .text(breakpoint.query));
+                    self.$breakpointContainer.append($breakpoint);
+                });
+            }
         });
     };
 
