@@ -15,6 +15,7 @@ module.exports = {
     clear: function (targetdir) {
         console.log('clearing "' + targetdir + '"');
         shell.rm('-r', targetdir + '*');
+        shell.mkdir('-p', targetdir);
     },
 
     copyToTarget: function (sourcedir, targetdir, excluded) {
