@@ -588,8 +588,10 @@ $('#cri-history-query-next').click(function () {
 let $breakpointContainer = $('#cri-breakpoints-container');
 let reactiveBreakpointManager = new cri.ReactiveBreakpointManager($breakpointContainer);
 
+$('#cri-breakpoint-select').editableSelect({filter: false});
+// it is important to query the element after "editableSelect" has been called, because
+// otherwise the selector will not have the proper value due to weird behavior of jquery-editable-select
 let $breakpointSelect = $('#cri-breakpoint-select');
-$breakpointSelect.editableSelect({filter: false});
 
 $('#cri-breakpoint-query-submit').click(function () {
     reactiveBreakpointManager.submitBreakpoints($breakpointSelect.val());

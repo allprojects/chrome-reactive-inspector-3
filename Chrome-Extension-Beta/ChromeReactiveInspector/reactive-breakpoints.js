@@ -8,12 +8,12 @@ _.extend(cri, (function (window) {
         return this;
     }
 
-    ReactiveBreakpointManager.prototype.submitBreakpoints = function(historyQueryString) {
-        var historyQuery, param1, param2 = '';
+    ReactiveBreakpointManager.prototype.submitBreakpoints = function (historyQueryString) {
+        let historyQuery, param1, param2 = '';
 
         historyQuery = historyQueryString.substring(0, historyQueryString.indexOf('['));
 
-        var matches = historyQueryString.match(/\[(.*?)\]/g).map(function (val) {
+        let matches = historyQueryString.match(/\[(.*?)\]/g).map(function (val) {
             return val.replace('[', '').replace(']', '');
         });
 
@@ -29,7 +29,7 @@ _.extend(cri, (function (window) {
 
             // NOW we have query and parameter
             // check which query to apply, find data from current stages
-            var breakPointToStore = {
+            let breakPointToStore = {
                 query: historyQuery,
                 params: matches
             };
@@ -38,15 +38,15 @@ _.extend(cri, (function (window) {
     };
 
     // This method append breakpoint object to local storage
-    ReactiveBreakpointManager.prototype.storeBreakPoint = function(breakPointToStore) {
-        var self = this;
+    ReactiveBreakpointManager.prototype.storeBreakPoint = function (breakPointToStore) {
+        let self = this;
         // by passing an object you can define default values e.g.: []
         chrome.storage.sync.get({criReactiveBreakPoints: []}, function (result) {
             // the input argument is ALWAYS an object containing the queried keys
             // so we select the key we need
-            var currentBreakPoints = result.criReactiveBreakPoints;
+            let currentBreakPoints = result.criReactiveBreakPoints;
 
-            var alreadyExists = _.some(currentBreakPoints, function (bp) {
+            let alreadyExists = _.some(currentBreakPoints, function (bp) {
                 if (bp.params[0] === breakPointToStore.params[0] && bp.query === breakPointToStore.query) {
                     if (breakPointToStore.params.length > 1) {
                         return bp.params.length > 1 && breakPointToStore.params[1] === bp.params[1];
@@ -66,12 +66,12 @@ _.extend(cri, (function (window) {
         });
     };
 
-    ReactiveBreakpointManager.prototype.removeBreakPointByIndex = function(index) {
-        var self = this;
+    ReactiveBreakpointManager.prototype.removeBreakPointByIndex = function (index) {
+        let self = this;
         chrome.storage.sync.get({criReactiveBreakPoints: []}, function (result) {
             // the input argument is ALWAYS an object containing the queried keys
             // so we select the key we need
-            var currentBreakPoints = result.criReactiveBreakPoints;
+            let currentBreakPoints = result.criReactiveBreakPoints;
             currentBreakPoints.splice(index, 1);
             // set the new array value to the same key
             chrome.storage.sync.set({criReactiveBreakPoints: currentBreakPoints}, function () {
@@ -86,17 +86,17 @@ _.extend(cri, (function (window) {
      *
      * @param callback function(array of {index, query})
      */
-    ReactiveBreakpointManager.prototype.getBreakpointsAsync=function(callback) {
-        var self = this;
+    ReactiveBreakpointManager.prototype.getBreakpointsAsync = function (callback) {
+        let self = this;
         // get current breakpoints from storage and list down
         chrome.storage.sync.get({criReactiveBreakPoints: []}, function (result) {
             // the input argument is ALWAYS an object containing the queried keys
             // so we select the key we need
-            var currentBreakPoints = result.criReactiveBreakPoints;
-            var breakpointData = [];
-            for (var index in currentBreakPoints) {
-                var currentBreakPoint = currentBreakPoints[index];
-                var currentBreakPointQuery = currentBreakPoint.query;
+            let currentBreakPoints = result.criReactiveBreakPoints;
+            let breakpointData = [];
+            for (let index in currentBreakPoints) {
+                let currentBreakPoint = currentBreakPoints[index];
+                let currentBreakPointQuery = currentBreakPoint.query;
                 if (currentBreakPoint.params[0] !== undefined) {
                     currentBreakPointQuery = currentBreakPointQuery + "[" + currentBreakPoint.params[0] + "]";
                 }
@@ -109,16 +109,15 @@ _.extend(cri, (function (window) {
         });
     };
 
-    ReactiveBreakpointManager.prototype.refreshUI = function() {
-        var self = this;
+    ReactiveBreakpointManager.prototype.refreshUI = function () {
+        let self = this;
 
         self.getBreakpointsAsync(function (data) {
             // remove everything
             self.$breakpointContainer.html("");
 
-            data.forEach(function () {
-                var breakpoint = this;
-                var $breakpoint = $("<div class='bpoint-entry'>")
+            data.forEach(function (breakpoint) {
+                let $breakpoint = $("<div class='bpoint-entry'>")
                     .append($("<span class='bpoint-remove'>")
                         .attr("data-bpoint-index", breakpoint.index)
                         .text("X"))
