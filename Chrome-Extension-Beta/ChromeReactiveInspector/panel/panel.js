@@ -454,11 +454,19 @@ $('#cri-findnode-select').editableSelect({filter: false});
 $("#cri-history-current-step").text(0);
 $("#cri-history-last-step").text(0);
 
-let stage = '';
+let historyQueryResult = '';
 $('#cri-history-query-submit').click(function () {
     let historyQuery, param1, param2 = '';
     let currentHistoryQuery = $('#cri-findnode-select').val();
     historyQuery = currentHistoryQuery.substring(0, currentHistoryQuery.indexOf('['));
+
+    if (!currentHistoryQuery || !historyQuery) {
+        // if the the query is empty, reset the history query feature.
+        $("#cri-history-current-step").text(0);
+        $("#cri-history-last-step").text(0);
+        historyQueryResult = '';
+        return;
+    }
     let matches = currentHistoryQuery.match(/\[(.*?)\]/g).map(function (val) {
         return val.replace('[', '').replace(']', '');
     });
@@ -471,40 +479,40 @@ $('#cri-history-query-submit').click(function () {
         if (historyQuery === "nodeCreated") {
             let _tNode = _.find(allNodes, {name: param1});
             if (_tNode) {
-                stage = historyEntries.filter(function (history) {
+                historyQueryResult = historyEntries.filter(function (history) {
                     if (history.type === 'nodeCreated' && history.nodeId === _tNode.nodeId)
                         return history.stageId;
                 });
-                if (stage.length) {
-                    graphManager.drawStage(stage[0].stageId);
-                    rxSlider.slider('value', stage[0].stageId, rxSlider.slider("option", "step"));
+                if (historyQueryResult.length) {
+                    graphManager.drawStage(historyQueryResult[0].stageId);
+                    rxSlider.slider('value', historyQueryResult[0].stageId, rxSlider.slider("option", "step"));
                     $("#cri-history-current-step").text(1);
-                    $("#cri-history-last-step").text(stage.length);
+                    $("#cri-history-last-step").text(historyQueryResult.length);
                 }
             }
         } else if (historyQuery === "nodeUpdated") {
-            stage = historyEntries.filter(function (history) {
+            historyQueryResult = historyEntries.filter(function (history) {
                 if (history.type === 'nodeUpdated' && history.nodeName === param1)
                     return history.stageId;
             });
-            if (stage.length) {
-                graphManager.drawStage(stage[0].stageId);
-                rxSlider.slider('value', stage[0].stageId, rxSlider.slider("option", "step"));
+            if (historyQueryResult.length) {
+                graphManager.drawStage(historyQueryResult[0].stageId);
+                rxSlider.slider('value', historyQueryResult[0].stageId, rxSlider.slider("option", "step"));
                 $("#cri-history-current-step").text(1);
-                $("#cri-history-last-step").text(stage.length);
+                $("#cri-history-last-step").text(historyQueryResult.length);
             }
         } else if (historyQuery === "evaluationYielded") {
-            stage = historyEntries.filter(function (history) {
+            historyQueryResult = historyEntries.filter(function (history) {
                 if (history.type === 'nodeUpdated' && history.nodeName === param1) {
                     if (history.nodeValue === param2 || history.nodeValue.indexOf(param2) !== -1)
                         return history.stageId;
                 }
             });
-            if (stage.length) {
-                graphManager.drawStage(stage[0].stageId);
-                rxSlider.slider('value', stage[0].stageId, rxSlider.slider("option", "step"));
+            if (historyQueryResult.length) {
+                graphManager.drawStage(historyQueryResult[0].stageId);
+                rxSlider.slider('value', historyQueryResult[0].stageId, rxSlider.slider("option", "step"));
                 $("#cri-history-current-step").text(1);
-                $("#cri-history-last-step").text(stage.length);
+                $("#cri-history-last-step").text(historyQueryResult.length);
             }
 
         } else if (historyQuery === "dependencyCreated") {
@@ -512,7 +520,7 @@ $('#cri-history-query-submit').click(function () {
             let nodeNameDest = param2;
             let result;
             let tempResult = [];
-            stage = '';
+            historyQueryResult = '';
             let filteredHistoryEntries = _.filter(historyEntries, function (history) {
                 return history.type === 'dependencyCreated'
             });
@@ -563,8 +571,8 @@ $('#cri-history-query-submit').click(function () {
 $('#cri-history-query-prev').click(function () {
     let currentStepFromHistoryQuery = $("#cri-history-current-step").text();
     let nextStepToAccess = parseInt(currentStepFromHistoryQuery) - 2;
-    if (stage && stage.length && nextStepToAccess > -1) {
-        let firstFoundStageId = stage[nextStepToAccess].stageId;
+    if (historyQueryResult && historyQueryResult.length && nextStepToAccess > -1) {
+        let firstFoundStageId = historyQueryResult[nextStepToAccess].stageId;
         rxSlider.slider('value', firstFoundStageId, rxSlider.slider("option", "step"));
         graphManager.drawStage(firstFoundStageId);
         $("#cri-history-current-step").text(nextStepToAccess + 1);
@@ -574,8 +582,8 @@ $('#cri-history-query-prev').click(function () {
 $('#cri-history-query-next').click(function () {
     let currentStepFromHistoryQuery = $("#cri-history-current-step").text();
     let nextStepToAccess = parseInt(currentStepFromHistoryQuery);
-    if (stage && (stage.length > 1) && stage.length > nextStepToAccess) {
-        let firstFoundStageId = stage[nextStepToAccess].stageId;
+    if (historyQueryResult && (historyQueryResult.length > 1) && historyQueryResult.length > nextStepToAccess) {
+        let firstFoundStageId = historyQueryResult[nextStepToAccess].stageId;
         rxSlider.slider('value', firstFoundStageId, rxSlider.slider("option", "step"));
         graphManager.drawStage(firstFoundStageId);
         $("#cri-history-current-step").text(nextStepToAccess + 1);
