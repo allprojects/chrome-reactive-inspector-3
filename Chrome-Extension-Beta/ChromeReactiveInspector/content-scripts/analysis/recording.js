@@ -26,13 +26,14 @@ cri.analysis.recording = (function () {
         let name = getValueOrEmpty(data.name);
         let value = getValueOrEmpty(data.value);
 
+        let val = null;
         if (!cri.shouldSaveNodeValue(fileReadOver, id)) {
             // if(checkPauseNow()){
             //     debugger;
             // }
             ++currentStep;
             cri.printValues(currentStep, value, id);
-            let val = getValue(value);
+            val = getValue(value);
             cri.sendObjectToDevTools({
                 content: {
                     'nodeId': id,
