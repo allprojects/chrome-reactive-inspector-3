@@ -19,28 +19,11 @@ $dialog.dialog({
     modal: true,
     buttons: {
         "Confirm": function () {
-            //setCriStatus($('#cri-rec-status'), false);
-            // sendObjectToInspectedPage(
-            //     {
-            //         action: "threshold",
-            //         content: {
-            //             "status": false
-            //         }
-            //     }
-            // );
             $(this).dialog("close");
         },
         "Cancel": function () {
             configRecStatusButton.click();
             $(this).dialog("close");
-            // sendObjectToInspectedPage(
-            //     {
-            //         action: "threshold",
-            //         content: {
-            //             "status": false
-            //         }
-            //     }
-            // );
         }
     }
 });
@@ -285,167 +268,35 @@ $('#cri-download-graph').click(function () {
         // Replace the current SVG with an image version of it.
         // simg.replace();
         // And trigger a download of the rendered image.
-        //TODO: currently wont trigger a download from chrome
         simg.download('dependency_graph_' + filename);
     });
 });
 
+let $searchNode = $("#cri-node-search-val");
+
+let searchGraphManager = new cri.SearchGraphManager(graphManager, $searchNode);
 
 $('#cri-find-btn').click(function () {
     let type = $('#featureType').text().trim();
     if (type === 'Search')
-        searchNodeFunction();
+        searchGraphManager.searchNodeFunction($searchNode.val());
     else if (type === 'Dependents')
-        dependency('dependents');
+        searchGraphManager.dependency($searchNode.val(), 'dependents');
     else if (type === 'Dependencies')
-        dependency('dependencies');
+        searchGraphManager.dependency($searchNode.val(), 'dependencies');
 });
 
-
-let searchNode = '';
-
-
-function setSearchNode() {
-    searchNode = $("#cri-node-search-val");
-}
-
-setSearchNode();
-
-let nodeFound = false;
-$("#cri-node-search-val").on('change keyup paste', function () {
-    //TODO: if keyup and blur right after, this may fire twice with same values
-    // same for paste + blur
-    if (!searchNode) {
-        setSearchNode();
-    }
+$searchNode.on('keyup paste', function () {
     //TODO: check if this resets the search correctly.
-    let searchNodeVal = searchNode.val();
+    let searchNodeVal = $searchNode.val();
     if (searchNodeVal === '') {
         // resets all search styles etc.
         //TODO: make search solely with css instead of resetting the data.
-        graphManager.drawStage(graphManager.currentStage);
+        searchGraphManager.resetSearch();
     }
-    searchNode.removeClass('error');
+    $searchNode.removeClass('error');
 });
 
-
-/**
- * Whenever user searches for node, below method will be called.
- */
-function searchNodeFunction() {
-    searchNode.removeClass('error');
-    let all_nodes = graphManager.getNodes();
-
-    let searchNodeVal = searchNode.val();
-    if (searchNodeVal) {
-        nodeFound = false;
-        all_nodes.forEach(function (node) {
-            if (node.ref && searchNodeVal && node.ref.includes(searchNodeVal)) {
-                nodeFound = true;
-                node.class = applySearchClass(node.class, 'highlight', true);
-            }
-            else {
-                node.class = applySearchClass(node.class, 'fade');
-            }
-        });
-        if (nodeFound) {
-            searchNode.removeClass('error');
-            graphManager.reRender();
-        } else {
-            searchNode.addClass('error');
-        }
-    } else {
-        graphManager.drawStage(graphManager.currentStage);
-    }
-}
-
-function dependency(type) {
-    let all_nodes = graphManager.getNodes();
-    let searchNodeVal = searchNode.val();
-    let tempNode = '';
-    let edges = [];
-    if (searchNodeVal) {
-        nodeFound = false;
-        all_nodes.forEach(function (node) {
-            if (node.ref && searchNodeVal && node.ref === searchNodeVal) {
-                tempNode = node;
-                nodeFound = true;
-            }
-        });
-        if (nodeFound) {
-            searchNode.removeClass('error');
-        } else {
-            searchNode.addClass('error');
-        }
-    }
-    allEdges.forEach(function (edge) {
-        if (type === 'dependencies') {
-            if (edge.endId === tempNode.nodeId) {
-                edges.push(edge.startId);
-            }
-        }
-        else {
-            if (edge.startId === tempNode.nodeId) {
-                edges.push(edge.endId);
-            }
-        }
-    });
-    if (edges.length) {
-        let tempArray = [];
-        if (type === 'dependencies') {
-            let allEdgesReverse = allEdges.slice().reverse();
-            allEdgesReverse.forEach(function (edge) {
-                if (_.contains(edges, edge.endId))
-                    edges.push(edge.startId);
-                else
-                    tempArray.push(edge)
-            });
-
-            tempArray.forEach(function (edge) {
-                if (_.contains(edges, edge.endId))
-                    edges.push(edge.startId);
-            });
-
-            edges = _.unique(edges)
-        }
-        else {
-            allEdges.forEach(function (edge) {
-                if (_.contains(edges, edge.startId))
-                    edges.push(edge.endId);
-                else
-                    tempArray.push(edge)
-            });
-            tempArray.forEach(function (edge) {
-                if (_.contains(edges, edge.startId))
-                    edges.push(edge.endId);
-            });
-            edges = _.unique(edges);
-        }
-    }
-
-    edges.push(tempNode.nodeId);
-
-    all_nodes.forEach(function (node) {
-        if (searchNodeVal && _.contains(edges, node.nodeId)) {
-            node.class = applySearchClass(node.class, 'highlight', true);
-        }
-        else {
-            node.class = applySearchClass(node.class, 'fade');
-        }
-    });
-    graphManager.reRender();
-}
-
-function applySearchClass(nodeClass, classString, doClearCurrent = false) {
-    let newClassList = nodeClass
-        .replace(/normal/g, '').trim()
-        .replace(/fade/g, '').trim()
-        .replace(/highlight/g, '').trim();
-    if (doClearCurrent) {
-        newClassList = newClassList.replace(/current/g, '').trim();
-    }
-    return newClassList + " " + classString;
-}
 
 /**
  * editable select for find by query feature
