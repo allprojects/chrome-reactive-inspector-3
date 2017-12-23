@@ -8,14 +8,14 @@ cri.analysis = cri.analysis || {};
 
 cri.analysis.jalangi = (function (window) {
     // remap pseudo include to shorten calls
-    var recording = cri.analysis.recording;
+    let recording = cri.analysis.recording;
 
     // Jalangi Analysis Start
     J$.analysis = {};
 
     (function (sandbox) {
         function AnalysisEngine() {
-            var iidToLocation = sandbox.iidToLocation;
+            let iidToLocation = sandbox.iidToLocation;
 
             this.literal = function (iid, val) {
                 return val;
@@ -31,12 +31,13 @@ cri.analysis.jalangi = (function (window) {
                 if (!val || !val.constructor || !val.constructor.name) {
                     return val;
                 }
-                //TODO submit nodeinfo to update nodes but do not add new step to history.
-                // also a step makes sense because something changes, it is not visible to the user and
+                //TODO: submit nodeinfo to update nodes but do not add new step to history.
+                // although a step makes sense because some info provided to the user changes,
+                // it is not directly visible to the user (because it is just visible as a tooltip) and
                 // the extra step provides no real value.
 
                 if (val.id && isObservable(val)) {
-                    var sourceInfo = getSourceInfo(iid, filename);
+                    let sourceInfo = getSourceInfo(iid, filename);
                     submitJalangiNodeInfo(val, '', sourceInfo);
                 }
 
@@ -73,10 +74,10 @@ cri.analysis.jalangi = (function (window) {
                     return val;
                 }
 
-                var sourceInfo = getSourceInfo(iid, filename);
+                let sourceInfo = getSourceInfo(iid, filename);
 
-                var currentType = val.constructor.name || "";
-                var currentTypeToDisplay = getTypeToDisplay(val) || currentType;
+                let currentType = val.constructor.name || "";
+                let currentTypeToDisplay = getTypeToDisplay(val) || currentType;
 
                 if (isObservable(val)) {
                     checkObservableForMeta(val, name, sourceInfo);
@@ -105,7 +106,7 @@ cri.analysis.jalangi = (function (window) {
                     }
                     else if (name) {
                         val.destination._id = recording.getNextId();
-                        var tempVal = '';
+                        let tempVal = '';
                         if (recording.getPreviousData().nodeId === val._id) {
                             tempVal = recording.getPreviousData().value;
                             recording.resetPreviousData();
@@ -154,8 +155,8 @@ cri.analysis.jalangi = (function (window) {
             }
 
             function getSourceInfo(iid, filename) {
-                var sourceInfo = '';
-                var SourceLocation = window.iidToLocationMap[iid];
+                let sourceInfo = '';
+                let SourceLocation = window.iidToLocationMap[iid];
                 if (SourceLocation) {
                     sourceInfo = {
                         begin: {line: SourceLocation[1], column: SourceLocation[2]},
@@ -170,13 +171,13 @@ cri.analysis.jalangi = (function (window) {
                 if (!val || !val.constructor.name) {
                     return false;
                 }
-                var typeToLower = val.constructor.name.toLowerCase();
+                let typeToLower = val.constructor.name.toLowerCase();
                 return (typeToLower.search("observable") !== -1 || typeToLower.search("subject") !== -1);
             }
 
             function submitJalangiNodeInfo(val, name, sourceInfo) {
 
-                var currentTypeToDisplay = getTypeToDisplay(val) || val.constructor.name || "";
+                let currentTypeToDisplay = getTypeToDisplay(val) || val.constructor.name || "";
                 // bacon observer already has the id attribute
                 val = recording.checkAndAssignId(val);
 
@@ -185,7 +186,7 @@ cri.analysis.jalangi = (function (window) {
                 // Check if there was already details submitted with a name.
                 // If so, the submitted details came from write which has greater position precision than
                 // from invoke function.
-                var existing = _.find(recording.nodesWithDetails, {id: val.id});
+                let existing = _.find(recording.nodesWithDetails, {id: val.id});
                 if (!name && existing && existing.name) {
                     return;
                 }
@@ -235,7 +236,7 @@ cri.analysis.jalangi = (function (window) {
      * @param name name of the observable variable
      */
     function addOrUpdatDetails(id, name) {
-        var existing = hasDetails(id, name);
+        let existing = hasDetails(id, name);
 
         // update or add new variable
         if (existing) {
@@ -254,12 +255,12 @@ cri.analysis.jalangi = (function (window) {
      * Returns the the details object if there is one.
      */
     function hasDetails(id, name) {
-        var existing = "";
-        var result = _.filter(recording.nodesWithDetails, function (v) {
+        let existing = "";
+        let result = _.filter(recording.nodesWithDetails, function (v) {
             return v.id === id || v.name === name
         });
-        var idResult = _.find(result, {id: id});
-        var nameResults = _.filter(result, {name: name});
+        let idResult = _.find(result, {id: id});
+        let nameResults = _.filter(result, {name: name});
 
         // check id and name to prevent finding of variables with id or name set to undefined
         if (id && idResult) {

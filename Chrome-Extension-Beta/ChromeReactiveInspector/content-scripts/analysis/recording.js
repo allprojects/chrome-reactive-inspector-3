@@ -20,11 +20,11 @@ cri.analysis.recording = (function () {
      * [id, type, method, name, value, location:{line,column,filename}}
      */
     function logNodeData(data) {
-        var id = getValueOrEmpty(data.id);
-        var type = getValueOrEmpty(data.type);
-        var method = getValueOrEmpty(data.method);
-        var name = getValueOrEmpty(data.name);
-        var value = getValueOrEmpty(data.value);
+        let id = getValueOrEmpty(data.id);
+        let type = getValueOrEmpty(data.type);
+        let method = getValueOrEmpty(data.method);
+        let name = getValueOrEmpty(data.name);
+        let value = getValueOrEmpty(data.value);
 
         if (!cri.shouldSaveNodeValue(fileReadOver, id)) {
             // if(checkPauseNow()){
@@ -32,7 +32,7 @@ cri.analysis.recording = (function () {
             // }
             ++currentStep;
             cri.printValues(currentStep, value, id);
-            var val = getValue(value);
+            let val = getValue(value);
             cri.sendObjectToDevTools({
                 content: {
                     'nodeId': id,
@@ -166,7 +166,7 @@ cri.analysis.recording = (function () {
         }, fileReadOver);
     }
 
-    var tempConstructorName = '';
+    let tempConstructorName = '';
 
     function getValue(value) {
         tempConstructorName = '';
@@ -231,7 +231,7 @@ cri.analysis.recording = (function () {
                 // keep value
                 break;
             case 'Function':
-                var tempType = value.constructor.name;
+                let tempType = value.constructor.name;
                 if (value.name === '') {
                     tempType = 'AnonymousFunction'
                 }

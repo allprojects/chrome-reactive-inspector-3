@@ -1,3 +1,4 @@
+/* excluded from build */
 var X$ = window.J$;
 var J$ = jQuery.extend({}, X$);
 J$.W = function (iid, name, val, lhs, isGlobal, isPseudoGlobal) {

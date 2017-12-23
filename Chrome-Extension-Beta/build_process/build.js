@@ -11,7 +11,8 @@ const excluded = [
     'jalangi-framework-with-comments.js',
     'underscore-min.map',
     '.git',
-    'ChromeReactiveInspector.pem'];
+    'ChromeReactiveInspector.pem',
+    'FilenameHookSnippet.js'];
 
 (function build() {
     tasks.clear(targetdir);
