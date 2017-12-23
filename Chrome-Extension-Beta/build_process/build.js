@@ -8,7 +8,10 @@ const targetdir = '../dist/';
 const excluded = [
     '.idea',
     '.gitignore',
-    'jalangi-framework-with-comments.js'];
+    'jalangi-framework-with-comments.js',
+    'underscore-min.map',
+    '.git',
+    'ChromeReactiveInspector.pem'];
 
 (function build() {
     tasks.clear(targetdir);
