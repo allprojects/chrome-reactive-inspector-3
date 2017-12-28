@@ -99,12 +99,33 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 });
 
 function injectScripts(tabId) {
-    executeScriptsSync(tabId, ["content-scripts/analysis/recording.js",
-        "content-scripts/analysis/jalangi-analysis.js",
-        "content-scripts/analysis/bacon-interception.js",
-        "content-scripts/analysis/rx-interception.js",
-        "content-scripts/analysis/instrumentor.js"], 0);
+    // test if underscore is loaded in example for all content scripts specified in the manifest.json
+    // if it is not loaded - the user updated the extension without reloading the inspected page.#
+    // to prevent errors all content-scripts specified in the manifest must be loaded manually.
+    const testContentScriptsLoadedSnippet = "typeof _ === \"undefined\";";
+
+    chrome.tabs.executeScript(tabId, {code: testContentScriptsLoadedSnippet}, function (resultArray) {
+        if (resultArray.length > 0 && resultArray[0] === true) {
+            executeScriptsSync(tabId, contentScriptsFromManifest.concat(scriptsToInject), 0);
+        } else {
+            executeScriptsSync(tabId, scriptsToInject, 0);
+        }
+    });
 }
+
+const scriptsToInject = ["libraries/Bacon.js",
+    "libraries/Rx.js",
+    "content-scripts/analysis/recording.js",
+    "content-scripts/analysis/jalangi-analysis.js",
+    "content-scripts/analysis/bacon-interception.js",
+    "content-scripts/analysis/rx-interception.js",
+    "content-scripts/analysis/instrumentor.js"];
+
+const contentScriptsFromManifest = ["libraries/jquery-1.12.4.min.js",
+    "content-scripts/content-scripts-start.js",
+    "content-scripts/content-script-communication.js",
+    "content-scripts/jalangi-framework.js",
+    "libraries/underscore-min.js"];
 
 function executeScriptsSync(tabId, scripts, index) {
     if (index === scripts.length)

@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Chrome Reactive Inspector",
-  "version": "2.0",
+  "version": "3.0",
   "description": "This is an extension to devtool for debugging Reactive JS libraries like Bacon.JS , RX-JS Version 5 ",
   "author": "Waqas Abbas and Pradeep Baradur with supervision from Dr.Guido Salvaneschi at TU - Darmstadt",
   "devtools_page": "panel/devtools.html",
@@ -27,9 +27,7 @@
         "content-scripts/content-scripts-start.js",
         "content-scripts/content-script-communication.js",
         "content-scripts/jalangi-framework.js",
-        "libraries/underscore-min.js",
-        "libraries/Bacon.js",
-        "libraries/Rx.js"
+        "libraries/underscore-min.js"
       ],
       "run_at": "document_start",
       "all_frames": false
