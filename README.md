@@ -41,8 +41,7 @@ It was continued as a Master Thesis by Pradeep Baradur.
 This project is done as extension to the work of [Reative Inspector](https://github.com/guidosalva/reactive-inspector)
 
 ### Contributions
-Waqas Abbas, Pradeep Baradur, [Prof. Dr Guido Salvaneschi](http://www.guidosalvaneschi.com/),
-Benedikt Gross
+Waqas Abbas, Pradeep Baradur, Benedikt Gross, [Prof. Dr Guido Salvaneschi](http://www.guidosalvaneschi.com/),
 
 ## For Developers:
 
