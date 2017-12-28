@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <style>
+        #sample {
+            height: 150px;
+        }
+        .actual-color{
+            height:50px;
+            width:50px;
+        }
+
+        #sample{
+            cursor: crosshair;
+        }
+
+        .selected-colors{
+            list-style-type: none;
+            width:50%;
+        }
+
+        .selected-colors li{
+            float: left;
+        }
+
+        .selected-colors div{
+            width: 25px;
+            height: 25px;
+            margin: 0 10px 10px 0;
+        }
+    </style>
+</head>
+<body>
+<h2>Image sampler example</h2>
+<p>Hover image to check color, click on image to add to the samples</p>
+<img id="sample" src="image.png"/>
+
+<h4>Hovered color</h4>
+
+<div class="actual-color"></div>
+<h5 class="actual-color-label"></h5>
+
+<h4>Selected color samples</h4>
+<div>
+    <ul class="selected-colors">
+
+    </ul>
+</div>
+
+<script src="../../js/Rx.js"></script>
+<script src="index.js"></script>
+</body>
+
+</html>

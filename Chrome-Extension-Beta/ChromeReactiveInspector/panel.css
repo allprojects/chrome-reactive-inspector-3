@@ -1,0 +1,186 @@
+/* This sets the color for "TK" nodes to a light blue green. */
+/*!**/
+g.type-TK > rect {
+    fill: #00ffd0;
+}
+
+g.current > rect {
+    stroke: red;
+    stroke-width:5;
+}
+
+g.highlight > rect {
+    stroke: green;
+    stroke-width: 5;
+    opacity: 1 !important;
+}
+
+g.fade > rect {
+    opacity: 0.3;
+}
+
+
+g.nodeWithRef > rect {
+    fill: #ddff99;
+}
+
+g.nodeWithoutRef > rect {
+    fill: #fff5cc;
+}
+
+text {
+    font-weight: 300;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serf, serif;
+    font-size: 14px;
+}
+
+.node rect {
+    stroke: #999;
+    fill: #fff;
+    stroke-width: 1.5px;
+    border-radius: 10px;
+}
+
+.edgePath path {
+    stroke: #333;
+    stroke-width: 1.5px;
+}
+
+text {
+    font-weight: 300;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+    font-size: 14px;
+}
+
+.node rect {
+    stroke: #333;
+    fill: #fff;
+}
+
+.edgePath path {
+    stroke: #333;
+    fill: #333;
+    stroke-width: 1.5px;
+}
+
+.node text {
+    pointer-events: none;
+}
+
+/**!*/
+/* This styles the title of the tooltip */
+.tipsy .custom_tooltip > p  {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #60b1fc;
+    margin: 0;
+    text-align: left;
+    pointer-events: none;
+}
+
+/* This styles the body of the tooltip */
+.tipsy .description {
+    font-size: 1.2em;
+}
+
+
+.container {
+    margin-bottom: 15px;
+}
+
+.ui-slider .ui-slider-handle {
+    position: absolute;
+    z-index: 2;
+    width: 2.2em;
+    height: 1.2em;
+    cursor: default;
+    text-align: center;
+}
+
+.column-left {
+    float: left;
+}
+
+.column-right {
+    float: right;
+}
+
+.column-center {
+    margin-top: 5px;
+    display: inline-block;
+    width: 80%;
+}
+#svg-canvas{
+    min-height: 800px;
+}
+
+.left-border{
+    border-left: 1px solid black;
+}
+
+.nodes .label {
+    color: #000;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: left;
+
+    padding: 8px;
+    font: 14px sans-serif;
+    background: #ffff99;
+    border: solid 1px #aaa;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 1;
+}
+
+hr {
+    margin: 5px 0 !important;
+}
+
+.pd-left-0{
+    padding-left: 0 !important;
+}
+
+.pd-left-5{
+    padding-left: 5px !important;
+}
+
+.pd-right-0{
+    padding-right: 0 !important;
+}
+
+#cri-breakpoints-container{
+    max-height: 105px;
+    overflow-y: auto;
+}
+
+.bpoint-remove{
+    margin-right: 2px;
+    background: red;
+    color: white;
+    font-size: 12px;
+    padding: 1px 2px;
+    cursor: pointer;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default{
+    line-height: 1;
+}
+
+.ui-slider .ui-slider-handle{
+    min-width: 1.2em;
+    max-width: none !important;
+}
+
+.form-control.error{
+    border: 1px solid red;
+}
+
+#svg-canvas .label {
+    text-align: left;
+}
+
+
+

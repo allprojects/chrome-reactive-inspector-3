@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Smart Counter</title>
+    <style>
+        body{
+            background: #ffa600;
+            font-family: "HelveticaNeue-Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+            height: 100%;
+        }
+        .wrapper{
+            wdith: 800px;
+            margin: 50px auto;
+            color: #fff;
+            text-align: center;
+        }
+        #clock{
+            margin: 5$ auto;
+            font-size: 4em;
+        }
+        button{
+            border-radius: 5px;
+            background: #fffa600;
+            color: #fff;
+            border: solid 1px #fff;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            padding: 18px 10px;
+            width: 180px;
+            margin: 10px;
+            outline: none;
+        }
+        button:hover{
+            transition: all 0.5s ease-in-out;
+            background: #fff;
+            border: solid 1px #fff;
+            color: #ffa600;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <p>https://www.learnrxjs.io/recipes/smartcounter.html</p>
+
+    <input id="range" type="number">
+    <button id="update">Update</button>
+    <h3 id="display">0</h3>
+
+</div>
+<script src="../../js/Rx.js"></script>
+<script src="index.js"></script>
+</body>
+</html>
