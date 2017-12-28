@@ -160,6 +160,8 @@ chrome.storage.sync.get('thresholdValue', function (items) {
     threshold = items.thresholdValue;
 });
 
+let $configIncludeParent = null;
+
 function initIncludeTokenField(scriptNames) {
     chrome.storage.sync.get('criconfigincludes', function (items) {
         let includes = items.criconfigincludes;
@@ -168,7 +170,6 @@ function initIncludeTokenField(scriptNames) {
 
         // remove previous events (e.g. during reload the field is already initialized)
         $configIncludeFilesField.off(".cri");
-
         $configIncludeFilesField.tokenfield({
             tokens: previousConfigFiles,
             autocomplete: {
@@ -178,6 +179,7 @@ function initIncludeTokenField(scriptNames) {
             showAutocompleteOnFocus: true
         }).on('tokenfield:createtoken.cri', function (e) {
             setCricConfigFiles(1, e.attrs.value);
+            validateIncludeList();
             optionsAccess.$getOption(optionKeys.reloadOnInstrument).done(function (shouldReload) {
                 if (shouldReload) {
                     reload();
@@ -186,12 +188,15 @@ function initIncludeTokenField(scriptNames) {
             reload();
         }).on('tokenfield:removedtoken.cri', function (e) {
             setCricConfigFiles(0, e.attrs.value);
+            validateIncludeList();
             optionsAccess.$getOption(optionKeys.reloadOnInstrument).done(function (shouldReload) {
                 if (shouldReload) {
                     reload();
                 }
             });
         });
+        $configIncludeParent = $configIncludeFilesField.closest(".tokenfield");
+        validateIncludeList();
     });
 }
 
@@ -209,6 +214,15 @@ function setCricConfigFiles(val, fileName) {
     chrome.storage.sync.set({
         'criconfigincludes': previousConfigFiles
     });
+}
+
+function validateIncludeList() {
+    let tokens = $configIncludeFilesField.tokenfield('getTokens');
+    if (tokens.length === 0) {
+        $configIncludeParent.addClass('validation-error');
+    } else {
+        $configIncludeParent.removeClass('validation-error');
+    }
 }
 
 /**

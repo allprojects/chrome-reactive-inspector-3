@@ -254,3 +254,7 @@ h4 {
 .btn-info:hover {
     background-color: #7AC3FF;
 }
+
+.validation-error {
+    border: 1px solid red;
+}
