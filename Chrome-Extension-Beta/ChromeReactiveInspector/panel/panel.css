@@ -1,0 +1,256 @@
+.node rect {
+    border-radius: 10px;
+    stroke: #004C8C;
+    stroke-width: 1.5px;
+}
+
+.nodes .label {
+    color: black;
+}
+
+.edgePath path {
+    stroke: #004C8C;
+    stroke-width: 1.5px;
+}
+
+.edgeLabel .label {
+    fill: #004C8C;
+}
+
+/* This sets the color for "TK" nodes to a light blue green. */
+/*!**/
+g.type-TK > rect {
+    fill: #00ffd0;
+}
+
+g.current > rect {
+    stroke: #FF9400;
+    stroke-width: 5;
+}
+
+g.edgePath.current path {
+    stroke: #FF9400;
+}
+
+g.highlight > rect {
+    stroke: green;
+    stroke-width: 5;
+    opacity: 1 !important;
+}
+
+g.fade > rect {
+    opacity: 0.3;
+}
+
+g.nodeWithRef > rect {
+    fill: #FFE9A4;
+}
+
+g.nodeWithoutRef > rect {
+    fill: white;
+}
+
+text {
+    font-weight: 300;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serf, serif;
+    font-size: 14px;
+}
+
+.node text {
+    pointer-events: none;
+}
+
+.container {
+    margin-bottom: 15px;
+}
+
+.ui-slider .ui-slider-handle {
+    position: absolute;
+    z-index: 2;
+    width: 2.2em;
+    height: 1.2em;
+    cursor: default;
+    text-align: center;
+}
+
+.column-left {
+    float: left;
+}
+
+.column-right {
+    float: right;
+}
+
+.column-center {
+    margin-top: 5px;
+    display: inline-block;
+    width: 80%;
+}
+
+#svg-canvas {
+    min-height: 800px;
+}
+
+.left-border {
+    border-left: 1px solid black;
+}
+
+hr {
+    margin: 5px 0 !important;
+}
+
+.pd-left-0 {
+    padding-left: 0 !important;
+}
+
+.pd-left-5 {
+    padding-left: 5px !important;
+}
+
+.pd-right-0 {
+    padding-right: 0 !important;
+}
+
+#cri-breakpoints-container {
+    max-height: 105px;
+    overflow-y: auto;
+}
+
+.bpoint-remove {
+    margin-right: 2px;
+    background: #D97E00;
+    color: white;
+    font-size: 12px;
+    padding: 1px 2px;
+    cursor: pointer;
+}
+
+.ui-state-default,
+.ui-widget-content .ui-state-default {
+    line-height: 1;
+}
+
+.ui-slider .ui-slider-handle {
+    min-width: 1.2em;
+    max-width: none !important;
+}
+
+.form-control.error {
+    border: 1px solid red;
+}
+
+#svg-canvas .label {
+    text-align: left;
+}
+
+/* modeled after: https://www.w3schools.com/css/css_navbar.asp */
+#menu-bar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #004C8C;
+}
+
+#menu-bar li {
+    float: left;
+}
+
+#menu-bar li.menuitem div,
+#menu-bar .dropbtn {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 8px 10px;
+    text-decoration: none;
+}
+
+#menu-bar li .menuitem:hover,
+#menu-bar .submenu:hover .dropbtn {
+    background-color: #7AC3FF;
+}
+
+#menu-bar li.submenu {
+    display: inline-block;
+}
+
+#menu-bar .submenu-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+#menu-bar .submenu-content div {
+    color: black;
+    padding: 8px 10px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+#menu-bar .submenu-content div:hover {
+    background-color: #f1f1f1
+}
+
+#menu-bar .submenu:hover .submenu-content {
+    display: block;
+}
+
+#dependency-graph-header {
+    position: absolute;
+}
+
+.flex-container {
+    display: flex;
+}
+
+.flex-vertical-container {
+    flex-direction: column;
+    display: flex;
+}
+
+.flex-centered {
+    align-items: center;
+}
+
+.flex-child-centered {
+    margin: auto;
+}
+
+.flex-align-baseline {
+    align-items: baseline;
+}
+
+.flex-item-container {
+    display: flex;
+    align-items: baseline;
+}
+
+.flex-item-container > * {
+    margin: 5px 0 5px 5px;
+}
+
+h4 {
+    white-space: nowrap;
+    margin: 10px;
+}
+
+#query-item-panel h4 {
+    margin: 5px 0 0 10px;
+}
+
+#svg-canvas rect {
+    rx: 5;
+    ry: 5;
+}
+
+.btn-info {
+    background-color: #004C8C;
+}
+
+.btn-info:hover {
+    background-color: #7AC3FF;
+}

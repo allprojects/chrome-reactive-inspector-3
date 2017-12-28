@@ -1,0 +1,53 @@
+\documentclass[type=msc,colorback,accentcolor=tud8b,12pt,twoside,openright,bibliography=totoc,listof=totoc]{tudthesis}
+
+\input{packages/packages}
+
+\begin{document}
+	
+	\pagenumbering{roman}
+	\input{pages/title}
+		\makethesistitle
+		
+	\input{pages/erklaerung}
+%	\input{pages/affidavit}
+	\cleardoublepage
+	
+	\begin{abstract}
+			\input{chap/Abstract}
+	\end{abstract}
+	
+	\cleardoublepage
+	\tableofcontents
+	%\listoffigures
+	%\listofcodes
+	%\lstlistoflistings
+	%\listoftables
+
+
+	\pagenumbering{arabic}
+	\input{chap/1_Introduction}
+	\cleardoublepage
+	\input{chap/2_State_of_the_Art}
+	\cleardoublepage
+	\input{chap/3_SystemDesign}
+	\cleardoublepage
+	\input{chap/4_Implementation}
+	\cleardoublepage
+	\input{chap/5_Evaluation}
+	\cleardoublepage
+	\input{chap/6_Summary}
+	\cleardoublepage
+	
+	\listoffigures
+	\lstlistoflistings
+%	\listoftables
+	
+%	\nocite{*}
+	\printbibliography
+	
+	\begin{appendices}
+		\input{chap/Appendix}
+	\end{appendices}
+
+	
+\end{document}

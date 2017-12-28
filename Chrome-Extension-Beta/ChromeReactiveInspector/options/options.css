@@ -1,0 +1,44 @@
+.flex-container {
+    display: flex;
+}
+
+.flex-centered {
+    align-items: center;
+}
+
+.flex-child-centered {
+    margin: auto;
+}
+
+.flex-align-baseline {
+    align-items: baseline;
+}
+
+.flex-item-container {
+    display: flex;
+    align-items: baseline;
+}
+
+.flex-item-container > * {
+    margin: 5px 0px 5px 5px;
+}
+
+.flex-vertical-container {
+    flex-direction: column;
+    display: flex;
+}
+
+.flex-child-left {
+
+}
+
+#options-list div.flex-child-left {
+    margin: 3px;
+}
+
+/* source: bootstrap alert-success*/
+.alert-success {
+    color: #468847;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}

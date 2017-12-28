@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/Chrome-Extension-Beta/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/Chrome-Extension-Stable" />
+      <excludeFolder url="file://$MODULE_DIR$/Documentation" />
+      <excludeFolder url="file://$MODULE_DIR$/Report" />
+      <excludeFolder url="file://$MODULE_DIR$/temp" />
+      <excludeFolder url="file://$MODULE_DIR$/tmp" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="chrome-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="jQuery 1.9.1" level="project" />
+    <orderEntry type="library" name="jquery-ui.js" level="project" />
+    <orderEntry type="library" name="Rx.js" level="project" />
+    <orderEntry type="library" name="d3.v3.min.js" level="project" />
+    <orderEntry type="library" name="underscore.js" level="project" />
+    <orderEntry type="library" name="Bootstrap" level="project" />
+    <orderEntry type="library" name="Bacon.js" level="project" />
+    <orderEntry type="library" name="jquery.js 1.11.3" level="project" />
+    <orderEntry type="library" name="jquery-ui-slider-pips.js" level="project" />
+    <orderEntry type="library" name="tipsy.js" level="project" />
+    <orderEntry type="library" name="jquery-editable-select.min.js" level="project" />
+    <orderEntry type="library" name="dagre-d3.js" level="project" />
+  </component>
+</module>
