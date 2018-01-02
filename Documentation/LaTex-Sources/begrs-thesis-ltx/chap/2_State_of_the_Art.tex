@@ -5,24 +5,11 @@ Chapter HEader
 
 \subsection{Observer Design Pattern}
 
-
-\subsection{Aspect-Oriented Programming} \label{subsec:AOP}
-
-\subsection{Callbacks}
-
-\subsection{Promises}
-
-\subsection{Iterator Vs Observer Pattern}
-
-
 \section{Reactive Programming}
 
 \subsection{Reactive Programming with JavaScript}
 
-
-\subsection{ReactiveX and RxJS}
-
-\subsection{Important Concepts of RxJS}
+\subsection{RxJs and BaconJs}
 
 \begin{figure}[!h]
 	\centering
@@ -49,18 +36,6 @@ var transformedObservable = sourceObservable.map(function(x) {
 	.filter(function(x) {
 		return x !== 20
 	})
-	.take(5);
-// 3. Subscribe to desired Observable 
-var subscription = transformedObservable.subscribe(
-	function(x) {
-		console.log('Next: ' + x);
-	},
-	function(err) {
-		console.log('Error: ' + err);
-	},
-	function() {
-		console.log('Completed');
-	});
 // OUTPUT
 Next: 0
 Next: 10
