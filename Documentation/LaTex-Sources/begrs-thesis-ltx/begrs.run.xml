@@ -44,11 +44,11 @@
   <internal package="biblatex" priority="9" active="1">
     <generic>latex</generic>
     <provides type="dynamic">
-      <file>waqas_abbas_thesis.aux</file>
-      <file>waqas_abbas_thesis-blx.bib</file>
+      <file>begrs_thesis.aux</file>
+      <file>begrs_thesis-blx.bib</file>
     </provides>
     <requires type="dynamic">
-      <file>waqas_abbas_thesis.bbl</file>
+      <file>begrs_thesis.bbl</file>
     </requires>
     <requires type="static">
       <file>blx-dm.def</file>
@@ -67,20 +67,20 @@
     <cmdline>
       <binary>bibtex</binary>
       <option>-min-crossrefs 2</option>
-      <infile>waqas_abbas_thesis</infile>
+      <infile>begrs_thesis</infile>
     </cmdline>
     <input>
-      <file>waqas_abbas_thesis.aux</file>
+      <file>begrs_thesis.aux</file>
     </input>
     <output>
-      <file>waqas_abbas_thesis.bbl</file>
+      <file>begrs_thesis.bbl</file>
     </output>
     <provides type="dynamic">
-      <file>waqas_abbas_thesis.bbl</file>
+      <file>begrs_thesis.bbl</file>
     </provides>
     <requires type="dynamic">
-      <file>waqas_abbas_thesis.aux</file>
-      <file>waqas_abbas_thesis-blx.bib</file>
+      <file>begrs_thesis.aux</file>
+      <file>begrs_thesis-blx.bib</file>
     </requires>
     <requires type="editable">
       <file>bibliography</file>
