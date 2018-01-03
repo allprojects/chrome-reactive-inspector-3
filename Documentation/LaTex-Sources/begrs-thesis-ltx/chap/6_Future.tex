@@ -14,9 +14,13 @@
  	% would have more dependencies and would have to cope with additional required changes due to changes in the IDE after
  	% an update
  	
-% ecma6 import support and bundled Rx/Bacon detection
+% ecma6 import support and bundled Rx/Bacon detection, + typescript
 	% currently searches for <script Rx.js/Bacon.js>
 	% if all used libraries are bundled and only own project files are not
 	% will not work
+	% all module/file loaders are not supported yet e.g. require.js since module loading prior to ecma6 is a diverse field
+	% and most applications use one this is one of the main obstacles before the extension can be used by a wider audience (see temp_references)
 	% ecma6 import references file not necessarily in html as <script>
 	%TODO check if above is true
+	%possible solution: since scripts are side loaded, append a detection function to the bottom of each loaded javascript file that sends
+	% a message to the extension if the "Bacon" or "Rx" object is present.
