@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <title>Chrome Reactive Inspector</title>
 
-    <link rel="stylesheet" href="../libraries/jquery-ui.css">
+    <link rel="stylesheet" href="../libraries/jquery-ui.min.css">
     <link rel="stylesheet" href="../libraries/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../libraries/bootstrap-tokenfield.min.css">
     <link rel="stylesheet" href="options.css">
 
-    <script src="../libraries/underscore.js"></script>
+    <script src="../libraries/underscore-min.js"></script>
     <script src="../libraries/jquery-1.9.1.min.js"></script>
-    <script src="../libraries/jquery-ui.js"></script>
+    <script src="../libraries/jquery-ui.min.js"></script>
     <script src="../libraries/bootstrap-tokenfield.min.js"></script>
 </head>
 <body>
@@ -23,40 +23,45 @@
             <hr>
         </div>
         <div class="flex-child-left">
-            <label for="debug">CRI Developer Mode</label>
+            <label for="debug">CRI Developer Mode:</label>
             <input type="checkbox" id="debug"/>
+            (Enables debugging features for the CRI like showing the instrumented file in chrome devtools.)
         </div>
         <div class="flex-child-left">
-            <label for="printAllValues">Select checkbox to print all the values at each step on console</label>
+            <label for="printAllValues">Select to enable verbose logging:</label>
             <input type="checkbox" id="printAllValues">
+            (default: false)
         </div>
 
         <div class="flex-child-left">
             <label for="reloadOnInstrument">Reload the page when the list of instrumented js files change
-                automatically.</label>
+                automatically:</label>
             <input type="checkbox" id="reloadOnInstrument">
+            (default: true)
         </div>
 
-        <div class="flex-child-left">
-            <label for="nodeId">Add node-ids(in below box) which should not be logged in the Graph.</label>
-            <input type="text" id="nodeId">
-        </div>
         <div class="flex-vertical-container flex-child-left" style="flex-direction: column">
             <div>
-                <label for="codePreviewScope">Scope: (Number of lines displayed before and after the relevant line in
-                    code
-                    previews)</label>
+                <label for="codePreviewScope">Scope:</label>
                 <input class="input-sm" id="codePreviewScope"/>
+                (Number of lines displayed before and after the relevant line in code previews.)
             </div>
-            <div><label for="codePreviewMax">Max code preview size: (including scope):</label>
+            <div><label for="codePreviewMax">Max code preview size (including scope):</label>
                 <input class="input-sm" id="codePreviewMax"/>
+                (Leave empty to not limit the scope.)
             </div>
         </div>
 
         <div class="flex-child-left flex-vertical-container">
-            <label for="defaultIgnores">Javascript files that should not be instrumented by default: (Separated by
-                ';')</label>
+            <label for="defaultIgnores">Javascript files that should not be instrumented by default:
+                (Separated by ';')</label>
             <input id="defaultIgnores"/>
+        </div>
+
+        <hr>
+        <div class="flex-child-left">
+            <label for="nodeId">Add node-ids(in below box) which should not be logged in the Graph:</label>
+            <input type="text" id="nodeId">
         </div>
 
         <div class="flex-child-centered">

@@ -31,8 +31,8 @@ cri.analysis.jalangi = (function (window) {
                 if (!val || !val.constructor || !val.constructor.name) {
                     return val;
                 }
-                //TODO: submit nodeinfo to update nodes but do not add new step to history.
-                // although a step makes sense because some info provided to the user changes,
+                //TODO: continue submitting nodeinfo to update nodes, but do not add new step to history.
+                // although a step might make sense because some info provided to the user changes,
                 // it is not directly visible to the user (because it is just visible as a tooltip) and
                 // the extra step provides no real value.
 
