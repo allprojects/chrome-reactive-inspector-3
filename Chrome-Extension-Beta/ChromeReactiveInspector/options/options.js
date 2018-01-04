@@ -14,12 +14,17 @@ const defaultDefaultIgnores = ["Rx.js", "rx.lite.js", "Bacon.js", "Bacon.UI.js",
 
 // Saves options to chrome.storage
 function save_options() {
+    let defaultIgnores = $defaultIgnores.tokenfield('getTokens');
+    defaultIgnores = _.map(defaultIgnores, function (item) {
+        return item.value;
+    });
+
     chrome.storage.sync.set({
             printAllValue: $printAllValues.prop('checked'),
             developerMode: $developerMode.prop('checked'),
             codePreviewScope: $codePreviewScope.val(),
             codePreviewMax: $codePreviewMax.val(),
-            defaultIgnores: $defaultIgnores.tokenfield('getTokens'),
+            defaultIgnores: defaultIgnores,
             reloadOnInstrument: $reloadOnInstrument.prop('checked')
         }, function () {
             dataSaved();
