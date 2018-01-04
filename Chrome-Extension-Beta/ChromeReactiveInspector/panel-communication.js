@@ -64,13 +64,6 @@ let allEdges = [];
     function handleLoading() {
         graphManager.clearGraph();
         adjustSlider(0, 0);
-        // chrome.storage.sync.get('cri_config_rec_status', function (items) {
-        //     if (items.cri_config_rec_status !== undefined) {
-        //         if (!items.cri_config_rec_status) {
-        //             configRecStatusButton.click();
-        //         }
-        //     }
-        // });
     }
 
     function handleSaveNode(message) {
@@ -201,22 +194,6 @@ function saveStageAndAdvance(event, data) {
     // Here we should increase steps count in step slider
     // this will cause the value changed event to fire and thus load and render the new stage.
     adjustSlider(lastStageId, lastStageId);
-
-
-    if (threshold && rxSlider.slider('value') > +threshold && !isConfirmed) {
-        // setCriStatus($('#cri-rec-status'), 1);
-        // sendObjectToInspectedPage(
-        //     {
-        //         action: "threshold",
-        //         content: {
-        //             "status": true
-        //         }
-        //     }
-        // );
-        // configRecStatusButton.click();
-        $("#dialog").dialog("open");
-        isConfirmed = true
-    }
     return stageId;
 }
 

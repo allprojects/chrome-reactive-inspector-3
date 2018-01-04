@@ -28,9 +28,6 @@ cri.analysis.recording = (function () {
 
         let val = null;
         if (!cri.shouldSaveNodeValue(fileReadOver, id)) {
-            // if(checkPauseNow()){
-            //     debugger;
-            // }
             ++currentStep;
             cri.printValues(currentStep, value, id);
             val = getValue(value);

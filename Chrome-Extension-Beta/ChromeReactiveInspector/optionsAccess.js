@@ -1,5 +1,4 @@
 var optionKeys = {
-    thresholdValue: 'thresholdValue',
     printAllValue: 'printAllValue',
     developerMode: 'developerMode',
     criconfigincludes: 'criconfigincludes',

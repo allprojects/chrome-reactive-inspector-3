@@ -137,7 +137,6 @@ adjustSlider(0, 0);
 
 let $configIncludeFilesField = $('#cri-config-includes');
 let previousConfigFiles = [];
-let threshold = '';
 let configRecStatusButton = document.getElementById('cri-rec-status');
 // (function () {
 // populate
@@ -154,10 +153,6 @@ chrome.storage.sync.get({cri_config_rec_status: true}, function (items) {
         configRecStatusButton.classList.remove('btn-info');
         configRecStatusButton.classList.add('btn-danger');
     }
-});
-//TODO: Warning, this is not a synchronous call so threshold may not be set when its used
-chrome.storage.sync.get('thresholdValue', function (items) {
-    threshold = items.thresholdValue;
 });
 
 let $configIncludeParent = null;

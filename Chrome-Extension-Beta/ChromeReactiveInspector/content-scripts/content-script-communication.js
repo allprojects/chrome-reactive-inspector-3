@@ -9,8 +9,7 @@
 var cri = cri || {};
 
 $.extend(cri, (function (window) {
-    var cri_config_rec_status = '';
-    var pauseNow = false;
+    let cri_config_rec_status = '';
     // chrome.storage.sync.get('cri_config_rec_status', function (items) {
     //     cri_config_rec_status = items.cri_config_rec_status;
     // })
@@ -37,10 +36,6 @@ $.extend(cri, (function (window) {
 
     }
 
-    function checkPauseNow() {
-        return pauseNow;
-    }
-
     // Listen message from background page s, that may be sent from panel
     chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
         // message received to content script from background js
@@ -52,9 +47,6 @@ $.extend(cri, (function (window) {
         else if (msg.action === 'cri_config_rec_status') {
             cri_config_rec_status = msg.content.status;
         }
-        else if (msg.action === 'threshold') {
-            pauseNow = msg.content.status;
-        }
         else if (msg.action === 'getSourceCode') {
             sendResponse({
                 code: cri.instrumentor.getCode(msg.content.filename, msg.content.from, msg.content.to)
@@ -63,7 +55,6 @@ $.extend(cri, (function (window) {
     });
 
     return {
-        sendObjectToDevTools: sendObjectToDevTools,
-        checkPauseNow: checkPauseNow
+        sendObjectToDevTools: sendObjectToDevTools
     };
 })(window));

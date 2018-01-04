@@ -2,7 +2,6 @@
 document.addEventListener('DOMContentLoaded', restore_options);
 
 let $developerMode = $("#debug");
-let $threshold = $("#threshold");
 let $printAllValues = $('#printAllValues');
 let $codePreviewScope = $('#codePreviewScope');
 let $codePreviewMax = $('#codePreviewMax');
@@ -16,7 +15,6 @@ const defaultDefaultIgnores = ["Rx.js", "rx.lite.js", "Bacon.js", "Bacon.UI.js",
 // Saves options to chrome.storage
 function save_options() {
     chrome.storage.sync.set({
-            thresholdValue: $threshold.val(),
             printAllValue: $printAllValues.prop('checked'),
             developerMode: $developerMode.prop('checked'),
             codePreviewScope: $codePreviewScope.val(),
@@ -29,11 +27,8 @@ function save_options() {
     );
 }
 
-let thresholdValue = '';
-
 function restore_options() {
     chrome.storage.sync.get({
-        thresholdValue: '',
         printAllValue: false,
         developerMode: false,
         codePreviewScope: 4,
@@ -41,7 +36,6 @@ function restore_options() {
         defaultIgnores: defaultDefaultIgnores,
         reloadOnInstrument: true
     }, function (items) {
-        $threshold.val(items.thresholdValue);
         $printAllValues.prop('checked', items.printAllValue);
         $developerMode.prop('checked', items.developerMode);
         $codePreviewScope.val(items.codePreviewScope);

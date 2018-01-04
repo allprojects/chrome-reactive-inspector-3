@@ -7,14 +7,14 @@ cri.analysis = cri.analysis || {};
 
 cri.analysis.bacon = (function (window) {
     // remap pseudo include to shorten calls
-    var recording = cri.analysis.recording;
+    let recording = cri.analysis.recording;
 
     if (Bacon !== undefined) {
         // https://baconjs.github.io/api.html#bacon-spy
         Bacon.spy(function (obs) {
 
-            var nodeType = "";
-            var nodeMethod = "";
+            let nodeType = "";
+            let nodeMethod = "";
 
             if (obs._isEventStream) {
                 nodeType = "Eventstream";
@@ -27,7 +27,7 @@ cri.analysis.bacon = (function (window) {
                 nodeMethod = obs.desc.method;
             }
 
-            var currentObsId = obs.id;
+            let currentObsId = obs.id;
             recording.logNodeData({id: currentObsId, type: nodeType, method: nodeMethod});
 
             // Log Observable dependencies
@@ -41,11 +41,6 @@ cri.analysis.bacon = (function (window) {
 
             // Log observable value
             obs.onValue(function (val) {
-                var constructorName = '';
-                if (val) {
-                    constructorName = val.constructor.name;
-                }
-
                 recording.logNodeData({id: currentObsId, type: nodeType, value: val});
             });
 

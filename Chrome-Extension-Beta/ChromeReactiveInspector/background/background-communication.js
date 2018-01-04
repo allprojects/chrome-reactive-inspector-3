@@ -11,7 +11,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 
     // come here when we click on our dev tool panel only once for the life of dev tool window
     // alert("chrome.extension.onConnect.addListener");
-    var tabId;
+    let tabId;
     port.onMessage.addListener(function (message) {
         if (!tabId) {
             // this is a first message from devtools so let's set the tabId-port mapping
@@ -23,7 +23,7 @@ chrome.runtime.onConnect.addListener(function (port) {
         }
     });
 
-    var extensionListener = function (message, sender, sendResponse) {
+    let extensionListener = function (message, sender, sendResponse) {
 
         const port = sender.tab && tabPorts[sender.tab.id];
 
@@ -106,6 +106,7 @@ function injectScripts(tabId) {
 
     chrome.tabs.executeScript(tabId, {code: testContentScriptsLoadedSnippet}, function (resultArray) {
         if (resultArray.length > 0 && resultArray[0] === true) {
+            console.log("reloaded content scripts");
             executeScriptsSync(tabId, contentScriptsFromManifest.concat(scriptsToInject), 0);
         } else {
             executeScriptsSync(tabId, scriptsToInject, 0);
