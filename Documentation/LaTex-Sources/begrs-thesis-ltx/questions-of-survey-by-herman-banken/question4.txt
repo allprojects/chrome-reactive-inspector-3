@@ -1,0 +1,24 @@
+In which year does the lottery server fail?
+
+// test inputs:
+
+ // newYear$ : Rx.Observable<Date> current date, every year
+var newYear$ = survey.lottery.newYear$.map(date => date.toUTCString())
+ // server : Date => Rx.Observable<LotteryResult>
+let server = survey.lottery.veryOldServer
+
+// program
+
+newYear$
+  .flatMap(date => server(date))
+  .subscribe(
+    lotteryResult => {
+      survey.renderSomething(lotteryResult)
+    },
+    err => {
+      survey.showError(err)
+    }
+  )
+
+// Advance test time very far into the future
+survey.scheduler.advanceTo(1e20)

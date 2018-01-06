@@ -1,0 +1,7 @@
+What are the last 2 values arriving at the `survey.render` function?
+
+Rx.Observable.range(2, 10)
+  .scan((x, next) => x + (x - 1))
+  .subscribe(value => {
+    survey.render(value)
+  })

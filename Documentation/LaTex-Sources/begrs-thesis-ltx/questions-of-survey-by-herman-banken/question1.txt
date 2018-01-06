@@ -1,0 +1,17 @@
+//// First uncomment the next line and hit "Run":
+// Rx.Observable.of(1, 2, 3).map(x => x * 2).subscribe(x => console.log(x))
+//// Try to find the numbers in the tool on the right
+
+//// Recomment/remove the previous lines and continue
+
+//// Then uncomment the next line and hit "Stop" then "Run" again:
+// Rx.Observable.interval(1000).map(x => x * 2).subscribe(x => console.log(x))
+//// See how it is live updating? Hit "Stop" to cancel execution
+
+//// Then uncomment the following lines and hit "Run" again:
+// var a = Rx.Observable.of(1, 2, 3).map(x => x * 2)
+// var b = Rx.Observable.of(1, 2, 3)
+// a.concat(b).subscribe(x => console.log(x))
+// Examine what is shown. In which way is the data combined?
+
+//// Now continue with the next question (Submit)
