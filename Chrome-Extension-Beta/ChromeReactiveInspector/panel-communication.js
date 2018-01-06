@@ -102,7 +102,9 @@ let allEdges = [];
         };
 
         // the new or updated node will have the class "current"
-        node.class = "current " + (node.ref ? "nodeWithRef" : "nodeWithoutRef");
+        node.class = "current"
+            + (node.ref ? " nodeWithRef" : " nodeWithoutRef")
+            + (node.sourceInfo ? " has-source-info" : "");
         node.label = getNodeLabel(id, node.ref, truncatedVal);
 
         // clear current from previous nodes

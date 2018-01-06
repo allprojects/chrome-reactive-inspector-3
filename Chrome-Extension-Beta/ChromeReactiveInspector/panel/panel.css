@@ -1,11 +1,17 @@
 .node rect {
     border-radius: 10px;
-    stroke: #004C8C;
+    stroke: #A1C0DB;
     stroke-width: 1.5px;
 }
 
 .nodes .label {
     color: black;
+}
+
+.node.has-source-info rect {
+    border-radius: 10px;
+    stroke: #004C8C;
+    stroke-width: 1.5px;
 }
 
 .edgePath path {

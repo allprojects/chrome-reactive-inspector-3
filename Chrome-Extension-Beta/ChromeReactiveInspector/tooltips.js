@@ -52,8 +52,8 @@ _.extend(cri, (function (window) {
                 return;
             }
 
-            var codeInfo = answer.code;
-            var codeHtml = createCodeTooltipContent(data.sourceInfo.begin, data.sourceInfo.end, codeInfo);
+            let codeInfo = answer.code;
+            let codeHtml = createCodeTooltipContent(data.sourceInfo.begin, data.sourceInfo.end, codeInfo);
             d3node.attr("nodeinfo", codeHtml);
 
             // do not display code preview if user already moved the mouse outside of the node
@@ -74,19 +74,19 @@ _.extend(cri, (function (window) {
      */
     function requestCodeSnippetAsync(sourceInfo, callback) {
         chrome.storage.sync.get({codePreviewScope: '', codePreviewMax: ''}, function (items) {
-            var codePreviewScope = items.codePreviewScope ? parseInt(items.codePreviewScope) : 4;
-            var codePreviewMax = items.codePreviewMax ? parseInt(items.codePreviewMax) : Number.POSITIVE_INFINITY;
+            let codePreviewScope = items.codePreviewScope ? parseInt(items.codePreviewScope) : 4;
+            let codePreviewMax = items.codePreviewMax ? parseInt(items.codePreviewMax) : Number.POSITIVE_INFINITY;
 
             // cap the maximum scope to be displayed
-            var codeLength = (sourceInfo.end.line - sourceInfo.begin.line);
+            let codeLength = (sourceInfo.end.line - sourceInfo.begin.line);
             if (codePreviewMax && codeLength + 2 * codePreviewScope > codePreviewMax) {
                 codePreviewScope = Math.round((codePreviewMax - codeLength) / 2);
                 if (codePreviewScope < 0) codePreviewScope = 0;
             }
 
-            var from = sourceInfo.begin.line - codePreviewScope;
-            var to = sourceInfo.end.line + codePreviewScope;
-            var filename = sourceInfo.filename;
+            let from = sourceInfo.begin.line - codePreviewScope;
+            let to = sourceInfo.end.line + codePreviewScope;
+            let filename = sourceInfo.filename;
 
             sendObjectToInspectedPage({
                 destination: 'instrumented',
@@ -114,7 +114,7 @@ _.extend(cri, (function (window) {
         // use jquery to construct html strings to prevent layout breaks
         // if "weird" values are displayed. (also prevents xss)
 
-        var sourceInfoText = '';
+        let sourceInfoText = '';
         if (sourceInfo && sourceInfo.begin) {
             sourceInfoText = sourceInfo.begin.line;
             if (sourceInfo.begin.column) {
@@ -125,7 +125,7 @@ _.extend(cri, (function (window) {
             sourceInfoText += ' (' + (sourceInfo.filename ? sourceInfo.filename : 'html') + ')';
         }
 
-        var $tooltip = $("<div>").addClass("custom-tooltip");
+        let $tooltip = $("<div>").addClass("custom-tooltip");
         if (id) {
             $tooltip.append($("<p>").text('Id: ' + id));
         }
