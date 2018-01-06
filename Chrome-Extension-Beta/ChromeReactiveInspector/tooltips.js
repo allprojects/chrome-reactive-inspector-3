@@ -110,7 +110,7 @@ _.extend(cri, (function (window) {
         d3node.classed("show-code", false);
     }
 
-    function createNormalTooltipContent(id, name, type, method, sourceInfo) {
+    function createNormalTooltipContent(id, name, type, method, sourceInfo, value) {
         // use jquery to construct html strings to prevent layout breaks
         // if "weird" values are displayed. (also prevents xss)
 
@@ -141,6 +141,9 @@ _.extend(cri, (function (window) {
         }
         if (method) {
             $tooltip.append($("<p>").text('Method: ' + method));
+        }
+        if (value) {
+            $tooltip.append($("<p>").text('Value: ' + value));
         }
 
         return $("<div>")
@@ -227,7 +230,7 @@ _.extend(cri, (function (window) {
         // add tipsy to nodes
         d3nodeCollection.attr("title", function (v) {
             let data = self.graphManager.getNode(v);
-            return createNormalTooltipContent(data.nodeId, data.ref, data.type, data.method, data.sourceInfo)
+            return createNormalTooltipContent(data.nodeId, data.ref, data.type, data.method, data.sourceInfo, data.value)
         })
             .each(function () {
                 // add tooltips
