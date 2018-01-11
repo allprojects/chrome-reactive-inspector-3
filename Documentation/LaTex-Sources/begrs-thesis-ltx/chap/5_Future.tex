@@ -6,6 +6,9 @@
 
 % Solution management
 
+% marking the setps where the recording was paused - because if the recording is continued the gap may lead to 
+% wrong assumptions about the changes
+
 % IDE extension like eclipse or webstorm that uses the extension to record data and control the debugger.
  % would enable multi window and toolbar support
  % syntax highlighting (snippets would be directly linkable)
@@ -22,5 +25,6 @@
 	% and most applications use one this is one of the main obstacles before the extension can be used by a wider audience (see temp_references)
 	% ecma6 import references file not necessarily in html as <script>
 	%TODO check if above is true
+	%TODO check if typescript compilatino to un-bundled js is possible
 	%possible solution: since scripts are side loaded, append a detection function to the bottom of each loaded javascript file that sends
 	% a message to the extension if the "Bacon" or "Rx" object is present.

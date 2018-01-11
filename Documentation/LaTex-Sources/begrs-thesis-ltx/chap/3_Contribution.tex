@@ -1,0 +1,106 @@
+\subsection{"User-Interface Changes"}
+% present Issue and Solution for each of these:
+	% - color blindness -> change color palette
+	% - usage frequency of input elements -> Reset, Download and Pause/Resume Recording moved to menu.
+	% - starting on a new application or different part of the application -> auto reload after instrumented files have changed
+	% - just examine the result -> button to hide query tools
+	% - searching for problems -> detect odd behavior, history queries (already present, mention that this is the reason for not relocating)
+	% - checking specific node (e.g. ater trying to fix a problem) -> find node or dependents (already there)
+	%- find node that has specific criteria -> removed unexpressive labels with no data to reduced text to read, to presenting more details and reference to "linking source" that will follow.
+	% - detect difference between one step and the next (what changed?) -> node (already there) and edge highlighting
+	
+\subsection{Connecting abstract graph with javascript code}
+	\subsection{"Goal"}
+	\subsubsection{"Difficulties"}
+	% Instrumented source code
+	
+	\subsubsection{"Possible Solutions"}
+	% Navigating to Source via Chrome debug api
+	% using a mirror
+	% Source Previews
+	
+	\subsection{"Implemented Solution"}
+	
+		\subsection{Source Information Tooltips}
+		% limited capabilities of used jalangi -> developed for a special demo, not in general
+		% jalangi extension via shallow copy
+		% tipsy.js
+		% link source to specific js file
+		% for developers: find instrumented file - added sourcemap
+	
+		\subsubsection{Limitations} 
+		% ui, syntax highlighting
+		% usefullness of code preview beyond a certain extend
+		% actual usage in general
+		% what it provides and what it doesnt
+
+
+\section{Rapidly updated Nodes}
+% value changes often
+% reasons: timer, mouse, network
+% steps can become unexpressive and hard to navigate
+% most times the setup is the most important so solved by "pause"
+% hard to debug interactions that take place after the setup or during a "busy" phase
+	
+	\subsection{"Problems with previous CRI"}
+	% previous CRI could not handle well.
+	% if the changes originate from anything other than user input - pausing recording is mandatory, 
+	%  but continuing leaves gaps in change history that has no visual feedback to the user.
+	% lag, getting stuck, crashing chrome due to increasing effort to handle coordination of async actions (async buildup)
+	% basic node exclusion was possible before, but very cumbersome. Should be changed in a way described later
+	
+	\subsection{Reworking the graph history}
+	% what it is, what it contains
+	% Performance improvements via paging and delta encoding
+	% -> the saving has to be very fast
+	% highlighting the current item
+	% Memory and CPU for one test case with exactly equal conditions.
+	
+	\subsection{"Further work"}
+	% before cri3 CPU profiler results
+	% throttling and debounce UI updates greatly increased performance
+	% evaluation of throttle time for Ui changes and reasoning to pick a certain value - compromise between detectable for human and node update speed that can be handled
+	% Excluding a node -> limitation: may need to cover many nodes before the ui values are mapped to readable values -> ignore all ancestors option 
+	%- should be able to ignore nodes via r-click on node, even with an option to exclude all dependents/dependencies - that did not work because time. 
+
+\section{Dynamically created observables}
+% nodes are generated extensively
+% mostly from the same line of code e.g. a loop or created in the local context of a function that is called multiple times
+% (local nodes are short living for specific purpose)
+% nodes are not identifyable to the user -> cant make connection between similar behaving nodes that could be merged into one node
+
+	\subsection{"Problems with CRI"}
+	% Userinterface limits - unexpressive nodes, limited canvas
+	% loosing track of the nodes that matter
+	% can not be excluded easily
+
+	\subsection{"Possible Solutions"}
+	% exluding them would require some form of excluding by rule/filter
+	% detection for such nodes would be needed to handle them specially. They could be merged into one pseudo node if all outgoing edges have the same target and ingoing edges have the same source.
+	% To cope with the special cases, high customization of recording needed so the customization needs to be persistent to be useful
+	
+	
+\section{"CRI - A growing project"}
+% previous work was strictly focused on the features but now growing project presents issues
+
+	\subsection{Increasing velocity}
+	% reorganizing file structure to match placement in chrome devtools vs other posibilities
+	% need for more documentation, still far from being fully documented but x new comments
+	% encapsulation to help track and correct errors or build on existing code
+	
+	\subsubsection{Code metrics for script languages}
+	% why some are not suitable for js
+	% instead: number of files, min max average number of lines and why this is not a definite improvement.
+	% x new classes and files, 
+	
+	\subsection{Build process}
+	% (short section)
+	% build project	to exclude files from packed extension. like the key or other project files that may contain sensual data.
+	% keep in javascript to present familiar environment and language
+	
+\section{Summary}
+
+	
+
+
+
