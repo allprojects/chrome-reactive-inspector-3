@@ -143,7 +143,9 @@ _.extend(cri, (function (window) {
             $tooltip.append($("<p>").text('Method: ' + method));
         }
         if (value) {
-            $tooltip.append($("<p>").text('Value: ' + value));
+            // if the value gets much bigger than 300, all other info in the tooltip can not be viewed anymore
+            let cropped = value.substring(0, 300);
+            $tooltip.append($("<p>").text('Value: ' + cropped));
         }
 
         return $("<div>")
