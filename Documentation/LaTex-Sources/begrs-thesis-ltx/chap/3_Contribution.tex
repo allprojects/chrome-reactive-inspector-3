@@ -1,4 +1,4 @@
-\subsection{"User-Interface Changes"}
+\section{"User-Interface Changes"}
 % present Issue and Solution for each of these:
 	% - color blindness -> change color palette
 	% - usage frequency of input elements -> Reset, Download and Pause/Resume Recording moved to menu.
@@ -9,34 +9,32 @@
 	%- find node that has specific criteria -> removed unexpressive labels with no data to reduced text to read, to presenting more details and reference to "linking source" that will follow.
 	% - detect difference between one step and the next (what changed?) -> node (already there) and edge highlighting
 	
-\subsection{Connecting abstract graph with javascript code}
+\section{Connecting abstract graph with javascript code}
 	\subsection{"Goal"}
-	\subsubsection{"Difficulties"}
+	\subsection{"Difficulties"}
 	% Instrumented source code
 	
-	\subsubsection{"Possible Solutions"}
+	\subsection{"Possible Solutions"}
 	% Navigating to Source via Chrome debug api
 	% using a mirror
 	% Source Previews
 	
-	\subsection{"Implemented Solution"}
-	
-		\subsection{Source Information Tooltips}
-		% limited capabilities of used jalangi -> developed for a special demo, not in general
+	\subsection{"Implemented Solution - Source Information Tooltips"}
+		% limited capabilities of used jalangi -> developed for a special demo, not in general (mentioned in state of the art)
 		% jalangi extension via shallow copy
 		% tipsy.js
 		% link source to specific js file
 		% for developers: find instrumented file - added sourcemap
 	
-		\subsubsection{Limitations} 
+		\subsubsection{"Limitations"} 
 		% ui, syntax highlighting
 		% usefullness of code preview beyond a certain extend
 		% actual usage in general
 		% what it provides and what it doesnt
 
 
-\section{Rapidly updated Nodes}
-% value changes often
+\section{Rapidly updated Observables}
+% value changes often - generates a huge amount of steps
 % reasons: timer, mouse, network
 % steps can become unexpressive and hard to navigate
 % most times the setup is the most important so solved by "pause"
@@ -62,6 +60,7 @@
 	% evaluation of throttle time for Ui changes and reasoning to pick a certain value - compromise between detectable for human and node update speed that can be handled
 	% Excluding a node -> limitation: may need to cover many nodes before the ui values are mapped to readable values -> ignore all ancestors option 
 	%- should be able to ignore nodes via r-click on node, even with an option to exclude all dependents/dependencies - that did not work because time. 
+	% reduce the number of steps by removing node info updates that are not value changes from the history. (only a few, but still) they dont need separate steps when extra info is added
 
 \section{Dynamically created observables}
 % nodes are generated extensively
@@ -80,7 +79,7 @@
 	% To cope with the special cases, high customization of recording needed so the customization needs to be persistent to be useful
 	
 	
-\section{"CRI - A growing project"}
+\section{CRI - A growing project}
 % previous work was strictly focused on the features but now growing project presents issues
 
 	\subsection{Increasing velocity}
@@ -88,7 +87,7 @@
 	% need for more documentation, still far from being fully documented but x new comments
 	% encapsulation to help track and correct errors or build on existing code
 	
-	\subsubsection{Code metrics for script languages}
+	\subsection{Code metrics for script languages}
 	% why some are not suitable for js
 	% instead: number of files, min max average number of lines and why this is not a definite improvement.
 	% x new classes and files, 
