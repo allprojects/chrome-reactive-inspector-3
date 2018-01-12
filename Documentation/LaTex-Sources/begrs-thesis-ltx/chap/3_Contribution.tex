@@ -1,32 +1,36 @@
-\section{"User-Interface Changes"}
+\section{Advancing the User Interface}
 % present Issue and Solution for each of these:
-	% - color blindness -> change color palette
+
+	\subsection{Reducing the cognitive load on the user}
+	% - remove "error" color from normal workflow -> change color palette
 	% - usage frequency of input elements -> Reset, Download and Pause/Resume Recording moved to menu.
+	%- find node that has specific criteria -> removed unexpressive labels with no data to reduced text to read, to presenting more details and reference to "linking source" that will follow.
+	% - detect difference between one step and the next (what changed?) -> node (already there) and edge highlighting
+	
+	\subsection{Additional changes to the User-Interface}
 	% - starting on a new application or different part of the application -> auto reload after instrumented files have changed
 	% - just examine the result -> button to hide query tools
 	% - searching for problems -> detect odd behavior, history queries (already present, mention that this is the reason for not relocating)
 	% - checking specific node (e.g. ater trying to fix a problem) -> find node or dependents (already there)
-	%- find node that has specific criteria -> removed unexpressive labels with no data to reduced text to read, to presenting more details and reference to "linking source" that will follow.
-	% - detect difference between one step and the next (what changed?) -> node (already there) and edge highlighting
 	
 \section{Connecting abstract graph with javascript code}
-	\subsection{"Goal"}
-	\subsection{"Difficulties"}
-	% Instrumented source code
+	% goal
+	% Difficulties: Instrumented source code
 	
 	\subsection{"Possible Solutions"}
 	% Navigating to Source via Chrome debug api
+	% Opening the code in a simple file viewer
 	% using a mirror
 	% Source Previews
 	
-	\subsection{"Implemented Solution - Source Information Tooltips"}
+	\subsection{Implemented Solution - Source Information Tooltips}
 		% limited capabilities of used jalangi -> developed for a special demo, not in general (mentioned in state of the art)
 		% jalangi extension via shallow copy
-		% tipsy.js
+		% tipsy.js - switching out the tooltip with the function
 		% link source to specific js file
 		% for developers: find instrumented file - added sourcemap
 	
-		\subsubsection{"Limitations"} 
+		\subsubsection{Strengths and limitations of this approach} 
 		% ui, syntax highlighting
 		% usefullness of code preview beyond a certain extend
 		% actual usage in general
@@ -40,7 +44,7 @@
 % most times the setup is the most important so solved by "pause"
 % hard to debug interactions that take place after the setup or during a "busy" phase
 	
-	\subsection{"Problems with previous CRI"}
+	\subsection{Difficulties and previous approach}
 	% previous CRI could not handle well.
 	% if the changes originate from anything other than user input - pausing recording is mandatory, 
 	%  but continuing leaves gaps in change history that has no visual feedback to the user.
@@ -51,8 +55,8 @@
 	% what it is, what it contains
 	% Performance improvements via paging and delta encoding
 	% -> the saving has to be very fast
-	% highlighting the current item
 	% Memory and CPU for one test case with exactly equal conditions.
+	% point out that even this has limitations - see mario example
 	
 	\subsection{"Further work"}
 	% before cri3 CPU profiler results
@@ -67,17 +71,14 @@
 % mostly from the same line of code e.g. a loop or created in the local context of a function that is called multiple times
 % (local nodes are short living for specific purpose)
 % nodes are not identifyable to the user -> cant make connection between similar behaving nodes that could be merged into one node
+% Userinterface limits - unexpressive nodes, limited canvas
+% loosing track of the nodes that matter
+% can not be excluded easily
 
-	\subsection{"Problems with CRI"}
-	% Userinterface limits - unexpressive nodes, limited canvas
-	% loosing track of the nodes that matter
-	% can not be excluded easily
-
-	\subsection{"Possible Solutions"}
+	\subsection{Increased recording complexity}
 	% exluding them would require some form of excluding by rule/filter
 	% detection for such nodes would be needed to handle them specially. They could be merged into one pseudo node if all outgoing edges have the same target and ingoing edges have the same source.
 	% To cope with the special cases, high customization of recording needed so the customization needs to be persistent to be useful
-	
 	
 \section{CRI - A growing project}
 % previous work was strictly focused on the features but now growing project presents issues
