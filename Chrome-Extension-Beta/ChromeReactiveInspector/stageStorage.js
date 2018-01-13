@@ -30,6 +30,10 @@ cri.stageStorage = (function (window) {
 
         let operation = function (callBackQueue) {
             chrome.storage.local.set(storageObject, function () {
+                if (chrome.runtime.lastError) {
+                    console.error("Chrome local storage api threw an exception. This is possibly because the local" +
+                        " storage ran out of capacity.")
+                }
                 console.log("cri: stored stages on disk.");
                 callBackQueue();
             });
