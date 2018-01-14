@@ -33,3 +33,4 @@ var subscription = function (currentNumber) {
         return currentNumber = v;
     }).startWith(currentNumber).subscribe(updateHTML('display'));
 }(0);
+alert("please open the CRI now");//#CRI-Test#

@@ -1,7 +1,7 @@
 var keyup = $("#title")
     .asEventStream("keyup")
     .debounce(100) // don't call me more often than every 100ms
-    .onValue(function(event, args) {
+    .onValue(function (event, args) {
         $("#blog-url").html(parameterize(event.target.value));
     });
 
@@ -18,3 +18,5 @@ function parameterize(string) {
 
     return safeStr.toLowerCase();
 }
+
+alert("please open the CRI now");//#CRI-Test#

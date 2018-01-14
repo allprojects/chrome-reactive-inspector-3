@@ -91,3 +91,4 @@ function intialize() {
 
 Rx.DOM.ready().subscribe(intialize);
 //}(window, document, Rx));
+alert("please open the CRI now");//#CRI-Test#
