@@ -2,6 +2,17 @@ var cri = cri || {};
 
 // closure to make createInstrumentor private
 (function () {
+    /**
+     * For formatted version see FilenameHookSnippet.js
+     * @type {string}
+     */
+    const jalangiOverrideSnippet = "var X$ = window.J$;var J$ = jQuery.extend({}, X$);J$.W = function (iid, name, val, lhs,"
+        + "isGlobal, isPseudoGlobal) {return X$.W(iid, name, val, lhs, isGlobal, isPseudoGlobal, 'PLACEHOLDER');};J$.M ="
+        + "function (iid, base, offset, isConstructor) {return X$.M(iid, base, offset, isConstructor, 'PLACEHOLDER');};"
+        + "J$.F = function (iid, f, isConstructor) {return X$.F(iid, f, isConstructor, 'PLACEHOLDER');};\n";
+
+    const testHookSnippet = "alert(\"please open the CRI now\");//#CRI-Test#";
+
     function createInstrumentor(window, options) {
         let scriptCache = {};
         /* DOCUMENT LOAD INTERCEPTION Start  */
@@ -69,12 +80,20 @@ var cri = cri || {};
                     return;
                 }
 
+                let scriptText = request.responseText;
+                if (options.developerMode &&
+                    scriptText.endsWith(testHookSnippet)) {
+                    // just in developer mode, remove alert used in half-automated UI tests from tests
+                    // after the CRI has been opened.
+                    scriptText = scriptText.slice(0, -testHookSnippet.length);
+                }
+
                 let filesToInstrument = options.criconfigincludes || false;
 
                 // check if file should be instrumented. If setting is not set, instrument all files.
                 if (filesToInstrument === false || _.contains(filesToInstrument, filename)) {
 
-                    let code = instrumentFile(filename, request.responseText, options.developerMode);
+                    let code = instrumentFile(filename, scriptText, options.developerMode);
                     executeInContext(code);
                     J$.W(-1, '', '', '');
                     fileReadOver = true;
@@ -82,7 +101,7 @@ var cri = cri || {};
                     // next
                     setTimeout(next, 0, ++index, finishedCallback);
                 } else {
-                    executeInContext(request.responseText);
+                    executeInContext(scriptText);
                     // next
                     setTimeout(next, 0, ++index, finishedCallback);
                 }
@@ -212,15 +231,6 @@ var cri = cri || {};
             let fun = new Function(code);
             fun.call(window);
         }
-
-        /**
-         * For formatted version see FilenameHookSnippet.js
-         * @type {string}
-         */
-        let jalangiOverrideSnippet = "var X$ = window.J$;var J$ = jQuery.extend({}, X$);J$.W = function (iid, name, val, lhs,"
-            + "isGlobal, isPseudoGlobal) {return X$.W(iid, name, val, lhs, isGlobal, isPseudoGlobal, 'PLACEHOLDER');};J$.M ="
-            + "function (iid, base, offset, isConstructor) {return X$.M(iid, base, offset, isConstructor, 'PLACEHOLDER');};"
-            + "J$.F = function (iid, f, isConstructor) {return X$.F(iid, f, isConstructor, 'PLACEHOLDER');};\n";
 
         return {
             getCode: getCode
