@@ -31,4 +31,3 @@ $("#runBaconScan").click(function () {
         $("#baconScan").text(val);
     });
 });
-alert("please open the CRI now");//#CRI-Test#

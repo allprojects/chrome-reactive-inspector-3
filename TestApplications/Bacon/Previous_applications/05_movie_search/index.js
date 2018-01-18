@@ -43,7 +43,7 @@ var mapDebouncedStreamToVal = debounsedStream.map(function (event) {
 
 var suggestions =
     mapDebouncedStreamToVal.flatMapLatest(function (query) {
-        if (query.length > 3) {
+        if (query.length > 3){
             // show no results for queries of length &lt; return singleValStream = Bacon.once([]);
             return eventStreamFromPromise = Bacon.fromPromise(queryMovie(query));
         }
@@ -64,4 +64,3 @@ waiting.onValue(function (x) {
 suggestions.onValue(function (results) {
     $('#results').html($.map(results, showMovie));
 });
-alert("please open the CRI now");//#CRI-Test#

@@ -1,29 +1,32 @@
-var dragTarget = document.getElementById('dragTarget');
 
-// Get the three major events
-var mouseup = Rx.Observable.fromEvent(dragTarget, 'mouseup');
-var mousemove = Rx.Observable.fromEvent(document, 'mousemove');
-var mousedown = Rx.Observable.fromEvent(dragTarget, 'mousedown');
+    var dragTarget = document.getElementById('dragTarget');
 
-var mousedrag = mousedown.flatMap(function (md) {
+    // Get the three major events
+    var mouseup   = Rx.Observable.fromEvent(dragTarget, 'mouseup');
+    var mousemove = Rx.Observable.fromEvent(document,   'mousemove');
+    var mousedown = Rx.Observable.fromEvent(dragTarget, 'mousedown');
 
-    // calculate offsets when mouse down
-    var startX = md.offsetX, startY = md.offsetY;
-    // Calculate delta with mousemove until mouseup
-    return mousemove.map(function (mm) {
+    var mousedrag = mousedown.flatMap(function (md) {
+
+      // calculate offsets when mouse down
+      var startX = md.offsetX, startY = md.offsetY;
+      // Calculate delta with mousemove until mouseup
+      return mousemove.map(function (mm) {
         mm.preventDefault();
 
         return {
-            left: mm.clientX - startX,
-            top: mm.clientY - startY
+          left: mm.clientX - startX,
+          top: mm.clientY - startY
         };
-    })
-        .takeUntil(mouseup);
-});
+      })
+          .takeUntil(mouseup);
+    });
 
-// Update position
-var subscription = mousedrag.subscribe(function (pos) {
-    dragTarget.style.top = pos.top + 'px';
-    dragTarget.style.left = pos.left + 'px';
-});
-alert("please open the CRI now");//#CRI-Test#
+    // Update position
+    var subscription = mousedrag.subscribe(function (pos) {
+      dragTarget.style.top = pos.top + 'px';
+      dragTarget.style.left = pos.left + 'px';
+    });
+
+
+

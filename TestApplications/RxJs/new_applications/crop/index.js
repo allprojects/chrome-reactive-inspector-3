@@ -1,4 +1,4 @@
-var // a model for the region of the image about to be cropped
+  var // a model for the region of the image about to be cropped
     boundingBox,
     // an array of draggable elements that modify the crop region
     handles = [],
@@ -9,16 +9,16 @@ var // a model for the region of the image about to be cropped
     // `ctx` will be the drawing context for `overlay`
     ctx;
 
-function loadImage() {
-    var // `buffer` is a canvas element that displays the actual image to crop
+  function loadImage () {
+      var // `buffer` is a canvas element that displays the actual image to crop
         buffer = document.getElementById('buffer'),
         // `img` is an img element we use to load the img, though we never add it to the DOM
         img = document.createElement('img');
 
-    img.src = 'images/leaf twirl.jpg';
+      img.src = 'images/leaf twirl.jpg';
 
-    // Returns an observable which fires when the image is loaded
-    return Rx.Observable.fromEvent(img, 'load').map(function () {
+      // Returns an observable which fires when the image is loaded
+      return Rx.Observable.fromEvent(img, 'load').map(function () {
         overlay.width = img.width;
         overlay.height = img.height;
 
@@ -27,116 +27,114 @@ function loadImage() {
         buffer.getContext('2d').drawImage(img, 0, 0);
 
         return {
-            width: img.width,
-            height: img.height
+          width: img.width,
+          height: img.height
         };
-    });
-}
+      });
+  }
 
-function initBoundingBox(size) {
+  function initBoundingBox(size) {
     boundingBox = {
-        x: 0,
-        y: 0,
-        x2: size.width,
-        y2: size.height
+      x: 0,
+      y: 0,
+      x2: size.width,
+      y2: size.height
     };
-}
+  }
 
-function createHandles() {
+  function createHandles () {
     var container = document.querySelector('#container');
 
-    function createHandle(id, render, updateModel) {
-        var handle = document.createElement('div');
-        handle.className += ' handle';
-        handle.setAttribute('id', id);
-        container.appendChild(handle);
+    function createHandle (id, render, updateModel) {
+      var handle = document.createElement('div');
+      handle.className += ' handle';
+      handle.setAttribute('id', id);
+      container.appendChild(handle);
 
-        // `render` allows us to visually update the handle after it has been dragged
-        handle['render'] = render;
-        // `updateModel` allows us to modify the correct part of the crop region model
-        handle['updateModel'] = updateModel;
+      // `render` allows us to visually update the handle after it has been dragged
+      handle['render'] = render;
+      // `updateModel` allows us to modify the correct part of the crop region model
+      handle['updateModel'] = updateModel;
 
-        handles.push(handle);
+      handles.push(handle);
     }
 
     // top left
     createHandle('tl', function () {
-        this.style.top = boundingBox.y + 'px';
-        this.style.left = boundingBox.x + 'px';
+      this.style.top = boundingBox.y + 'px';
+      this.style.left = boundingBox.x + 'px';
     }, function (x, y) {
-        boundingBox.x = x;
-        boundingBox.y = y;
+      boundingBox.x = x;
+      boundingBox.y = y;
     });
 
     //top right
     createHandle('tr', function () {
-        this.style.top = boundingBox.y + 'px';
-        this.style.left = boundingBox.x2 + 'px';
+      this.style.top = boundingBox.y + 'px';
+      this.style.left = boundingBox.x2 + 'px';
     }, function (x, y) {
-        boundingBox.y = y;
-        boundingBox.x2 = x;
+      boundingBox.y = y;
+      boundingBox.x2 = x;
     });
 
     // bottom left
     createHandle('bl', function (s) {
-        this.style.top = boundingBox.y2 + 'px';
-        this.style.left = boundingBox.x + 'px';
+      this.style.top = boundingBox.y2 + 'px';
+      this.style.left = boundingBox.x + 'px';
     }, function (x, y) {
-        boundingBox.x = x;
-        boundingBox.y2 = y;
+      boundingBox.x = x;
+      boundingBox.y2 = y;
     });
 
     // bottom right
     createHandle('br', function (s) {
-        this.style.top = boundingBox.y2 + 'px';
-        this.style.left = boundingBox.x2 + 'px';
+      this.style.top = boundingBox.y2 + 'px';
+      this.style.left = boundingBox.x2 + 'px';
     }, function (x, y) {
-        boundingBox.y2 = y;
-        boundingBox.x2 = x;
+      boundingBox.y2 = y;
+      boundingBox.x2 = x;
     });
 
     // render the handles in their initial positiions
-    handles.forEach(function (element) {
-        element['render']();
-    });
+    handles.forEach(function (element) { element['render'](); });
 
     // grab handles in a nodeList so we can add mousedown listeners to all of them at once
     handleNodes = document.querySelectorAll('.handle');
-}
+  }
 
-function respondToGestures() {
+  function respondToGestures() {
     // Check for pointer events
     var moves = 'mousemove', downs = 'mousedown', ups = 'mouseup';
     if (window.navigator.pointerEnabled) {
-        moves = 'pointermove';
-        downs = 'pointerdown';
-        ups = 'pointerup';
+      moves = 'pointermove';
+      downs = 'pointerdown';
+      ups = 'pointerup';
     }
 
     var fromEvent = Rx.Observable.fromEvent,
         move = fromEvent(overlay, moves),
-        up = fromEvent(document, ups),
+        up   = fromEvent(document, ups),
         down = fromEvent(handleNodes, downs);
 
     // When the mouse is down on a handle, return the handle element
     return down.flatMap(function (handle) {
-        handle.preventDefault();
+      handle.preventDefault();
 
-        return move
+      return move
         // We combine the handle element with the position data from the move event
-            .map(function (pos) {
-                return {
-                    element: handle.target,
-                    offsetX: pos.offsetX,
-                    offsetY: pos.offsetY
-                };
-            })
-            // However, when the mouse is up (anywhere on the document) then stop the stream
-            .takeUntil(up);
+        .map(function (pos) {
+          return {
+            element: handle.target,
+            offsetX: pos.offsetX,
+            offsetY: pos.offsetY
+          };
+        })
+        // However, when the mouse is up (anywhere on the document) then stop the stream
+        .takeUntil(up);
     });
-}
+  }
 
-function drawOverlay() {
+  function drawOverlay() {
     var x = boundingBox.x,
         y = boundingBox.y,
         w = boundingBox.x2 - boundingBox.x,
@@ -154,29 +152,26 @@ function drawOverlay() {
     ctx.fillRect(x, y, w, h);
     ctx.fill();
 
-    handles.forEach(function (tool) {
-        tool['render']();
-    });
-}
+    handles.forEach(function (tool) { tool['render'](); });
+  }
 
-overlay = document.getElementById('overlay');
-ctx = overlay.getContext('2d');
+  overlay = document.getElementById('overlay');
+  ctx = overlay.getContext('2d');
 
-var subscription = loadImage()
+  var subscription = loadImage()
     .flatMap(function (size) {
 
-        // Initialize after load
-        initBoundingBox(size);
-        createHandles();
+      // Initialize after load
+      initBoundingBox(size);
+      createHandles();
 
-        return respondToGestures();
+      return respondToGestures();
     })
     .subscribe(function (data) {
 
-        // Update model and redraw via an async operation
-        data.element.updateModel(data.offsetX, data.offsetY);
+      // Update model and redraw via an async operation
+      data.element.updateModel(data.offsetX, data.offsetY);
 
-        Rx.Scheduler.animationFrame.schedule(drawOverlay);
+      Rx.Scheduler.animationFrame.schedule(drawOverlay);
     });
 
-alert("please open the CRI now");//#CRI-Test#

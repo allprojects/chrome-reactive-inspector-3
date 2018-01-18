@@ -52,7 +52,7 @@ var velocity = drag.debounceTime(dt).pairwise().map(function (md) {
     var vx = sx / dt; // pixels/milisecond
     var vy = sy / dt;
 
-    return {vx: vx, vy: vy};
+    return { vx: vx, vy: vy };
 });
 
 velocity.subscribe(function (vel) {
@@ -92,4 +92,3 @@ touchend.subscribe(function (te) {
 var rect = target.getBoundingClientRect();
 target.style.top = (window.innerHeight - rect.height) / 2 + 'px';
 target.style.left = (window.innerWidth - rect.width) / 2 + 'px';
-alert("please open the CRI now");//#CRI-Test#
