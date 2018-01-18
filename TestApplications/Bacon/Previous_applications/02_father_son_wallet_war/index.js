@@ -22,4 +22,5 @@ fatherWalletValue = sonWalletValue
     });
 sonWalletValue.assign($sonWallet, "val");
 fatherWalletValue.assign($fatherWallet, "val");
-alert("please open the CRI now");//#CRI-Test#
+/*#cri-hint test alert*/
+alert("please open the CRI now");
