@@ -19,9 +19,29 @@
 	
 	\subsection{"Possible Solutions"}
 	% Navigating to Source via Chrome debug api
+		% - Problem: instrumentated javascript is not readable, not instrumentated version seems to exist in chromes code storage as dynamic script, but should not correspond because the instumented version is loaded dynamically.
+		% correspondence between line in code and actual used javascript file is not working
+		% easily possible to navigate to a line number in a file, if the file url is known and the javascript actually exists.
 	% Opening the code in a simple file viewer
+		% just navigate to or display the original code even though it is not the file currently used (because the current one is instrumented)
+		% pro: full code, user can use find and search via IDE or Chrome devtools
+		% con: - User has to leave the extension UI to do it. 
+			% - Really cumbersome if many nodes are to be inspected. 
+			% - unprecise, just the line number is not precise for chained calls.
+			% - if navigating with chrome devtools: breakpoints will show but never trigger which could confuse the user
 	% using a mirror
+		%- keep copy of website that is instrumented and mirror all interaction to it
+		%--> navigate to real one when clicked
 	% Source Previews
+		% - use popup that opens when strg click on node with surrounding lines
+		% - change tooltip to show the code if ctrl pressed while mouse enter or when already on element
+		% Pro: - precise highlighting of corresponding code possible
+			% - serves as additional details for nodes, can help identify a node that has no name
+			% - helps the user to find and remember a node without a name between multiple uses of the extension by other means than the id. The id may have changed due to changes to the previously executed code.
+			% - fast to open/close and without leaving the extensions UI
+		% Con: - if the chain of functions is to large, not all relevant code can be shown and in general big chains are hard to read.
+			% - no search or other code inspection tools available for the code snippet -> the user would have to use an external tool and the line number for that. No breakpoints, though there are not that useful in reactive programming anyway as described in #state of the art chapter.
+			% - can not use existing syntax highlighting of chrome or an IDE. Implementing a own syntax highlighting would not be easy, because if just the small snippet is analysed all context relying highlighting will be lost. Basic keywords would be possible but with own implementation or third party library.
 	
 	\subsection{Implemented Solution - Source Information Tooltips}
 		% limited capabilities of used jalangi -> developed for a special demo, not in general (mentioned in state of the art)
@@ -29,6 +49,20 @@
 		% tipsy.js - switching out the tooltip with the function
 		% link source to specific js file
 		% for developers: find instrumented file - added sourcemap
+	- when hovering above node press ctrl to view source code (canvas needs to have tabindex to be focusable)
+	- bind special keypress event for hovered node to canvas
+	- remove handlers when leaving
+	- add functional title for tipsy tooltips
+	- Connection of abstract graph to code is not always helpful, because it takes/tuggs the user back to sequential/non-reactive thinking, but helps to understand nodes without other details or inexpressive names. Without this additional info the user is encouraged to split chained function calls and give each step a named variable, which not only is cumbersome but also may lead to diverting the focus from variables that should really have a name.
+	
+	- the problem is to have the filename in the write function, because all instrumented files use the same jalangi sandbox.
+	- the filenames in contrast to the original jalangi are not implemented in the minified non nodejs version taken from the demo page.
+	- the only solution with minimal changes to the used jalangi-framework.js is to locally overwrite the W function in every instrumented file.
+	- the overwrite is done via shallow copying the J\$ object and replacing the W function.
+	- to get additional info an observables previously not covered, the invokeFun was also extended with the filename and used to record source info. This can obviously not record names for additional nodes.
+	- inline scripts are excluded from this because there might be many and that could lead to performance issues due to the shallow copying.
+	If filename is not set, document domain is assumed for the filename.
+	
 	
 		\subsubsection{Strengths and limitations of this approach} 
 		% ui, syntax highlighting

@@ -16,16 +16,22 @@
 	\subsection{The Chrome Reactive Inspector}
 		% everything done by my predecessors in short, focus of both works and what differed
 		\subsubsection{Master Thesis by Waqas Abbas}
+		
 		\subsubsection{Master Thesis by Pradeep Baradur}
+		
 		\subsubsection{Merging previous efforts}
-		%...
+		%- took chrome-reactive-inspector 2 as base and merge all later developed features into it, piece by piece.
+		
 		\subsubsection{"Special Curicumstances"}
 		% demo version of jalangi
 		% instrumenting files via scanning the html for script tags
 		% -> will not work for module loaders like require.js or ecma6
 		% -> will not work with bundled javascript code - but since in development there should be a non bundled version available not 
 		% a big problem in javascript. But for Typescript since the extension does not support it and when compiling there may already be bundling in place. (#add some text from future here#)
-	% shared context through "new Function" that breaks the separation enforced by chrome (previous code eval)	
+		% Shared context through "new Function" that breaks the separation enforced by chrome. To increase consistency and prevent different execution contexts the previous eval was replaced with "new Function" but this does not reduce the security risk.There are other options to execute scripts from a chrome extension but since some of the extension scripts need to share the Rx or Bacon object with the inspected pages javascript files there is no other way. ofcorse that breaks the normal isloated world and intodruces a new set of problems like conflicting names. The security risk involved in executing a foreign script in a "trusted" extension context could be reduced if a sandbox was used as described in https://developer.chrome.com/extensions/sandboxingEval. Then all the inspected pages content scripts and some special recording scripts could be executed in that sandbox and transmitt the recorded nodes back via message passing.
+		% - Dangers of using eval -> execution in current context. if called from other function, "this" might change. Function() for global with window passed to execute in original context.
+		- Note that  files that are not selected for instrumentation will still generate nodes in the graph, because the Rx and Bacon frameworks will still record interactions.
+		- The Bacon and Rx scripts are prevented from loading so the extensions own files can be used. This is accomplished by filtering all referenced js files in the inspected page for any Bacon or Rx library files and excluding them from the loading process. They need to match version exactly though. 
 	
 
 	\subsection{RxFiddle}
