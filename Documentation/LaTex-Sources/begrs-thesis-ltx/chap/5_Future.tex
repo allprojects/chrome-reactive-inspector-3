@@ -33,5 +33,4 @@
 	% ecma6 import references file not necessarily in html as <script>
 	%TODO check if above is true
 	%TODO check if typescript compilatino to un-bundled js is possible
-	%possible solution: since scripts are side loaded, append a detection function to the bottom of each loaded javascript file that sends
-	% a message to the extension if the "Bacon" or "Rx" object is present.
+	%- the breach of the isolated world of chrome context scripts enables the developer to have a total access to the pages javascript which can be used to solve the problem of "import" statements. The developer could overwrite the import/require/.. comands of each known framework and provide a custom function that does the loading in additional 
