@@ -135,12 +135,12 @@ _.extend(cri, (function (window) {
         if (type) {
             $tooltip.append($("<p>").text('Type: ' + type));
         }
+        if (method) {
+            $tooltip.append($("<p>").text('Method: ' + method));
+        }
         if (sourceInfoText) {
             $tooltip.append($("<p>").text('Location: ' + sourceInfoText));
             $tooltip.append($("<p>").text('Press CTRL to view source code.').addClass("tooltip-hint"));
-        }
-        if (method) {
-            $tooltip.append($("<p>").text('Method: ' + method));
         }
         if (nodeUpdates && nodeUpdates > 1) {
             $tooltip.append($("<p>").text('Number of Updates: ' + nodeUpdates));
