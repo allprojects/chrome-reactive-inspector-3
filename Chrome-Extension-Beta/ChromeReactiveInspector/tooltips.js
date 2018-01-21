@@ -110,7 +110,7 @@ _.extend(cri, (function (window) {
         d3node.classed("show-code", false);
     }
 
-    function createNormalTooltipContent(id, name, type, method, sourceInfo, value) {
+    function createNormalTooltipContent(id, name, type, method, sourceInfo, value, nodeUpdates) {
         // use jquery to construct html strings to prevent layout breaks
         // if "weird" values are displayed. (also prevents xss)
 
@@ -141,6 +141,9 @@ _.extend(cri, (function (window) {
         }
         if (method) {
             $tooltip.append($("<p>").text('Method: ' + method));
+        }
+        if (nodeUpdates && nodeUpdates > 1) {
+            $tooltip.append($("<p>").text('Number of Updates: ' + nodeUpdates));
         }
         if (value) {
             // if the value gets much bigger than 300, all other info in the tooltip can not be viewed anymore
@@ -232,7 +235,8 @@ _.extend(cri, (function (window) {
         // add tipsy to nodes
         d3nodeCollection.attr("title", function (v) {
             let data = self.graphManager.getNode(v);
-            return createNormalTooltipContent(data.nodeId, data.ref, data.type, data.method, data.sourceInfo, data.value)
+            return createNormalTooltipContent(data.nodeId, data.ref, data.type,
+                data.method, data.sourceInfo, data.value, data.nodeUpdates)
         })
             .each(function () {
                 // add tooltips

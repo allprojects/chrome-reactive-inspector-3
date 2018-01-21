@@ -107,6 +107,13 @@ let allEdges = [];
             + (node.sourceInfo ? " has-source-info" : "");
         node.label = getNodeLabel(id, node.ref, truncatedVal);
 
+        let previousSavedNode = graphManager.getNode(id);
+        if (previousSavedNode) {
+            node.nodeUpdates = previousSavedNode.nodeUpdates + 1;
+        } else {
+            node.nodeUpdates = 1;
+        }
+
         // clear current from previous nodes
         _.each(graphManager.graph.nodes(), function (n) {
             let node = graphManager.graph.node(n);

@@ -79,7 +79,6 @@ cri.graphHistory = (function (window) {
         });
     }
 
-
     /**
      * Calls the callback with a restored graph
      * @param stageId
