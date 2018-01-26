@@ -8,7 +8,28 @@
 	
 	\subsection{RxJs and BaconJs}
 	% Though there are other Javascript implementations of the reactive design pattern like https://github.com/stoeffel/awesome-frp-js,
+	% kefir, cyclejs
 	% this thesis focuses on RxJs and BaconJs, because these are the one the extension currently supports.
+	
+	%RXjs
+	%var button = document.querySelector('button');
+	%Rx.Observable.fromEvent(button, 'click')
+	%.throttleTime(1000)
+	%.scan(count => count + 1, 0)
+	%.subscribe(count => console.log(`Clicked ${count} times`));
+	% The essential concepts in RxJS which solve async event management are:
+	%Observable: represents the idea of an invokable collection of future values or events.
+	%Observer: is a collection of callbacks that knows how to listen to values delivered by the Observable.
+	%Subscription: represents the execution of an Observable, is primarily useful for cancelling the execution.
+	%Operators: are pure functions that enable a functional programming style of dealing with collections with operations like map, filter, concat, flatMap, etc.
+	%Subject: is the equivalent to an EventEmitter, and the only way of multicasting a value or event to multiple Observers.
+	%Schedulers: are centralized dispatchers to control concurrency, allowing us to coordinate when computation happens on e.g. setTimeout or requestAnimationFrame or others.
+	
+	
+	%Baconjs: 
+	%Generally, this is how you implement an app with Bacon.js. Capture input into EventStreams and Properties - Transform and compose signals into ones that describe your domain. - Assign side-effects to signals.
+	%EventStreams (distinct events) and Properties (values that change over time). 
+	%$("#username input").asEventStream("keyup").map(function(event) { return $(event.target).val() }).toProperty("")
 
 	\subsection{Debugging Reactive Code}
 	% other systems that do
