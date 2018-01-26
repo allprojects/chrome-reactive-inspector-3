@@ -5,27 +5,20 @@
 	% example mario: still to fast to keep up
 	% Memory for one test case with exactly equal conditions.
 	
-	\subsection{"Specifications"}
-	% for all:
-	% - After loading the website, the extension shows the dependency graph.
-	% - Each node that does not have a code preview, has a faded border.
-	% - All fields are only displayed on a node if they have a value. 
-	% - The node Ids are continuous and start with 1.
-	% - No console errors from extension scripts while using the test application. (the selenium webdriver may have console errors, due to the reload of the page by CRI)
-	% - Starting at step 20 the user can navigate to 0 and back to 20 and see the same dependency graph again.
-	
-	% for one: (because to much work for all)
-	% - for all nodes with a variable name, the code preview shows the first assignment of that variable with an observable.
-	% - Search/Dependencies: all dependencies are correctly highlighted and restored once the search is reset.
-	% - Creating a breakpoint for nodeCreated for a node and reloading will halt the execution once the node is created.
-	
-	%#### specification how the tool should be have (kind of generic) #behavior
-	%- asses that basic behaviors happen in all applications instead of test for specifics
-	%- what are the 10-15 most important behavior we expect from the tool	
-	
-	%- spreadsheet with details about every application, name, source, short description, length, technologies.
-	%- notify guido if ready
-	
+	\subsection{"Test Applications"}
+	Specifications
+	\begin{itemize}
+		\item The dependency graph is shown and all observables that are assigned to a named variable are displayed distinctively.
+		(Test: The first five named observables in the code are all displayed with an orange background.)
+		\item The history of the dependency graph can be navigated. It is possible to navigate to the previous, succeeding or a random step in the history. (Test: Jump to the median step, click next five times, click previous five times. )
+		\item For each node, no space is occupied by fields that hold no value in neither the node itself nor it's tooltip.
+		\item The ids of the nodes start at one and are continuous. If the test application is started again with the exact same inputs, the each node has the same id as in the last execution.
+		\item The source code tooltips show and highlight the corresponding lines of code. (Test: If possible, choose two nodes, one that corresponds to the middle of a chain of reactive function calls and one that corresponds to the end of a chain of reactive function calls. For both nodes check if the highlighting is correct.)
+		\item The node or edge that was updated in a step is highlighted. (Test: Check for the first ten steps in the history.)
+		\item The history queries can be used to search for a specific event in the history. (Test: evaluationYielded and nodeUpdated find the corresponding steps for the first named node.)
+		\item Reactive breakpoints can be used to pause the debugger when a specific event occurs. (Test: A breakpoint set for the first node created will break at step one. A breakpoint for the first node updated will break before the value is shown in the CRI)
+		\item The graph can be searched, the matching node(s) is/are highlighted and if the search is reseted the original view will be restored. (Test: Search for the dependencies of a node and then reset the search.)
+	\end{itemize}
 	
 	
 	% > to use test apps with "broken by policy" host them on the integrated webstorm webserver like http://localhost:63342/chrome-reactive-inspector-3/TestApplications/RxJs/previous_applications/12_movie_search/autocomplete.html note that you need to uncheck "Allow unsecure requests" for it to work properly. The project must be opened in webstorm for it to work.
@@ -79,8 +72,3 @@
 	%true-false-logger - sample input for values
 	%drawing - sample input for values
 	
-	\subsection{"Test Applications"}
-	%for each:
-	% portion of nodes that can be linked to code
-	% portion of nodes that have details
-	% specifications
