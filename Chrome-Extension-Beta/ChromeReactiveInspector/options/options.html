@@ -19,7 +19,7 @@
     <div id="options-list" class="flex-vertical-container flex-child-centered">
         <div id="status" class="alert-success flex-child-left"></div>
         <div class="flex-child-left">
-            <h2>Here you can set additional options for the plugin.</h2>
+            <h2>Chrome Reactive Inspector Options</h2>
             <hr>
         </div>
         <div class="flex-child-left">
@@ -42,13 +42,13 @@
 
         <div class="flex-vertical-container flex-child-left" style="flex-direction: column">
             <div>
-                <label for="codePreviewScope">Scope:</label>
+                <label for="codePreviewScope">Source code scope:</label>
                 <input class="input-sm" id="codePreviewScope"/>
-                (Number of lines displayed before and after the relevant line in code previews.)
+                (Number of lines displayed before and after the relevant lines in source code tooltips.)
             </div>
-            <div><label for="codePreviewMax">Max code preview size (including scope):</label>
+            <div><label for="codePreviewMax">Max source code tooltip lines (including scope):</label>
                 <input class="input-sm" id="codePreviewMax"/>
-                (Leave empty to not limit the scope.)
+                (Leave empty for unlimited lines.)
             </div>
         </div>
 
@@ -60,8 +60,9 @@
 
         <hr>
         <div class="flex-child-left">
-            <label for="nodeId">Add node-ids(in below box) which should not be logged in the Graph:</label>
+            <label for="nodeId">Node-ids which should not be updated:</label>
             <input type="text" id="nodeId">
+            (Use this to exclude nodes which values change exceedingly often.)
         </div>
 
         <div class="flex-child-centered">
