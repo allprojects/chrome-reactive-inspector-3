@@ -3,8 +3,26 @@
 
 \section{Implementation of Reactive Systems}
 	\subsection{Reactive Programming}
-	% eventStreams
-	% observables, difference to Observer design pattern.
+	% reactive programming is in general not asynchroneous but it can be used in async context.? (waqas says something different for RXjs)
+	% observables, difference to Observer design pattern:
+		% observables in a reactive system return/provide multiple values (a stream) instead of just the current state.
+		% "Observables provide abstractions over a stream of events. Promises are synchronous executables with a single return value, whereas observables are asynchronous executables that return multiple values over time." [pradeep]
+		%"The data produced by the producer is stored in observable which the consumer consumes."[Pradeep]
+	% observables are also called signals[wikipedia] = values that vary over continuous time -> or in RxJs Observables, Bacon Properties
+	% events = events which have occurrences at discrete points in time -> RxJs Subject, Bacon EventStream
+	% "observables" are functions that tie an observer to a producer. A producer creates values over time. An observer reacts to the values of a producer and notifies all subscribers (in a push based system).
+	%operators: "Each operator outputs an another observable without modifying the original data streams." [Pradeep]
+	% push and pull based: 
+		%"Push-based systems take events and push them through a signal network to achieve a result. Pull-based systems wait until the result is demanded, and work backwards through the network to retrieve the value demanded." https://en.wikipedia.org/wiki/Functional_reactive_programming
+	% cold and hot observables https://medium.com/@benlesh/hot-vs-cold-observables-f8094ed53339
+			% -> author: "RxJS 5+ Lead, Software Engineer at Google, RxWorkshop.com. Own view, not the companies"
+		% cold: the subscribe call creates the producer - one producer (e.g. a websocket raising events) is created for each call to subscribe, it gets destroied if the observer unsubscribes -> unicast
+		% hot: all calls to subscribe (usally) share one producer - multicast
+		% Rx Subjects - functions as both observer and observable, multicast but will terminate if the last subscriber is unsubscribed, can not be reused after termination or if in error state. "It multicasts. All observers passed to it via `subscribe()` are added to an internal observers list."
+			% "Armed with our Rx Subject above, we can use a bit of functional programming to make any “cold” observable “hot”:
+			%function makeHot(cold) {const subject = new Subject();cold.subscribe(subject); return new Observable((observer) => subject.subscribe(observer));}
+			%Our new `makeHot` method will take any cold observable and make it hot by creating a subject that is shared by the resulting observable."
+			% in RxJs that is e.g. publish or share
 	
 	\subsection{RxJs and BaconJs}
 	% Though there are other Javascript implementations of the reactive design pattern like https://github.com/stoeffel/awesome-frp-js,
@@ -24,12 +42,18 @@
 	%Operators: are pure functions that enable a functional programming style of dealing with collections with operations like map, filter, concat, flatMap, etc.
 	%Subject: is the equivalent to an EventEmitter, and the only way of multicasting a value or event to multiple Observers.
 	%Schedulers: are centralized dispatchers to control concurrency, allowing us to coordinate when computation happens on e.g. setTimeout or requestAnimationFrame or others.
+	%"The subscribers are not locked in a synchronous request and there can be an infinite sequence of next emissions from the observables to the observer." [Pradeep]
+	%"completed and error functions	being defined at the observer, which are invoked by the observable on respective events. This lets the observer know that an observable has exhausted sending values, or an error has occurred	when performing an operation on the observable." [Pradeep]
+	%"Subjects can be both observable and an observer[37]. It is a special type of observable which	allows values to be multicasted to many observers" [Pradeep]
+	%"Unsubscribing is an optional feature in RxJS as RxJS handles this by default but it makes sense to unsubscribe manually by a user if the source observable is emitting the values continuously and the user does not need values after a specific point of time." [Pradeep]
+	%"With the support of RxJS, we can convert multiple values, arrays, events into observables."[Pradeep]
 	
 	
 	%Baconjs: 
 	%Generally, this is how you implement an app with Bacon.js. Capture input into EventStreams and Properties - Transform and compose signals into ones that describe your domain. - Assign side-effects to signals.
 	%EventStreams (distinct events) and Properties (values that change over time). 
 	%$("#username input").asEventStream("keyup").map(function(event) { return $(event.target).val() }).toProperty("")
+	% "In Bacon, these are two flavors of Observables. EventStreams and Property are two basic concepts	of Bacon.js that are basically known as events and behaviours in the literature of FRP." [waqas]
 
 	\subsection{Debugging Reactive Code}
 	% other systems that do
