@@ -48,13 +48,26 @@
 	%"Subjects can be both observable and an observer[37]. It is a special type of observable which	allows values to be multicasted to many observers" [Pradeep]
 	%"Unsubscribing is an optional feature in RxJS as RxJS handles this by default but it makes sense to unsubscribe manually by a user if the source observable is emitting the values continuously and the user does not need values after a specific point of time." [Pradeep]
 	%"With the support of RxJS, we can convert multiple values, arrays, events into observables."[Pradeep]
-	
+	% - current version in development 6.0.0-alpha.2, stable: 5.5.6
+	% - github stats 31.1.2018 18:22 for current active version (they changed repositories multiple times): watch: 387 star: 10,540 fork: 991 contributors: 185 but since they changed the repository the total numbers for all versions are much higher.
+	% licence: Apache 2.0 latest commit: 30.01.2018
+	% first release on github: version 2.2.0 01.03.2013
 	
 	%Baconjs: 
 	%Generally, this is how you implement an app with Bacon.js. Capture input into EventStreams and Properties - Transform and compose signals into ones that describe your domain. - Assign side-effects to signals.
 	%EventStreams (distinct events) and Properties (values that change over time). 
 	%$("#username input").asEventStream("keyup").map(function(event) { return $(event.target).val() }).toProperty("")
 	% "In Bacon, these are two flavors of Observables. EventStreams and Property are two basic concepts	of Bacon.js that are basically known as events and behaviours in the literature of FRP." [waqas]
+	% - BaconJS does not have cold observables [ref baconjs github - For RxJs Users]
+	% - "Error handling is also a bit different: the Error event does not terminate a stream. So, a stream may contain multiple errors. To me, this makes more sense than always terminating the stream on error; this way the application developer has more direct control over error handling. You can always use stream.endOnError() to get a stream that ends on error!" [baconjs github]
+	% - it has the "spy" feature which greatly reduces the required effort to create complementary tooling like CRI or RxFiddle. It can also be used to easily create extensive logging.
+	% - created because "Bacon.js exists largely because I got frustrated with RxJs, which is a good library, but at that time didn't have very good documentation and wasn't open-source. Things have improved a lot in the Rx world since that. Yet, there are still compelling reasons to use Bacon.js instead. Like, for instance, more consistent stream/property behavior and (arguably) simplicity of use." [baconjs github]
+	% - current version 2.0.0
+	% - github stats 31.1.2018 18:22: watch: 156 star: 5,839 fork: 328 contributors: 83
+	% licence: MIT latest commit: 30.01.2018
+	% -> has a smaller community than RxJs
+	% first release on github: version 0.7.90 08.03.2017
+	
 
 	\subsection{Debugging Reactive Code}
 	% due to reactive programming being declarative ... [github, guido rxScala]
