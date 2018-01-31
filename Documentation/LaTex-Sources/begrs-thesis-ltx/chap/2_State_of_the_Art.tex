@@ -3,6 +3,7 @@
 
 \section{Implementation of Reactive Systems}
 	\subsection{Reactive Programming}
+	%"Reactive programming provides dedicated language abstractions for reactive software. Reactive programming relieves developers from manually updating outputs when the inputs of a computation change, it overcomes a number of well-know issues of the Observer design pattern, and it makes programs more comprehensible." [github, rxScala guido] Its also declarative instead of imperative.
 	% reactive programming is in general not asynchroneous but it can be used in async context.? (waqas says something different for RXjs)
 	% observables, difference to Observer design pattern:
 		% observables in a reactive system return/provide multiple values (a stream) instead of just the current state.
@@ -56,10 +57,20 @@
 	% "In Bacon, these are two flavors of Observables. EventStreams and Property are two basic concepts	of Bacon.js that are basically known as events and behaviours in the literature of FRP." [waqas]
 
 	\subsection{Debugging Reactive Code}
-	% other systems that do
-	% - Reactive Inspector for scala https://guidosalva.github.io/reactive-inspector/ 
-	% - reference to rxfiddle
+	% due to reactive programming being declarative ... [github, guido rxScala]
+	% short-comings of standard debuggers with reactive systems:
+		% - stepping through reactive libarary code to track down bugs
+		% - unconditional breakpoints in lambda functions will trigger to often to be useful 
+		% - non-linear code execution makes step by step debugging hard -> "step over" is rarely useful and "step into" needs to be used multiple times for chained functions to iterate to the desired part, because "step over" will skip the whole line [verify with VS, IntelliJ, Webstorm, Chrome debugger].
+		%- "lack of abstractions" and "mismatch in the mental model" [paper guido1]
+		% - "Missing dependencies are hard to detect with traditional debuggers." [paper guido1 4.1]
 	% - unit tests and do-debugging for Rx: https://msdn.microsoft.com/en-us/library/hh242967(v=vs.103).aspx to reduce the effort of adding do-statements each time a bug is tracked down, the developer can add logging functionality and use that in the do statement. https://shiny.rstudio.com/articles/debugging.html #"The Reactive log" where a visualization is later used on the log to create a simple dependency graph containing code pieces as nodes.
+	% other systems that do
+	% - Reactive Inspector for scala https://guidosalva.github.io/reactive-inspector/ is an extension of Scala IDE for Eclipse. Reactive Inspector is a project started and maintained by Guido Salvaneschi at the Software Technology Group - Technical University of Darmstadt, Germany and many people have contributed.
+		% - Many features and the basic concepts that are implemented in CRI originate from RxScala Reactive Inspector. Dependency graph in the so called Reactive Tree, Tree History, History Queries, Reactive Breakpoints, Node search/dependencies/dependents. They are described in details in [Chapter: Previous CRI]
+		% -"Tree Outline: Tree Outline In a large dependency graph it is sometimes hard to navigate the reactive tree. This view shows you at a glance where you are in the graph and helps you jump quickly to a different area of the graph."
+	% - reference to rxfiddle in later section
+	
 	
 
 
