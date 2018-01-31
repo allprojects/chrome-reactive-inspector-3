@@ -70,17 +70,14 @@
 		% - Many features and the basic concepts that are implemented in CRI originate from RxScala Reactive Inspector. Dependency graph in the so called Reactive Tree, Tree History, History Queries, Reactive Breakpoints, Node search/dependencies/dependents. They are described in details in [Chapter: Previous CRI]
 		% -"Tree Outline: Tree Outline In a large dependency graph it is sometimes hard to navigate the reactive tree. This view shows you at a glance where you are in the graph and helps you jump quickly to a different area of the graph."
 	% - reference to rxfiddle in later section
-	
-	
-
 
 \section{Previous and Related Work}
-	\subsection{The Chrome Reactive Inspector}		
+	\subsection{The Chrome Reactive Inspector}
 		\subsubsection{Master Thesis by Waqas Abbas}
 		% main focus of the thesis
 			% - proof of concept
 			% - how to intercept calls to reactive framework
-			% - how to retrieve additional details for each node like the variable name via instrumentation of the source code
+			% - how to retrieve additional details for each node like the variable name via instrumentation of the source code to give context to observables shown in the dependency graph
 		% implemented result of the thesis in short
 			% - reactive breakpoints
 			% - history queries
@@ -124,6 +121,7 @@
 	
 
 	\subsection{RxFiddle}
+	% RxFiddle is the main competitor with CRI since it is the only other tool (that we are aware of) that tackels debugging for reactive javascript systems. Currently the only reactive framework that is supported is RxJs.
 	% features of RxFiddle
 	% limitations: 'one of the limitations of RxFiddle is ... which we tackeld in this work.
 		% - requires more setup to use with web sites that have DOM logic and applications with more than one Javascript files, although it is possible according to the author [ref rxfiddle attached].
@@ -131,6 +129,7 @@
 		% - fast updating observables like "interval" since each value update creates a new marble for the observable, the view becomes encoumbered fast with this type of observables. As of this moment CRI also generates one or more steps for each update (if the node is not explicitly excluded), but it is easier to examine the value of a node in the first or last few steps (jump to the step and use the next/previous button). CRI can also query the result which provide means to cope with large dependency graphs or histories. In RxFiddle the limitating factor for the fine grained stepping is the available space and resulting overplotting of the value-marbles since the examination is implemented via tooltips on mouseover. For performance comparison see [Evalutation chapter section Performance Improvements].
 		% - like the author explained in "https://github.com/hermanbanken/RxFiddle/issues/6" the web app can not work with large applications properly. The displaying of large applications in one graph is hard for both tools [reference to Contributions chapters], but RxFiddle needs more spaces for a single reactive operator than CRI. A large dependency graph with descriptive nodes is easier to examine than a large marble diagram that only shows information on nodes in tooltips except in the details view of a currently selected node so finding the desired node/operation is not as easy. RxFiddle also has performacne issue while rendering huge diagrams according to the author. RxFiddle would porbably need another view to appropiately cope with such large applications to help the user navigate and give an overview, although for mid-sized applications the graph on the left side where a user can choose which operation to examine can serve this purpose - As mentioned earlier RxFiddle does not porvide variable names which may lead to confusion of nodes if similar observables are in the same application.
 		% As of now, CRI does not support multiple variables having the same name. The author describes some other options like priority ranking in the issue [ref].
+		% - as mentioned erlier RxFiddle onyl supports RxJs while CRI also supports Bacon.js
 	% - The author plans to support multiple collectors in the future for web applications, RxScala, RxJava, RxSwift and/or RxNet (source: "https://rxfiddle.net/tutorials.html#attached") which would provide the necessary data collection on one of these platforms and transmit this data to the RxFiddle tool/web-application to be able to use the same debugging environment (RxFiddle) with any of these platforms.
 
 
