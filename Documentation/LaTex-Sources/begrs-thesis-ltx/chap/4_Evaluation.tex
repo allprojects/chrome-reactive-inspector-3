@@ -5,6 +5,10 @@
 	% example mario: still to fast to keep up
 	% Memory for one test case with exactly equal conditions.
 	
+	% Comparison for test cast TestForExactPerformance: CRI vs RxFiddle
+		% although RxFiddle does not have performance issues (lags > 1 s) for ~ 1000 updates on Chrome (63.0.3239.132 (64-Bit)) with win10 8GB RAM i7 7500 2.7GHz 4CPUs. It does block Firefox (57.0.4 (64-bit)) for a few seconds. Once the UI is build it is noticeable slower than for applications with less value changes but delays < 1s. The CRI performance for this test app is slightly faster, but due to it being an extension instead of a webpage the performance difference may not be due to the tool implementations. CRI generates ~ 2700 steps, RxFiddle generates ~ 1000 values for each operator/observable in the chain of "intervalObservable".
+		% CRI is not testable in Firefox
+	
 	\subsection{"Test Applications"}
 	Specifications
 	\begin{itemize}

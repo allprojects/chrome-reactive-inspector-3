@@ -42,7 +42,7 @@
 	%Operators: are pure functions that enable a functional programming style of dealing with collections with operations like map, filter, concat, flatMap, etc.
 	%Subject: is the equivalent to an EventEmitter, and the only way of multicasting a value or event to multiple Observers.
 	%Schedulers: are centralized dispatchers to control concurrency, allowing us to coordinate when computation happens on e.g. setTimeout or requestAnimationFrame or others.
-	%"The subscribers are not locked in a synchronous request and there can be an infinite sequence of next emissions from the observables to the observer." [Pradeep]
+	%"The subscribers are not locked in a synchronous request and there can be an infinite sequence of next emissions from the observables to the observer." [Pradeep] although subscribing is in general a synchroneous operation.
 	%"completed and error functions	being defined at the observer, which are invoked by the observable on respective events. This lets the observer know that an observable has exhausted sending values, or an error has occurred	when performing an operation on the observable." [Pradeep]
 	%"Subjects can be both observable and an observer[37]. It is a special type of observable which	allows values to be multicasted to many observers" [Pradeep]
 	%"Unsubscribing is an optional feature in RxJS as RxJS handles this by default but it makes sense to unsubscribe manually by a user if the source observable is emitting the values continuously and the user does not need values after a specific point of time." [Pradeep]
@@ -67,18 +67,37 @@
 	\subsection{The Chrome Reactive Inspector}		
 		\subsubsection{Master Thesis by Waqas Abbas}
 		% main focus of the thesis
+			% - proof of concept
+			% - how to intercept calls to reactive framework
+			% - how to retrieve additional details for each node like the variable name via instrumentation of the source code
 		% implemented result of the thesis in short
+			% - reactive breakpoints
+			% - history queries
+			% - Bacon support and partly support for Rx
+			% - dependency graph, nodes, edges, zoom, highlighting of current node
+			% - instrumentation, dynamically reloading of the page to intercept the javascripts for instrumentation
+			% - first batch of test applications
+			% -> focus on new implementation and prototypes of features and less on maintainability and reliability.
+			% -> proof of concept
 		
 		\subsubsection{Master Thesis by Pradeep Baradur}
-		% main focus of the thesis
-		% new features introduced
+		% main focus of the thesis:
+			% support for all RxJS operations and RxJS Subjects -> hard to implement, because there is no uniform way like the Bacon.spy method. For details on the general approach see [ref to pradeep thesis]. For source code see "rx-interception.js"
+		% new features introduced:
+			% - support for all operations and Subjects in RxJs
+			% - loading of some CRI content scripts only when the CRI panel is opened. Istrumentation only when CRI panel is opened.
+			% - find dependencys, dependents
+			% - added many test applications
+			% - improved reliability
+			% - less focus on maintainability but move the project further to being usable in a production environment by adding framework feature support.
+			% - rearranged UI, changed many styles to defaullt jquery-ui layout.
 		
 		\subsubsection{Merging previous efforts}
-		%- took chrome-reactive-inspector 2 as base and merge all later developed features into it, piece by piece.
+		%- took chrome-reactive-inspector 2 as base and merge all later developed features into it, piece by piece. manually copied changes by Pradeep from Waqas's repository. Hard to detect, changed to match other variable names before committing.
 		% - uncompatible git histories - solvable but not much use since the files had separated so much in text character changes, though not so much in logic -> renames and splitting of files
-		% - manually copied changes by Pradeep from Waqas's repository. Hard to detect, changed to match other variable names before committing.
 		% - access to many global variables made tracking down dependencies of components hard with mixed contexts - some files with the window object corresponding to contentscripts in the same directory as files with a window object corresponding to the extensions window.
 		%TODO: change tone to always present problems as general difficulties instead of shortcomings
+		% - merged additional features of Abbas with framework support from Pradeep
 		
 		\subsubsection{"Special Curicumstances"}
 		% demo version of jalangi
@@ -89,14 +108,20 @@
 		
 		% Shared context through "new Function" that breaks the separation enforced by chrome. To increase consistency and prevent different execution contexts the previous eval was replaced with "new Function" but this does not reduce the security risk.There are other options to execute scripts from a chrome extension but since some of the extension scripts need to share the Rx or Bacon object with the inspected pages javascript files there is no other way. ofcorse that breaks the normal isloated world and intodruces a new set of problems like conflicting names. The security risk involved in executing a foreign script in a "trusted" extension context could be reduced if a sandbox was used as described in https://developer.chrome.com/extensions/sandboxingEval. Then all the inspected pages content scripts and some special recording scripts could be executed in that sandbox and transmitt the recorded nodes back via message passing.
 		% - Dangers of using eval -> execution in current context. if called from other function, "this" might change. Function() for global with window passed to execute in original context.
-		%- Note that  files that are not selected for instrumentation will still generate nodes in the graph, because the Rx and Bacon frameworks will still record interactions.
-		%- The Bacon and Rx scripts are prevented from loading so the extensions own files can be used. This is accomplished by filtering all referenced js files in the inspected page for any Bacon or Rx library files and excluding them from the loading process. They need to match version exactly though. 
+		%- Note that  files that are not selected for instrumentation will still generate nodes in the graph, because the Rx and Bacon frameworks will still record interactions, just the information provided by instrumentation is missing.
+		%- The Bacon and Rx scripts are prevented from loading so the extensions own files can be used. This is accomplished by filtering all referenced js files in the inspected page for any Bacon or Rx library files and excluding them from the loading process. They need to match version exactly though. This is necessary to guarantee that both work with the same Rx/Bacon object.
 	
 
 	\subsection{RxFiddle}
 	% features of RxFiddle
 	% limitations: 'one of the limitations of RxFiddle is ... which we tackeld in this work.
-	% test rxFiddle with one example that generates thousands of steps
+		% - requires more setup to use with web sites that have DOM logic and applications with more than one Javascript files, although it is possible according to the author [ref rxfiddle attached].
+		% - the variable names in the source code are not displayed in the ui. RxFiddle instruments RxJs to collect its data, not the source code itself like CRI.
+		% - fast updating observables like "interval" since each value update creates a new marble for the observable, the view becomes encoumbered fast with this type of observables. As of this moment CRI also generates one or more steps for each update (if the node is not explicitly excluded), but it is easier to examine the value of a node in the first or last few steps (jump to the step and use the next/previous button). CRI can also query the result which provide means to cope with large dependency graphs or histories. In RxFiddle the limitating factor for the fine grained stepping is the available space and resulting overplotting of the value-marbles since the examination is implemented via tooltips on mouseover. For performance comparison see [Evalutation chapter section Performance Improvements].
+		% - like the author explained in "https://github.com/hermanbanken/RxFiddle/issues/6" the web app can not work with large applications properly. The displaying of large applications in one graph is hard for both tools [reference to Contributions chapters], but RxFiddle needs more spaces for a single reactive operator than CRI. A large dependency graph with descriptive nodes is easier to examine than a large marble diagram that only shows information on nodes in tooltips except in the details view of a currently selected node so finding the desired node/operation is not as easy. RxFiddle also has performacne issue while rendering huge diagrams according to the author. RxFiddle would porbably need another view to appropiately cope with such large applications to help the user navigate and give an overview, although for mid-sized applications the graph on the left side where a user can choose which operation to examine can serve this purpose - As mentioned earlier RxFiddle does not porvide variable names which may lead to confusion of nodes if similar observables are in the same application.
+		% As of now, CRI does not support multiple variables having the same name. The author describes some other options like priority ranking in the issue [ref].
+	% - The author plans to support multiple collectors in the future for web applications, RxScala, RxJava, RxSwift and/or RxNet (source: "https://rxfiddle.net/tutorials.html#attached") which would provide the necessary data collection on one of these platforms and transmit this data to the RxFiddle tool/web-application to be able to use the same debugging environment (RxFiddle) with any of these platforms.
+
 
 
 % end of state of the art chapter
