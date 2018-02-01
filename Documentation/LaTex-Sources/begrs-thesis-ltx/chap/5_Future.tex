@@ -10,35 +10,6 @@
 
 % Future:
 
-
-% __________________________________________________________ future + issues for github:
-
-% Minimize js and css during release build
-
-% extending tools to work with the graph for big applications
-	% magnifying glass
-	% multi js file support needs improvements - 
-
-% - The generated steps could be reduced to increase each steps expressiveness.
-
-% Solution management
-
-% marking the setps where the recording was paused - because if the recording is continued the gap may lead to 
-% wrong assumptions about the changes
-
-% IDE extension like eclipse or webstorm that uses the extension to record data and control the debugger.
- % would enable multi window and toolbar support
- % syntax highlighting (snippets would be directly linkable)
- % would enable use of already existing IDE features
- % con: narrows usability and target users, because it would be no longer portable(depending on IDE)
- 	% would have more dependencies and would have to cope with additional required changes due to changes in the IDE after
- 	% an update
-
-% future: extend search with source code line query. Then observabels without a name could be found.
-% future: display a visual clue if a history query returns no results.
-% future: highlight all results for a history query on the slider.
-% future: the variable recording code that is used to ... can not handle multiple variables with the same name! (e.g. in different files or scopes)
- 	
 % ecma6 import support and bundled Rx/Bacon detection, + typescript
 	% currently searches for <script Rx.js/Bacon.js>
 	% if all used libraries are bundled and only own project files are not
@@ -48,5 +19,11 @@
 	% ecma6 import references file not necessarily in html as <script>
 	%TODO check if above is true
 	%TODO check if typescript compilatino to un-bundled js is possible
-	%- the breach of the isolated world of chrome context scripts enables the developer to have a total access to the pages javascript which can be used to solve the problem of "import" statements. The developer could overwrite the import/require/.. comands of each known framework and provide a custom function that does the loading in additional 
+	%- the breach of the isolated world of chrome context scripts enables the developer to have a total access to the pages javascript 	which can be used to solve the problem of "import" statements. The developer could overwrite the import/require/.. comands of each known framework and provide a custom function that does the loading in additional 
 	% add nodejs support
+	% - as long as all the files that are desired for debugging are present, it does not matter if they are loaded via a module loader, because the file can be instrumented seperately. The only problem is to find the file, a simple hook in a specially designed comment may be used <!-- cri: src="path to jsfile" --> that is ignored in a production environment. The problem is to access the shared Rx/Bacon object as a simple comment that specifies Rx or Bacon would not suffice.
+
+% Solution management:
+% - enabled storage of project specific configuration. 
+% - necessary for fine grained recording to be effective as described in [Increased recording complexity]
+ 	
