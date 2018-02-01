@@ -1,23 +1,22 @@
-# Chrome Reactive Inspector ![alt text](https://github.com/allprojects/chrome-reactive-inspector-2/blob/master/logo.png "Chrome Reactive Inspector")
-Chrome extension to debug JavaScript Reactive Libraries like [Bacon-JS](https://baconjs.github.io/) and [Rx-JS](https://github.com/ReactiveX/rxjs).
+# Chrome Reactive Inspector (CRI)
+[On GitHub](https://github.com/allprojects/chrome-reactive-inspector-3)
+Chrome extension to debug JavaScript Reactive Libraries like [Bacon-JS](https://baconjs.github.io/) 
+and [Rx-JS](https://github.com/reactivex/rxjs).
 
-
+A video demo and tutorial for a previous version of CRI (Version 1.0) can be found on YouTube.
 [Watch Video](http://www.youtube.com/watch?feature=player_embedded&v=HQWnCo_lMJQ)
-
 
 ## Where Is What ?
 
-#### 1. Chrome-Extension-SourceCode
-Contains source code of chrome extension.
+#### 1. Chrome-Extension-Beta
+Contains the source code of the chrome extension.
 
-#### 2. Chrome-Extension
+#### 2. Chrome-Extension-Stable
 Contains packed extension ready for installation.
 
 #### 3. Documentation
-Contains thesis and slides by Waqas Abbas.
-
-#### 4. Report
-Contains thesis and slides by Pradeep Baradur.
+Contains the documentation including the Master Thesis by Waqas Abbas, Pradeep Baradur 
+and the Bachelor Thesis by Benedikt Gross.
 
 #### 5. TestApplications
 Contains test applications.
@@ -33,12 +32,16 @@ For more detail please go to [TestApplications](TestApps/README.md) directory.
 
 
 ## Usage
-After Successful installation you can go to Chrome devtools and there you will see new panel called  "Reative Inspector"
+After the chrome extension is installed successfully, open an application that should be examined and open the developer
+ tools (F12, CTRL-Shift-I or open it via R-Click "Inspect Element").
+Now switch to the "Reactive Inspector" tab in the devtools window.
 
 ## History
-This project started as a Master Thesis by Waqas Abbas at TU - Darmstadt Germany with collaboration of [Prof. Dr Guido Salvaneschi](http://www.guidosalvaneschi.com/)
-It was continued as a Master Thesis by Pradeep Baradur.
-This project is done as extension to the work of [Reative Inspector](https://github.com/guidosalva/reactive-inspector)
+This project is done as extension to the work of [Reative Inspector](https://github.com/guidosalva/reactive-inspector).
+
+It was started as a Master Thesis by Waqas Abbas at TU - Darmstadt Germany and later advanced in a Master Thesis by
+ Pradeep Baradur at TU-Darmstadt Germany and a Bachelor Thesis by Benedikt Gross at TU - Darmstadt Germany, all under 
+ the supervision of [Prof. Dr Guido Salvaneschi](http://www.guidosalvaneschi.com/).
 
 ### Contributions
 Waqas Abbas, Pradeep Baradur, Benedikt Gross, [Prof. Dr Guido Salvaneschi](http://www.guidosalvaneschi.com/),
