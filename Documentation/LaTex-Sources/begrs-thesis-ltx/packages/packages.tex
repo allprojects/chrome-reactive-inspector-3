@@ -1,3 +1,4 @@
+% The following configuration file is greatly basen on a configuration file that was (as far as I know) developed by Waqas Abbas for his Master Thesis at TU-Darmstadt in 2017.
 
 \usepackage{hyperref}
 \usepackage{emptypage}
@@ -113,7 +114,7 @@
 \usepackage{psfrag}
 
 % bibliography with biblatex
-\usepackage[style=numeric, firstinits=true, backend=bibtex]{biblatex}
+\usepackage[style=alphabetic,backend=biber]{biblatex}
 
 % same style for URLs
 \urlstyle{same}
@@ -138,7 +139,7 @@
 
 % biblatex
 
-\addbibresource{bibliography}
+\addbibresource{bibliography.bib}
 
 % properly underlined url in bibliography
 \usepackage{url}
@@ -184,3 +185,6 @@ framefg=0 0 0, nosideways, width=0.9\textwidth
 
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{2}
+
+% set \emph to display text italic
+\DeclareTextFontCommand{\emph}{\textit}

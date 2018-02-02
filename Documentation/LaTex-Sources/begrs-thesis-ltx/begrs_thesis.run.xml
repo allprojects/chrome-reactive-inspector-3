@@ -41,11 +41,10 @@
   >
 ]>
 <requests version="1.0">
-  <internal package="biblatex" priority="9" active="1">
+  <internal package="biblatex" priority="9" active="0">
     <generic>latex</generic>
     <provides type="dynamic">
-      <file>begrs_thesis.aux</file>
-      <file>begrs_thesis-blx.bib</file>
+      <file>begrs_thesis.bcf</file>
     </provides>
     <requires type="dynamic">
       <file>begrs_thesis.bbl</file>
@@ -53,24 +52,22 @@
     <requires type="static">
       <file>blx-dm.def</file>
       <file>blx-compat.def</file>
-      <file>blx-bibtex.def</file>
       <file>biblatex.def</file>
-      <file>numeric.bbx</file>
+      <file>alphabetic.bbx</file>
       <file>standard.bbx</file>
-      <file>numeric.cbx</file>
+      <file>alphabetic.cbx</file>
       <file>biblatex.cfg</file>
       <file>english.lbx</file>
     </requires>
   </internal>
-  <external package="biblatex" priority="5" active="1">
-    <generic>bibtex</generic>
+  <external package="biblatex" priority="5" active="0">
+    <generic>biber</generic>
     <cmdline>
-      <binary>bibtex</binary>
-      <option>-min-crossrefs 2</option>
+      <binary>biber</binary>
       <infile>begrs_thesis</infile>
     </cmdline>
     <input>
-      <file>begrs_thesis.aux</file>
+      <file>begrs_thesis.bcf</file>
     </input>
     <output>
       <file>begrs_thesis.bbl</file>
@@ -79,14 +76,10 @@
       <file>begrs_thesis.bbl</file>
     </provides>
     <requires type="dynamic">
-      <file>begrs_thesis.aux</file>
-      <file>begrs_thesis-blx.bib</file>
+      <file>begrs_thesis.bcf</file>
     </requires>
     <requires type="editable">
-      <file>bibliography</file>
-    </requires>
-    <requires type="static">
-      <file>biblatex.bst</file>
+      <file>bibliography.bib</file>
     </requires>
   </external>
 </requests>
