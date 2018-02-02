@@ -36,18 +36,18 @@
 	%.throttleTime(1000)
 	%.scan(count => count + 1, 0)
 	%.subscribe(count => console.log(`Clicked ${count} times`));
-	% The essential concepts in RxJS which solve async event management are:
+	% - The essential concepts in RxJS which solve async event management are:
 	%Observable: represents the idea of an invokable collection of future values or events.
 	%Observer: is a collection of callbacks that knows how to listen to values delivered by the Observable.
 	%Subscription: represents the execution of an Observable, is primarily useful for cancelling the execution.
-	%Operators: are pure functions that enable a functional programming style of dealing with collections with operations like map, filter, concat, flatMap, etc.
+	%Operators: are pure functions that enable a functional programming style of dealing with collections with operations like map, filter, concat, flatMap, etc. Each operator output another observable without modifying the originial data stream.
 	%Subject: is the equivalent to an EventEmitter, and the only way of multicasting a value or event to multiple Observers.
 	%Schedulers: are centralized dispatchers to control concurrency, allowing us to coordinate when computation happens on e.g. setTimeout or requestAnimationFrame or others.
-	%"The subscribers are not locked in a synchronous request and there can be an infinite sequence of next emissions from the observables to the observer." [Pradeep] although subscribing is in general a synchroneous operation.
-	%"completed and error functions	being defined at the observer, which are invoked by the observable on respective events. This lets the observer know that an observable has exhausted sending values, or an error has occurred	when performing an operation on the observable." [Pradeep]
-	%"Subjects can be both observable and an observer[37]. It is a special type of observable which	allows values to be multicasted to many observers" [Pradeep]
-	%"Unsubscribing is an optional feature in RxJS as RxJS handles this by default but it makes sense to unsubscribe manually by a user if the source observable is emitting the values continuously and the user does not need values after a specific point of time." [Pradeep]
-	%"With the support of RxJS, we can convert multiple values, arrays, events into observables."[Pradeep]
+	% - "The subscribers are not locked in a synchronous request and there can be an infinite sequence of next emissions from the observables to the observer." [Pradeep] although subscribing is in general a synchroneous operation.
+	% - "completed and error functions	being defined at the observer, which are invoked by the observable on respective events. This lets the observer know that an observable has exhausted sending values, or an error has occurred	when performing an operation on the observable." [Pradeep]
+	% - "Subjects can be both observable and an observer[37]. It is a special type of observable which	allows values to be multicasted to many observers" [Pradeep]
+	% - "Unsubscribing is an optional feature in RxJS as RxJS handles this by default but it makes sense to unsubscribe manually by a user if the source observable is emitting the values continuously and the user does not need values after a specific point of time." [Pradeep]
+	% - "With the support of RxJS, we can convert multiple values, arrays, events into observables."[Pradeep]
 	% - current version in development 6.0.0-alpha.2, stable: 5.5.6
 	% - github stats 31.1.2018 18:22 for current active version (they changed repositories multiple times): watch: 387 star: 10,540 fork: 991 contributors: 185 but since they changed the repository the total numbers for all versions are much higher.
 	% licence: Apache 2.0 latest commit: 30.01.2018
