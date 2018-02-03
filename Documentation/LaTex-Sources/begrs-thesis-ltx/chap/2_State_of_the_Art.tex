@@ -2,11 +2,16 @@
 % introduction
 
 \section{Implementation of Reactive Systems}
-	\subsection{Reactive Programming}
+	\subsection{Reactive Functional Programming}
+	A Reactive Functional Programming (from now on \emph{Reactive Programming}) framework removes a lot of boilerplate code the developer usually has to implement to propagate changes and event throughout a software system.	It advances the well known Observer Design Pattern and overcomes several short-comings of that approach. In the Observer Design Pattern, a Subject propagates changes to its value to a list of prior registered Observers. In contrast to an Observable (also called Signal) in Reactive Programming, which can provide multiple values over time as a stream, a Subject can only return one value - its state.
+	In addition to Observables which provide varying values over time, a Reactive Programming implementation usually contains a possibility to handle discrete events over time called Events or Event Streams \cite{BaconJs}.
+	
+	
+	The declarative functional programming style limits side-effects and is usually implemented with many \emph{pure} functions as operators that can be used to transform, combine or change behavior of signals ...
+	 
+	 
 	%"Reactive programming provides dedicated language abstractions for reactive software. Reactive programming relieves developers from manually updating outputs when the inputs of a computation change, it overcomes a number of well-know issues of the Observer design pattern, and it makes programs more comprehensible." [github, rxScala guido] Its also declarative instead of imperative.
-	% reactive programming is in general not asynchroneous but it can be used in async context.? (waqas says something different for RXjs)
 	% observables, difference to Observer design pattern:
-		% observables in a reactive system return/provide multiple values (a stream) instead of just the current state.
 		% "Observables provide abstractions over a stream of events. Promises are synchronous executables with a single return value, whereas observables are asynchronous executables that return multiple values over time." [pradeep]
 		%"The data produced by the producer is stored in observable which the consumer consumes."[Pradeep]
 	% observables are also called signals[wikipedia] = values that vary over continuous time -> or in RxJs Observables, Bacon Properties
