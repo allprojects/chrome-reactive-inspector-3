@@ -83,24 +83,23 @@ The Reactive Inspector is an extension of the Scala IDE for Eclipse. Many featur
  graph or the possibility to search for a specific node in the current graph. They are described in details in section \ref{sec:PreviousCRI}. One main feature of the Reactive Inspector, called \emph{Tree Outline} where the user can quickly jump to different areas of the dependency graph, which is useful for applications with large graphs, is currently not implemented for the CRI.
 
 \section{Previous and Related Work}
+In this section we will cover the previous work on the Chrome Reactive Inspector (CRI) as well as RxFiddle which is the main competitor for the CRI because both have a similar goal to help developers debug Reactive Systems in JavaScript with abstract concepts that go beyond traditional debugging.
+
+%TODO: framework vs library - write at the beginning that framework and library may be used interchangeable for convenience.
 	\subsection{The Chrome Reactive Inspector}
 	\label{sec:PreviousCRI}
-		\subsubsection{Master Thesis by Waqas Abbas}
-		% main focus of the thesis
-			% - proof of concept
-			% - how to intercept calls to reactive framework
-			% - how to retrieve additional details for each node like the variable name via instrumentation of the source code to give context to observables shown in the dependency graph
-		% implemented result of the thesis in short
-			% - reactive breakpoints
-			% - history queries
-			% - Bacon support and partly support for Rx
-			% - dependency graph, nodes, edges, zoom, highlighting of current node
-			% - instrumentation, dynamically reloading of the page to intercept the JavaScripts for instrumentation
-			% - first batch of test applications
-			% -> focus on new implementation and prototypes of features and less on maintainability and reliability.
-			% -> proof of concept
+	The Chrome Reactive Inspector is based on the Reactive Inspector for Scala \cite{ReactiveInspector} and was developed by the Software Technology Group at the TU-Darmstadt Germany supervised by Prof. Dr. Guido Salvaneshi. It is implemented as a Google Chrome(Chrome) extension that extends the Chrome Developer Tools (DevTools) with another panel that inspects and instruments a target Reactive web application that is using RxJS or BaconJS. Prior to this thesis there have already been two Master theses targeting the CRI that provide the base theory and source code of this thesis.
+	%TODO: thesis capatalized?
+	\subsubsection{Master Thesis by Waqas Abbas}
+	\cite{ThesisAbbas} The main goal of the Master Thesis by Waqas Abbas was to develop and implement a concept for a Chrome extension based on the Reactive Inspector to debug Reactive web applications in JavaScript.
+	%TODO: The main - twice
+	%TODO: many "to"s
+	The main difficulties were to find a viable solution to intercept calls to the reactive frameworks in order to retrieve the necessary information about observables and their dependencies to build a Dependency Graph (called Dependency Tree in \cite{ReactiveInspector}) as well as to gather additional details like variable name that directly correspond to observables and providing them with context by instrumenting the source code. An in-browser solution taken from a demo page \cite{JalangiDemo} of Jalangi was used to instrument and analyze the source code directly. The main Jalangi framework \cite{Jalangi} is currently not usable solely within a browser.
+	Abbas also implemented several features to help the developer navigate and examine the Dependency Graph and its history. In this first version of the CRI, the user could already submit History Queries that search the History of the Graph for specific nodes or events like node creation, update or the creation of a dependency. In addition the user could add Reactive Breakpoints - breakpoints that pause the program execution when a specific event occurs - or search for a node in a large Dependency Graph.
+	At the time the CRI supported BaconJS\cite{BaconJS} and parts of RxJS\cite{RxJS}. Abbas also added a first batch of small web applications that could be used as test applications to manually verify features of CRI.
 		
-		\subsubsection{Master Thesis by Pradeep Baradur}
+	\subsubsection{Master Thesis by Pradeep Baradur}
+	The main goal of the Master Thesis by Pradeep Baradur was to add full support for RxJS to CRI.
 		% main focus of the thesis:
 			% support for all RxJS operations and RxJS Subjects -> hard to implement, because there is no uniform way like the Bacon.spy method. For details on the general approach see \cite{ThesisBaradur}. For source code see "rx-interception.js"
 		% new features introduced:
@@ -113,6 +112,9 @@ The Reactive Inspector is an extension of the Scala IDE for Eclipse. Many featur
 			% - rearranged UI, changed many styles to defaullt jquery-ui layout.
 		
 		\subsubsection{Merging previous efforts}
+		
+		% The Thesis by Waqas Abbas focused on new implementation and prototypes of features and less on maintainability and reliability.
+		
 		%- took chrome-reactive-inspector 2 as base and merge all later developed features into it, piece by piece. manually copied changes by Pradeep from Waqas's repository. Hard to detect, changed to match other variable names before committing.
 		% - uncompatible git histories - solvable but not much use since the files had separated so much in text character changes, though not so much in logic -> renames and splitting of files
 		% - access to many global variables made tracking down dependencies of components hard with mixed contexts - some files with the window object corresponding to contentscripts in the same directory as files with a window object corresponding to the extensions window.
@@ -134,12 +136,14 @@ The Reactive Inspector is an extension of the Scala IDE for Eclipse. Many featur
 
 	\subsection{RxFiddle}
 	\label{sec:RxFiddle}
+	
 	% RxFiddle is the main competitor with CRI since it is the only other tool (that we are aware of) that tackels debugging for reactive JavaScript systems. Currently the only reactive framework that is supported is RxJs.
 	% features of RxFiddle
 	% limitations: 'one of the limitations of RxFiddle is ... which we tackeld in this work.
 		% - requires more setup to use with web sites that have DOM logic and applications with more than one JavaScript files, although it is possible according to the author \cite{RxFiddleTutorials}.
 		% - the variable names in the source code are not displayed in the ui. RxFiddle instruments RxJs to collect its data, not the source code itself like CRI.
 		% - fast updating observables like "interval" since each value update creates a new marble for the observable, the view becomes encoumbered fast with this type of observables. As of this moment CRI also generates one or more steps for each update (if the node is not explicitly excluded), but it is easier to examine the value of a node in the first or last few steps (jump to the step and use the next/previous button). CRI can also query the result which provide means to cope with large dependency graphs or histories. In RxFiddle the limitating factor for the fine grained stepping is the available space and resulting overplotting of the value-marbles since the examination is implemented via tooltips on mouseover. For performance comparison see \ref{sec:PerformanceEvaluation}.
+		
 		% - like the author explained in "https://github.com/hermanbanken/RxFiddle/issues/6" the web app can not work with large applications properly. The displaying of large applications in one graph is hard for both tools \ref{sec:RapidlyUpdatedObservables}, but RxFiddle needs more spaces for a single reactive operator than CRI. A large dependency graph with descriptive nodes is easier to examine than a large marble diagram that only shows information on nodes in tooltips except in the details view of a currently selected node so finding the desired node/operation is not as easy. RxFiddle also has performacne issue while rendering huge diagrams according to the author. RxFiddle would porbably need another view to appropiately cope with such large applications to help the user navigate and give an overview, although for mid-sized applications the graph on the left side where a user can choose which operation to examine can serve this purpose - As mentioned earlier RxFiddle does not porvide variable names which may lead to confusion of nodes if similar observables are in the same application.
 		% As of now, CRI does not support multiple variables having the same name. The author describes some other options like priority ranking in the GitHub issues for the RxFiddle repository \cite[Issues]{RxFiddleGitHub}.
 		% - as mentioned erlier RxFiddle onyl supports RxJs while CRI also supports Bacon.js
