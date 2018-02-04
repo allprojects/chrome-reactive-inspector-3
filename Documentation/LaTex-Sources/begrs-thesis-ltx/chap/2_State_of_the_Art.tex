@@ -82,7 +82,7 @@ Currently there are few tools to help the developer debug reactive applications 
 The Reactive Inspector is an extension of the Scala IDE for Eclipse. Many features and the basic concepts taht are implemented in the \emph{Chrome Reactive Inspector(CRI)} originate from the Reactive Inspector; including the representation of observables and their dependencies in a dependency graph called \emph{Reactive Tree}, the possibility to query the history of said %TODO can "said" be used?
  graph or the possibility to search for a specific node in the current graph. They are described in details in section \ref{sec:PreviousCRI}. One main feature of the Reactive Inspector, called \emph{Tree Outline} where the user can quickly jump to different areas of the dependency graph, which is useful for applications with large graphs, is currently not implemented for the CRI.
 
-\section{Previous work on the CRI its main competitor}
+\section{Previous work on the CRI and its main competitor}
 In this section we will cover the previous work on the Chrome Reactive Inspector (CRI) as well as RxFiddle which is the main competitor for the CRI because both have a similar goal to help developers debug Reactive Systems in JavaScript with abstract concepts that go beyond traditional debugging.
 
 %TODO: framework vs library - write at the beginning that framework and library may be used interchangeable for convenience.
@@ -105,16 +105,25 @@ In this section we will cover the previous work on the Chrome Reactive Inspector
 	%TODO: change tone to always present problems as general difficulties instead of shortcomings
 	Since Waqas Abbas and Pradeep Baradur's works on the CRI partly overlapped and where developed in separate repositories, uniting both works was the first task for the thesis. Due to being developed separately after Baradur's Thesis started, the repositories shared no common history and due to many refactorings and renames in both projects as they advanced, merging the code base was not possible with automated tools and had to be done manually. Tracing the correlation between different changes was not trivial - in part because both theses were focused on advancing the project and less on maintainability and modularization. For this thesis we took the source code of Pradeep Baradur's Thesis as a base and added features that Waqas Abbas developed after Baradurs's Thesis had started. The main reason for this is that Bradur removed many bugs and race conditions that happened in some rarer cases of code execution order, in his goal to make CRI more reliable, that were outside of the scope of Abbas's work.
 		
-	\subsubsection{Exceptional properties the CRI implementation}
+	\subsubsection{Exceptional properties of the CRI implementation}
 	The special method that is used to intercept the loading of a web application by dynamically reloading the JavaScripts to allow direct access and replace specified scripts with an instrumented version has several implications that break the usual \emph{isolated world} \cite{GoogleApiContentScripts} of Google Chrome extensions and their Content Scripts. The loading of the inspected html is stopped, the html file is scanned for references to JavaScript files that are then loaded and on demand instrumented. The scripts are then executed within the context of the Content Script that does the instrumentation. This is necessary so that both the inspected pages own scripts as well as the Content Scripts of CRI that are responsible for the recording of the inner workings of the used Reactive System share the same RxJs or BaconJS instance. But this approach also has some downsides, for example a global variable in one of the inspected pages scripts may also be used in a script of CRI could cause unforeseen errors - e.g. common libraries like jQuery \cite{jQuery} that provide global objects may cause version conflicts. This also implies a potential security risk, because a Chrome extension runs in a \emph{trusted} context and has access to many Chrome APIs that are not accessible from a normal web application - the CRI could therefore be manipulated through shared global variables to execute malicious code by an inspected page.
 	Another implication of this approach is that CRI has to filter all referenced JS files of the inspected page to exclude all RxJS or BaconJS scripts from the loading process to use its own versions. This may lead to errors if the versions do not match exactly.
-	
 	Dynamically loading the scripts that are referenced by the inspected pages html also can not handle any module loader without special interception logic. As module loaders are widely used in modern web applications and are even part of the ECMA6 \cite{ECMA6import} standard as the \emph{import} keyword, this currently imposes a significant limitation on the number of web applications CRI can be used with. We provide more detail and discuss some of the possible options in chapter \ref{ch:Future}.
 	
+	
 	In addition to the special circumstances due to the dynamically loading of script in the shared context, CRI also uses a Demo \cite{JalangiDemo} in-browser version of the Jalangi \cite{Jalangi} that does not provide the full features of Jalangi. Instead it only contains features used in the Demo - for example the source code position information of functions and variables do not contain the scripts file name. Jalangi itself contains hundreds of analysis customization options that are not included in the in-browser Demo. Another obstacle presented by using the in-browser Demo script is that it is only available in the \emph{minified} version that is hard to read and debug.
+	%TODO check all cite if it was compiled correctly
 	
 	\subsection{RxFiddle}
-	\label{sec:RxFiddle}
+	\label{sec:RxFiddle} %TODO capitalization
+	RxFiddle \cite{RxFiddle} is a tool developed as part of the Master Thesis of Herman Banken at the Delft University of Technology that displays interactive Marble Diagrams for RxJS web applications. It is available as a web application at \cite{RxFiddle} and the source code is publicly available at \cite{RxFiddleGitHub} under the MIT license. RxFiddle is the main competitor of CRI as it is the only other tool (that we are aware of) that tackles debugging for Reactive Systems in JavaScript. In RxFiddle the user can run JavaScript code visible on the left (1) and select a node from a simplistic Dependency Graph (2) to view a Marble Diagram showing details of its events, value streams (3), interaction of operators and lambda functions (4) passed to these operators.
+	
+	\begin{figure}[!h]
+		\centering
+		\includegraphics[scale=0.5,trim=0 0 0 0]{gfx/RxFiddleDemo.png}
+		\caption{RxFiddle Demo \protect\cite{RxFiddle}}
+		\label{fig:RxFiddleDemo}
+	\end{figure}
 	
 	% RxFiddle is the main competitor with CRI since it is the only other tool (that we are aware of) that tackels debugging for reactive JavaScript systems. Currently the only reactive framework that is supported is RxJs.
 	% features of RxFiddle
@@ -142,36 +151,4 @@ In this section we will cover the previous work on the Chrome Reactive Inspector
 %	\caption{Reactive pattern \protect\cite{ReactiveXobservable}}
 %	\label{fig:rxjs-reactive-pattern}
 %\end{figure}
-
-\textbf{Observable and Observer}\\
-Placeholder
-
-\textbf{Operators}
-\label{subsec:Operators}\\
-
-\textbf{RxJS Code Structure}\\
-Placeholder
-\begin{lstlisting}[language=JavaScript, caption=RxJS Simple Example, label={lst:RxJS_Simple_Example}]
-// 1. Srouce Observable Creation
-var sourceObservable = Rx.Observable.interval(1000);
-// 2. Transformation by applying different operators
-var transformedObservable = sourceObservable.map(function(x) {
-		return x * 10;
-	})
-	.filter(function(x) {
-		return x !== 20
-	})
-// OUTPUT
-Next: 0
-Next: 10
-Next: 30
-Next: 40
-Next: 50
-Completed
-\end{lstlisting}
-
-\subsection{Bacon.js}
-
-\textbf{EventStream and Property}\\
-Placeholder
 

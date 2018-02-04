@@ -9,6 +9,10 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {lstlisting}{\numberline {2.3}Simple example of .NET LINQ in C\# to show the steps the visual stidio 2017 for .NET debugger takes while debuggin step-by-step.}{8}{lstlisting.2.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {lstlisting}{\numberline {2.4}RxJS Simple Example}{10}{lstlisting.2.4}
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
