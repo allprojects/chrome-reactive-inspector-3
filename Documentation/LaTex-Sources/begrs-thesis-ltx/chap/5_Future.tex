@@ -1,3 +1,4 @@
+\label{ch:Future}
 % conclusion and future
 
 % Conclusion:
@@ -22,8 +23,15 @@
 	%- the breach of the isolated world of chrome context scripts enables the developer to have a total access to the pages javascript 	which can be used to solve the problem of "import" statements. The developer could overwrite the import/require/.. comands of each known framework and provide a custom function that does the loading in additional 
 	% add nodejs support
 	% - as long as all the files that are desired for debugging are present, it does not matter if they are loaded via a module loader, because the file can be instrumented seperately. The only problem is to find the file, a simple hook in a specially designed comment may be used <!-- cri: src="path to jsfile" --> that is ignored in a production environment. The problem is to access the shared Rx/Bacon object as a simple comment that specifies Rx or Bacon would not suffice.
+	
+			% instrumenting files via scanning the html for script tags
+	% -> will not work for module loaders like require.js or ecma6
+	% -> will not work with bundled JavaScript code - but since in development there should be a non bundled version available not 
+	%TODO: verify this:
+	% a big problem in JavaScript. But for TypeScript since the extension does not support it and when compiling there may already be bundling in place. (#add some text from future here#)
 
 % Solution management:
 % - enabled storage of project specific configuration. 
 % - necessary for fine grained recording to be effective as described in [Increased recording complexity]
+
  	
