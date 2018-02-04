@@ -82,7 +82,7 @@ Currently there are few tools to help the developer debug reactive applications 
 The Reactive Inspector is an extension of the Scala IDE for Eclipse. Many features and the basic concepts taht are implemented in the \emph{Chrome Reactive Inspector(CRI)} originate from the Reactive Inspector; including the representation of observables and their dependencies in a dependency graph called \emph{Reactive Tree}, the possibility to query the history of said %TODO can "said" be used?
  graph or the possibility to search for a specific node in the current graph. They are described in details in section \ref{sec:PreviousCRI}. One main feature of the Reactive Inspector, called \emph{Tree Outline} where the user can quickly jump to different areas of the dependency graph, which is useful for applications with large graphs, is currently not implemented for the CRI.
 
-\section{Previous and Related Work}
+\section{Previous work on the CRI its main competitor}
 In this section we will cover the previous work on the Chrome Reactive Inspector (CRI) as well as RxFiddle which is the main competitor for the CRI because both have a similar goal to help developers debug Reactive Systems in JavaScript with abstract concepts that go beyond traditional debugging.
 
 %TODO: framework vs library - write at the beginning that framework and library may be used interchangeable for convenience.
@@ -99,41 +99,30 @@ In this section we will cover the previous work on the Chrome Reactive Inspector
 	At the time the CRI supported BaconJS\cite{BaconJS} and parts of RxJS\cite{RxJS}. Abbas also added a first batch of small web applications that could be used as test applications to manually verify features of CRI.
 		
 	\subsubsection{Master Thesis by Pradeep Baradur}
-	The main goal of the Master Thesis by Pradeep Baradur was to add full support for RxJS to CRI.
-		% main focus of the thesis:
-			% support for all RxJS operations and RxJS Subjects -> hard to implement, because there is no uniform way like the Bacon.spy method. For details on the general approach see \cite{ThesisBaradur}. For source code see "rx-interception.js"
-		% new features introduced:
-			% - support for all operations and Subjects in RxJs
-			% - loading of some CRI content scripts only when the CRI panel is opened. Istrumentation only when CRI panel is opened.
-			% - find dependencys, dependents
-			% - added many test applications
-			% - improved reliability
-			% - less focus on maintainability but move the project further to being usable in a production environment by adding framework feature support.
-			% - rearranged UI, changed many styles to defaullt jquery-ui layout.
+	 \cite{ThesisBaradur} The main goal of the Master Thesis by Pradeep Baradur was to add full support for RxJS to CRI, especially all operators and Subjects. Since RxJS does not provide a uniform way to intercept all calls to the framework like the BaconJS's \emph{spy} function, this is a hard problem. For the actual implementation details see \cite{ThesisBaradur} or the \emph{rx-interception.js} file in the current version of CRI. Baradur also reworked the loading of the Content Scripts of CRI and instrumentation to only occur once the CRI DevTools panel is opened for an inspected web application to reduce load on the browser if the tool is not currently used. He also extended the Find Node and History Query features to allow searching for dependents or dependencies of a node. The focus of his thesis in comparison to Abbas's shifted from being mainly a proof of concept to advancing the CRI to be more reliable and ultimately being usable in a production environment. This included rearranging the UI to be more consistent and improving reliability in general as well as adding additional test applications.
 		
-		\subsubsection{Merging previous efforts}
+	\subsubsection{Merging previous efforts}
+	%TODO: change tone to always present problems as general difficulties instead of shortcomings
+	Since Waqas Abbas and Pradeep Baradur's works on the CRI partly overlapped and where developed in separate repositories, uniting both works was the first task for the thesis. Due to being developed separately after Baradur's Thesis started, the repositories shared no common history and due to many refactorings and renames in both projects as they advanced, merging the code base was not possible with automated tools and had to be done manually. Tracing the correlation between different changes was not trivial - in part because both theses were focused on advancing the project and less on maintainability and modularization. For this thesis we took the source code of Pradeep Baradur's Thesis as a base and added features that Waqas Abbas developed after Baradurs's Thesis had started. The main reason for this is that Bradur removed many bugs and race conditions that happened in some rarer cases of code execution order, in his goal to make CRI more reliable, that were outside of the scope of Abbas's work.
 		
-		% The Thesis by Waqas Abbas focused on new implementation and prototypes of features and less on maintainability and reliability.
-		
-		%- took chrome-reactive-inspector 2 as base and merge all later developed features into it, piece by piece. manually copied changes by Pradeep from Waqas's repository. Hard to detect, changed to match other variable names before committing.
-		% - uncompatible git histories - solvable but not much use since the files had separated so much in text character changes, though not so much in logic -> renames and splitting of files
-		% - access to many global variables made tracking down dependencies of components hard with mixed contexts - some files with the window object corresponding to contentscripts in the same directory as files with a window object corresponding to the extensions window.
-		%TODO: change tone to always present problems as general difficulties instead of shortcomings
-		% - merged additional features of Abbas with framework support from Pradeep
-		
-		\subsubsection{"Special Curicumstances"}
+	\subsubsection{Exceptional properties the CRI implementation}
+	The special method that is used to intercept the loading of a web application by dynamically reloading the JavaScripts to add direct access and replace specified scripts with an instrumented version has several implications that break the usual \emph{isolated} world \cite{} of Google Chrome extensions and their Content Scripts. ...
+	
+	% Shared context through "new Function" that breaks the separation enforced by chrome. To increase consistency and prevent different execution contexts the previous eval was replaced with "new Function" but this does not reduce the security risk.There are other options to execute scripts from a chrome extension but since some of the extension scripts need to share the Rx or Bacon object with the inspected pages JavaScript files there is no other way. ofcorse that breaks the normal isloated world and intodruces a new set of problems like conflicting names. The security risk involved in executing a foreign script in a "trusted" extension context could be reduced if a sandbox was used as described in https://developer.chrome.com/extensions/sandboxingEval. Then all the inspected pages content scripts and some special recording scripts could be executed in that sandbox and transmitt the recorded nodes back via message passing.
+	% - Dangers of using eval -> execution in current context. if called from other function, "this" might change. Function() for global with window passed to execute in original context.
+	%- Note that  files that are not selected for instrumentation will still generate nodes in the graph, because the Rx and Bacon frameworks will still record interactions, just the information provided by instrumentation is missing.
+	%- The Bacon and Rx scripts are prevented from loading so the extensions own files can be used. This is accomplished by filtering all referenced js files in the inspected page for any Bacon or Rx library files and excluding them from the loading process. They need to match version exactly though. This is necessary to guarantee that both work with the same Rx/Bacon object.
+	
+	
+	
+	In addition ... demo version of jalangi ..
 		% demo version of jalangi
 		% instrumenting files via scanning the html for script tags
 		% -> will not work for module loaders like require.js or ecma6
 		% -> will not work with bundled JavaScript code - but since in development there should be a non bundled version available not 
+	%TODO: verify this:
 		% a big problem in JavaScript. But for TypeScript since the extension does not support it and when compiling there may already be bundling in place. (#add some text from future here#)
 		
-		% Shared context through "new Function" that breaks the separation enforced by chrome. To increase consistency and prevent different execution contexts the previous eval was replaced with "new Function" but this does not reduce the security risk.There are other options to execute scripts from a chrome extension but since some of the extension scripts need to share the Rx or Bacon object with the inspected pages JavaScript files there is no other way. ofcorse that breaks the normal isloated world and intodruces a new set of problems like conflicting names. The security risk involved in executing a foreign script in a "trusted" extension context could be reduced if a sandbox was used as described in https://developer.chrome.com/extensions/sandboxingEval. Then all the inspected pages content scripts and some special recording scripts could be executed in that sandbox and transmitt the recorded nodes back via message passing.
-		% - Dangers of using eval -> execution in current context. if called from other function, "this" might change. Function() for global with window passed to execute in original context.
-		%- Note that  files that are not selected for instrumentation will still generate nodes in the graph, because the Rx and Bacon frameworks will still record interactions, just the information provided by instrumentation is missing.
-		%- The Bacon and Rx scripts are prevented from loading so the extensions own files can be used. This is accomplished by filtering all referenced js files in the inspected page for any Bacon or Rx library files and excluding them from the loading process. They need to match version exactly though. This is necessary to guarantee that both work with the same Rx/Bacon object.
-	
-
 	\subsection{RxFiddle}
 	\label{sec:RxFiddle}
 	
