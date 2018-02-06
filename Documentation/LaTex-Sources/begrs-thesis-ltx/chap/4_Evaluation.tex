@@ -15,7 +15,7 @@
 	Specifications
 	\begin{itemize}
 		\item The dependency graph is shown and all observables that are assigned to a named variable are displayed distinctively.
-		(Test: The first five named observables in the code are all displayed with an orange background.)
+		(Test: Up to the first five named observables in the code are all displayed with an orange background.)
 		\item The history of the dependency graph can be navigated. It is possible to navigate to the previous, succeeding or a random step in the history. (Test: Jump to the median step, click next five times, click previous five times. )
 		\item For each node, no space is occupied by fields that hold no value in neither the node itself nor it's tooltip.
 		\item The ids of the nodes start at one and are continuous. If the test application is started again with the exact same inputs, the each node has the same id as in the last execution.
@@ -23,7 +23,7 @@
 		\item The node or edge that was updated in a step is highlighted. (Test: Check for the first ten steps in the history.)
 		\item The history queries can be used to search for a specific event in the history. (Test: evaluationYielded and nodeUpdated find the corresponding steps for the first named node.)
 		\item The graph can be searched, the matching node(s) is/are highlighted and if the search is reseted the original view will be restored. (Test: Search for the dependencies of a node and then reset the search.)
-		\item Reactive breakpoints can be used to pause the debugger when a specific event occurs. (Test: A breakpoint set for the first node created will break at step one. A breakpoint for the first node updated will break before the value is shown in the CRI)
+		\item Reactive breakpoints can be used to pause the debugger when a specific event occurs. (Test: A breakpoint set for the first node created will break at step one. A breakpoint for the first node updated will break before the value is updated in the observable.)
 	\end{itemize}
 	
 	
