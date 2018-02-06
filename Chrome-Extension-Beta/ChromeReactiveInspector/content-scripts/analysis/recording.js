@@ -27,7 +27,7 @@ cri.analysis.recording = (function () {
         let value = getValueOrEmpty(data.value);
 
         let val = null;
-        if (!cri.shouldSaveNodeValue(fileReadOver, id)) {
+        if (!cri.shouldSaveNodeValue(id)) {
             ++currentStep;
             cri.printValues(currentStep, value, id);
             val = getValue(value);
@@ -40,7 +40,7 @@ cri.analysis.recording = (function () {
                     'nodeValue': val,
                     'sourceInfo': data.location
                 }, action: "saveNode", destination: "panel"
-            }, fileReadOver);
+            });
             previousData.nodeId = id;
             previousData.value = value;
         }
@@ -89,7 +89,7 @@ cri.analysis.recording = (function () {
             },
             action: "saveEdge",
             destination: "panel"
-        }, fileReadOver);
+        });
         currentStep++;
         if (cri.shouldBreakNow('dependencyCreated', startId, endId)) {
             debugger;
@@ -105,7 +105,7 @@ cri.analysis.recording = (function () {
             },
             action: "updateSavedEdge",
             destination: "panel"
-        }, fileReadOver);
+        });
     }
 
     /**
@@ -150,10 +150,7 @@ cri.analysis.recording = (function () {
         return obj;
     }
 
-    let fileReadOver = false;
-
     function sendAllNodesAndEdges() {
-        fileReadOver = true;
         cri.sendObjectToDevTools({
             content: {
                 "nodes": allNodes,
@@ -161,7 +158,7 @@ cri.analysis.recording = (function () {
             },
             action: "allNodesEdges",
             destination: "panel"
-        }, fileReadOver);
+        });
     }
 
     let tempConstructorName = '';
@@ -272,9 +269,6 @@ cri.analysis.recording = (function () {
         resetPreviousData: function () {
             previousData = {};
         },
-        getNextId: getNextId,
-        getFileReadOver: function () {
-            return fileReadOver;
-        }
+        getNextId: getNextId
     };
 })();

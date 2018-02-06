@@ -23,7 +23,7 @@ $.extend(cri, (function (window) {
                     }
                 } else if ((currentEvent === "evaluationYielded") || (currentEvent === "dependencyCreated")) {
                     if ((currentBreakPoint.params[0] !== undefined) && (currentBreakPoint.params[1] !== undefined)) {
-                        if ((+currentBreakPoint.params[0] === param1) && (currentBreakPoint.params[1] == param2 || String(param2).includes(currentBreakPoint.params[1]) )) {
+                        if ((+currentBreakPoint.params[0] === param1) && (currentBreakPoint.params[1] == param2 || String(param2).includes(currentBreakPoint.params[1]))) {
                             return true;
                         }
                     }
@@ -99,18 +99,13 @@ $.extend(cri, (function (window) {
     });
 
     // returns true if query matches
-    function shouldSaveNodeValue(fileReadOver, nodeId) {
-        if (!fileReadOver) {
-            return false;
-        }
-        else {
-            let found = false;
-            nodesDoNotSave.forEach(function (node) {
-                if (+node === nodeId)
-                    found = true
-            });
-            return found;
-        }
+    function shouldSaveNodeValue(nodeId) {
+        let found = false;
+        nodesDoNotSave.forEach(function (node) {
+            if (+node === nodeId)
+                found = true
+        });
+        return found;
     }
 
     return {

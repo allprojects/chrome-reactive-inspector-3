@@ -13,7 +13,6 @@ var cri = cri || {};
         let shouldReactiveDebuggerRun = true;
 
         let filesShouldNotInclude = options.defaultIgnores;
-        let fileReadOver = false;
         request.onload = function () {
 
             let respText = request.responseText;
@@ -51,7 +50,6 @@ var cri = cri || {};
                 // script tag contains inline code.
                 let code = instrumentInline(index, script.textContent);
                 executeInContext(code);
-                fileReadOver = true;
                 setTimeout(next, 0, ++index, finishedCallback);
                 return;
             }
@@ -77,7 +75,6 @@ var cri = cri || {};
                     let code = instrumentFile(filename, request.responseText, options.developerMode);
                     executeInContext(code);
                     J$.W(-1, '', '', '');
-                    fileReadOver = true;
 
                     // next
                     setTimeout(next, 0, ++index, finishedCallback);

@@ -9,31 +9,35 @@
 var cri = cri || {};
 
 $.extend(cri, (function (window) {
-    let cri_config_rec_status = '';
-    // chrome.storage.sync.get('cri_config_rec_status', function (items) {
-    //     cri_config_rec_status = items.cri_config_rec_status;
-    // })
-    function sendObjectToDevTools(message, fileReadOver) {
-        // The callback here can be used to execute something on receipt
+    let recordStatus = null;
 
-        // This is added because chrome communication is asynchronous. Initially messages were not sent to panel page,
-        // because of which it was not generating dependency graph as soon as we send message from analyzer.
-        // it was affecting setting up break point when nodeCreated or dependencyCreated.
-        if (!fileReadOver) {
-            chrome.runtime.sendMessage(message, function (message) {
-                // console.log("message sent");
-            });
-        } else {
-            // check the config settings weather to record or not
+    chrome.storage.onChanged.addListener(function (changes, namespace) {
+        for (let key in changes) {
+            if (key === "cri_config_rec_status" && namespace === "sync") {
+                recordStatus = changes[key].newValue;
+            }
+        }
+    });
+
+    function sendObjectToDevTools(message) {
+
+        // check the config settings weather to record or not
+        if (recordStatus === null) {
+            // config setting was not initialized yet so wait for the value
             chrome.storage.sync.get({cri_config_rec_status: true}, function (items) {
-                if (items.cri_config_rec_status && fileReadOver) {
+                recordStatus = items.cri_config_rec_status;
+                if (recordStatus) {
                     chrome.runtime.sendMessage(message, function (message) {
-                        // console.log("message sent");
                     });
                 }
             });
+        } else {
+            // if a value was previously set, do not read the status sync again to lower performance impact
+            if (recordStatus === true) {
+                chrome.runtime.sendMessage(message, function (message) {
+                });
+            }
         }
-
     }
 
     // Listen message from background page s, that may be sent from panel
@@ -43,9 +47,6 @@ $.extend(cri, (function (window) {
             console.log("Node details");
             console.log("Node id " + msg.content.id);
             console.log("Node value " + msg.content.value);
-        }
-        else if (msg.action === 'cri_config_rec_status') {
-            cri_config_rec_status = msg.content.status;
         }
         else if (msg.action === 'getSourceCode') {
             sendResponse({

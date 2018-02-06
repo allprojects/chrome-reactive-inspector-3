@@ -181,7 +181,7 @@ cri.analysis.bacon = (function (window) {
                                     },
                                     action: "removeEdge",
                                     destination: "panel"
-                                }, recording.getFileReadOver());
+                                });
                                 recording.logEdgeData(this.id, sink.parent._parent._id, sink._operatorName);
                             }
                         }
