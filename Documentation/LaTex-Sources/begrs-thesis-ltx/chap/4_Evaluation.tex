@@ -22,8 +22,8 @@
 		\item The source code tooltips show and highlight the corresponding lines of code. (Test: If possible, choose two nodes, one that corresponds to the middle of a chain of reactive function calls and one that corresponds to the end of a chain of reactive function calls. For both nodes check if the highlighting is correct.)
 		\item The node or edge that was updated in a step is highlighted. (Test: Check for the first ten steps in the history.)
 		\item The history queries can be used to search for a specific event in the history. (Test: evaluationYielded and nodeUpdated find the corresponding steps for the first named node.)
-		\item Reactive breakpoints can be used to pause the debugger when a specific event occurs. (Test: A breakpoint set for the first node created will break at step one. A breakpoint for the first node updated will break before the value is shown in the CRI)
 		\item The graph can be searched, the matching node(s) is/are highlighted and if the search is reseted the original view will be restored. (Test: Search for the dependencies of a node and then reset the search.)
+		\item Reactive breakpoints can be used to pause the debugger when a specific event occurs. (Test: A breakpoint set for the first node created will break at step one. A breakpoint for the first node updated will break before the value is shown in the CRI)
 	\end{itemize}
 	
 	
