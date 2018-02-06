@@ -343,24 +343,14 @@ $('#cri-history-query-submit').click(function () {
                     if (history.type === 'nodeCreated' && history.nodeId === _tNode.nodeId)
                         return history.stageId;
                 });
-                if (historyQueryResult.length) {
-                    graphManager.drawStage(historyQueryResult[0].stageId);
-                    rxSlider.slider('value', historyQueryResult[0].stageId, rxSlider.slider("option", "step"));
-                    $("#cri-history-current-step").text(1);
-                    $("#cri-history-last-step").text(historyQueryResult.length);
-                }
+                displayHistoryQueryResult(historyQueryResult);
             }
         } else if (historyQuery === "nodeUpdated") {
             historyQueryResult = historyEntries.filter(function (history) {
                 if (history.type === 'nodeUpdated' && history.nodeName === param1)
                     return history.stageId;
             });
-            if (historyQueryResult.length) {
-                graphManager.drawStage(historyQueryResult[0].stageId);
-                rxSlider.slider('value', historyQueryResult[0].stageId, rxSlider.slider("option", "step"));
-                $("#cri-history-current-step").text(1);
-                $("#cri-history-last-step").text(historyQueryResult.length);
-            }
+            displayHistoryQueryResult(historyQueryResult);
         } else if (historyQuery === "evaluationYielded") {
             historyQueryResult = historyEntries.filter(function (history) {
                 if (history.type === 'nodeUpdated' && history.nodeName === param1) {
@@ -370,37 +360,32 @@ $('#cri-history-query-submit').click(function () {
                         return history.stageId;
                 }
             });
-            if (historyQueryResult.length) {
-                graphManager.drawStage(historyQueryResult[0].stageId);
-                rxSlider.slider('value', historyQueryResult[0].stageId, rxSlider.slider("option", "step"));
-                $("#cri-history-current-step").text(1);
-                $("#cri-history-last-step").text(historyQueryResult.length);
-            }
+            displayHistoryQueryResult(historyQueryResult);
 
         } else if (historyQuery === "dependencyCreated") {
             let nodeNameSource = param1;
             let nodeNameDest = param2;
-            let result;
             let tempResult = [];
-            historyQueryResult = '';
             let filteredHistoryEntries = _.filter(historyEntries, function (history) {
                 return history.type === 'dependencyCreated'
             });
 
             filteredHistoryEntries.forEach(function (history) {
                 if (history.startNodeName === nodeNameSource && history.endNodeName === nodeNameDest) {
-                    result = history;
+                    historyQueryResult = [history];
                 } else if (history.startNodeName === nodeNameSource) {
                     tempResult.push(history)
                 }
             });
 
-            if (!result) {
+            if (!historyQueryResult.length) {
                 if (tempResult.length) {
                     tempResult.forEach(function (temp) {
-                        if (temp.endNodeName === nodeNameDest && !result) {
-                            result = temp
+                        if (temp.endNodeName === nodeNameDest && !historyQueryResult.length) {
+                            historyQueryResult = [temp];
                         } else {
+                            //TODO: check the desired behavior here. "pop(temp)" does not pop the element temp!
+                            // -> it used pop on the last element, because the function only takes one argument
                             tempResult.pop(temp);
                             checkFurtherNodes(temp)
                         }
@@ -410,9 +395,9 @@ $('#cri-history-query-submit').click(function () {
 
             function checkFurtherNodes(h) {
                 filteredHistoryEntries.forEach(function (history) {
-                    if (!result) {
+                    if (!historyQueryResult.length) {
                         if (history.startNodeName === h.endNodeName && history.endNodeName === nodeNameDest) {
-                            result = history;
+                            historyQueryResult = [history];
                         } else if (history.startNodeName === h.endNodeName) {
                             tempResult.push(history)
                         }
@@ -420,15 +405,22 @@ $('#cri-history-query-submit').click(function () {
                 });
             }
 
-            if (result) {
-                graphManager.drawStage(result.stageId);
-                rxSlider.slider('value', result.stageId, rxSlider.slider("option", "step"));
-                $("#cri-history-current-step").text(1);
-                $("#cri-history-last-step").text(1);
-            }
+            displayHistoryQueryResult(historyQueryResult);
         }
     }
 });
+
+function displayHistoryQueryResult(queryResult) {
+    if (queryResult.length) {
+        graphManager.drawStage(historyQueryResult[0].stageId);
+        rxSlider.slider('value', historyQueryResult[0].stageId, rxSlider.slider("option", "step"));
+        $("#cri-history-current-step").text(1);
+        $("#cri-history-last-step").text(historyQueryResult.length);
+    } else {
+        $("#cri-history-current-step").text(0);
+        $("#cri-history-last-step").text(0);
+    }
+}
 
 $('#cri-history-query-prev').click(function () {
     let currentStepFromHistoryQuery = $("#cri-history-current-step").text();
