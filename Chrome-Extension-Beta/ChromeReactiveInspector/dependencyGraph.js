@@ -5,7 +5,10 @@ cri.dependencyGraph = (function () {
         this.container = d3container;
         this.graph = null;
         this.history = history;
+
+        // currentStage is initially null but if the stage is later set back to stage 0 it will have the value 0.
         this.currentStage = null;
+        
         this.render = new dagreD3.render();
         this.afterChangedCallback = afterChangedCallback;
         this.afterResetCallback = afterResetCallback;
@@ -28,11 +31,17 @@ cri.dependencyGraph = (function () {
     GraphManager.prototype.drawStage = function (stageId) {
         let self = this;
 
-        if (!stageId) {
+        if (stageId === 0) {
             self.graph = createGraph();
+            self.currentStage = 0;
             //this.clearGraph();
             self.reRender();
             self.afterChangedCallback();
+            return;
+        }
+
+        if (!stageId) {
+            console.error("Unset stage Id with value '" + stageId + "'");
             return;
         }
         //TODO: prevent reload of current stage.
