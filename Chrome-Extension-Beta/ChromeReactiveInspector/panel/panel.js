@@ -364,7 +364,9 @@ $('#cri-history-query-submit').click(function () {
         } else if (historyQuery === "evaluationYielded") {
             historyQueryResult = historyEntries.filter(function (history) {
                 if (history.type === 'nodeUpdated' && history.nodeName === param1) {
-                    if (history.nodeValue === param2 || history.nodeValue.indexOf(param2) !== -1)
+                    // using indexOf here would be problematic, because it would find "5" in "15".
+                    //TODO: this should have an option to provide a regex. For now indexOf replaced with exact match to avoid confusing the user.
+                    if (String(history.nodeValue) === String(param2))
                         return history.stageId;
                 }
             });
