@@ -30,8 +30,8 @@ g.type-TK > rect {
 }
 
 g.current > rect {
-    stroke: #FF9400;
-    stroke-width: 5;
+    stroke: #FF9400 !important;
+    stroke-width: 3 !important;
 }
 
 g.edgePath.current path {
