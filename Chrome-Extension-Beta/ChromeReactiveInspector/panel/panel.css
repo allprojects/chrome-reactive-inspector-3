@@ -39,8 +39,8 @@ g.edgePath.current path {
 }
 
 g.highlight > rect {
-    stroke: green;
-    stroke-width: 5;
+    stroke: #00BA6F !important;
+    stroke-width: 5 !important;
     opacity: 1 !important;
 }
 
