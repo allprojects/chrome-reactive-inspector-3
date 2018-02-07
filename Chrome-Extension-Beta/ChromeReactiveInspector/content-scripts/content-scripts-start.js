@@ -60,9 +60,12 @@ $.extend(cri, (function (window) {
         for (let key in changes) {
             if (!changes.hasOwnProperty(key)) continue;
 
+            let storageChange = changes[key];
             if (key === 'printAllValue') {
-                let storageChange = changes[key];
                 isPrintOptionSelected = storageChange.newValue;
+
+            } else if (key === 'criReactiveBreakPoints') {
+                reactiveBreakPoints = storageChange.newValue;
             }
         }
     });
