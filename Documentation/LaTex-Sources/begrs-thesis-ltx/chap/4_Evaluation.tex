@@ -74,9 +74,17 @@
 		\item Reactive breakpoints can be used to pause the debugger when a specific event occurs. (Test: A breakpoint set for the first node created will break at step one. A breakpoint for the first node updated will break before the value is updated in the observable.)
 	\end{itemize}
 	Results in abstract - Detailed result tables in appendix.
-	% - short mention of excluded tests
+	% - short mention of excluded tests:
+		% RxJS/all-operators - artifical examples by Pradeep Baradur used to verify operators but not a suitable test application.
+		% RxJS/spotify-search - great test application in general, but the used API does not work without a token.
 	% findings:
 	% - statistical results
 	% - what worked
-	% - different classes of errors and if they were present in CRI2
-	% - special errors in detail
+	% - N.A. mostly not applicable because there were no named nodes
+	% - different classes of errors or details of a single error AND if they were present in CRI2: 
+		% - Ambiguity: CRI can not handle nodes with the same name. e.g. a named node created in a for loop. CRI will use the first or last node depending on the context and is not equipped to handle ambiguous names consitently yet. Dependencies can not be found correctly, history queries will only match one node.
+		% - spec 9 : N*,Y - the nodes are added out of order in RxJS if the first node does not stem from jalangi analysis.
+		% - Dependencies or Dependents not correctly highlighted: seems to be related to dynamically created nodes, but not always. Is a bug.
+		% - alphabetinvasion: observables are not correctly recorded. The test uses closures and custom operators (although custom operators do work in RxJS\animationtest). Example observable that is missing!!!
+		% - BaconJS/blog-url the named variable is not correctly detected, futhermore the bacon recording does not detect the correct observables.
+		
