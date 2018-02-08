@@ -1,17 +1,58 @@
 \chapter{Evaluation}
 \section{Evaluation of Improvements}
+	\subsection{Changes to the User Interface}
+	Most of the changes to the User Interface are, by their nature, hard to evaluate. The experienced usability of a User Interface can be highly subjective \cite, any evaluation therefore has to be done by collecting and analyzing empirical data, for example through Click-Stream analysis. Since CRI is not yet used in active production systems by a large user base, a User Study with many participants would be the preferred solution. Unfortunately this is outside the scope of this thesis.
+	However, it can be easily verified that the text per node in the Dependency Graph was reduced without loosing any information and parts of the UI that are not necessary to examine the Dependency Graph can be hidden. Highlighting of the currently updated edge in addition to nodes also provides additional information for the user to help track down differences between steps that was not as easily visible before.
+
+
+	\subsection{"Code Previews"}
+	% - since on-demand feature the performance impact is neglegent, additional storage of js files in RAM in non-instrumented form to show code is also neglegent due to RAM reduce of performance improvements.
+	% - percentage of nodes per test app that have them
+	% - short referecne to specs in later section
+
 	\subsection{"Performance improvements"}
 	\label{sec:PerformanceEvaluation}
-	% CPU after cri3, 
-	% one exemplary case where the previous CRI would get stuck but the new one will not
-	% example mario: still to fast to keep up
-	% Memory for one test case with exactly equal conditions.
+	% All measurements with integrated Web server of WebStorm on localhost. Chrome Version 64.0.3282.140 (Offizieller Build) (64-Bit). WebStorm 2017 3.4. Win10 8GB RAM i7 7500 2.7GHz 4CPUs, Intel(R) HD Graphics 620. No other active applications but background processes and services must be taken into account.
 	
-	% Comparison for test cast TestForExactPerformance: CRI vs RxFiddle
-		% although RxFiddle does not have performance issues (lags > 1 s) for ~ 1000 updates on Chrome (63.0.3239.132 (64-Bit)) with win10 8GB RAM i7 7500 2.7GHz 4CPUs. It does block Firefox (57.0.4 (64-bit)) for a few seconds. Once the UI is build it is noticeable slower than for applications with less value changes but delays < 1s. The CRI performance for this test app is slightly faster, but due to it being an extension instead of a webpage the performance difference may not be due to the tool implementations. CRI generates ~ 2700 steps, RxFiddle generates ~ 1000 values for each operator/observable in the chain of "intervalObservable".
+	% Memory and CPU for PerformanceTest with approx. equal conditions:
+	% CRI3 -> stream approach: RAM is farily constant and not dependent on the number of steps in the history, although the impact is tiny since modern PCs have enough. -> Would already be achieved by paging.
+	
+	% Comparison CRI2 CRI3 on PerformanceTest
+	% - Tests for CPU and RAM, tested on WebStorm integrated Web server by creating a breakpoint at nodeCreated[1], starting the recording with Chrome-JavaScript Profiler and Memory DevTool, and then resuming.
+	% - results are approximations due to unknown influences by the OS and by manually controlling the start and end.
+	% - memory test for CRI2 had to be restarted several times before it would complete the execution without crashing. Few forced UI updates by dragging the Dependency Graph around a few centimeters.
+	
+	%CPU:: "(program)" = native code of Chrome, Images are not very expressive since they cover the whole recording time and not only the execution time - they can only be used as vague indicators. The percentage of execution time to recording time can give a glimpse on the variance of the percentages in the images - however "(program") can not be judged by that - it is not visible if the "(program)" time was spent during execution or after/before due to the limitations of the recording tool.
+ 	% CRI2 - CPU:
+ 	% approx execution time by selecting the heavy loaded area in the "Chart" view: end 170000ms - start 16000ms =  154s
+	% execution time percentage of recording: ~154000ms / 187860ms  * 100 ~= 82.0%
+	% The biggest percentage directly correspond to UI updates - which happen at least once per created step since the slider is updated and renders the new Dependency Graph. getBB (getBoundingBox) calculates the size of the nodes in the graph, buildFragment's impact stems form domManip from jquery
+	
+	% CRI3 - CPU:
+	% 13000ms - 7500ms = 5.5s, 
+	% execution time percentage of recording: ~5500 / 23188ms * 100 ~= 23.7 %
+	% it can be seen that still a sizeable part of cpu time is spent in UI related computation getBB (getBoundingBox). "ja" is a part of jquery and is hard to track down, but approx. half stems from dispatchOnMessage
+	% the (program) part is the biggest chunk, but not visible what parts are due to running the profiling, running the test app, handling mediation etc.
+	
+	%RAM::
+	% CRI2 - RAM: Total RAM approx 52.7MB
+	% CRI3 -RAM: Total RAM approx 14.6MB
+	% most notable difference in a category is the size of JS array which includes the most part of the stored Dependency Graph
+	% Comparison to same Test app with pause event after 250ms instead of 5s:
+	% CRI2: ~16.1MB -> increases rapidly over time
+	% CRI3: ~12.6MB -> increases very little over time
+	% for 250ms both version have a fairly similar Memory consumption, although CRI2 has a noticable delay before the Dependency Graph is shown (still <5s) while CRI3 has no noticeable delay.
+	
+	% example mario: still to fast to keep up - will crash if not paused
+	% -> in case of mario - hard to detect the real reason due to overload of Chrome itself - the async requests on communication api seems to build up because they are to many for Chrome to keep up.
+	% --> crashes CRI Chrome extension if not paused
+	
+	% Comparison for test case PerformanceTest: CRI vs RxFiddle
+		% although RxFiddle does not have performance issues (lags > 1 s when hovering over a node) for ~ 1000 updates on Chrome. It does block Firefox (57.0.4 (64-bit)) for a few seconds. Once the UI is build it is noticeable slower than for applications with less value changes but delays < 1s. The CRI performance for this test app is slightly faster, but due to it being an extension instead of a webpage the performance difference may not be due to the tool implementations. CRI generates ~ 2700 steps, RxFiddle generates ~ 1000 values for each operator/observable in the chain of "intervalObservable".
 		% CRI is not testable in Firefox
+
 	
-	\subsection{"Test Applications"}
+\section{"Current state of the Test Applications"}
 	Specifications
 	\begin{itemize}
 		\item The dependency graph is shown and all observables that are assigned to a named variable are displayed distinctively.
@@ -25,59 +66,10 @@
 		\item The graph can be searched, the matching node(s) is/are highlighted and if the search is reseted the original view will be restored. (Test: Search for the dependencies of a node and then reset the search.)
 		\item Reactive breakpoints can be used to pause the debugger when a specific event occurs. (Test: A breakpoint set for the first node created will break at step one. A breakpoint for the first node updated will break before the value is updated in the observable.)
 	\end{itemize}
-	
-	
-	% > to use test apps with "broken by policy" host them on the integrated webstorm webserver like http://localhost:63342/chrome-reactive-inspector-3/TestApplications/RxJs/previous_applications/12_movie_search/autocomplete.html note that you need to uncheck "Allow unsecure requests" for it to work properly. The project must be opened in webstorm for it to work.
-	%instead of auto testing, provide auto input for all testapps that require input?
-	% possible gains:
-	% Rx.js
-	%alalphabetinvasion - sample input for graph needed ( check if more observables in previous CRI )
-	%mario - none
-	%all-operators - none
-	%animated-image - sample input for values
-	%animationtest - sample input for values
-	%backpressure - sample input for values
-	%crop - sample input for graph needed
-	%creadit-crad-drag - sample input needed for full graph
-	%draw-with-combine-latest - sample input adds some values
-	%earthquake - none
-	%mouse 3 - sample input for values
-	%simple-databinding - sample input for values
-	%stopwatch - none
-	%subjects-examples - none
-	%wikipedia-updates - none (exceptions in d3)
-	%smart-counter - sample input for full graph needed
-	%state-store - sample input for values
-	%letter-counter - sample input for values
-	%son-father-wallet - sample input for values
-	%movie-search - sample input for values (exceptions, broken by permission policy)
-	%follow-the-mouse - sample input for values
-	%drag-and-drop - sample input for full graph
-	%canvas-painting - sample input for full graph
-	%twitter-follow-box - none (exceptions by permisson policy)
-	%rest-api-call - sample input for values (exceptions, broken by permission policy)
-	%spotify-search- sample for values (exceptions, unauthorized)
-	%image-sampler - none (exceptions, canvas compromised by cross origin data)
-	
-	% Bacon.js
-	%timer - none
-	%blog_url - sample input for full graph needed
-	%comb-lock - sample input for values
-	%dragdrop - sample input for values
-	%events - sample input for full graph needed
-	%operators - sample input for graph needed #
-	%son-father-wallet split file test - sample input for values
-	%operators-and-events - sample input for values
-	%son-father-wallet -sample input for values
-	%up-down-counter - sample input for values
-	%form-validation - none
-	%movie-search - sample input for full graph needed
-	%bar-chart - none
-	%websocket-wikipedia - none (exceptions in d3)
-	%multiselect-card - sample input for values (exceptions)
-	%true-false-logger - sample input for values
-	%drawing - sample input for values
-	
-	
-	% evaluate "Connecting abstract graph with Javascript code"
-	% evaluate "Advancing the User Interface"
+	Results in abstract - Detailed result tables in appendix.
+	% - short mention of excluded tests
+	% findings:
+	% - statistical results
+	% - what worked
+	% - different classes of errors and if they were present in CRI2
+	% - special errors in detail
