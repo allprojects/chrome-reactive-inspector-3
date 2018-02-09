@@ -55,23 +55,26 @@
 	- bind special keypress event for hovered node to canvas
 	- remove handlers when leaving
 	- add functional title for tipsy tooltips
-	- Connection of abstract graph to code is not always helpful, because it takes/tuggs the user back to sequential/non-reactive thinking, but helps to understand nodes without other details or inexpressive names. Without this additional info the user is encouraged to split chained function calls and give each step a named variable, which not only is cumbersome but also may lead to diverting the focus from variables that should really have a name.
+	- Connection of abstract graph to code is not always helpful, because it takes/tuggs the user back to sequential/non-reactive thinking, but helps to understand nodes without other details or inexpressive names. Without this additional info the user is encouraged to split chained function calls and give each step a named variable, which not only is cumbersome but also may lead to diverting the focus from variables that should really have a name - also falls back to modifying the original source code to enable debugging like in do-debugging.
 	
 	- the problem is to have the filename in the write function, because all instrumented files use the same jalangi sandbox.
 	- the filenames in contrast to the original jalangi are not implemented in the minified non nodejs version taken from the demo page.
-	- the only solution with minimal changes to the used jalangi-framework.js is to locally overwrite the W function in every instrumented file.
-	- the overwrite is done via shallow copying the J\$ object and replacing the W function.
-	- to get additional info an observables previously not covered, the invokeFun was also extended with the filename and used to record source info. This can obviously not record names for additional nodes.
+	- the only solution with minimal changes to the used jalangi-framework.js is to locally overwrite the W function in every instrumented file. Otherwise the whole instrumentation process would have to be customized.
+	- the overwrite is done via shallow copying the J\$ object and replacing the W function with one that submits the filename as a fixed parameter to the analysis and calls the base.
+	- to get additional info on observables previously not covered, the invokeFun was also extended with the filename and used to record source info. This can obviously not record names for additional nodes.
 	- inline scripts are excluded from this because there might be many and that could lead to performance issues due to the shallow copying.
 	If filename is not set, document domain is assumed for the filename.
 	
 	
 		\subsubsection{Strengths and limitations of this approach} 
-		% ui, syntax highlighting
-		% usefullness of code preview beyond a certain extend
+		% ui, syntax highlighting: syntax highlighting is hard for snippets because the context is missing
+		% usefullness of code preview beyond a certain extend: 
+			% Chained calls can be to long to display
+			% it is nearly useless if the corresponding code is just a function that returns the observable because in contrast to an IDE the developer can not directly jump into the function to look at the acutal code.
+			% best in chained calls because the developer can see which part of the chained call corresponds to the observable
+			% if the chain is spread out e.g. because parts are assigned to variables the code corresponding to nodes that have a dependency can actually be many lines appart.
 		% actual usage in general
 		% what it provides and what it doesnt
-
 
 \section{Rapidly updated Observables}
 \label{sec:RapidlyUpdatedObservables}
