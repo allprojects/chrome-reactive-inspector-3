@@ -14,28 +14,57 @@
 	% - searching for problems -> detect odd behavior, history queries (already present, mention that this is the reason for not relocating)
 	% - checking specific node (e.g. ater trying to fix a problem) -> find node or dependents (already there)
 	
-\section{Connecting abstract graph with Javascript code}
-	% goal
-	% Difficulties: Instrumented source code
+\section{Connecting abstract graph with JavaScript code}
+	% goal: to porvide nodes without a name with additonal details that allows to put them into context. Connect the abstract representation with the code to allow developer to see the code responsible for an issue they detected - was possible before with line information. The developer should be able to easily switch between source code inspection and dependency graph inspection, because not all issues can be found in either of them when used alone. E.g. there is an issue in a lambda function - the developer can not find this issue directly in the dependency graph, he can only see the result in node values that do not match the values expected with the original intention of the code. To fix the issue the dev has to switch to the code anyway so he already has to use both representations in tandem. 
+	% Difficulties: 
+		% The JS code that is used during runtime is instrumented. Jalangi instrumented code is very hard to read as is shown in listing \ref{lst:Instrumented}. This makes it unfeasable to directly show it to the user. in addition it is an implementation detail of CRI and should not be disclosed. Additionally the code position retrieved from the Jalangi analysis corresponds to the position in the original source code without the instumentation code.
+		% The JS code that is used during runtime is dynamically loaded and therefore can not be navigated to out of the box with the Chrome DevTools navigation API. Although this can be mitigated by adding "//# sourceURL=" and a custom url to the bottom of the scripts. Since this shows the Jalangi instrumented source code that is not useful for a normal user, we decided to tie this to a new option called "CRI Developer Mode" that can be enabled in the options page of CRI.
+	
+	\begin{lstlisting}[language=JavaScript, caption={Example of RxJS code.},label={lst:Instrumented}]
+	$sonWallet = J$.W(593, '$sonWallet', J$.F(585, J$.I(typeof $ === 'undefined' ? $ = J$.R(569, '$', undefined, true, true) : $ = J$.R(569, '$', $, true, true)), false)(J$.T(577, '#wallet-son', 21, false)), J$.I(typeof $sonWallet === 'undefined' ? undefined : $sonWallet), true, true);
+	$fatherWallet = J$.W(625, '$fatherWallet', J$.F(617, J$.I(typeof $ === 'undefined' ? $ = J$.R(601, '$', undefined, true, true) : $ = J$.R(601, '$', $, true, true)), false)(J$.T(609, '#wallet-father', 21, false)), J$.I(typeof $fatherWallet === 'undefined' ? undefined : $fatherWallet), true, true);
+	\end{lstlisting}
+	
+	
 	
 	\subsection{"Possible Solutions"}
-	% Navigating to Source via Chrome debug api
-		% - Problem: instrumentated javascript is not readable, not instrumentated version seems to exist in chromes code storage as dynamic script, but should not correspond because the instumented version is loaded dynamically.
-		% correspondence between line in code and actual used javascript file is not working
-		% easily possible to navigate to a line number in a file, if the file url is known and the javascript actually exists.
-	% Opening the code in a simple file viewer
-		% just navigate to or display the original code even though it is not the file currently used (because the current one is instrumented)
-		% pro: full code, user can use find and search via IDE or Chrome devtools
-		% con: - User has to leave the extension UI to do it. 
+	% Navigating to Source via Chrome debug api or open in another IDE
+		% It is easily possible to navigate to a line number in a file, if the actual file url (can difffer due to many factors) is known. For the reasons explained above, navigating to the instrumented code is not desirable. A not instrumentated version seems to exist in chromes code storage as dynamic script, but it does not correspond to the script that is used at runtime and any breakpoint added by the user would be ignored since the code is never actually run - this may confuse the user.
+		% Pro: 
+			% the user can profit from Chromes syntax highlighting and search which supports regex.
+			% full code available
+		% Con:
+			% Leaving context of CRI - user has to navigate between DevTools tabs and looses focus each time. 
 			% - Really cumbersome if many nodes are to be inspected. 
 			% - unprecise, just the line number is not precise for chained calls.
 			% - if navigating with chrome devtools: breakpoints will show but never trigger which could confuse the user
+			% most features of Chrome debugger wont work and there is no way to indicate which ones do work to the user. E.g. direct evaluation code (except for pure code like a mathmatical formula since no variables actually contain a value), breakpoints and watches wont work.
+			% if another IDE is used "Go to declaration" is probably availabe which provides scaleable query features not provided by a simple string search. Enterprise size applications may return to many results for a string query to be usefull.
+	% Opening the code in a simple file viewer
+		% Open the file in a popup or using an additional view e.g. a tab in the CRI to display the full code.
+		% pro: 
+			% full code can be provided - multiple files can be shown
+			% it is possible to implement syntax highlighting based on context
+			% it is possible, although cumbersome, to customize the view in any way - each observable could be marked in the source code and additional information could be displayed to the user. Reverse of what is implemented now -> abstract with code info, would be code with abstract info. But this would move the focus from the abstract to the code.
+		% con: 
+			% custom solution which takes tremendous effort to implement, because there is nothing available that fullfills every requirement and for a fully customizeable solution it would effectively be a lightweight IDE.
+			% still requires the user to leave the abstract representation and loose foucs
+			% cumbersome to examine a set of nodes that share a dependency or are directly related in the abstract graph but are not in close proximity in the JavaScript source code.
 	% using a mirror
-		%- keep copy of website that is instrumented and mirror all interaction to it
-		%--> navigate to real one when clicked
+		% instead of instrumenting the source code used at runtime, use a copy of the website that is instrumented and mirror all interaction from the original to the instrumented version. This would enable the option to navigate to the real source code used at runtime when a node is selected for inspection, since the used code is no longer instrumented.
+		% pro: 
+			% this would enable all features of chrome to be used a runtime like normal breakpoints, eval in code, syntax highlighting, watches.
+		% con: 
+			% not easy to record and replay all interactions in realtime if at all - many interactions the user can do to a website are restricted to the acual user due to important security restrictions. E.g. context menu interactions or clipboard access is restricted. In addition some types of ui interactions like mouse movement or drag and drop are hard to record and replay rebustly enough while still keeping performance
+			% the mirror needs to match exactly - same resolution due to media queries and other resolution dependent code. If some size calculation is done via JavaScript everything has to be calculated equally. This is nearly impossible to achieve precise enough due to rounding errors.
+			% timing is the killing factor here. The replay on the mirror has to match exactly in regards to timing, if not the values of observables and results of calculations based on the system time will turn out differently. This issue might be solveable by replacing some APIs with custom copies that slows down the system enough to enable CRI to mirror the steps in the same time frame. E.g. a mousemove event fires multiple times in fixed intervals if the user moves the mouse - the mirrors observables that use mousemove would have to contain the exact same number of values at any given time to remove synchronicity issues for arbitrary applications.
+			% access to Chrome API would have to be intercepted and directed to a fake API - otherwise calls with sideeffects will execute twice. Requests to e.g. WebAPIs might trigger abuse detection because they have to be executed in a very short period of time. This could be solved by intercepting everything that targets an outside element and just fetching the result instead of actually executing them twice, but this will change timing of calls if they are not forced to be synchronized between the mirror and the real application.
+			% twice the resources needed
+			
 	% Source Previews
-		% - use popup that opens when strg click on node with surrounding lines
-		% - change tooltip to show the code if ctrl pressed while mouse enter or when already on element
+		% - use tooltip that opens when CTRL is hold down on node that displays a snippet of the original code that contains the code corresponding to a node with surrounding lines of code. Or use CTRL click to open the snippet.
+		% details in "Implemented Solution"
+		%TODO: make sure there are not duplicates in Implemented Solution.
 		% Pro: - precise highlighting of corresponding code possible
 			% - serves as additional details for nodes, can help identify a node that has no name
 			% - helps the user to find and remember a node without a name between multiple uses of the extension by other means than the id. The id may have changed due to changes to the previously executed code.
@@ -43,8 +72,11 @@
 		% Con: - if the chain of functions is to large, not all relevant code can be shown and in general big chains are hard to read.
 			% - no search or other code inspection tools available for the code snippet -> the user would have to use an external tool and the line number for that. No breakpoints, though there are not that useful in reactive programming anyway as described in #state of the art chapter.
 			% - can not use existing syntax highlighting of chrome or an IDE. Implementing a own syntax highlighting would not be easy, because if just the small snippet is analysed all context relying highlighting will be lost. Basic keywords would be possible but with own implementation or third party library.
-	
+			% full code is not availabe for the user
+			% the displayed code can not be examined with features like search - but they are short enough to be examined in a few seconds.
+			
 	\subsection{Implemented Solution - Source Information Tooltips}
+	% change tooltip to show the code if ctrl pressed while mouse enter or when already on element to speed up inspection of multiple nodes one after another
 		% limited capabilities of used jalangi -> developed for a special demo, not in general (mentioned in state of the art)
 		% jalangi extension via shallow copy
 		% tipsy.js - switching out the tooltip with the function
@@ -101,11 +133,13 @@
 	
 	\subsection{"Further work"}
 	% before cri3 CPU profiler results
+	
 	% throttling and debounce UI updates greatly increased performance
 	% evaluation of throttle time for Ui changes and reasoning to pick a certain value - compromise between detectable for human and node update speed that can be handled
 	% Excluding a node -> limitation: may need to cover many nodes before the ui values are mapped to readable values -> ignore all ancestors option 
 	%- should be able to ignore nodes via r-click on node, even with an option to exclude all dependents/dependencies - that did not work because time. It would also help to exclude nodes just form value updates so the nodes is still present in the graph with its value updates.
 	% reduce the number of steps by removing node info updates that are not value changes from the history. (only a few, but still) they dont need separate steps when extra info is added
+	
 
 \section{Dynamically created observables}
 % nodes are generated extensively
@@ -129,17 +163,41 @@
 	% reorganizing file structure to match placement in chrome devtools vs other posibilities
 		% prior to this work there were some files with the window object corresponding to contentscripts in the same directory as files with a window object corresponding to the extensions window.
 	% need for more documentation, still far from being fully documented but x new comments
-	% encapsulation to help track and correct errors or build on existing code
+		% CRI3: 271 single line, 48 multiline
+		% CRI2: 231 single line, 32 multiline
+		% just source of CRI was used to collect results - libraries directory and jalangi-framework excluded. WebStorm/search for // and /* inside the CRI BEta/ CRI directory - usage in comments feature.
+		% includes TODOs - more in CRI3,  and commented code - more in CRI2
+	% encapsulation and separation of concerns to help track and correct errors or build on existing code
+		% closures: a closure prevents variables to be accessed from the outside and makes them effectively private - works because variabels are bound to a function context in javascript. In the example a self executing function is used that returns a function. It is also possible to use closure to create pseudo classes in JS that can be instantiated with "new". A self executing function that returns a constructor function. In CRI we used both in addition to self executing functions that return an object with several functions to realise "public" functions and mimicing the usual behavior of a namespace to not pollute the global namespace and document the correspondence of a public function to a specific feature throug the actual code. 
+		
+		\begin{lstlisting}[language=JavaScript, caption={Example of RxJS code.},label={lst:closure}]
+			var add = (function () {
+			var counter = 0;
+			return function () {return counter += 1;}
+			})();
+		\end{lstlisting}
+		
+		% CRI3: 19 own js files (excluding jalangi + libraries dir) - 9 new classes
+		% not in closure:
+		% background-communication -> only script in background context
+		% options.js - not needed so far
+		% panel.js - not enough time, needs to be split further to achieve separation of concerns.  search and history query feature need to be extracted too. The file should ultimately only be responsible to instanciate the other classes and delegate work. In short of implementing a full MVC or MVVM at least each distinc feature should be in its own file to limit influence to the explicint interfaces.
+		% panel-communication.js - no enough time, because the functions and variables are used by code in panel.js
+		% CRI2: 8 own js files, no closures, background, devtools, content-script-end are empty
+		
+		% most other code metrics normally used in OO can not be easily used on JavaScript like cohesion and coupling because it is not type save (is duck typed) makes it hard to detect which variable contains what class at runtime - there can easily be multiple "classes" that get assigned to the same variable, even dynamically so that there is no way to provide consisten results.
+	
+	% only in appendix because this has 0 value for the reader, but is needed to proove the claim:
+	% CRI3 has 3580 total lines of code including comments, brackets, empty lines, just the number of lines per js file; average of 188 lines
+	% CRI2: has 2353 total lines, 294 average
 	
 	\subsection{Build process}
 	% (short section)
+	% suggested way to exclude files; source: https://bugs.chromium.org/p/chromium/issues/detail?id=314360#c10
 	% build project	to exclude files from packed extension. like the key or other project files that may contain sensual data.
 	% keep in javascript to present familiar environment and language
-	
-	\subsection{Code metrics for script languages}
-	% why some are not suitable for js
-	% instead: number of files, min max average number of lines and why this is not a definite improvement.
-	% x new classes and files
+	% could be used to miniy the extension before deployment in the future
+
 	
 \section{Summary}
 
