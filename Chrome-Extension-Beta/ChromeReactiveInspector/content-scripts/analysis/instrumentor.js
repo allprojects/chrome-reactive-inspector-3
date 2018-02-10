@@ -211,7 +211,7 @@ var cri = cri || {};
         }
 
         /**
-         * For formatted version see FilenameHookSnippet.js
+         * For formatted version see _filenameHookSnippet.js
          * @type {string}
          */
         let jalangiOverrideSnippet = "var X$ = window.J$;var J$ = jQuery.extend({}, X$);J$.W = function (iid, name, val, lhs,"
