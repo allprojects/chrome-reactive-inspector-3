@@ -17,6 +17,3 @@ var optionsAccess = (function () {
 })();
 
 optionsAccess.$getOption();
-
-
-

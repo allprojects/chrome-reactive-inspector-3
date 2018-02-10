@@ -3,10 +3,12 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/Chrome-Extension-Beta/ChromeReactiveInspector/libraries" />
       <excludeFolder url="file://$MODULE_DIR$/Chrome-Extension-Beta/dist" />
       <excludeFolder url="file://$MODULE_DIR$/Chrome-Extension-Stable" />
       <excludeFolder url="file://$MODULE_DIR$/Documentation" />
       <excludeFolder url="file://$MODULE_DIR$/Report" />
+      <excludeFolder url="file://$MODULE_DIR$/TestApplications" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
     </content>
