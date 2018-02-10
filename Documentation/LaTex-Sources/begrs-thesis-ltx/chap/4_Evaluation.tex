@@ -80,13 +80,15 @@ In this chapter we evaluate the contributions of this thesis and the general sta
 		% RxJS/all-operators - artifical examples by Pradeep Baradur used to verify operators but not a suitable test application.
 		% RxJS/spotify-search - great test application in general, but the used API does not work without a token.
 	% findings:
-	% - statistical results
-	% - what worked
+	% - statistical results: For this statistic spec 9 was interpreted as two different results to have a simple result with Yes and No's - Ambiguity was counted as No because it means not fully supported yet. N.A. was counted as Yes because it does no additional work to be done by a dev
+		% verified 388/420 working
+		% specs 2,3,4,5,6,9.2 are without errors in any application
+	% Exceptions in detail:
 	% - N.A. mostly not applicable because there were no named nodes
 	% - different classes of errors or details of a single error AND if they were present in CRI2: 
-		% - Ambiguity: CRI can not handle nodes with the same name. e.g. a named node created in a for loop. CRI will use the first or last node depending on the context and is not equipped to handle ambiguous names consitently yet. Dependencies can not be found correctly, history queries will only match one node.
-		% - spec 9 : N*,Y - the nodes are added out of order in RxJS if the first node does not stem from jalangi analysis.
-		% - Dependencies or Dependents not correctly highlighted: seems to be related to dynamically created nodes, but not always. Is a bug.
-		% - alphabetinvasion: observables are not correctly recorded. The test uses closures and custom operators (although custom operators do work in RxJS\animationtest). Example observable that is missing!!!
-		% - BaconJS/blog-url the named variable is not correctly detected, futhermore the bacon recording does not detect the correct observables.
-		
+		% - Ambiguity: CRI can not handle nodes with the same name. e.g. a named node created in a for loop. CRI will use the first or last node depending on the context and is not equipped to handle ambiguous names consitently yet. Dependencies can not be found correctly, history queries will only match one node. # verified CRI2 with split file test
+		% - spec 9 : N*,Y - the nodes are added out of order in RxJS if the first node does not stem from jalangi analysis. #verified CRI2 with son_father_wallet
+		% - Dependencies or Dependents not correctly highlighted: seems to be related to dynamically created nodes, but not always. Is a bug. # different behavior with CRI2 crop example - new bug, equal behavior with stopwatch example.
+		% - alphabetinvasion: observables are not correctly recorded. The test uses closures and custom operators (although custom operators do work in RxJS\animationtest). Example observable that is missing!!! # verified with CRI2
+		% - BaconJS/blog-url the named variable is not correctly detected, futhermore the bacon recording does not detect the correct observables. # verified with CRI2
+	%  They should be the target of further development.

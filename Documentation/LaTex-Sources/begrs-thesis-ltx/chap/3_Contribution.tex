@@ -3,16 +3,17 @@
 	% present Issue and Solution for each of these:
 
 	\subsection{Reducing the cognitive load on the user}
-	% - remove "error" color from normal workflow -> change color palette
-	% - usage frequency of input elements -> Reset, Download and Pause/Resume Recording moved to menu.
-	%- find node that has specific criteria -> removed unexpressive labels with no data to reduced text to read, to presenting more details and reference to "linking source" that will follow.
+	% - remove "error" color from normal workflow to decrease cognitive load on the used. Red is associated with errors, warnings and dangers e.g. in traffic especially with high contrast (green). The user should immediately be able to identify the change, but the changed node does not require the full attention over, we therefore moved from using red with high contrast that may even be probelematic for color blind users to an equally destinguishable but less demanding color sheme using blue and orange with less contrast. For this complementary colors to a base color were used.
 	% - detect difference between one step and the next (what changed?) -> node (already there) and edge highlighting
+	% - usage frequency of input elements -> Reset, Download and Pause/Resume Recording moved to menu. Download currently hiddedn because a change in Chrome broke the used library Simg.
+	% reload was added as a button, because it was already part of the usuall workflow by pressing CTRL F5. The ususal workflow would be to create a breakpoint for dependencyCreated or nodeCreated, and then reloading the applicaiton to actually hit the breakpoint.
+	%- find node that has specific criteria -> removed unexpressive labels with no data to reduced text to read, to presenting more details and reference to "linking source" that will follow. It also prevents the UI to be clattered by new details that may be added in the future that are not present for every node - an example of this that already existed would be "method".
 	
 	\subsection{Additional changes to the User-Interface}
 	% - starting on a new application or different part of the application -> auto reload after instrumented files have changed
-	% - just examine the result -> button to hide query tools
-	% - searching for problems -> detect odd behavior, history queries (already present, mention that this is the reason for not relocating)
-	% - checking specific node (e.g. ater trying to fix a problem) -> find node or dependents (already there)
+	% - just examine the result -> button to hide query tools - especially usefull when working with smaller screens or bigger graphs.
+	% - searching for problems, examining the dependency graph history in detail is implemented in the default workflow and used in many scenarios also directly tied to the dependency graph -> detect odd behavior, jump to desired point of interest;  mention that this is the reason for not relocating
+	% - checking specific node is mostly useful for big dependency graphs and therefore not for small ones. Therefore it could be hidden in a closable panel or only temporarily opened if the user clicks a button or presses CTRL F like in many IDEs. It was not moved, because on normal resolutions the space that it occupies would currently be empty. If another feature is added in the future that is more embedded in the default workflow it should replace the search feature in the UI  -> find node or dependents (already there)
 	
 \section{Connecting abstract graph with JavaScript code}
 	% goal: to porvide nodes without a name with additonal details that allows to put them into context. Connect the abstract representation with the code to allow developer to see the code responsible for an issue they detected - was possible before with line information. The developer should be able to easily switch between source code inspection and dependency graph inspection, because not all issues can be found in either of them when used alone. E.g. there is an issue in a lambda function - the developer can not find this issue directly in the dependency graph, he can only see the result in node values that do not match the values expected with the original intention of the code. To fix the issue the dev has to switch to the code anyway so he already has to use both representations in tandem. 
@@ -113,15 +114,15 @@
 % value changes often - generates a huge amount of steps
 % reasons: timer, mouse, network
 % steps can become unexpressive and hard to navigate
-% most times the setup is the most important so solved by "pause"
+% most times the setup is the most important so solved by "pause" - the exception would be additonal observables created later in the execution like e.g. an observable created by a specific event that happens after a set period of time.
 % hard to debug interactions that take place after the setup or during a "busy" phase
 	
 	\subsection{Difficulties and previous approach}
 	% previous CRI could not handle well.
 	% if the changes originate from anything other than user input - pausing recording is mandatory, 
 	%  but continuing leaves gaps in change history that has no visual feedback to the user.
-	% lag, getting stuck, crashing chrome due to increasing effort to handle coordination of async actions (async buildup)
-	% basic node exclusion was possible before, but very cumbersome. Should be changed in a way described later
+	% lag, getting stuck, crashing chrome due to increasing effort to handle coordination of async actions (async buildup) like message passing and storage access (read/write)
+	% basic node exclusion was possible before, but very cumbersome and would exclude the node completely sometimes resuling in errors due to the node missing for dependent actions. A future implementation should only exclude value updates after the first. Should be changed in a way described in detail later.
 	
 	\subsection{Reworking the graph history}
 	% what it is, what it contains
