@@ -1,20 +1,17 @@
 \chapter{Evaluation}
 In this chapter we evaluate the contributions of this thesis and the general state of the project. On that account we first examine the changes to the UI, the Source Code Previews and performance improvements. We then verify the most important features of CRI by checking a set of specifications for each test application and discuss the result.
 
+All performance measurements and tests in this chapter were performed with Chrome Version 64.0.3282.140 (Offizieller Build) (64-Bit), WebStorm 2017 3.4 and Windows 10 Home 64 bit version 1709 build 16299.192. The used device has 8GB RAM, Intel i7 7500 2.7GHz 4CPUs Processor with integrated Intel(R) HD Graphics 620. Each test application was hosted on the integrated Web server of WebStorm on the local machine. No other applications were running, but background processes and services as well as other unpredictable factors have to be taken into account that may have influenced the results of the performance measurements.
+
 \section{Evaluation of Improvements}
+This section examines the improvements introduced by this thesis and their implementations. 
+
 	\subsection{Changes to the User Interface}
 	Most of the changes to the User Interface are, by their nature, hard to evaluate in regards to their usability improvement. The experienced usability of a User Interface can be highly subjective \cite, the easiest way to achieve consistent evaluation results is therefore by collecting and analyzing empirical data, for example through Click stream analysis \cite{Clickstream}. Since CRI is not yet used in active production systems by a large user base, a User Study would be the usual approach. Unfortunately this is outside the scope of this thesis. However, some changes can be verified as improvements. For example, the text per node in the Dependency Graph was reduced without loosing any information can be seen as a general improvement of usability, because the change did not affect any other part of the UI and removed obsolete text. Another change that can be objectively categorized as an improvement is that parts of the UI which are not necessary to examine the Dependency Graph can now be hidden. Although it has to be noted that this change added a new UI element - the \emph{hide} button - which could potentially introduces new usability issues. Highlighting of the currently updated edge in addition to nodes also provides additional information for the user, to help track down differences between steps that were not as easily detectable before, without affecting other aspects of the UI.
 
 	\subsection{Inspecting Source Code Tooltips}
-	% - since on-demand feature the performance impact is neglegent, additional storage of js files in RAM in non-instrumented form (to show code) is also neglegent due to RAM reduce of performance improvements.
-	% - a robustness test is performed through checking the specification against all test apps
-	% - percentage of nodes per test app that have them (details appendix):
-	% Total Nodes: 581
-	% Sum Source Infos: 436 = 75% of total nodes
-	% Sum Named: 197 = 33.9% of total nodes
-	% Additional 35.1% of total nodes have details attached that give context.
-	% - most nodes that do not have source info are easy to identify because they are nodes created for fixed values like  for test app RxJs/canvas painting - node with id 9 is a ScalarObservable with value "#000000".
-	% - short reference to specs in later section
+	The Source Code Tooltips that connect nodes in the Dependency Graph with the JS code they originate from are created whenever the user hovers over a node and presses the CTRL key. Due to their on-demand nature, their performance impact on the time critical computations of CRI like the recording process can be neglected. The original JS files are stored in a variable in a Content script of CRI that are queried for the lines corresponding to a node if requested. Storing a copy of the whole JS file in addition to the instrumented version however should not exceed the Memory (RAM) of any modern computer that can run Google Chrome. We will examine the robustness of this feature in regards to its accuracy in a later section as part of the test application evaluation. To investigate and verify the usefulness of Source Code Tooltips we examined each test application and calculated the percentage of nodes that gain additional context through this feature. As a \emph{named} node already has some form of context that helps the user to identify it and its dependents, we counted \emph{named} nodes separately. For the exact circumstances and inputs used for each test application see section \ref{sec:EvalTests}. Over all test applications there were 581 nodes. Of these, 436 nodes had a Source Code Tooltip which equals to approximately 75\% of all nodes. Only 197, approximately 33.9\% of all nodes are \emph{named}. This means that the introduction of Source Code Tooltips provided additional means to identify a node to the user for 35.1\% of the total number of nodes. The remaining 145 nodes that can not yet be linked to specific positions in the source code in part consist of nodes that can be easily interpreted by examining the nodes that depend on them. For example in the test application "RXJS /Canvas Painting" %TODO test ref
+	the node with Id 6 is a FromEventObservable created by "Rx.Observable.fromEvent(colorchar,"click")" and is not yet detected by the Jalangi analysis.
 
 	\subsection{Scrutinizing performance with rapidly updated Observables}
 	\label{sec:PerformanceEvaluation}
@@ -29,29 +26,20 @@ In this chapter we evaluate the contributions of this thesis and the general sta
 	})
 	.share();	
 	\end{lstlisting}
+
+	To exclude the initial setup of CRI from the gathered performance data we create a Reactive Breakpoint for the \emph{nodeCreated} event of node one ("nodeCreated[1]"), ran the application until it paused at the Reactive Breakpoint, started the performance recording and then continued execution. To record a CPU profile that includes the time spent per function we used the Chrome-JavaScript Profiler. To inspect the memory usage we used the Memory tab of Chrome DevTools. The duration of the recordings vary from the actual time the execution of the test application took and its recording took, because they were started and ended manually. 
 	
-	All performance measurements in this section were performed with Chrome Version 64.0.3282.140 (Offizieller Build) (64-Bit), WebStorm 2017 3.4 and Windows 10 Home 64 bit version 1709 build 16299.192. The used device has 8GB RAM, Intel i7 7500 2.7GHz 4CPUs Processor with integrated Intel(R) HD Graphics 620. The test application was hosted on the integrated Web server of WebStorm on the local machine. No other applications were running, but background processes and services as well as other unpredictable factors have to be taken into account that may have influenced the results.
+	\textbf{CPU Profile}
+	% pic of CPU profile CRI2 besides CRI3
 	
-	% Memory and CPU for PerformanceTest with approx. equal conditions:
-	% CRI3 -> stream approach: RAM is farily constant and not dependent on the number of steps in the history, although the impact is tiny since modern PCs have enough. -> Would already be achieved by paging.
+	The label "(program)" in the recording entitles native code execution of Chrome. The measured execution time for this label is far less accurate than any other measurement, because the individual composition is unclear and can solely increase by stopping the recording at a later point in time due to the limitations of the recording tool.
 	
-	% Comparison CRI2 CRI3 on PerformanceTest
-	% - Tests for CPU and RAM, tested on WebStorm integrated Web server by creating a breakpoint at nodeCreated[1], starting the recording with Chrome-JavaScript Profiler and Memory DevTool, and then resuming.
-	% - results are approximations due to unknown influences by the OS and by manually controlling the start and end.
-	% - memory test for CRI2 had to be restarted several times before it would complete the execution without crashing. Few forced UI updates by dragging the Dependency Graph around a few centimeters.
+	For CRI2 the execution of PerformanceTest took approximately 154.0 seconds with an overall recording interval of 187.9 seconds. To differentiate between execution time and recording time we selected an area with significantly higher CPU load that should correspond reasonably well to the actual execution time. The largest percentage of \emph{Self Time} (the time spent executing code directly in the function) spent in a single function directly correspond to excessive UI updates - which happen at least once per created step since the slider is updated and triggers the rendering of a new Dependency Graph for that step. \emph{getBB} (getBoundingBox) calculates the size of nodes in the graph, whereas  \emph{buildFragment}'s impact stems form the \emph{domManip} function of jQuery.
+	For CRI3 the execution took approximately 5.5 seconds with an overall recording interval of 23.2 seconds. It can be observed that still a sizable amount of time is spent inside UI related computations especially \emph{getBB}. The most time of execution not related to Chromes native code is spent inside the \emph{ja} function of jQuery that can not easily be tracked down to CRI code. Overall the most time is spent inside Chromes native code, but as described earlier this can have numerous reasons. Due to the nature of changes from CRI2 to CRI3 we can however account at least part of that execution time to storage operations using the Chrome Storage API. 
+	As CRI3 was approximately 28 times faster than CRI2, the performance improvements regarding rapid updates implemented by this thesis were effective. It is however worth noting, that CRI2 can barely handle this test without crashing - the UI becomes temporarily unresponsive. This probably increases the performance differences between the two versions of CRI more than it would be for a test both CRI versions can handle well (without the UI becoming temporarily unresponsive). We chose to keep the test as-is to underline the impact of \emph{async} buildup and load exceeding the extension's capacity. 
+	As of now CRI3 also has a fixed capacity of updates it can handle without crashing, but it is much higher than CRI2's mostly due to the throttling of rendering operations. Basic tools to detect and react to an application exceeding that capacity are already in place for CRI3 and could be easily extended to automatically detect if rendering computations accumulate beyond its limit and increase or decrease the throttle interval for UI updates on demand. Since all steps are recorded even if the rendering can not keep up, increasing the throttle time to keep the extension from crashing is a viable approach. The user can then pause the recording anytime and examine the steps in details whereas a crash will render CRI useless to the user.
 	
-	%CPU:: "(program)" = native code of Chrome, Images are not very expressive since they cover the whole recording time and not only the execution time - they can only be used as vague indicators. The percentage of execution time to recording time can give a glimpse on the variance of the percentages in the images - however "(program") can not be judged by that - it is not visible if the "(program)" time was spent during execution or after/before due to the limitations of the recording tool.
-	% CRI2 - CPU:
-	% approx execution time by selecting the heavy loaded area in the "Chart" view: end 170000ms - start 16000ms =  154s
-	% execution time percentage of recording: ~154000ms / 187860ms  * 100 ~= 82.0%
-	% The biggest percentage directly correspond to UI updates - which happen at least once per created step since the slider is updated and renders the new Dependency Graph. getBB (getBoundingBox) calculates the size of the nodes in the graph, buildFragment's impact stems form domManip from jquery
-	
-	% CRI3 - CPU:
-	% 13000ms - 7500ms = 5.5s, 
-	% execution time percentage of recording: ~5500 / 23188ms * 100 ~= 23.7 %
-	% it can be seen that still a sizeable part of cpu time is spent in UI related computation getBB (getBoundingBox). "ja" is a part of jquery and is hard to track down, but approx. half stems from dispatchOnMessage
-	% the (program) part is the biggest chunk, but not visible what parts are due to running the profiling, running the test app, handling mediation etc.
-	
+	% - memory test for CRI2 had to be restarted several times before it would complete the execution without crashing . Few forced UI updates by dragging the Dependency Graph around a few centimeters.
 	%RAM::
 	% CRI2 - RAM: Total RAM approx 52.7MB
 	% CRI3 -RAM: Total RAM approx 14.6MB
@@ -60,8 +48,8 @@ In this chapter we evaluate the contributions of this thesis and the general sta
 	% CRI2: ~16.1MB -> increases rapidly over time
 	% CRI3: ~12.6MB -> increases very little over time
 	% for 250ms both version have a fairly similar Memory consumption, although CRI2 has a noticable delay before the Dependency Graph is shown (still <5s) while CRI3 has no noticeable delay.
-	
-	Note that CRI2 can barely handle this test without crashing. This probably increases the performance differences between the two versions of CRI more than it would be for a test both CRI versions can handle well (without the UI becoming temporarily unresponsive). We chose to keep the test as-is to underline the impact of \emph{async} buildup and the load exceeding the extension's capacity. As of now CRI3 also has a fixed capacity of updates it can handle without crashing, but it is much higher than CRI2's and basic tools to detect and react to an application exceeding that capacity are already in place. CRI3 could therefore easily be extended to automatically detect if rendering computations accumulate beyond its limit and increase or decrease the throttle interval for UI updates on demand. Since all steps are recorded even if the rendering can not keep up, increasing the throttle time to keep the extension from crashing is a viable approach. The user can then pause the recording anytime and examine the steps in details whereas a crash will render CRI useless to the user.
+	Since CRI3's History implements a stream like approach through paging, the memory usage once the size of a single >page< is exceeded is fairly constant and does not increase with the number of steps. As CRI2's History does not support paging the memory usage increases approximately proportional to the number of steps in the History. However since modern computers have usually more than 1GB of Memory, even the higher Memory consumption of CRI2 does not have any influence on the performance detectable by the user.
+
 	
 	\textbf{Comparison to RxFiddle}
 	We also examined the performance of RxFiddle with the used test application and compared it to CRI3 to qualify the discussion in section \ref{sec:RxFiddle} on its performance with rapidly updated Observables.
@@ -70,6 +58,7 @@ In this chapter we evaluate the contributions of this thesis and the general sta
 		% CRI is not testable in Firefox 
 	
 \section{Reviewing the Test Applications}
+\label{sec:EvalTests}
 To establish the current state of the most important features of CRI we compiled a set of specifications that we validated for each of the test applications. They were also designed to provide a baseline for the robustness of the current CRI implementation. Note that we also included specifications targeting features not introduced by this thesis as a means of manual regression testing for the most important aspects of CRI. Since most of these specifications can not be tested for each node, step and/or case in reasonable time, we specified the exact tests that were performed in order to approximate the results. These test probes should provide a reasonably precise evaluation and ,in contrast to some of the specifications, can easily be reproduced to verify our results.
 
 \textbf{Specifications}

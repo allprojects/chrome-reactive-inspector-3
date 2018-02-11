@@ -90,6 +90,8 @@
 	- add functional title for tipsy tooltips
 	- Connection of abstract graph to code is not always helpful, because it takes/tuggs the user back to sequential/non-reactive thinking, but helps to understand nodes without other details or inexpressive names. Without this additional info the user is encouraged to split chained function calls and give each step a named variable, which not only is cumbersome but also may lead to diverting the focus from variables that should really have a name - also falls back to modifying the original source code to enable debugging like in do-debugging.
 	
+	% invokeFun intercepted for chained functions
+	
 	- the problem is to have the filename in the write function, because all instrumented files use the same jalangi sandbox.
 	- the filenames in contrast to the original jalangi are not implemented in the minified non nodejs version taken from the demo page.
 	- the only solution with minimal changes to the used jalangi-framework.js is to locally overwrite the W function in every instrumented file. Otherwise the whole instrumentation process would have to be customized.
