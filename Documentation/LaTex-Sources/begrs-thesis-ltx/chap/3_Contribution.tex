@@ -29,7 +29,7 @@
 	
 	
 	\subsection{"Possible Solutions"}
-	% Navigating to Source via Chrome debug api or open in another IDE
+	% Navigating to source code via Chrome debug api or open in another IDE
 		% It is easily possible to navigate to a line number in a file, if the actual file url (can difffer due to many factors) is known. For the reasons explained above, navigating to the instrumented code is not desirable. A not instrumentated version seems to exist in chromes code storage as dynamic script, but it does not correspond to the script that is used at runtime and any breakpoint added by the user would be ignored since the code is never actually run - this may confuse the user.
 		% Pro: 
 			% the user can profit from Chromes syntax highlighting and search which supports regex.
@@ -61,8 +61,7 @@
 			% timing is the killing factor here. The replay on the mirror has to match exactly in regards to timing, if not the values of observables and results of calculations based on the system time will turn out differently. This issue might be solveable by replacing some APIs with custom copies that slows down the system enough to enable CRI to mirror the steps in the same time frame. E.g. a mousemove event fires multiple times in fixed intervals if the user moves the mouse - the mirrors observables that use mousemove would have to contain the exact same number of values at any given time to remove synchronicity issues for arbitrary applications.
 			% access to Chrome API would have to be intercepted and directed to a fake API - otherwise calls with sideeffects will execute twice. Requests to e.g. WebAPIs might trigger abuse detection because they have to be executed in a very short period of time. This could be solved by intercepting everything that targets an outside element and just fetching the result instead of actually executing them twice, but this will change timing of calls if they are not forced to be synchronized between the mirror and the real application.
 			% twice the resources needed
-			
-	% Source Previews
+	% Source Code Tooltips
 		% - use tooltip that opens when CTRL is hold down on node that displays a snippet of the original code that contains the code corresponding to a node with surrounding lines of code. Or use CTRL click to open the snippet.
 		% details in "Implemented Solution"
 		%TODO: make sure there are not duplicates in Implemented Solution.
@@ -76,7 +75,8 @@
 			% full code is not availabe for the user
 			% the displayed code can not be examined with features like search - but they are short enough to be examined in a few seconds.
 			
-	\subsection{Implemented Solution - Source Information Tooltips}
+	\subsection{Implemented Solution - Source Code Tooltips}
+	% display the origin  JS code of a node 
 	% change tooltip to show the code if ctrl pressed while mouse enter or when already on element to speed up inspection of multiple nodes one after another
 		% limited capabilities of used jalangi -> developed for a special demo, not in general (mentioned in state of the art)
 		% jalangi extension via shallow copy
