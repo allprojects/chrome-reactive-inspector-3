@@ -30,7 +30,13 @@ This section examines the improvements introduced by this thesis and their imple
 	To exclude the initial setup of CRI from the gathered performance data we create a Reactive Breakpoint for the \emph{nodeCreated} event of node one ("nodeCreated[1]"), ran the application until it paused at the Reactive Breakpoint, started the performance recording and then continued execution. To record a CPU profile that includes the time spent per function we used the Chrome-JavaScript Profiler. To inspect the memory usage we used the Memory tab of Chrome DevTools. The duration of the recordings vary from the actual time the execution of the test application took and its recording took, because they were started and ended manually. 
 	
 	\textbf{CPU Profile}
-	% pic of CPU profile CRI2 besides CRI3
+	\begin{figure}[!h]
+	\centering
+	\subfloat[Chrome Reactive Inspector version 2.0]{\includegraphics[width=0.4\textwidth]{gfx/CPU_CRI2.png}\label{fig:CPUCRI2}}
+	\hfill
+	\subfloat[Chrome Reactive Inspector version 3.0]{\includegraphics[width=0.4\textwidth]{gfx/CPU_CRI3.png}\label{fig:CPUCRI3}}
+	\caption{CPU Profiles recorded by Google Chrome JavaScript Profiler.}
+	\end{figure}
 	
 	The label "(program)" in the recording entitles native code execution of Chrome. The measured execution time for this label is far less accurate than any other measurement, because the individual composition is unclear and can solely increase by stopping the recording at a later point in time due to the limitations of the recording tool.
 	
@@ -42,7 +48,15 @@ This section examines the improvements introduced by this thesis and their imple
 	\textbf{Memory Profiling}
 	To reveal the impact of a large History on Memory consumption we executed the PerformanceTest with a limit of 250ms for both versions of CRI in addition to the execution we used for CPU profiling with a limit of five seconds.
 	
-	% 4 pics
+	\begin{figure}[!h]
+		\centering
+		\subfloat[CRI2 - 5s duration]{\includegraphics[width=0.4\textwidth]{gfx/RAM_CRI2.png}\label{fig:RAM2}}
+		\hfill
+		\subfloat[CRI3 - 5s duration]{\includegraphics[width=0.4\textwidth]{gfx/RAM_CRI3.png}\label{fig:RAM3}}
+		\subfloat[CRI2 - 250ms duration]{\includegraphics[width=0.4\textwidth]{gfx/RAM_CRI2_250ms.png}\label{fig:RAM2Short}}
+		\subfloat[CRI3 - 250ms duration]{\includegraphics[width=0.4\textwidth]{gfx/RAM_CRI2_250ms.png}\label{fig:RAM3Short}}
+		\caption{Memory Profiles recorded by Google Chrome Memory DevTool}
+	\end{figure}
 	
 	For the test execution with the full duration (figure -ref-) CRI2 used 52.7MB in total while CRI3 used only 14.6MB. The most notable difference in a specific category is the size of the Memory used by JS arrays which includes the stored Dependency Graph. In the test with reduced execution time (250ms), CRI2 used approximately 16.1MB of Memory while CRI3 used 12.6MB of Memory. Both versions of CRI have a similar Memory consumption for the test with reduced execution time, although CRI2 shows the Dependency Graph with a noticeable delay (still less than 5s). Since CRI3's History implements a stream like approach through paging, the memory usage once the size of a single \emph{page} is exceeded is fairly constant and does not increase with the number of steps. As CRI2's History does not support paging the memory usage increases approximately proportional to the number of steps in the History. However since modern computers have usually more than 1GB of Memory, even the higher Memory consumption of CRI2 does not have any influence detectable by the user. We made no distinction of CRI3 with Delta Encoding and Paging; and CRI3 just with Paging, because this examination shows that the Memory usage is far to low to  imposes any limitation on the overall performance of CRI, even for CRI2.
 	

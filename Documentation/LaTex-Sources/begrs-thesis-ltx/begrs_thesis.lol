@@ -11,7 +11,13 @@
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
+\contentsline {lstlisting}{\numberline {3.1}Example of RxJS code.}{15}{lstlisting.3.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {lstlisting}{\numberline {3.2}Example of RxJS code.}{16}{lstlisting.3.2}
+\defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\contentsline {lstlisting}{\numberline {4.1}Example of RxJS code.}{20}{lstlisting.4.1}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
