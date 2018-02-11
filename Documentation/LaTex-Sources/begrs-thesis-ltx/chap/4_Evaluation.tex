@@ -39,23 +39,18 @@ This section examines the improvements introduced by this thesis and their imple
 	As CRI3 was approximately 28 times faster than CRI2, the performance improvements regarding rapid updates implemented by this thesis were effective. It is however worth noting, that CRI2 can barely handle this test without crashing - the UI becomes temporarily unresponsive. This probably increases the performance differences between the two versions of CRI more than it would be for a test both CRI versions can handle well (without the UI becoming temporarily unresponsive). We chose to keep the test as-is to underline the impact of \emph{async} buildup and load exceeding the extension's capacity. 
 	As of now CRI3 also has a fixed capacity of updates it can handle without crashing, but it is much higher than CRI2's mostly due to the throttling of rendering operations. Basic tools to detect and react to an application exceeding that capacity are already in place for CRI3 and could be easily extended to automatically detect if rendering computations accumulate beyond its limit and increase or decrease the throttle interval for UI updates on demand. Since all steps are recorded even if the rendering can not keep up, increasing the throttle time to keep the extension from crashing is a viable approach. The user can then pause the recording anytime and examine the steps in details whereas a crash will render CRI useless to the user.
 	
-	% - memory test for CRI2 had to be restarted several times before it would complete the execution without crashing . Few forced UI updates by dragging the Dependency Graph around a few centimeters.
-	%RAM::
-	% CRI2 - RAM: Total RAM approx 52.7MB
-	% CRI3 -RAM: Total RAM approx 14.6MB
-	% most notable difference in a category is the size of JS array which includes the most part of the stored Dependency Graph
-	% Comparison to same Test app with pause event after 250ms instead of 5s:
-	% CRI2: ~16.1MB -> increases rapidly over time
-	% CRI3: ~12.6MB -> increases very little over time
-	% for 250ms both version have a fairly similar Memory consumption, although CRI2 has a noticable delay before the Dependency Graph is shown (still <5s) while CRI3 has no noticeable delay.
-	Since CRI3's History implements a stream like approach through paging, the memory usage once the size of a single >page< is exceeded is fairly constant and does not increase with the number of steps. As CRI2's History does not support paging the memory usage increases approximately proportional to the number of steps in the History. However since modern computers have usually more than 1GB of Memory, even the higher Memory consumption of CRI2 does not have any influence on the performance detectable by the user.
-
+	\textbf{Memory Profiling}
+	To reveal the impact of a large History on Memory consumption we executed the PerformanceTest with a limit of 250ms for both versions of CRI in addition to the execution we used for CPU profiling with a limit of five seconds.
+	
+	% 4 pics
+	
+	For the test execution with the full duration (figure -ref-) CRI2 used 52.7MB in total while CRI3 used only 14.6MB. The most notable difference in a specific category is the size of the Memory used by JS arrays which includes the stored Dependency Graph. In the test with reduced execution time (250ms), CRI2 used approximately 16.1MB of Memory while CRI3 used 12.6MB of Memory. Both versions of CRI have a similar Memory consumption for the test with reduced execution time, although CRI2 shows the Dependency Graph with a noticeable delay (still less than 5s). Since CRI3's History implements a stream like approach through paging, the memory usage once the size of a single \emph{page} is exceeded is fairly constant and does not increase with the number of steps. As CRI2's History does not support paging the memory usage increases approximately proportional to the number of steps in the History. However since modern computers have usually more than 1GB of Memory, even the higher Memory consumption of CRI2 does not have any influence detectable by the user. We made no distinction of CRI3 with Delta Encoding and Paging; and CRI3 just with Paging, because this examination shows that the Memory usage is far to low to  imposes any limitation on the overall performance of CRI, even for CRI2.
+	
+	As there were no significant changes to the recording process of RxJS and BaconJS in CRI, we did not execute separate performance measurements for CRI2 and CRI3 using a test application with BaconJS.
 	
 	\textbf{Comparison to RxFiddle}
 	We also examined the performance of RxFiddle with the used test application and compared it to CRI3 to qualify the discussion in section \ref{sec:RxFiddle} on its performance with rapidly updated Observables.
-	% Comparison for test case PerformanceTest: CRI vs RxFiddle
-		% although RxFiddle does not have performance issues (lags > 1 s when hovering over a node) for ~ 1000 updates on Chrome. It does block Firefox (57.0.4 (64-bit)) for a few seconds. Once the UI is build it is noticeable slower than for applications with less value changes but delays < 1s. The CRI performance for this test app is slightly faster, but due to it being an extension instead of a webpage the performance difference may not be due to the tool implementations. CRI generates ~ 2700 steps, RxFiddle generates ~ 1000 values for each operator/observable in the chain of "intervalObservable".
-		% CRI is not testable in Firefox 
+	Although RxFiddle does not have performance issues (exceeding a delay of one second when hovering over a node before the tooltip is shown) for approximately one thousand updates on Chrome, if executed with Firefox (57.0.4 (64-bit)) the browser becomes unresponsive for a few seconds. The overall Memory consumption of RxFiddle during the test was 52.5MB and the execution took approximately 5.5 seconds - similar to CRI3. As mentioned earlier the Memory consumption is not a limiting factor for the overall performance. CRI generates approximately 2700 steps during the test execution while RxFiddle generates approximately one thousand values for each Operator in the chain of \emph{intervalObservable}. Examining these results any further does not provide additional insight since the tools are bases on completely different technologies. RxFiddle uses TypeScript and runs as a Web page while CRI does not use TypeScript, any form of bundling or minifying and runs as a Chrome extension.
 	
 \section{Reviewing the Test Applications}
 \label{sec:EvalTests}
