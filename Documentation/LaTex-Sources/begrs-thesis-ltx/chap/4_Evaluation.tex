@@ -68,7 +68,7 @@ This section examines the improvements introduced by this thesis and their imple
 	
 \section{Reviewing the Test Applications}
 \label{sec:EvalTests}
-To establish the current state of the most important features of CRI we compiled a set of specifications that we validated for each of the test applications. They were also designed to provide a baseline for the robustness of the current CRI implementation. Note that we also included specifications targeting features not introduced by this thesis as a means of manual regression testing for the most important aspects of CRI. Since most of these specifications can not be tested for each node, step and/or case in reasonable time, we specified the exact tests that were performed in order to approximate the results. These test probes should provide a reasonably precise evaluation and ,in contrast to some of the specifications, can easily be reproduced to verify our results.
+To establish the current state of the most important features of CRI we compiled a set of specifications that we validated for each of the test applications. They were also designed to provide a baseline for the robustness of the current CRI implementation. Note that we also included specifications targeting features not introduced by this thesis as a means of manual regression testing for the most important aspects of CRI. Since most of these specifications can not be tested for each node, step and/or case in reasonable time, we specified the exact tests that were performed in order to approximate the results. These test probes should provide a reasonably precise evaluation and, in contrast to some of the specifications, can easily be reproduced to verify our results.
 
 \textbf{Specifications}
 \begin{itemize}
@@ -80,27 +80,21 @@ To establish the current state of the most important features of CRI we compiled
 	\item The node or edge that was updated in a step is highlighted. (Test: Check this behavior for the first ten steps in the history.)
 	\item The history queries can be used to search for a specific event in the history. (Test: Queries for \emph{evaluationYielded} and \emph{nodeUpdated} find the corresponding steps for the first named node.)
 	\item The graph can be searched, the matching node(s) is/are highlighted and if the search is reseted the original coloring is restored. (Test: Search for the dependencies and dependents of the first named node and then reset the search.)
-	\item Reactive breakpoints can be used to pause the debugger when a specific event occurs. (Test: A breakpoint set for the first node created will break at step one. A breakpoint for the first node updated will break before the value is updated in the original observable. Note: The value will be already updated in the CRI UI.)
+	\item Reactive breakpoints can be used to pause the debugger when a specific event occurs. (Test: \emph{a)} A breakpoint set for the first node created will break at step one. \emph{b)} A breakpoint for the first node updated will break before the value is updated in the original observable. Note: The value will be already updated in the CRI UI.)
 \end{itemize}
 
-	Results in abstract - Detailed result tables in appendix.
-	% - short mention of excluded tests:
-		% RxJS/all-operators - artifical examples by Pradeep Baradur used to verify operators but not a suitable test application.
-		% RxJS/spotify-search - great test application in general, but the used API does not work without a token.
-	% findings:
-	% - statistical results: For this statistic spec 9 was interpreted as two different results to have a simple result with Yes and No's - Ambiguity was counted as No because it means not fully supported yet. N.A. was counted as Yes because it does no additional work to be done by a dev
-		% verified 388/420 working
-		% specs 2,3,4,5,6,9.2 are without errors in any application
-	% Exceptions in detail:
-	% - N.A. mostly not applicable because there were no named nodes
-	% - different classes of errors or details of a single error AND if they were present in CRI2: 
-		% - Ambiguity: CRI can not handle nodes with the same name. e.g. a named node created in a for loop. CRI will use the first or last node depending on the context and is not equipped to handle ambiguous names consitently yet. Dependencies can not be found correctly, history queries will only match one node. # verified CRI2 with split file test
-		% - spec 9 : N*,Y - the nodes are added out of order in RxJS if the first node does not stem from jalangi analysis. #verified CRI2 with son_father_wallet
-		% - Dependencies or Dependents not correctly highlighted: seems to be related to dynamically created nodes, but not always. Is a bug. # different behavior with CRI2 crop example - new bug, equal behavior with stopwatch example.
-		% - alphabetinvasion: observables are not correctly recorded. The test uses closures and custom operators (although custom operators do work in RxJS\animationtest). Example observable that is missing!!! # verified with CRI2
-		% - BaconJS/blog-url the named variable is not correctly detected, futhermore the bacon recording does not detect the correct observables. # verified with CRI2
-	% example mario: still to fast to keep up - will crash if not paused
-	% -> in case of mario - hard to detect the real reason due to overload of Chrome itself - the async requests on communication api seems to build up because they are to many for Chrome to keep up.
-	% --> crashes CRI Chrome extension if not paused
-	
-	%  They should be the target of further development.
+We excluded some of the test applications that were used in the prior works targeting CRI from this evaluation, because they no longer work due to outside influences or did not provide any additional value. The results of this evaluation can be seen in figure \ref{}. For the following statistics we interpreted \emph{ambiguity} as the check failed, because CRI can not handle ambiguity between nodes with the same name yet. \emph{N.A.} means that the check was not applicable e.g. because there were no \emph{Named} nodes in the Dependency Graph and the check is dependent on \emph{Named} nodes. We therefore treated \emph{N.A.} as a success. Due to specification number 9 having two parts that can fail or succeed individually we treated their result separately in the following statistic. Overall 388 of 420 single checks (10 per test application) were successful. The specifications number 2 up to number 6 in addition to number 9 \emph{b)} verified for all test applications. The 32 checks that failed fall into four categories. All checks labeled with \emph{ambiguity} are the result of CRI not being able to handle multiple nodes with the same name. This can happen for example if a named variable is created inside a loop. The History Query and Search feature will not be able to correctly distinct between the ambiguous nodes and any operation that requires a name will only find the node added last to the Dependency Graph and show the result solely for that node. Specification 9 \emph{a)} failed for all RxJS applications where the node with Id 1 is not added by the Jalangi analysis. It seems the RxJS interception records nodes out of order in certain circumstances. We verified that this behavior already existed in the previous versions of CRI2 by executing the same check with RxJS/son_father_wallet application. The failed checks for specification number 8 denote fails to identify every Dependent or Dependency. This seems to correspond to Observables being dynamically created but it will not fail for every dynamically created Observable. In case of the check for the RxJS \emph{Crop} application, this behavior is not consistent with previous versions of CRI and stems from changes in CRI3, however the issue in the RxJS \emph{Stopwatch} application was already present in CRI2.
+The failed check for specification number 1 in the BaconJS \emph{Blog-url} application is the result of BaconJS interception not being able to detect the used Observables correctly. The \emph{Named} Observable is not detected and in addition each change to the used Observable in the JS code creates a new node in the Dependency Graph. This has to be counted as a complete breakdown of the recording for this test application and is consistent with previous versions of CRI. The remaining failed check for specification number 1 in the RxJS \emph{Alphabetinvasion} application also denotes a full breakdown of the recording. It seems the current implementation is not able to detect the Observables correctly or, in most cases, at all. This behavior is also consistent with previous versions of CRI and is the result of the patterns used in this application. The Observables that were not recorded correctly are never assigned and no Reactive Operator is used on them except of \emph{subscribe} or \emph{unsubscribe}. An example of this can be seen in listing \ref{lst:AlphabetInvasionExtract}.
+
+\begin{lstlisting}[language=JavaScript, caption={Extract of RxJS AlphabetInvasion test application.},label={lst:AlphabetInvasionExtract}]
+Rx.Observable.timer(750).subscribe(function () {
+self.playfield.removeChild(enemy);
+});	
+\end{lstlisting}
+
+For the test application RxJS \emph{Mario} we added a Reactive Breakpoint on the last dependency that is created, because the excessive use of timers and rapidly updating Observables still causes CRI to crash after a few seconds. This is probably the result of \emph{async} buildup due to the large number of calls to the communication API of Chrome, but it is hard to provide a sufficient proof, because Chrome itself will stop responding as well.
+%TODO explain async buildup somewher
+
+\subsection{Summary}
+We examined the set of specifications for each of the test applications and found several issues. The problems with ambiguous variable names and out-of-order recording of nodes, although clearly issues that should be resolved at some point, do not break the overall usefulness of CRI, because the Dependency Graph can still be examined and other features not directly affected work as well. In contrast, the issues with recording in the test applications RxJS \emph{AlphabetInvasion} and BaconJS \emph{blog-url} cause the extension to display an incomplete Dependency Graph which greatly reduces the usefulness of CRI for these applications.
+All issues found should be the target of further development to increase the robustness of CRI, but issues in recording Observables should clearly be prioritized.
