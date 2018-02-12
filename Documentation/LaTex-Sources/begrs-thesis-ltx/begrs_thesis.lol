@@ -19,6 +19,8 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {lstlisting}{\numberline {4.1}Example of RxJS code.}{20}{lstlisting.4.1}
 \defcounter {refsection}{0}\relax 
+\contentsline {lstlisting}{\numberline {4.2}Extract of RxJS AlphabetInvasion test application.}{26}{lstlisting.4.2}
+\defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }

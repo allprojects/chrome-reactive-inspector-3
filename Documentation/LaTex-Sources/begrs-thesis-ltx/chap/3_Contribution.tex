@@ -1,4 +1,6 @@
 \chapter{Contribution}
+In this chapter ..
+
 \section{Advancing the User Interface}
 	% present Issue and Solution for each of these:
 
@@ -87,6 +89,7 @@
 	- nodes have faded border if they do not have source information. names nodes always have source information
 	- bind special keypress event for hovered node to canvas
 	- remove handlers when leaving
+		% The class TooltipManager handles the creation and displaying of tooltips for all nodes in the Dependency Graph. It adds the UI events used to switch out the tooltips and requests the code needed to construct the Source Code Tooltips from the instrumentation script if the tooltip was not opened before in this step for this node.
 	- add functional title for tipsy tooltips
 	- Connection of abstract graph to code is not always helpful, because it takes/tuggs the user back to sequential/non-reactive thinking, but helps to understand nodes without other details or inexpressive names. Without this additional info the user is encouraged to split chained function calls and give each step a named variable, which not only is cumbersome but also may lead to diverting the focus from variables that should really have a name - also falls back to modifying the original source code to enable debugging like in do-debugging.
 	
@@ -99,6 +102,8 @@
 	- to get additional info on observables previously not covered, the invokeFun was also extended with the filename and used to record source info. This can obviously not record names for additional nodes.
 	- inline scripts are excluded from this because there might be many and that could lead to performance issues due to the shallow copying.
 	If filename is not set, document domain is assumed for the filename.
+	
+ 
 	
 	
 		\subsubsection{Strengths and limitations of this approach} 
@@ -123,16 +128,21 @@
 	% previous CRI could not handle well.
 	% if the changes originate from anything other than user input - pausing recording is mandatory, 
 	%  but continuing leaves gaps in change history that has no visual feedback to the user.
-	% lag, getting stuck, crashing chrome due to increasing effort to handle coordination of async actions (async buildup) like message passing and storage access (read/write)
+	% lag, getting stuck, crashing chrome due to increasing effort to handle coordination of async actions like message passing and storage access (read/write) => shorthand: request buildup
 	% basic node exclusion was possible before, but very cumbersome and would exclude the node completely sometimes resuling in errors due to the node missing for dependent actions. A future implementation should only exclude value updates after the first. Should be changed in a way described in detail later.
 	
 	\subsection{Reworking the graph history}
 	% what it is, what it contains: the graph history records every change to the graph as a new step. The previous implementation stored the whole graph for each step inside an array for simplicity. This means the required memory will increase proportianlly with the number of steps.
 	% Performance improvements via paging and delta encoding: The idea to use paging was that the memory consumption would be fairly constant and not dependent on the number of steps. It still corresponded to the size of the graph, but since modern systems have a huge amount of RAM this increase would only affect the performance if thousands of nodes were in a graph which would not be possible for the user to comprehend anyway.
-	% Paging was then advanced to Delta encoding because it better corresponded to the intention. The changes are the relevant data between steps - loggin the changes and their types actually provides more useful data and makes the changes easier to quey because they do not have to be calculated (in the future the history query feature should be changed to use the graph instead of logging the changes itself). This enabled an easy and more robust way to detect the current change node and later edge - prior the current node was stored inside the node just as the css classes itself and was affected by search highlighting.
+	% Paging was then advanced to Delta encoding because it better corresponded to the intention. The changes are the relevant data between steps - loggin the changes and their types actually provides more useful data and makes the changes easier to query because they do not have to be calculated (in the future the history query feature should be changed to use the graph instead of logging the changes itself). This enabled an easy and more robust way to detect the current change node and later edge - prior the current node was stored inside the node just as the css classes itself and was affected by search highlighting.
 	% To reduce the computation cost to reconstruct a full graph for random stepping or stepping back in the history (not all changes can easily be reverted ----- full explanation here) an approach similar to "https://en.wikipedia.org/wiki/Video_compression_picture_types" without B-frames was implemented. The I frames are called BaseStages, P-frames DeltaStages that only encode the delta to the previous step. The size of the delta window can be configured in code and is currently 100 meaning each BaseStage will have 100 Detlas before a new basestage is created. code in history.js. The history also uses paging by loading several BaseStages at once in a specified window into a cache. This is important to cope with the user stepping forward and backwars repeatedly over a basestage threshold. To increase the cache size also reduces the distinct storage and load commands submitted to the Chrome storage api that is used to store any BaseStage currently not loaded into the cache.
-	%TODO ------------- continue here ------
-	% -> the saving has to be very fast
+	% paging -> to implement paging we used submitted the history parts that exceeded he cache to the local chrome storage which allows sizes of XX. If the history is cleared by the user or due to closing, opening a new CRI the storage is cleared. This will cause issues with multiple instances of CRI running at once, but unless both can use the same list of instrumented files (also stored in the chrome storage) this wont work anyway [maybe leave out]. When a stage is not in the cache, CRI will load it from the local storage and its surounding blocks into the cache. The requested step will be in the middle of the cache, if possible, to prevent the need to immediately load another stage if the user clicks next or previous.  In addition loading data in batches is normally faster than one by one, because it leaves optimization possiblilties to the used API.
+	% delta encoding -> If a new delta stage is added or requested that is in the forward direction (without crossing over the base stage boundries) all changes can be directly applied to the current stage. If however the direction is backwards, the new graph is constructed by clearing the graph, loading the base stage and then appliying all deltas up to the requested stage. It is the same logic if a random stage is requested that is not part of the current base stage. This means forward is always faster than random or backwards. As noted above the adding is crucial for the recording process and this approach that keeps this use case fast and simple benefits the recording process. On the other hand stepping back and random access can only be triggered by the user.
+	% deltas will contain the full node or edge regardless of if it was a new one or an old one was updated as they were recorded. The deltas do not need to be calculated first. -- intention from above.
+	% The class GraphManager handles drawing of the displayed graph in the UI and request the loading of a different stage from the history when necessary. It also implements the highlighting of the current node or edge.
+	% The class History handles the actual data, caching and requesting loading of stages from the storage when necessary. It also manages when to switch to the next basestage instead of adding another delta stage.
+	% The shared object stageStorage provides a OO interface that loads and stores stages by calling the key-value based chrome storage api. stageStorage also schedules request internally to ensure that requests are handled sequentially and in the correct order - stages finished saving before the loading operation is executed. For this reason the loading operation is async and uses a callback that is invoked when the loading is done. To achive this sync, stageStorage uses a queue, if an operation finished storing or loading it will invoke the next operation in the queue.
+ 	% -> the saving has to be very fast
 	% Memory and CPU for one test case with exactly equal conditions.
 	% point out that even this has limitations - see mario example
 	
@@ -169,8 +179,9 @@
 	% reorganizing file structure to match placement in chrome devtools vs other posibilities
 		% prior to this work there were some files with the window object corresponding to contentscripts in the same directory as files with a window object corresponding to the extensions window.
 	% need for more documentation, still far from being fully documented but x new comments
-		% CRI3: 271 single line, 48 multiline
-		% CRI2: 231 single line, 32 multiline
+		%TODO introduce shorthands CRI2 and CRI3
+		% Chrome Reactive Inspector version 3, after this thesis (CRI3): 271 single line, 52 multiline
+		% Chrome Reactive Inspector version 2, version created by Pradeep Baradur as part of his thesis (CRI2): 231 single line, 32 multiline
 		% just source of CRI was used to collect results - libraries directory and jalangi-framework excluded. WebStorm/search for // and /* inside the CRI BEta/ CRI directory - usage in comments feature.
 		% includes TODOs - more in CRI3,  and commented code - more in CRI2
 	% encapsulation and separation of concerns to help track and correct errors or build on existing code
