@@ -2,6 +2,13 @@ var cri = cri || {};
 
 _.extend(cri, (function (window) {
 
+    /**
+     * Implements Reactive Breakpoints.
+     * @param $breakpointContainer A jquery selector for the UI element that contains the
+     * list of currently used breakpoints.
+     * @returns {ReactiveBreakpointManager}
+     * @constructor {ReactiveBreakpointManager}
+     */
     function ReactiveBreakpointManager($breakpointContainer) {
         this.$breakpointContainer = $breakpointContainer;
         this.refreshUI();

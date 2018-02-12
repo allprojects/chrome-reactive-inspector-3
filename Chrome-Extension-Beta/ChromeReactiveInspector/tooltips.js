@@ -2,10 +2,19 @@ var cri = cri || {};
 
 _.extend(cri, (function (window) {
 
+    /**
+     * Handles creation and displaying of tooltips for all nodes in the Dependency Graph.
+     * @param $canvasContainer A jquery selector for the element that contains the canvas used to display
+     * the Dependency Graph.
+     * @param graphManager The GraphManger instance that handles the Dependency Graph.
+     * @returns {TooltipManager}
+     * @constructor {TooltipManager}
+     */
     function TooltipManager($canvasContainer, graphManager) {
         this.graphManager = graphManager;
         this.codePreviewCanceled = [];
         this.$canvasContainer = $canvasContainer;
+        return this;
     }
 
     function getTooltip(d3node) {

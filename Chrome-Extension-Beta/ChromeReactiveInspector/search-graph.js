@@ -2,6 +2,13 @@ var cri = cri || {};
 
 _.extend(cri, (function (window) {
 
+    /**
+     * Implements the search for nodes and their dependents or dependencies.
+     * @param graphManager The GraphManger instance that handles the Dependency Graph.
+     * @param $searchNode A jquery selector for the UI element that will contain the query.
+     * @returns {SearchGraphManager}
+     * @constructor {SearchGraphManager}
+     */
     function SearchGraphManager(graphManager, $searchNode) {
         this.graphManager = graphManager;
         this.$searchNode = $searchNode;

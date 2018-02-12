@@ -23,6 +23,7 @@ cri.utils = (function (window) {
     }
 
     /**
+     * adds padding to a string
      */
     function pad(str, count) {
         return String(" " +

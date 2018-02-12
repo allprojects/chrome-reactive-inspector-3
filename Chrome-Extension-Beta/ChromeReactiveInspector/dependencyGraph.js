@@ -1,6 +1,15 @@
 var cri = cri || {};
 
 cri.dependencyGraph = (function () {
+    /**
+     * Handles the displayed Dependency Graph and the current stage.
+     * @param d3container The parent of the Dependency Graph selected by a d3 selector.
+     * @param history The history that should be used to load stages.
+     * @param afterChangedCallback A callback that is invoked after the graph changed and was rendered.
+     * @param afterResetCallback A callback that is invoked if the graph is reset.
+     * @returns {GraphManager}
+     * @constructor {GraphManager}
+     */
     function GraphManager(d3container, history, afterChangedCallback, afterResetCallback) {
         this.container = d3container;
         this.graph = null;
@@ -8,7 +17,7 @@ cri.dependencyGraph = (function () {
 
         // currentStage is initially null but if the stage is later set back to stage 0 it will have the value 0.
         this.currentStage = null;
-        
+
         this.render = new dagreD3.render();
         this.afterChangedCallback = afterChangedCallback;
         this.afterResetCallback = afterResetCallback;
