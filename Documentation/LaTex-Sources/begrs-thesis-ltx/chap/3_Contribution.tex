@@ -5,17 +5,27 @@ In this chapter ..
 	% present Issue and Solution for each of these:
 
 	\subsection{Reducing the cognitive load on the user}
-	% - remove "error" color from normal workflow to decrease cognitive load on the used. Red is associated with errors, warnings and dangers e.g. in traffic especially with high contrast (green). The user should immediately be able to identify the change, but the changed node does not require the full attention over, we therefore moved from using red with high contrast that may even be probelematic for color blind users to an equally destinguishable but less demanding color sheme using blue and orange with less contrast. For this complementary colors to a base color were used.
+	% - remove "error" color from normal workflow to decrease cognitive load on the used. Red is associated with errors, warnings and dangers e.g. in traffic especially with high contrast (green). The user should immediately be able to identify the change, but the changed node does not require the full attention over the whole time
+		%, we therefore moved from using red with high contrast that may even be probelematic for color blind users to an equally destinguishable but less demanding color sheme using blue and orange with less contrast. To this purpose we chose a shade of blue and selected the colors for nodes, edges and highlightings from suggestions provided by a color sheme designer \cite{Paletton}. We chose to keep the text color black, because its the most used color for text and easy to read on most background colors. The nodes that do not correspond to a named variable were left with a white background to further reduce the coginitive load. The brain is trained to ignore empty spaces therefore making the text and named nodes appear more important.
 	% - detect difference between one step and the next (what changed?) -> node (already there) and edge highlighting
-	% - usage frequency of input elements -> Reset, Download and Pause/Resume Recording moved to menu. Download currently hiddedn because a change in Chrome broke the used library Simg.
-	% reload was added as a button, because it was already part of the usuall workflow by pressing CTRL F5. The ususal workflow would be to create a breakpoint for dependencyCreated or nodeCreated, and then reloading the applicaiton to actually hit the breakpoint.
-	%- find node that has specific criteria -> removed unexpressive labels with no data to reduced text to read, to presenting more details and reference to "linking source" that will follow. It also prevents the UI to be clattered by new details that may be added in the future that are not present for every node - an example of this that already existed would be "method".
+	% - usage frequency of input elements -> Reset, Download and Pause/Resume Recording moved to menu. Download currently hiddedn because a change in Chrome broke the used library Simg. Nearly every desktop application and many Websites (e.g. http://reactivex.io/rxjs/, Windows File Explorer, Eclipse, Microsoft Paint, Adobe PDF Reader , ...) has a menu at the top. This adds structure to the UI and also removes many buttons from the noral working space. The user nows that the buttons are in the menu and searches it on demand, but they do not require space or attention by the user at other times.
+		% - searching for problems, examining the dependency graph history in detail is implemented in the default workflow and used in many scenarios also directly tied to the dependency graph -> detect odd behavior, jump to desired point of interest => reason for not relocating
+		% - checking specific node is mostly useful for big dependency graphs and therefore not for small ones. Therefore it could be hidden in a closable panel or only temporarily opened if the user clicks a button or presses CTRL F like in many IDEs. It was not moved, because on normal resolutions the space that it occupies would currently be empty. If another feature is added in the future that is more embedded in the default workflow it should replace the search feature in the UI  -> find node or dependents (already there)
+	% reload was added as a button, because it was already part of the usuall workflow pressing CTRL F5. The ususal workflow would be to create a breakpoint for dependencyCreated or nodeCreated, and then reloading the applicaiton to actually hit the breakpoint.
+	%- find node that has specific criteria -> removed unexpressive labels with no data to reduced text to read. There may also be added more details in the future that are specific to some nodes and will not have a value for others like the already present "Method". Displaying them all for every node would clatter the UI fast and since the empty values does not provide any information to the user they should be omitted. Only values that are necessary to always have present without the need to open every tooltip should be part of the nodes. 
+		% The name is important to identify relevant nodes (including those depending or dependent on a named node).
+		% The Id is required for Reactive Breakpoints and to identify nodes without a name from one step to another if the nodes are repositioned due to added edges.
+		% The value is displayed if present, because it is normally the property at which developers can see if the code works as intended. E.g. an Observable is expected to have a specific value at some point in the execution. The developer can also observe a value passing along the chain of dependencies.
+		% The type is hidden in the tooltip, because there is often no difference to the developer what type of observable the framework used internally. E.g. in most scenarios for RxJS there is not difference between a FromEventObservable and Observable. It should however be in the tooltip and not omitted completely, because some types of Observables behave differently than others e.g. RxJS Subject vs Observable.
+		% The location is also just used in a special task - the user wants to find the code corresponding to a node in the graph and therefore should not be visible at all times.
+		% The number of updates was introduces by this thesis as a way for the user to detect bottlenecks and also to help identify nodes that cause the generation of a huge amount of steps (through value updates) in CRI. The feature is based on the Time Profiling feature of the Reactive Inspector \cite{ReactiveInspector}, but for now only provides the total number of updates instead of detailed timing and evaluation information. It is only useful for the purposes mentioned above and therefore should not be displayed on the nodes themselves.
+		
+	% It is also an option to replace the different node styles currently used to show a node >state< that shows what level of details are present for a node, with styling based on the chararcteristics of an Observable like its type.
 	
-	\subsection{Additional changes to the User-Interface}
-	% - starting on a new application or different part of the application -> auto reload after instrumented files have changed
-	% - just examine the result -> button to hide query tools - especially usefull when working with smaller screens or bigger graphs.
-	% - searching for problems, examining the dependency graph history in detail is implemented in the default workflow and used in many scenarios also directly tied to the dependency graph -> detect odd behavior, jump to desired point of interest;  mention that this is the reason for not relocating
-	% - checking specific node is mostly useful for big dependency graphs and therefore not for small ones. Therefore it could be hidden in a closable panel or only temporarily opened if the user clicks a button or presses CTRL F like in many IDEs. It was not moved, because on normal resolutions the space that it occupies would currently be empty. If another feature is added in the future that is more embedded in the default workflow it should replace the search feature in the UI  -> find node or dependents (already there)
+	% - just examine the result -> button to hide query tools - especially usefull when working with smaller screens or bigger graphs. Hide everything that is not the dependency Graph to help the user remove distractions and focus on the graph.
+	
+	% - starting on a new application or different part of the application -> auto reload after instrumented files have changed. This does not reduce the cognitive load on the user but removes a redundant click on the reload button. It is not very usefull to change the instrumented files without restarting the recording and will most likely confuse the user if they forget to do it. 
+
 	
 \section{Connecting abstract graph with JavaScript code}
 	% goal: to porvide nodes without a name with additonal details that allows to put them into context. Connect the abstract representation with the code to allow developer to see the code responsible for an issue they detected - was possible before with line information. The developer should be able to easily switch between source code inspection and dependency graph inspection, because not all issues can be found in either of them when used alone. E.g. there is an issue in a lambda function - the developer can not find this issue directly in the dependency graph, he can only see the result in node values that do not match the values expected with the original intention of the code. To fix the issue the dev has to switch to the code anyway so he already has to use both representations in tandem. 
@@ -103,7 +113,8 @@ In this chapter ..
 	- inline scripts are excluded from this because there might be many and that could lead to performance issues due to the shallow copying.
 	If filename is not set, document domain is assumed for the filename.
 	
- 
+	% we chose to give the user a visual clue if a node has a Source Code Tooltip so a user does not have to probe a nodes tooltip to see if it has one. Nodes without Source Code Tooltips have a faded border - we chose this, because having no Source Code Tooltip means the node does not provide any context information, named nodes always have one.
+	% One could argue that the Location information could now be omitted from the normal tooltips, but it currently the only way for the user to see from which JS file the node originated. Source Code Tooltips do not show the filename.
 	
 	
 		\subsubsection{Strengths and limitations of this approach} 
@@ -152,9 +163,10 @@ In this chapter ..
 	
 	% throttling and debounce UI updates greatly increased performance
 	% evaluation of throttle time for Ui changes and reasoning to pick a certain value - compromise between detectable for human and node update speed that can be handled
-	% Excluding a node -> limitation: may need to cover many nodes before the ui values are mapped to readable values -> ignore all ancestors option 
-	%- should be able to ignore nodes via r-click on node, even with an option to exclude all dependents/dependencies - that did not work because time. It would also help to exclude nodes just form value updates so the nodes is still present in the graph with its value updates.
-	% reduce the number of steps by removing node info updates that are not value changes from the history. (only a few, but still) they dont need separate steps when extra info is added
+	% Excluding a node -> limitation:
+		% may need to cover many nodes before the ui values are mapped to readable values -> ignore all ancestors option 
+		% currently nodes can be excluded via Id in the options page, but this is to cumbersome since the user has to leave the current context, they are specific to one application and should not be in general options.
+		%- should be able to ignore nodes via r-click on node, even with an option to exclude all dependents/dependencies - that did not work because time. Ignoring a node completely will sometimes break the dependency graph. Excluded nodes should be created and only value updates beyond the first should be ignored.
 	
 
 \section{Dynamically created observables}
@@ -164,12 +176,12 @@ In this chapter ..
 % nodes are not identifyable to the user -> cant make connection between similar behaving nodes that could be merged into one node
 % -> in case of named nodes the name will appear for each iteration - CRI can not handle decent in History Query and Search yet.
 % Userinterface limits - unexpressive nodes, limited canvas
-% loosing track of the nodes that matter
+% loosing track of the nodes that matter; in case of multiple loops that creat observables that depend on each other these dynamically created nodes may cause the graph to be reordered during any step one is added. 
 % can not be excluded easily
 
 	\subsection{Increased recording complexity}
 	% exluding them would require some form of excluding by rule/filter
-	% detection for such nodes would be needed to handle them specially. They could be merged into one pseudo node if all outgoing edges have the same target and ingoing edges have the same source.
+	% detection for such nodes would be needed to handle them specially. They could be merged into one pseudo node if all outgoing edges have the same target and ingoing edges have the same source. If possible, detect named and nodes with same source info aht are created inside a loop and merge them if the dependencies and dependents are the same. But their value will certainly differ so the values have to be displayed as an array - an option to separate a bundle would probably be useful. 
 	% To cope with the special cases, high customization of recording needed so the customization needs to be persistent to be useful
 	
 \section{CRI - A growing project}
