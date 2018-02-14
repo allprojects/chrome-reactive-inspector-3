@@ -1968,7 +1968,8 @@
     <bcf:citekey order="43">RxFiddleTutorials</bcf:citekey>
     <bcf:citekey order="44">RxFiddleGitHub</bcf:citekey>
     <bcf:citekey order="45">RxFiddleGitHub</bcf:citekey>
-    <bcf:citekey order="47">Clickstream</bcf:citekey>
+    <bcf:citekey order="46">ReactiveInspector</bcf:citekey>
+    <bcf:citekey order="48">Clickstream</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="anyt">
