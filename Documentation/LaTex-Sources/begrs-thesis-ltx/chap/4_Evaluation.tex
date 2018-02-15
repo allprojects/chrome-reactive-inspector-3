@@ -94,6 +94,8 @@ self.playfield.removeChild(enemy);
 
 For the test application \emph{RxJS mario} we added a Reactive Breakpoint on the last dependency that is created, because the excessive use of timers and rapidly updating Observables still causes CRI to crash after a few seconds. This is probably the result of \emph{request buildup} due to the large number of calls to the communication API of Chrome, but it is hard to provide a sufficient proof, because Chrome itself will stop responding as well.
 
+%TODO: add table here.
+
 \subsection{Summary}
 We examined the set of specifications for each of the test applications and found several issues. The problems with ambiguous variable names and out-of-order recording of nodes, although clearly issues that should be resolved at some point, do not break the overall usefulness of CRI, because the Dependency Graph can still be examined and other features not directly affected work as well. In contrast, the issues with recording in the test applications \emph{RxJS alphabetinvasion} and \emph{BaconJS blog\_url} cause the extension to display an incomplete Dependency Graph which greatly reduces the usefulness of CRI for these applications.
 All issues found should be the target of further development to increase the robustness of CRI, but issues in recording Observables should clearly be prioritized.

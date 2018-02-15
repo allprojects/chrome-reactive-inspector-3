@@ -1971,7 +1971,10 @@
     <bcf:citekey order="46">ReactiveInspector</bcf:citekey>
     <bcf:citekey order="47">D3JS</bcf:citekey>
     <bcf:citekey order="48">Paletton</bcf:citekey>
-    <bcf:citekey order="50">Clickstream</bcf:citekey>
+    <bcf:citekey order="49">Katalon</bcf:citekey>
+    <bcf:citekey order="50">Selenium</bcf:citekey>
+    <bcf:citekey order="51">EventBasedJS</bcf:citekey>
+    <bcf:citekey order="53">Clickstream</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="anyt">
