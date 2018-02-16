@@ -145,6 +145,10 @@ hr {
     border: 1px solid red;
 }
 
+#canvas-container:focus {
+    outline: none;
+}
+
 #svg-canvas .label {
     text-align: left;
 }
