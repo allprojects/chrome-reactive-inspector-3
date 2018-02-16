@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>InlineScriptTest</title>
+    <script type="text/javascript" src="../js/Rx.js"></script>
+    <script src="../js/jquery.js"></script>
+</head>
+<body>
+<div>Test for in html script tags and in-line javascript inside an attribute. (Author: Benedikt Gross)
+</div>
+<div>
+    <!-- code based on son-father-wallet example -->
+    <script type="text/javascript">
+        function plus(a, b) {
+            return a + b;
+        }
+
+        $fatherWallet = $('#wallet-father');
+        $addSon = $('#add-son');
+        addClick = Rx.Observable.fromEvent($addSon, 'click').mapTo(1);
+        fatherWalletValue = addClick.scan(plus, 0)
+            .map(function (value) {
+                return value + 10
+            })
+            .subscribe(
+                function (data) {
+                    $fatherWallet.val(data);
+                });</script>
+    <a href="javascript:removeClick = Rx.Observable.fromEvent($addSon, 'click').mapTo(-1);alert('executed')">
+        execute script in attribute</a>
+</div>
+</body>
+</html>

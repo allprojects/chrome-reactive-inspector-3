@@ -182,7 +182,8 @@ var cri = cri || {};
          * @returns {*}
          */
         function getCode(file, from, to) {
-            let code = scriptCache[file];
+            let fileOrDomain = file ? file : document.domain;
+            let code = scriptCache[fileOrDomain];
             if (!code || code.length === 0) {
                 return ''
             }
