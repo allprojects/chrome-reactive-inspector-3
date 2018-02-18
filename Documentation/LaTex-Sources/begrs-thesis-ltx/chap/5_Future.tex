@@ -30,6 +30,12 @@
 	% -> will not work with bundled JavaScript code - but since in development there should be a non bundled version available not 
 	%TODO: verify this:
 	% a big problem in JavaScript. But for TypeScript since the extension does not support it and when compiling there may already be bundling in place. (#add some text from future here#)
+	
+	% rapdily updates observables
+		% Excluding a node -> limitation:
+	% may need to cover many nodes before the ui values are mapped to readable values -> ignore all ancestors option 
+	% currently nodes can be excluded via Id in the options page, but this is to cumbersome since the user has to leave the current context, they are specific to one application and should not be in general options.
+	%- should be able to ignore nodes via r-click on node, even with an option to exclude all dependents/dependencies - that did not work because time. Ignoring a node completely will sometimes break the dependency graph. Excluded nodes should be created and only value updates beyond the first should be ignored.
 
 % Solution management:
 % - enabled storage of project specific configuration. 
