@@ -4,3 +4,28 @@
 The lines of code include comments, lines containing only brackets and empty lines.
 CRI2 has 8 own JS files with 2353 total and 294 average lines of code per file. The scripts \emph{background}, \emph{devtools} and \emph{content-script-end} are empty and were ignored for these measurements.
 CRI3 has 19 own JS files with 3580 total and 188 average lines of code per file.
+
+\section{Source code of performance test.}
+	\begin{lstlisting}[language=JavaScript, caption={RxJS code of PerformanceTest}]
+var intervalObservable = Rx.Observable.interval(5)
+.timestamp()
+.bufferCount(2, 1)
+.map(function (w) {
+return w[1].timestamp - w[0].timestamp;
+})
+.share();
+
+var pauser = new Rx.Subject();
+var pausable = pauser.switchMap(function (paused) {
+return paused ? Rx.Observable.never() : intervalObservable;
+});
+// generates approximately 1000 steps
+setTimeout(function () {
+pauser.next(true);
+}, 5000);
+
+pausable.subscribe(function (value) {
+console.log("Value: " + value);
+});
+pauser.next(false);
+\end{lstlisting}
