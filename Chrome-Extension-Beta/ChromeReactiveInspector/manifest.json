@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
   "name": "Chrome Reactive Inspector",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "This extension enables developers to debug reactive web applications written in Rx.js 5 or Bacon.js. It adds a new panel to the Chrome DevTools that interacts with the inspected page.",
   "author": "Waqas Abbas, Pradeep Baradur and Benedikt Gross with supervision from Dr.Guido Salvaneschi at TU - Darmstadt",
-  "devtools_page": "panel/devtools.html",
+  "devtools_page": "devtools/panel/devtools.html",
   "background": {
     "scripts": [
       "background/background-communication.js"
@@ -36,7 +36,7 @@
     "128": "resources/icon.png"
   },
   "web_accessible_resources": [
-    "panel/panel.js"
+    "devtools/panel/panel.js"
   ],
   "options_page": "options/options.html"
 }
