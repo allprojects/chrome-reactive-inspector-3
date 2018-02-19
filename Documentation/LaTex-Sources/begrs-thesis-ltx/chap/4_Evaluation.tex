@@ -63,9 +63,16 @@ This section examines the improvements introduced by this thesis and their imple
 	
 	As there were no significant changes to the recording process of RxJS and BaconJS in CRI, we did not execute separate performance measurements for CRI2 and CRI3 using a test application with BaconJS.
 	
-	\textbf{Comparison to RxFiddle}
+	\textbf{Comparison to RxFiddle}\\
 	We also examined the performance of RxFiddle with the used test application and compared it to CRI3 to qualify the discussion in section \ref{sec:RxFiddle} on its performance with rapidly updated Observables.
-	Although RxFiddle does not have performance issues (exceeding a delay of one second when hovering over a node before the tooltip is shown) for approximately one thousand updates on Chrome, if executed with Firefox (57.0.4 (64-bit)) the browser becomes unresponsive for a few seconds. The overall Memory consumption of RxFiddle during the test was 52.5MB and the execution took approximately 5.5 seconds - similar to CRI3. As mentioned earlier the Memory consumption is not a limiting factor for the overall performance. CRI generates approximately 2700 steps during the test execution while RxFiddle generates approximately one thousand values for each Operator in the chain of \emph{intervalObservable}. Examining these results any further does not provide additional insight since the tools are bases on completely different technologies. RxFiddle uses TypeScript and runs as a Web page while CRI does not use TypeScript, any form of bundling or minifying and runs as a Chrome extension.
+	Although RxFiddle does not have performance issues (exceeding a delay of one second when hovering over a node before the tooltip is shown) for approximately one thousand updates on Chrome, if executed with Firefox (57.0.4 (64-bit)) the browser becomes unresponsive for a few seconds. The overall Memory consumption of RxFiddle during the test was 52.5MB and the execution took approximately 5.5 seconds - similar to CRI3. As mentioned earlier the Memory consumption is not a limiting factor for the overall performance. CRI generates approximately 2700 steps during the test execution while RxFiddle generates approximately one thousand values for each Operator in the chain of \emph{intervalObservable} which is displayed in figure \ref{fig:RxFiddlePerformance}. Examining these results any further does not provide additional insight since the tools are bases on completely different technologies. RxFiddle uses TypeScript and runs as a Web page while CRI does not use TypeScript, any form of bundling or minifying and runs as a Chrome extension.
+	
+	\begin{figure}[!h]
+		\centering
+		\includegraphics[scale=0.7,trim=0 0 0 0]{gfx/RxFiddleWithTimer.png}
+		\caption{Test application PerformanceTest inspected with RxFiddle}
+		\label{fig:RxFiddlePerformance}
+	\end{figure}
 	
 \section{Reviewing the Test Applications}
 \label{sec:EvalTests}

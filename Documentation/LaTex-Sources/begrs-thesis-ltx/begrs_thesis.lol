@@ -15,7 +15,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {lstlisting}{\numberline {3.2}Example of using a creation function in RxJS.}{23}{lstlisting.3.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {lstlisting}{\numberline {3.3}Example of RxJS code.}{34}{lstlisting.3.3}
+\contentsline {lstlisting}{\numberline {3.3}Example of RxJS code.}{35}{lstlisting.3.3}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
