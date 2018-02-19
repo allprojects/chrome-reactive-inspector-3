@@ -1,18 +1,6 @@
-\chapter{APPENDIX} \label{chap:Appendix}
-Details on the applications used for evaluation in the chapter~\ref{chap:Evaluation} are presented here. For each application, we present the source from where we took the application. We also mention the required refactoring for each application.
-\section{App\#1 - Operators and Events}
-This application contains lot of sub-applications to explain the operators and event handling with Bacon.js library.\\
-Application Source:\\ 
-This application is one of the examples from the GitHub repository of Bacon.js library.\\
-\url{https://github.com/baconjs/bacon.js/blob/master/examples/examples.html}\\
-Application Setup/Refactoring: \\
-On page JavaScript code has been moved to separate JavaScript file, which is then included in HTML file.
-
-\section{App\#2 - Father-Son Wallet War}
-This application is based on a rule that father will always have ten dollars more than his son.\\
-Application Source:\\ 
-Detailed logic of this application can be found here.\\ \url{https://alfredodinapoli.wordpress.com/2011/12/24/functional-reactive-programming-kick-starter-guide/}\\
-We found Bacon.js implementation in jsfiddle \url{http://jsfiddle.net/EeJgZ/} mentioned in one issue of GitHub repository of Bacon.js\\
-\url{https://github.com/baconjs/bacon.js/issues/51}\\
-Application Setup/Refactoring: \\
-We copied the HTML from the jsfiddle to the HTML file and JavaScript code into a JS file, include it in HTML file with other dependencies like Jquery and Bacon.js libraries.
+\chapter{APPENDIX}
+\label{ch:Appendix}
+\section{Ad-hoc code metrics for CRI2 and CRI3}
+The lines of code include comments, lines containing only brackets and empty lines.
+CRI2 has 8 own JS files with 2353 total and 294 average lines of code per file. The scripts \emph{background}, \emph{devtools} and \emph{content-script-end} are empty and were ignored for these measurements.
+CRI3 has 19 own JS files with 3580 total and 188 average lines of code per file.
