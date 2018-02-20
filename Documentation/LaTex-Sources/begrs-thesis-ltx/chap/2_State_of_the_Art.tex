@@ -87,9 +87,8 @@ In this section we will cover the previous work on the Chrome Reactive Inspector
 	%TODO: textbf seems not to work
 	
 	\cite{ThesisAbbas} The main goal of the Master Thesis by Waqas Abbas was to develop and implement a concept for a Chrome extension based on the Reactive Inspector to debug Reactive Web applications in JavaScript.
-	%TODO: The main - twice
 	%TODO: many "to"s
-	The main difficulties were to find a viable solution to intercept calls to the reactive frameworks in order to retrieve the necessary information about observables and their dependencies to build a Dependency Graph (called Dependency Tree in \cite{ReactiveInspector}) as well as to gather additional details like variable name that directly correspond to observables and providing them with context by instrumenting the source code. An in-browser solution taken from a demo page \cite{JalangiDemo} of Jalangi was used to instrument and analyze the source code directly. The main Jalangi framework \cite{Jalangi} is currently not usable solely within a browser.
+	One mayor difficulty was to find a viable solution to intercept calls to the reactive frameworks in order to retrieve the necessary information about observables and their dependencies to build a Dependency Graph (called Dependency Tree in \cite{ReactiveInspector}) as well as to gather additional details like variable name that directly correspond to observables and providing them with context by instrumenting the source code. An in-browser solution taken from a demo page \cite{JalangiDemo} of Jalangi was used to instrument and analyze the source code directly. The main Jalangi framework \cite{Jalangi} is currently not usable solely within a browser.
 	Abbas also implemented several features to help the developer navigate and examine the Dependency Graph and its history. In this first version of the CRI, the user could already submit History Queries that search the History of the Graph for specific nodes or events like node creation, update or the creation of a dependency. In addition the user could add Reactive Breakpoints - breakpoints that pause the program execution when a specific event occurs - or search for a node in a large Dependency Graph.
 	At the time the CRI supported BaconJS\cite{BaconJS} and parts of RxJS\cite{RxJS}. Abbas also added a first batch of small Web applications that could be used as test applications to manually verify features of CRI.\\		
 		
@@ -99,7 +98,6 @@ In this section we will cover the previous work on the Chrome Reactive Inspector
 		
 	\textbf{Merging previous efforts}\\
 	
-	%TODO: change tone to always present problems as general difficulties instead of shortcomings
 	Since Waqas Abbas and Pradeep Baradur's works on the CRI partly overlapped and where developed in separate repositories, uniting both works was the first task for the thesis. Due to being developed separately after Baradur's Thesis started, the repositories shared no common history and due to many refactorings and renames in both projects as they advanced, merging the code base was not possible with automated tools and had to be done manually. Tracing the correlation between different changes was not trivial - in part because both theses were focused on advancing the project and less on maintainability and modularization. For this thesis we took the source code of Pradeep Baradur's Thesis as a base and added features that Waqas Abbas developed after Baradur's Thesis had started. The main reason for this is that Baradur removed many bugs and race conditions that happened in some rarer cases of code execution order, in his goal to make CRI more reliable, that were outside of the scope of Abbas's work.
 		
 	\subsubsection{Exceptional properties of the CRI implementation}
