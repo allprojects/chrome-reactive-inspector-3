@@ -11,6 +11,7 @@ In this chapter we explain the fundamental theory of Functional Reactive Program
 	
 	The declarative functional programming style limits side-effects and is usually implemented with many \emph{pure} functions as operators that can be used to transform, combine or change behavior of Observables and Event Streams. The operators return a new Observable that depends upon the Observable on which the operator was used. Using these operators, the developer declares dependencies between observables, which creates more comprehensible program code and structure \cite[Why Reactive Programming?]{ReactiveInspector} than imperative programming style would produce. 	
 
+
 	\subsection{RxJS and BaconJS}
 	Although there are many JavaScript implementations of the reactive design pattern like Cycle\cite{CycleJS}, Kefir\cite{KefirJS} or  Most\cite{MostJS}, this section is focused on ReactiveX for JavaScript (RxJS) \cite{RxJS} and Bacon (BaconJS) \cite{BaconJS}, because these are the libraries the Chrome Reactive Inspector currently supports. A comprehensible list of reactive frameworks and libraries for JavaScript can be found at \cite{FRPJSList}.
 	
@@ -77,18 +78,13 @@ The Reactive Inspector is an extension of the Scala WIDE for Eclipse. Many featu
 \section{Previous work on the CRI and its main competitor}
 In this section we will cover the previous work on the Chrome Reactive Inspector (CRI) as well as RxFiddle which is the main competitor for the CRI because both have a similar goal to help developers debug Reactive Systems in JavaScript with abstract concepts that go beyond traditional debugging.
 
-%TODO: framework vs library - write at the beginning that framework and library may be used interchangeable for convenience.
 	\subsection{The Chrome Reactive Inspector}
 	\label{sec:PreviousCRI}
 	The Chrome Reactive Inspector is based on the Reactive Inspector for Scala \cite{ReactiveInspector} and was developed by the Software Technology Group at the TU-Darmstadt Germany supervised by Prof. Dr. Guido Salvaneschi. It is implemented as a Google Chrome(Chrome) extension that extends the Chrome Developer Tools (DevTools) with another panel that inspects and instruments a target Reactive Web application that is using RxJS or BaconJS. Prior to this thesis there have already been two Master theses targeting the CRI that provide the base theory and source code of this thesis.\\
-	%TODO: thesis capitalized?
 	
 	\textbf{Master Thesis by Waqas Abbas}\\
-	%TODO: textbf seems not to work
 	
-	\cite{ThesisAbbas} The main goal of the Master Thesis by Waqas Abbas was to develop and implement a concept for a Chrome extension based on the Reactive Inspector to debug Reactive Web applications in JavaScript.
-	%TODO: many "to"s
-	One mayor difficulty was to find a viable solution to intercept calls to the Reactive libraries in order to retrieve the necessary information about observables and their dependencies to build a Dependency Graph (called Dependency Tree in \cite{ReactiveInspector}) as well as to gather additional details like variable name that directly correspond to observables and providing them with context by instrumenting the source code. An in-browser solution taken from a demo page \cite{JalangiDemo} of Jalangi was used to instrument and analyze the source code directly. The main Jalangi framework \cite{Jalangi} is currently not usable solely within a browser.
+	\cite{ThesisAbbas} The main goal of the Master Thesis by Waqas Abbas was to develop and implement a concept for a Chrome extension based on the Reactive Inspector to debug Reactive Web applications in JavaScript. One mayor difficulty was to find a viable solution for intercepting calls to the Reactive libraries in order to retrieve the necessary information about observables and their dependencies that are used to build a Dependency Graph (called Dependency Tree in \cite{ReactiveInspector}) as well as to gather additional details like variable name that directly correspond to observables and providing them with context by instrumenting the source code. An in-browser solution taken from a demo page \cite{JalangiDemo} of Jalangi was used to instrument and analyze the source code directly. The main Jalangi framework \cite{Jalangi} is currently not usable solely within a browser.
 	Abbas also implemented several features to help the developer navigate and examine the Dependency Graph and its history. In this first version of the CRI, the user could already submit History Queries that search the History of the Graph for specific nodes or events like node creation, update or the creation of a dependency. In addition the user could add Reactive Breakpoints - breakpoints that pause the program execution when a specific event occurs - or search for a node in a large Dependency Graph.
 	At the time the CRI supported BaconJS\cite{BaconJS} and parts of RxJS\cite{RxJS}. Abbas also added a first batch of small Web applications that could be used as test applications to manually verify features of CRI.\\		
 		
