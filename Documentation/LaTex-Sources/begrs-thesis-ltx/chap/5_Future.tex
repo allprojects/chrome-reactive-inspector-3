@@ -3,16 +3,23 @@
 % conclusion and future
 
 % Conclusion:
+% Advanced the CRI by:
+
+% - The UI has been updated to direct the users focus and speed up or reduce cognitive load for some user tasks. An objective verification using multiple usability metrics like a User Study and Clickstream analysis is still missing, but most changes have a clearly explained benefit.
+% - To strengthen links* between abstract representation and acutal code, source code previews* have been introduced. The evaluation showed the potential for this feature and in addition with the ease of access, this makes it a valuable additon to CRI.
+% - Even though many improvements have been made to cope with large*(always use the same terminology) graphs/histories/applications like performance improvements, it does not cover everything.
+% - CRI has a way to go before being able to properly support excessively created observables.
+% This and some other features are required to increase CRI's robustness when handling any arbitrary application, however, it is still useable to some degree for most of these applications except for very severe cases.
+% improved extensibility and maintainability
+% The evaluation showed that some of the features of CRI still need some improvements in special cases.
+
 % - CRI supports many additional features that help to cope with some of the issues encountered by reactive debuggers that are currently not present in RxFiddle.
-% - Event though many improvements have been made to cope with large*(always use the same terminology) graphs/histories/applications like performance improvements, it does not cover everything.
-% - The UI has been updated to direct the users focus and speed up or reduce cognitive load for some user tasks.
-% - To strengthen links* between abstract representation and acutal code, source code previews* have been introduced.
-% - CRI has a way to go before being able to properly use in a production environment - Typescript, ecma6 support see future.
-% - 
 
 % Future:
+% - CRI needs Typescript, ecma6 support to handle more Web applications
 
 % ecma6 import support and bundled Rx/Bacon detection, + typescript
+
 	% currently searches for <script Rx.js/Bacon.js>
 	% if all used libraries are bundled and only own project files are not
 	% will not work

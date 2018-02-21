@@ -1,30 +1,40 @@
 \chapter{Introduction} \label{ch:Introduction}
-Introduction Header Placeholder
+This chapter gives a short introduction to Reactive Functional Programming in general and the Chrome Reactive Inspector. The Chrome Reactive Inspector is an advanced debugging tool for systems using Reactive Programming in JavaScript with the libraries RxJS or BaconJS. The tool provides many features, similar to those of traditional debuggers like Breakpoints, tailored especially to the needs of users debugging Reactive Programming Systems for these two JavaScript libraries.
 
 \section{Background}
-% Reactive Inspector and previous CRI mentioned
+% very Short intro to RP, advances observable pattern
+% RP is hard to debug without abstract representation.
+
+For JavaScript there are 
+% origin of CRI in RI and 
+Enables advantageous debugging for applications written in JavaScript using RxJS or BaconJS without the need to modify the source code.
+% CRI is a Google Chrome extension. The tool is therefore platform independent as long as the platform supports a version of Google Chrome that supports extensions.
+CRI provides abstract representation in form of a Dependency Graph for the inspected application. It also provides the user with the possibility to examine the creation of that graph in addition to tracking value updates traveling along the chain of dependencies at any time during the application's execution.%TODO possibility?
 
 \section{Motivation}
+Advancing CRI by:
 % increase usablity of CRI
-% advance to eventually be used in production environment
+% advance to eventually be used in production environment by:
+% provide more info for nodes with few useful information
+% increase support for applications using interval Observables as it was discovered as an issue by Abbas
+% reevaluate UI to present sound look and reduce learning time and increase users speed with CRI
 
 
 \section{Our Contribution}
 
-In the last two sections, we introduced reactive systems, ...
-
-
-As a summary, this thesis makes the following contributions:
+In the last two sections, we presented a brief overview of Function Reactive Programming, introduced the Chrome Reactive Inspector, its origin and the scope of this thesis.
+In summary, we make the following contributions:
 
 \begin{itemize}
-
-	\item Item 1
-	\item Item 2
-	
-
+	\item Merging previous work on the Chrome Reactive Inspector.
+	\item Reworking the User Interface to better support the user in their tasks.
+	\item Providing additional details to the Dependency Graph by connecting nodes with their corresponding lines of code.
+	\item Reducing computational resource consumption when working with applications that contain rapidly updated Observables
+	\item Providing a baseline for additional development targeting excessively created Observables.
 \end{itemize}
 
-
 \section{Outline}
-
-Outline Placeholder
+In chapter \ref{ch:StateOfTheArt} we explain Reactive Functional Programming in general and the two JavaScript libraries RxJS and BaconJS that the Chrome Reactive Inspector currently supports in detail. We also examine existing tools for debugging Reactive Systems and the reasons traditional debuggers are not suitable. In addition, we present the previous work on the Chrome Reactive Inspector and picture RxFiddle which is the main competitor of the Chrome Reactive Inspector.
+Our contributions and reasoning behind choosing a specific approach over other possible solutions is explained in chapter \ref{ch:Contribution}.
+Chapter \ref{ch:Evaluation} contains verification of our claims and implementations, as well as, results of the evaluation of the most important features in CRI for a set of test applications.
+In chapter \ref{ch:Future} we summarize  We also point out possible targets of further development to increase the applicability of CRI.
