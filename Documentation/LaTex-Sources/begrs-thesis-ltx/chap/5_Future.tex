@@ -1,6 +1,5 @@
 \chapter{Conclusion and Future}
 \label{ch:Future}
-% conclusion and future
 
 % Conclusion:
 % Advanced the CRI by:
@@ -16,36 +15,17 @@
 % - CRI supports many additional features that help to cope with some of the issues encountered by reactive debuggers that are currently not present in RxFiddle.
 
 % Future:
-% - CRI needs Typescript, ecma6 support to handle more Web applications
 
-% ecma6 import support and bundled Rx/Bacon detection, + typescript
+% To extend the range of applications CRI can be used with, CRI needs TypeScript and ECMA2015 compliant JavaSCript support. However the used Jalangi Demo library is not able to handle either. Due to this reason and others it would be beneficial to replace Jalangi with another JS code analysis that works in-browser by design, although it is also possible to add a dedicated a second library explicitly for TypeScript and ECMA2015 compliant JavaScript because it is unlikely that there is a tool that is able to handle both. Many Web applications that use ECMA6 in their development actually transpile it to ECMA5 because ECMA2015 is not fully supported by each broser yet. This means, that CRI could be used on the transpiled JS code, but it renders the Source Code Tooltips useless since the code shown is not the one the user is editing.
 
-	% currently searches for <script Rx.js/Bacon.js>
-	% if all used libraries are bundled and only own project files are not
-	% will not work
-	% all module/file loaders are not supported yet e.g. require.js since module loading prior to ecma6 is a diverse field
-	% and most applications use one this is one of the main obstacles before the extension can be used by a wider audience (see temp_references)
-	% ecma6 import references file not necessarily in html as <script>
-	%TODO check if above is true
-	%TODO check if typescript compilatino to un-bundled js is possible
-	%- the breach of the isolated world of chrome context scripts enables the developer to have a total access to the pages javascript 	which can be used to solve the problem of "import" statements. The developer could overwrite the import/require/.. comands of each known framework and provide a custom function that does the loading in additional 
-	% add nodejs support
-	% - as long as all the files that are desired for debugging are present, it does not matter if they are loaded via a module loader, because the file can be instrumented seperately. The only problem is to find the file, a simple hook in a specially designed comment may be used <!-- cri: src="path to jsfile" --> that is ignored in a production environment. The problem is to access the shared Rx/Bacon object as a simple comment that specifies Rx or Bacon would not suffice.
+% Support for loading of JS scripts from within other scripts. This has become a usual practice for many developers since the introduction of module loaders. There are several popular libraries that inlcude module loading functionallity. These inlcude NodeJS, requireJS, as well as, the \emph{import} keyword used in ECMA2015 compliant JavaScript and TypeScript. Since CRI scans an inspected page for HTML \emph{script} tags to determine if the recording should run, any script using a module loader to load scripts that use RxJS or BaconJS cannot be recorded properly. Scripts loaded by module loaders are also excluded from the instrumentation process. To create the Dependency Graph, CRI records internal processes of RxJS or BaconJS. For this reason, CRI needs access to the Rx or Bacon object used in the inspected applications scripts. To enable the use of CRI with applications using module loaders, the tool would need to intercept calls to the module loader and load the files itself before submitting them to the application. This way, the loaded scripts could also be replaced with an instrumented version. 
+%- the breach of the isolated world of chrome context scripts enables the developer to have a total access to the pages javascript 	which can be used to solve the problem of "import" statements. The developer could overwrite the import/require/.. comands of each known framework and provide a custom function that does the loading in additional
 	
-			% instrumenting files via scanning the html for script tags
-	% -> will not work for module loaders like require.js or ecma6
-	% -> will not work with bundled JavaScript code - but since in development there should be a non bundled version available not 
-	%TODO: verify this:
-	% a big problem in JavaScript. But for TypeScript since the extension does not support it and when compiling there may already be bundling in place. (#add some text from future here#)
-	
-	% rapdily updates observables
-		% Excluding a node -> limitation:
+% Additional features to help the user support CRI with applications using rapdily updates observables.
+	% Excluding a node -> limitation:
 	% may need to cover many nodes before the ui values are mapped to readable values -> ignore all ancestors option 
 	% currently nodes can be excluded via Id in the options page, but this is to cumbersome since the user has to leave the current context, they are specific to one application and should not be in general options.
 	%- should be able to ignore nodes via r-click on node, even with an option to exclude all dependents/dependencies - that did not work because time. Ignoring a node completely will sometimes break the dependency graph. Excluded nodes should be created and only value updates beyond the first should be ignored.
 
-% Solution management:
-% - enabled storage of project specific configuration. 
-% - necessary for fine grained recording to be effective as described in [Increased recording complexity]
-
+% The features discussed in Excessivel Created Observables section that were not possible to implement as part of this thesis.
  	
