@@ -41,7 +41,7 @@
 	Lcaron={Ľ},
 }
 
-%Customize a bit the look
+%Customize the look
 \lstset{ %
 	backgroundcolor=\color{white}, % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
 	basicstyle=\footnotesize, % the size of the fonts that are used for the code
@@ -58,8 +58,11 @@
 	% language=Octave, % the language of the code
 	morekeywords={*,...}, % if you want to add more keywords to the set
 	numbers=left, % where to put the line-numbers; possible values are (none, left, right)
-	numbersep=5pt, % how far the line-numbers are from the code
+	%numbersep=5pt, % how far the line-numbers are from the code
 	numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+	xleftmargin=2.5em,
+	xrightmargin=1em,
+	framexleftmargin=2em,
 	rulecolor=\color{black}, % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
 	showspaces=false, % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
 	showstringspaces=false, % underline spaces within strings only
@@ -113,7 +116,7 @@
 % consistent text for graphics
 \usepackage{psfrag}
 
-% bibliography with biblatex
+% bibliography with biblatex and biber backend
 \usepackage[style=alphabetic,backend=biber]{biblatex}
 
 % same style for URLs
