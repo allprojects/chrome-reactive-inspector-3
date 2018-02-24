@@ -21,7 +21,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {lstlisting}{\numberline {4.1}Example of RxJS code.}{38}{lstlisting.4.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {lstlisting}{\numberline {4.2}Extract of RxJS AlphabetInvasion test application.}{44}{lstlisting.4.2}
+\contentsline {lstlisting}{\numberline {4.2}Extract of RxJS AlphabetInvasion test application.}{45}{lstlisting.4.2}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
