@@ -13,7 +13,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {lstlisting}{\numberline {3.1}Example of RxJS code.}{20}{lstlisting.3.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {lstlisting}{\numberline {3.2}Example of using a creation function in RxJS.}{23}{lstlisting.3.2}
+\contentsline {lstlisting}{\numberline {3.2}Example of using a creation function in RxJS.}{24}{lstlisting.3.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {lstlisting}{\numberline {3.3}Example of RxJS code.}{35}{lstlisting.3.3}
 \defcounter {refsection}{0}\relax 
