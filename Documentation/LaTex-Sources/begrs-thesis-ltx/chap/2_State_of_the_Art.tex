@@ -19,27 +19,27 @@ Although there are many implementations of reactive systems for a multitude of p
 	
 	\noindent\textbf{Rx.js}\\
 	Reactive Extensions for JavaScript or RxJS \cite{RxJS} is the JavaScript implementation of ReactiveX. ReactiveX implementations also exist for a number of other programming languages, such as Java (RxJava), Scala(RxScala) or C\#(Rx.NET). In extension to the basic concepts of reactive programming, RxJS implements \emph{subjects} and \emph{schedulers}. A \emph{subject} represents the implementation of an \emph{event stream} and is the only option to realize a multicast \emph{observable} since \emph{observables} are \emph{cold} \emph{observables} in RxJS. \emph{Subjects} can be both \emph{observer} and \emph{observable} at the same time. To convert a \emph{cold} \emph{observable} into a \emph{hot} one, the functions \emph{share} or \emph{publish} can be used. They use a \emph{subject} internally to track the shared \emph{producer}. A \emph{subject} will be terminated once the last \emph{subscriber} unsubscribes. \emph{Schedulers} are centralized dispatchers which are used to control concurrency and allow influencing the scheduling behavior when asynchronous functions such as \emph{setTimeout}\cite{RxJsDocu} are called. \emph{Observers} raise special events if the \emph{observable} is completed or reaches an error state. The \emph{observable} will not be reusable afterwards, even if it is a \emph{subject}, which is a main difference to the later discussed BaconJS. RxJS provides several utility functions to convert values, arrays or events into observables \cite{ThesisBaradur}. A basic example of RxJS code to show the general structure can be seen in listing \ref{lst:Rx} (Source: \cite{RxJsDocu} under manual/overview.html).
-	The latest stable version of RxJS is version 5.5.6 with version 6.0.0-alpha already under active development. RxJS is licensed under the Apache 2.0 license and the source code is publicly available on GitHub \cite{RxJSRepo}.
+	The latest stable version of RxJS is version 5.5.6 with version 6.0.0-alpha already under active development. RxJS is licensed under the Apache 2.0 license and the source code is publicly available on GitHub \cite{RxJSRepo}.\\
 
-	\begin{lstlisting}[language=JavaScript, caption={Example of RxJS code.},label={lst:Rx}]
-	var button = document.querySelector('button');
-	Rx.Observable.fromEvent(button, 'click')
+\begin{lstlisting}[language=JavaScript, caption={Example of RxJS code.},label={lst:Rx}]
+var button = document.querySelector('button');
+Rx.Observable.fromEvent(button, 'click')
 	.throttleTime(1000)
 	.scan(count => count + 1, 0)
 	.subscribe(count => console.log(`Clicked ${count} times`));
-	\end{lstlisting}
+\end{lstlisting}
 	
 	\noindent\textbf{Bacon.js}\\
 	The basic concepts of BaconJS \cite{BaconJS} are \emph{properties} - which represent the \emph{observables} - and \emph{event streams} that handle distinct events. 
 	In contrast to RxJS, BaconJS's \emph{properties} are always \emph{hot} \emph{observables}. In addition, an error in an \emph{event stream} or \emph{property} will not cause them to terminate. Errors are, therefore, handled as any other value, which provides more fine-grained control for the developer. However, the \emph{endOnError} function can be used if the termination is desired. 
 	Another advantage of BaconJS is the \emph{spy} function, which can be used to observe the internal workings and, therefore, greatly reduces the required effort to create complementary tooling like the CRI or RxFiddle. It can also be used to easily create extensive logging without modifying the rest of the reactive application source code. According to the author(s), BaconJS was developed because they got frustrated with RxJS as its source code was not publicly available at the time and the documentation was minimal. They also claim that BaconJS has a more consistent and glitch-free stream/property behavior \cite{BaconJSRepo}. However, they explain that RxJS has less overhead and consequently a better performance. 
-		\begin{lstlisting}[language=JavaScript, caption={Example of BaconJS code.},label={lst:Bacon}]
-	$("#username input").asEventStream("keyup")
+\begin{lstlisting}[language=JavaScript, caption={Example of BaconJS code.},label={lst:Bacon}]
+$("#username input").asEventStream("keyup")
 	.map(function(event) {
-	return $(event.target).val();
-	})
+			return $(event.target).val();
+		})
 	.toProperty("")
-	\end{lstlisting}
+\end{lstlisting}
 	BaconJS is still under active development, with the latest stable version being 2.0.0. It is licensed under the MIT license and the source code is publicly available on GitHub \cite{BaconJSRepo}.
 
 	While BaconJS is a newer reactive programming library and was developed to handle some shortcomings of RxJS, according to the GitHub statistics RxJS has still a much larger community. RxJS has 387 watches, 10540 stars, 991 forks and 185 contributors for the currently active repository, while BaconJS has 156 watches, 5839 stars, 328 forks and 83 contributors in total (last accessed: 31.1.2018 18:22).
@@ -54,14 +54,14 @@ For big collections or, in the case of reactive programming, observables with ma
 \begin{lstlisting}[language=JavaScript, caption={Simple example of .NET LINQ in C\# to show the steps the Visual Studio 2017 for .NET debugger takes while debugging step-by-step.},label={lst:CSharp_LINQ}]
  var lst = new List<string>{"test1","test2"};
  var result = lst.Select(s => s.ToUpper())
- .Where(s =>
- {
-	var b = s.StartsWith("t");
-	return !b && s.StartsWith("T");
- })
-.OrderBy(s => s)
-.DoCustom()
-.ToList();
+ 	.Where(s =>
+ 		{
+			var b = s.StartsWith("t");
+			return !b && s.StartsWith("T");
+ 		})
+	.OrderBy(s => s)
+	.DoCustom()
+	.ToList();
 \end{lstlisting}
 
 This shows that a traditional debugger is not suitable for the use with declarative programming in general and reactive programming in particular. While the Visual Studio debugger is still somewhat useful to debug LINQ in .Net, because multiple specialized behaviors have been implemented over the years and LINQ expressions will most likely not cover the entire application and are often used to execute short tasks inside an imperative program flow, observables in a reactive application are usually much more intertwined and make up the general flow of the program; making a traditional debugger more of an obstacle.
@@ -80,11 +80,9 @@ In this section, we will cover the previous work on the Chrome Reactive Inspecto
 	\label{sec:PreviousCRI}
 	The Chrome Reactive Inspector is based on the Reactive Inspector for Scala \cite{ReactiveInspector} and was developed by the Software Technology Group at the TU-Darmstadt Germany supervised by Prof. Dr. Guido Salvaneschi. It is implemented as a Google Chrome(Chrome) extension that extends the Chrome Developer Tools (DevTools) with another panel that inspects and instruments a target reactive Web application that is using RxJS or BaconJS. Prior to this thesis there have already been two Master theses targeting the CRI that provide the base theory and source code of this thesis.\\
 	
-	\noindent\textbf{Master Thesis by Waqas Abbas}\\
 	
-	\cite{ThesisAbbas} The main goal of the Master Thesis by Waqas Abbas was to develop and implement a concept for a Chrome extension based on the Reactive Inspector to debug reactive Web applications in JavaScript. One major difficulty was to find a viable solution for intercepting calls to the reactive libraries in order to retrieve the necessary information about observables and their dependencies that are used to build a dependency graph (called dependency tree in \cite{ReactiveInspector}) as well as to gather additional details like the variable name that directly correspond to observables and providing them with context by instrumenting the source code. An in-browser solution taken from a demo page \cite{JalangiDemo} of Jalangi was used to instrument and analyze the source code directly. The main Jalangi framework \cite{Jalangi} is currently not usable solely within a browser.
-	Abbas also implemented several features to help the developer navigate and examine the dependency graph and its history. In this first version of the CRI, the user could already submit history queries that search the history of the graph for specific nodes or events like node creation, update or the creation of a dependency. In addition, the user could add \emph{reactive breakpoints} - breakpoints that pause the program execution when a specific event occurs - or search for a node in a large dependency graph.
-	At the time the CRI supported BaconJS\cite{BaconJS} and parts of RxJS\cite{RxJS}. Abbas also added the first batch of small Web applications that could be used as test applications to manually verify features of the CRI.\\		
+	\noindent\textbf{Master Thesis by Waqas Abbas}\\
+	\cite{ThesisAbbas} The main goal of the Master Thesis by Waqas Abbas was to develop and implement a concept for a Chrome extension based on the Reactive Inspector to debug reactive Web applications in JavaScript. One major difficulty was to find a viable solution for intercepting calls to the reactive libraries in order to retrieve the necessary information about observables and their dependencies that are used to build a dependency graph (called dependency tree in \cite{ReactiveInspector}) as well as to gather additional details like the variable name that directly correspond to observables and providing them with context by instrumenting the source code. An in-browser solution taken from a demo page \cite{JalangiDemo} of Jalangi was used to instrument and analyze the source code directly. The main Jalangi framework \cite{Jalangi} is currently not usable solely within a browser. Abbas also implemented several features to help the developer navigate and examine the dependency graph and its history. In this first version of the CRI, the user could already submit history queries that search the history of the graph for specific nodes or events like node creation, update or the creation of a dependency. In addition, the user could add \emph{reactive breakpoints} - breakpoints that pause the program execution when a specific event occurs - or search for a node in a large dependency graph. At the time the CRI supported BaconJS\cite{BaconJS} and parts of RxJS\cite{RxJS}. Abbas also added the first batch of small Web applications that could be used as test applications to manually verify features of the CRI.\\		
 		
 	\noindent\textbf{Master Thesis by Pradeep Baradur}\\
 	 \cite{ThesisBaradur} The main goal of the Master Thesis by Pradeep Baradur was to add full support for RxJS to the CRI, especially all \emph{operators} and \emph{subjects}. Since RxJS does not provide a uniform way to intercept all calls to the library like the BaconJS's \emph{spy} function, this is a hard problem. For the actual implementation details see \cite{ThesisBaradur} or the \emph{rx-interception.js} file in the current version of the CRI. Baradur also reworked loading of the CRI's content scripts and instrumentation to only occur once the CRI DevTools panel is opened for an inspected Web application. This reduces the load on the browser if the CRI is not currently used. He also extended the search and history query features to allow searching for dependents or dependencies of a node. The focus of his thesis in comparison to Abbas's shifted from being mainly a proof of concept to advancing the CRI to be more reliable and ultimately being usable in a production environment. This included rearranging the UI to be more consistent and improving reliability in general as well as adding additional test applications.\\		
@@ -99,7 +97,6 @@ In this section, we will cover the previous work on the Chrome Reactive Inspecto
 	Dynamically loading the scripts that are referenced by the inspected pages HTML also cannot handle any module loader without special interception logic. As module loaders are widely used in modern Web applications and are even part of the ECMA6 \cite{ECMA6import} standard as the \emph{import} keyword, this currently imposes a significant limitation on the number of Web applications the CRI can be used with. We provide more detail and discuss some of the possible options in chapter \ref{ch:Future}.
 	
 	In addition to the special circumstances due to the dynamically loading of scripts in the shared context, the CRI also uses a Demo \cite{JalangiDemo} in-browser version of the Jalangi \cite{Jalangi} that does not provide the full features of Jalangi. Instead, it only contains features used in the Demo - for example, the source code position information of functions and variables do not contain the scripts file name. Jalangi itself contains hundreds of analysis customization options that are not included in the in-browser Demo. Another obstacle presented by using the in-browser Demo script is that it is only available in the \emph{minified} version that is hard to read and debug.
-	%TODO check all cite if it was compiled correctly
 	
 	\subsection{RxFiddle}
 	\label{sec:RxFiddle}
