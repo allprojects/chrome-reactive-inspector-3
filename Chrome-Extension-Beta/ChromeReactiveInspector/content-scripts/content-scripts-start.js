@@ -8,6 +8,13 @@ $.extend(cri, (function (window) {
         reactiveBreakPoints = result.criReactiveBreakPoints;
     });
 
+    window.addEventListener("message", function(event) {
+        if (event.data != "some answer") {
+            console.log("received message in cs", event);
+            window.postMessage("some answer", "*");
+        }
+    });
+
     // returns true if query matches
     function shouldBreakNow(currentEvent, param1, param2) {
         for (var index in reactiveBreakPoints) {

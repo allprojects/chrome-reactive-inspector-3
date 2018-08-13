@@ -28,8 +28,9 @@ let allEdges = [];
         action: "inject"
     });
 
-    // Listen to messages from the background page
-    port.onMessage.addListener(function (message) {
+    function handleGraphMessage (message) {
+
+        console.log("received message in panel: ", message);
 
         switch (message.action) {
             case "loading":
@@ -57,9 +58,30 @@ let allEdges = [];
                 handleScriptNames(message);
                 break;
             default:
-                console.warn("Unknown message received. '" + message.action + "' is not implemented. (panel)");
+                if (message.resCb) {
+                    message.resCb(cri);
+                }
+                else {
+                    console.warn("Unknown message received. '" + message.action + "' is not implemented. (panel)");
+                }
         }
+    }
+
+    window.addEventListener("message", function(event) {
+        console.log("received message", event);
+        handleGraphMessage(event.data);
     });
+
+    chrome.runtime.onMessageExternal.addListener(
+        function(request, sender, sendResponse) {
+            console.log("background received external: ", request);
+            console.log("sender", sender);
+            handleGraphMessage(request);
+            sendResponse("yay")
+        });
+
+    // Listen to messages from the background page
+    port.onMessage.addListener(handleGraphMessage);
 
     function handleLoading() {
         graphManager.clearGraph();

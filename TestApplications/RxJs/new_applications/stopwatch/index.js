@@ -40,6 +40,9 @@ var render = function render(time) {
     minutes.innerHTML = pad(time.minutes);
     seconds.innerHTML = pad(time.seconds);
 };
+
+var counter = 0
+
 var interval$ = Rx.Observable.interval(1000);
 var click$ = Rx.Observable.fromEvent(document, 'click');
 var dblclick$ = Rx.Observable.fromEvent(document, 'dblclick');
@@ -50,7 +53,8 @@ var toggleOrReset$ = Rx.Observable.merge(click$.mapTo(function (isRunning) {
 })).startWith(false).scan(function (isRunning, toggleOrFalse) {
     return toggleOrFalse(isRunning);
 }).do(function (isRunning) {
-    return console.log('Running:', isRunning);
+    counter = counter + 1
+    return console.log('Running:', isRunning, ' counter:', counter);
 }).share();
 var start$ = toggleOrReset$.filter(function (isRunning) {
     return isRunning;

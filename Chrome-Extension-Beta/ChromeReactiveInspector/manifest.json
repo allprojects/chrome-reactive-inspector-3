@@ -38,5 +38,8 @@
   "web_accessible_resources": [
     "devtools/panel/panel.js"
   ],
-  "options_page": "options/options.html"
+  "options_page": "options/options.html",
+  "externally_connectable": {
+    "matches": ["*://localhost:*/*"]
+  }
 }

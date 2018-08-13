@@ -70,6 +70,7 @@ chrome.runtime.onConnect.addListener(function (port) {
     });
 });
 
+
 function handleTabInfoRequestAsync(tabId, callback) {
     // retrieve url for download feature
     chrome.tabs.get(tabId, function (tab) {
@@ -99,19 +100,19 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 });
 
 function injectScripts(tabId) {
-    // test if underscore is loaded in example for all content scripts specified in the manifest.json
-    // if it is not loaded - the user updated the extension without reloading the inspected page.#
-    // to prevent errors all content-scripts specified in the manifest must be loaded manually.
-    const testContentScriptsLoadedSnippet = "typeof _ === \"undefined\";";
-
-    chrome.tabs.executeScript(tabId, {code: testContentScriptsLoadedSnippet}, function (resultArray) {
-        if (resultArray.length > 0 && resultArray[0] === true) {
-            console.log("reloaded content scripts");
-            executeScriptsSync(tabId, contentScriptsFromManifest.concat(scriptsToInject), 0);
-        } else {
-            executeScriptsSync(tabId, scriptsToInject, 0);
-        }
-    });
+    // // test if underscore is loaded in example for all content scripts specified in the manifest.json
+    // // if it is not loaded - the user updated the extension without reloading the inspected page.#
+    // // to prevent errors all content-scripts specified in the manifest must be loaded manually.
+    // const testContentScriptsLoadedSnippet = "typeof _ === \"undefined\";";
+    //
+    // chrome.tabs.executeScript(tabId, {code: testContentScriptsLoadedSnippet}, function (resultArray) {
+    //     if (resultArray.length > 0 && resultArray[0] === true) {
+    //         console.log("reloaded content scripts");
+    //         executeScriptsSync(tabId, contentScriptsFromManifest.concat(scriptsToInject), 0);
+    //     } else {
+    //         executeScriptsSync(tabId, scriptsToInject, 0);
+    //     }
+    // });
 }
 
 const scriptsToInject = ["libraries/Bacon.js",
