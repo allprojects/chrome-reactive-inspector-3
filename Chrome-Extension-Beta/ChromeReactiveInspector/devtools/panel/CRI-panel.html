@@ -157,11 +157,14 @@
     </div>
 </div>
 <hr>
-<!-- canvas-container needs tabindex to receive key events -->
-<div id="canvas-container" tabindex="0">
-    <h4 id="dependency-graph-header">Dependency Graph</h4>
-    <svg id="svg-canvas" width="100%"></svg>
-    <div class="tooltip" id="cri-node-tooltip" style=""></div>
+<div id=bottomframe>
+    <div id=sidebar></div>
+    <!-- canvas-container needs tabindex to receive key events -->
+    <div id="canvas-container" tabindex="0">
+        <h4 id="dependency-graph-header">Dependency Graph</h4>
+        <svg id="svg-canvas" width="100%"></svg>
+        <div class="tooltip" id="cri-node-tooltip" style=""></div>
+    </div>
 </div>
 <script src="panel.js"></script>
 <script src="../panel-communication.js"></script>
