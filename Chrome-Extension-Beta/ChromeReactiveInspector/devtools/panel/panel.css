@@ -1,3 +1,7 @@
+#svg-canvas {
+    min-height: 400px;
+}
+
 .node rect {
     border-radius: 10px;
     stroke: #A1C0DB;
@@ -91,10 +95,6 @@ text {
     margin-top: 5px;
     display: inline-block;
     width: 80%;
-}
-
-#svg-canvas {
-    min-height: 800px;
 }
 
 .left-border {

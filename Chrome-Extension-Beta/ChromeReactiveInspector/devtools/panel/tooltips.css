@@ -1,31 +1,55 @@
-.tipsy.code-tooltip .tipsy-inner {
-    max-width: 500px !important;
+.tipsy-inner { max-width: 50em; }
+
+#bottomframe {
+    position: relative;
+}
+#sidebar {
+    position: absolute;
+    width: 50%;
+    top: 0;
+    bottom: 0;
+
+    padding: 1em;
+    overflow: hidden;
+    height: -webkit-fill-available;
+    background: #eee;
+    line-height: 1;
+    font-size: 13px;
+    overflow-x: scroll;
+}
+#sidebar > {background: silver}
+#canvas-container {
+    position: absolute;
+    right: 0;
+    left: 50%;
+    top: 0;
+    bottom: 0;
 }
 
-.tipsy.code-tooltip .custom-tooltip p {
-    font-family: Andale Mono, AndaleMono, monospace;
-    font-size: 1.2em;
-    font-weight: normal;
-}
-
-.tipsy.code-tooltip .custom-tooltip p em {
-    color: #D97E00 !important;
-    font-style: normal;
-}
+/*body:not(.ctrl-key) .node-tooltip {display:block}*/
+/*body:not(.ctrl-key) .code-tooltip {display:none}*/
+/*body.ctrl-key       .node-tooltip {display:none}*/
+/*body.ctrl-key       .code-tooltip {display:block}*/
 
 .tipsy .custom-tooltip > p {
-    font-size: 1.2em;
-    font-weight: bold;
+    padding: 0; margin: 0;
+}
+.code-tooltip {
+    font-family: Andale Mono, AndaleMono, monospace;
     color: #004C8C;
-    margin: 0;
-    text-align: left;
+}
+.custom-tooltip {
+/*    font-size: 1em;*/
+/*    font-weight: normal;*/
+/*    padding: 0; margin: 0;*/
+/*    text-align: left;*/
     pointer-events: none;
     word-wrap: break-word;
 }
 
-.tooltip-hint {
-    font-size: 10px !important;
-    color: darkgray !important;
+.custom-tooltip em {
+    color: #D97E00 !important;
+    font-style: normal;
 }
 
 .code-placeholder {
@@ -35,13 +59,16 @@
     height: 30px;
 }
 
-.code-tooltip span.line-number {
+.code-tooltip span, .code-tooltip em {
+    white-space: pre;
+}
+.code-tooltip p {
+    position: relative;
+    padding-left: 2em !important;
+}
+.code-tooltip p > :nth-child(1) {
+    position: absolute; top: 0; left: 0;
     color: #A1C0DB;
-    font-family: Andale Mono, AndaleMono, monospace;
-    font-size: 1.2em;
-    font-weight: normal;
-    margin: 0;
-    padding: 0;
-    text-align: left;
     pointer-events: none;
 }
+

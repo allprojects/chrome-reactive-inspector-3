@@ -27,7 +27,7 @@ cri.utils = (function (window) {
      */
     function pad(str, count) {
         return String(" " +
-            " ".repeat(count) + str).slice(-count).replace(/ /g, "&nbsp;");
+            " ".repeat(count) + str).slice(-count);
     }
 
 
