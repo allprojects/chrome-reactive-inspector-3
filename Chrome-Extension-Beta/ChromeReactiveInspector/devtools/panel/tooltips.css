@@ -5,7 +5,7 @@
 }
 #sidebar {
 /*    position: absolute;*/
-    width: 50%;
+    width: 25%;
     max-width: calc( 30em );
 /*    top: 0;*/
 /*    bottom: 0;*/
@@ -15,7 +15,7 @@
     height: -webkit-fill-available;
     background: #eee;
     line-height: 1;
-    font-size: 13px;
+    font-size: 1.2em;
     overflow-x: scroll;
 }
 #sidebar > {background: silver}

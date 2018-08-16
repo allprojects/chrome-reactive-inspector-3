@@ -83,16 +83,27 @@ _.extend(cri, (function (window) {
         }
 
         let tooltip = $("<div class='custom-tooltip node-tooltip'>");
-        let addText = (text, cls) => tooltip.append($("<p>", {"class":cls}).text(text))
+        let addText = (label, text, cls) => tooltip.append($("<div style='margin-bottom:1em'>", {"class":cls}).append(
+          $("<p>").append($("<b>").text(label)),
+          $("<p>").text(text)
+        ));
+//          tooltip.append($("<p>", {"class":cls}).text(text))
 
-        if (data.nodeId)      addText('Id: ' + data.nodeId);
-        if (data.type)        addText('Type: ' + data.type);
-        if (data.method)      addText('Method: ' + data.method);
-        if (data.nodeUpdates && data.nodeUpdates > 1)
-                              addText('Number of Updates: ' + data.nodeUpdates);
-        if (data.value)       addText('Value: ' + data.value.substring(0, 300)); // value can get very long
+        if (data.nodeId)      addText('Id:', data.nodeId);
+        if (data.type)        addText('Type:', data.type);
+        if (data.method)      addText('Method:', data.method);
+
+        tooltip.append($("<div style='margin-bottom:1em'>").append(
+          $("<p>").append($("<b>").text("Value:")),
+          $("<p>").append($("<input>"), $("<button>").text("Fire!"))
+        ));
+
+//        if (data.nodeUpdates && data.nodeUpdates > 1)
+//                              addText('Number of Updates: ' + data.nodeUpdates);
+//        if (data.value)
+//            addText('Value: ' + data.value.substring(0, 300)); // value can get very long
         if (sourceInfoText) {
-            addText('Location: ' + sourceInfoText);
+            addText('Location:', sourceInfoText);
 //            addText('(Press CTRL to view source code, click to focus panel if not working.)');
         }
 

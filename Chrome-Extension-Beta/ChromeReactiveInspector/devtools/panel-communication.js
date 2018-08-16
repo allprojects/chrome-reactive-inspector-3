@@ -127,7 +127,7 @@ let allEdges = [];
         node.class = "current"
             + (node.ref ? " nodeWithRef" : " nodeWithoutRef")
             + (node.sourceInfo ? " has-source-info" : "");
-        node.label = getNodeLabel(id, node.ref, truncatedVal);
+        node.label = getNodeLabel(node, truncatedVal);
 
         let previousSavedNode = graphManager.getNode(id);
         if (previousSavedNode) {
@@ -250,11 +250,11 @@ function saveHistory(stageId, type, value) {
     }
 }
 
-function getNodeLabel(id, name, value) {
+function getNodeLabel(node, truncatedValue) {
     let lines = [];
-    if (id)    lines.push("Id: " + id);
-//    if (name)  lines.push("Name: " + name);
-    if (value) lines.push("Value: " + value)
+    if (node.nodeId) lines.push("Id: " + node.nodeId);
+    if (node.type != "Evt" && node.type != "Event" && truncatedValue)
+      lines.push("Value: " + truncatedValue)
     // wrap in html to ensure valid html
     return $("<div>").append(lines.join("<br />")).html();
 }

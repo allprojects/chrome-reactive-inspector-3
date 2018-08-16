@@ -75,9 +75,10 @@
     <!--</div>-->
 
     <hr>
+
     <div id="query-item-panel" class="flex-container collapse" style="flex-wrap: wrap">
-      <div class="">
-        <h4>Queries & Breakpoints</h4>
+      <div class="flex-child-centered" style="padding:0 2em">
+        <h4>History Queries</h4>
         <div class="flex-item-container">
           <select class="form-control cri-findnode-select" id="cri-findnode-select">
             <option value="nodeCreated">nodeCreated[nodeName]</option>
@@ -100,9 +101,21 @@
         </div>
       </div>
 
-      <div style=width:2em></div>
+      <div class="flex-child-centered" style="padding:0 2em">
+        <h4>Reactive Breakpoints</h4>
+        <div class="flex-item-container">
+          <select class="form-control cri-breakpoint-select" id="cri-breakpoint-select">
+            <option>nodeCreated[nodeId]</option>
+            <option>nodeUpdated[nodeId]</option>
+            <option>evaluationYielded[nodeId][value]</option>
+            <option>dependencyCreated[nodeId][nodeId]</option>
+          </select>
+          <button type="button" class="btn" id="cri-breakpoint-query-submit">Add</button>
+        </div>
+      </div>
+      <div id="cri-breakpoints-container" class="flex-child-centered flex-vertical-container"></div>
 
-      <div class="flex-grow">
+      <div class="flex-grow" style="padding:0 2em">
         <h4>History</h4>
         <div class="flex-container">
           <div class="flex-child-centered">
@@ -118,24 +131,9 @@
               <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
           </div>
-          <button type=button style="margin: .5em" class="btn btn-default btn-sm">Time travel!</button>
+          <button type=button style="margin: .5em" class="btn btn-default btn-sm">Time travel</button>
         </div>
       </div>
-
-  <!-- REACTIVE BREAKPOINTS -->
-  <!--    <div class="flex-child-centered">-->
-  <!--      <h4>Reactive Breakpoints</h4>-->
-  <!--      <div class="flex-item-container">-->
-  <!--        <select class="form-control cri-breakpoint-select" id="cri-breakpoint-select">-->
-  <!--          <option>nodeCreated[nodeId]</option>-->
-  <!--          <option>nodeUpdated[nodeId]</option>-->
-  <!--          <option>evaluationYielded[nodeId][value]</option>-->
-  <!--          <option>dependencyCreated[nodeId][nodeId]</option>-->
-  <!--        </select>-->
-  <!--        <button type="button" class="btn" id="cri-breakpoint-query-submit">Add</button>-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--    <div id="cri-breakpoints-container" class="flex-child-centered flex-vertical-container"></div>-->
 
   <!-- HISTORY SEARCH -->
   <!--    <div class="flex-child-centered">-->
@@ -168,7 +166,7 @@
     <div id=sidebar></div>
     <!-- canvas-container needs tabindex to receive key events -->
     <div class="flex-grow" id="canvas-container" tabindex="0">
-      <h4 id="dependency-graph-header">Dependency Graph</h4>
+      <h4 id="dependency-graph-header">Dataflow Graph</h4>
       <svg id="svg-canvas" width="100%"></svg>
       <div class="tooltip" id="cri-node-tooltip" style=""></div>
     </div>
