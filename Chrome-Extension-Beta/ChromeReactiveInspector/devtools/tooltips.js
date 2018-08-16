@@ -19,7 +19,7 @@ _.extend(cri, (function (window) {
     }
 
     function loadCodeIfNotThere(node, data) {
-        if (!data || !data.sourceInfo) return; // missing source code file
+//        if (!data || !data.sourceInfo) return; // missing source code file
 
         // only load code once
         let d3node = d3.select(node);
@@ -29,11 +29,11 @@ _.extend(cri, (function (window) {
         // refresh tipsy / sidebar
         d3node.attr("original-title", "this"); $(node).tipsy("show");
         let norm = createNormalTooltipContent(data);
-        d3node.attr("tooltip", norm + pendingIcon);
+        d3node.attr("tooltip", norm + (data.sourceInfo ? pendingIcon : ""));
         $("#sidebar").html(d3node.attr("tooltip"));
 
         // async, refresh tipsy with source code preview
-        requestCodeSnippetAsync(data.sourceInfo, function (answer) {
+        if (data.sourceInfo) requestCodeSnippetAsync(data.sourceInfo, function (answer) {
             if (!answer.code) return;
             let codeHtml = createCodeTooltipContent(data.sourceInfo.begin, data.sourceInfo.end, answer.code);
 
@@ -85,10 +85,12 @@ _.extend(cri, (function (window) {
         let tooltip = $("<div class='custom-tooltip node-tooltip'>");
         let addText = (text, cls) => tooltip.append($("<p>", {"class":cls}).text(text))
 
-        if (data.type)   addText('Type: ' + data.type);
-        if (data.method) addText('Method: ' + data.method);
-        if (data.nodeUpdates && data.nodeUpdates > 1) addText('Number of Updates: ' + data.nodeUpdates);
-        if (data.value) addText('Value: ' + data.value.substring(0, 300)); // value can get very long
+        if (data.nodeId)      addText('Id: ' + data.nodeId);
+        if (data.type)        addText('Type: ' + data.type);
+        if (data.method)      addText('Method: ' + data.method);
+        if (data.nodeUpdates && data.nodeUpdates > 1)
+                              addText('Number of Updates: ' + data.nodeUpdates);
+        if (data.value)       addText('Value: ' + data.value.substring(0, 300)); // value can get very long
         if (sourceInfoText) {
             addText('Location: ' + sourceInfoText);
 //            addText('(Press CTRL to view source code, click to focus panel if not working.)');

@@ -1,13 +1,14 @@
 .tipsy-inner { max-width: 50em; }
 
 #bottomframe {
-    position: relative;
+/*    position: relative;*/
 }
 #sidebar {
-    position: absolute;
+/*    position: absolute;*/
     width: 50%;
-    top: 0;
-    bottom: 0;
+    max-width: calc( 30em );
+/*    top: 0;*/
+/*    bottom: 0;*/
 
     padding: 1em;
     overflow: hidden;
@@ -19,11 +20,13 @@
 }
 #sidebar > {background: silver}
 #canvas-container {
-    position: absolute;
-    right: 0;
-    left: 50%;
-    top: 0;
-    bottom: 0;
+/*    width: 100%;*/
+    min-height: 500px;
+/*    position: absolute;*/
+/*    right: 0;*/
+/*    left: 50%;*/
+/*    top: 0;*/
+/*    bottom: 0;*/
 }
 
 /*body:not(.ctrl-key) .node-tooltip {display:block}*/

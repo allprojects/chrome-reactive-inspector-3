@@ -252,15 +252,9 @@ function saveHistory(stageId, type, value) {
 
 function getNodeLabel(id, name, value) {
     let lines = [];
-    if (id) {
-        lines.push("Id: " + id);
-    }
-    if (name) {
-        lines.push("Name: " + name);
-    }
-    if (value) {
-        lines.push("Value: " + value)
-    }
+    if (id)    lines.push("Id: " + id);
+//    if (name)  lines.push("Name: " + name);
+    if (value) lines.push("Value: " + value)
     // wrap in html to ensure valid html
     return $("<div>").append(lines.join("<br />")).html();
 }

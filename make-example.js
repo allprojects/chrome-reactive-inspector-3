@@ -1,19 +1,21 @@
 function mkNode(name, type, value = "None") {
-	let node = {
-	    content: {
-	        'nodeId': name,
-	        'nodeType': type,
-	        'nodeRef': name,
-	        'nodeValue': value,
-	        'sourceInfo': 0
-	    }, action: "saveNode", destination: "panel"
-	}
-	chrome.runtime.sendMessage("fgfpihlifkogdbneaeioniifkipgeipn", node, function (response) { console.log(response) })
-	return node
+    let node = {
+        content: {
+            'nodeId': name,
+            'nodeType': type,
+            'nodeRef': name,
+            'nodeValue': value,
+            'sourceInfo': 0
+        },
+        action: "saveNode",
+        destination: "panel"
+    }
+    chrome.runtime.sendMessage("llgljhhckhgbadnnjbaninnndngdfioe", node, function (response) { console.log(response) })
+    return node
 }
 
 function mkEdge(from, to) {
-	let edge = {
+    let edge = {
             content: {
                 "edgeStart": from.content.nodeId,
                 "edgeStartName": '',
@@ -24,7 +26,7 @@ function mkEdge(from, to) {
             action: "saveEdge",
             destination: "panel"
         }
-	chrome.runtime.sendMessage("fgfpihlifkogdbneaeioniifkipgeipn", edge, function (response) { console.log(response) })
+    chrome.runtime.sendMessage("llgljhhckhgbadnnjbaninnndngdfioe", edge, function (response) { console.log(response) })
 }
 
 
@@ -44,3 +46,32 @@ let dashboard = mkNode("dashboard", "Signal", "…")
 mkEdge(onDisplay, dashboard)
 mkEdge(history, dashboard)
 mkEdge(aggregated, dashboard)
+
+mkNode("temperature", "Evt", "10")
+mkNode("filter", "Event", "10")
+mkNode("filtered", "Event", "10")
+mkNode("history", "Event", "List(10)")
+mkNode("aggregated", "Event", "10")
+mkNode("dashboard", "Event", "...")
+mkNode("temperature", "Evt", "None")
+mkNode("filter", "Event", "None")
+mkNode("filtered", "Event", "None")
+
+mkNode("temperature", "Evt", "1000")
+mkNode("temperature", "Evt", "None")
+
+mkNode("temperature", "Evt", "-100")
+mkNode("filter", "Event", "-100")
+mkNode("temperature", "Evt", "None")
+mkNode("filter", "Event", "None")
+
+mkNode("temperature", "Evt", "20")
+mkNode("filter", "Event", "20")
+mkNode("filtered", "Event", "20")
+mkNode("history", "Event", "List(10, 20)")
+mkNode("aggregated", "Event", "15")
+mkNode("dashboard", "Event", "...")
+mkNode("temperature", "Evt", "None")
+mkNode("filter", "Event", "None")
+mkNode("filtered", "Event", "None")
+

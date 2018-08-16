@@ -222,6 +222,10 @@ hr {
     display: flex;
 }
 
+.flex-grow {
+    flex-grow: 1;
+}
+
 .flex-centered {
     align-items: center;
 }
