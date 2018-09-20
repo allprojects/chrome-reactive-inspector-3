@@ -78,7 +78,8 @@ let allEdges = [];
             console.log("sender", sender);
             handleGraphMessage(request);
             sendResponse("yay")
-        });
+        }
+    );
 
     // Listen to messages from the background page
     port.onMessage.addListener(handleGraphMessage);

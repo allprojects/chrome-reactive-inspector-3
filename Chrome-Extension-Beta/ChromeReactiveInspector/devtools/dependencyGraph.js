@@ -101,14 +101,13 @@ cri.dependencyGraph = (function () {
         // clear previously marked edges and nodes
         self.graph.nodes().forEach(function (n) {
             let node = self.graph.node(n);
-            node.class = node.class.replace(/current/g, "");
             // remove multiple spaces
-            node.class = node.class.replace(/ +(?= )/g, "");
+            node.class = (node.class || "").replace(/current/g, "").replace(/ +(?= )/g, "");
         });
 
         self.graph.edges().forEach(function (e) {
             let edge = self.graph.edge(e);
-            edge.class = edge.class.replace(/current/g, "");
+            edge.class = (edge.class || "").replace(/current/g, "");
         });
 
         // clear ui, because dagre-d3 does not clean up old classes properly
@@ -129,7 +128,7 @@ cri.dependencyGraph = (function () {
 
     function createGraph() {
         return new dagreD3.graphlib.Graph()
-            .setGraph({rankdir: "LR"})
+            .setGraph({rankdir: "LR"}) // left to right
             .setDefaultEdgeLabel(function () {
                 return {};
             });
@@ -143,7 +142,7 @@ cri.dependencyGraph = (function () {
             case "newNode":
             case "updateNode":
                 if (isLast) {
-                    node.class += " current";
+                    node.class = (node.class || "") + " current";
                 }
                 self.graph.setNode(node.nodeId, node);
                 break;

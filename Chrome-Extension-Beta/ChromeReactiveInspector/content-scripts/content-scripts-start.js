@@ -1,18 +1,16 @@
 var cri = cri || {};
 
 $.extend(cri, (function (window) {
+    window.addEventListener("message", function(event) {
+        if (event.data.destination == "panel")
+            chrome.runtime.sendMessage(event.data);
+    });
+
     var reactiveBreakPoints;
     chrome.storage.sync.get({criReactiveBreakPoints: []}, function (result) {
         // the input argument is ALWAYS an object containing the queried keys
         // so we select the key we need
         reactiveBreakPoints = result.criReactiveBreakPoints;
-    });
-
-    window.addEventListener("message", function(event) {
-        if (event.data != "some answer") {
-            console.log("received message in cs", event);
-            window.postMessage("some answer", "*");
-        }
     });
 
     // returns true if query matches
