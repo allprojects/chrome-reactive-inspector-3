@@ -32,16 +32,13 @@ For more detail please go to [TestApplications](TestApps/README.md) directory.
 
 
 ## Usage
-After the chrome extension is installed successfully, open an application that should be examined and open the developer
- tools (F12, CTRL-Shift-I or open it via R-Click "Inspect Element").
+After the chrome extension is installed successfully, open an application that should be examined and open the developer tools (F12, CTRL-Shift-I or open it via R-Click "Inspect Element").
 Now switch to the "Reactive Inspector" tab in the devtools window.
 
 ## History
 This project is done as extension to the work of [Reative Inspector](https://github.com/guidosalva/reactive-inspector).
 
-It was started as a Master Thesis by Waqas Abbas at TU - Darmstadt Germany and later advanced in a Master Thesis by
- Pradeep Baradur at TU-Darmstadt Germany and a Bachelor Thesis by Benedikt Gross at TU - Darmstadt Germany, all under 
- the supervision of [Prof. Dr Guido Salvaneschi](http://www.guidosalvaneschi.com/).
+It was started as a Master Thesis by Waqas Abbas at TU - Darmstadt Germany and later advanced in a Master Thesis by Pradeep Baradur at TU-Darmstadt Germany and a Bachelor Thesis by Benedikt Gross at TU - Darmstadt Germany, all under the supervision of [Prof. Dr Guido Salvaneschi](http://www.guidosalvaneschi.com/).
 
 ### Contributions
 Waqas Abbas, Pradeep Baradur, Benedikt Gross, [Prof. Dr Guido Salvaneschi](http://www.guidosalvaneschi.com/),
@@ -61,8 +58,7 @@ Now the extensions is loaded, but Chrome will ask at every start to disable the 
 Click Cancel in the dialog that pops up and proceed.
 
 ## Credits
-I would like to thank my supervisor Guido Salvaneschi for his continuous support, his feedback
-and his patience.
+I would like to thank my supervisor Guido Salvaneschi for his continuous support, his feedbackand his patience.
 
 
 ### Debugging:

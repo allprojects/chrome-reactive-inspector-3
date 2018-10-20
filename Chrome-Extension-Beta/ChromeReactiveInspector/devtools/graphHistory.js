@@ -1,6 +1,6 @@
 var cri = cri || {};
 
-cri.graphHistory = (function (window) {
+(function () {
     const cacheMax = 5;
     const cacheMin = 2;
     const deltaWindowSize = 100;
@@ -35,19 +35,18 @@ cri.graphHistory = (function (window) {
     };
 
     function createStage(id, graph) {
-        let edges = _.map(graph.edges(), function (e) {
-            return new Edge(e.v, e.w, graph.edge(e));
-        });
+        let edges = graph.edges().map(e =>
+            new Edge(e.v, e.w, graph.edge(e)));
 
-        let nodes = _.map(graph.nodes(), function (n) {
+        let nodes = graph.nodes().map(n => {
+            let node = {...graph.node(n)};
 
-            let uiNode = _.clone(graph.node(n));
             // remove classes added by findNode feature
-            uiNode.class = uiNode.class
+            node.class = node.class
                 .replace(/fade/g, '')
                 .replace(/highlight/g, '');
 
-            return uiNode;
+            return node;
         });
 
         return new Stage(id, nodes, edges);
@@ -159,10 +158,6 @@ cri.graphHistory = (function (window) {
         }
     }
 
-    History.prototype.getStageCount = function () {
-        return this.nextStageId;
-    };
-
     History.prototype.clear = function () {
         this.nextStageId = 0;
         this.storage = [];
@@ -198,9 +193,8 @@ cri.graphHistory = (function (window) {
         this.data = data;
     }
 
-    return {
-        History: History,
-        Stage: Stage,
-        Edge: Edge
-    }
-})(window);
+    // exports
+    cri.graphHistory = {};
+    cri.graphHistory.History = History;
+    cri.graphHistory.Stage = Stage;
+}());

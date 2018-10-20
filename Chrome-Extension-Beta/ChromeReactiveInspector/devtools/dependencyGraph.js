@@ -1,6 +1,6 @@
 var cri = cri || {};
 
-cri.dependencyGraph = (function () {
+(function () {
     /**
      * Handles the displayed Dependency Graph and the current stage.
      * @param d3container The parent of the Dependency Graph selected by a d3 selector.
@@ -56,7 +56,7 @@ cri.dependencyGraph = (function () {
         //TODO: prevent reload of current stage.
 
         // get data for asked stage
-        history.loadStage(stageId, function (baseStage, deltaStages) {
+        this.history.loadStage(stageId, function (baseStage, deltaStages) {
             self.currentStage = stageId;
 
             if (baseStage) {
@@ -99,13 +99,13 @@ cri.dependencyGraph = (function () {
         let self = this;
 
         // clear previously marked edges and nodes
-        self.graph.nodes().forEach(function (n) {
+        self.graph.nodes().forEach(n => {
             let node = self.graph.node(n);
             // remove multiple spaces
             node.class = (node.class || "").replace(/current/g, "").replace(/ +(?= )/g, "");
         });
 
-        self.graph.edges().forEach(function (e) {
+        self.graph.edges().forEach(e => {
             let edge = self.graph.edge(e);
             edge.class = (edge.class || "").replace(/current/g, "");
         });
@@ -129,38 +129,26 @@ cri.dependencyGraph = (function () {
     function createGraph() {
         return new dagreD3.graphlib.Graph()
             .setGraph({rankdir: "LR"}) // left to right
-            .setDefaultEdgeLabel(function () {
-                return {};
-            });
+            .setDefaultEdgeLabel(function () { return {}; });
     }
 
     function applyDeltaStage(self, delta, isLast) {
-        let node = delta.change.data;
-        let edge = delta.change.data;
-
-        switch (delta.change.event) {
-            case "newNode":
-            case "updateNode":
-                if (isLast) {
-                    node.class = (node.class || "") + " current";
-                }
-                self.graph.setNode(node.nodeId, node);
-                break;
-            case "saveEdge":
-                self.graph.setEdge(edge.edgeStart, edge.edgeEnd, {
-                    label: edge.edgeLabel,
-                    class: isLast ? "current" : ""
-                });
-                break;
-            case "removeEdge":
-                self.graph.removeEdge(edge.edgeStart, edge.edgeEnd, edge.edgeLabel);
-                break;
-            default:
-                console.error("Unknown change '" + delta.change.event + "' to the graph detected. " +
-                    "Please report this error to the owner of the Chrome Reactive Inspector.");
-                break;
-        }
+        let data = delta.change.data;
+        let ev = delta.change.event;
+        if (ev === "newNode" || ev === "updateNode") {
+            if (isLast) data.class = (data.class || "") + " current";
+            self.graph.setNode(data.nodeId, data);
+        } else if (ev === "saveEdge")
+            self.graph.setEdge(data.edgeStart, data.edgeEnd, {
+                label: data.edgeLabel,
+                class: isLast ? "current" : ""
+            });
+        else if (ev === "removeEdge")
+            self.graph.removeEdge(data.edgeStart, data.edgeEnd, data.edgeLabel);
+        else
+            console.error("Unknown change '" + delta.change.event + "' to the graph detected. " +
+                          "Please report this error to the owner of the Chrome Reactive Inspector.");
     }
 
-    return {GraphManager: GraphManager}
-})(window);
+    cri.GraphManager = GraphManager
+})();

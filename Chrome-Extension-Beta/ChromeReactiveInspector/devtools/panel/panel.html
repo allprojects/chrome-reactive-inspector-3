@@ -7,35 +7,8 @@
   <link rel="stylesheet" href="../../libraries/jquery-ui.min.css">
   <link rel="stylesheet" href="../../libraries/jquery-editable-select.min.css">
   <link rel="stylesheet" href="../../libraries/jquery-ui-slider-pips.css">
-
   <link rel="stylesheet" href="panel.css">
-  <link rel="stylesheet" href="tooltips.css">
-
-  <script src="../../libraries/d3.v3.min.js" charset="utf-8"></script>
-  <script src="../../libraries/dagre-d3.js"></script>
-  <script src="../../libraries/jquery-1.12.4.min.js"></script>
-  <script src="../../libraries/bootstrap/js/bootstrap.min.js"></script>
-  <script src="../../libraries/underscore-min.js"></script>
-  <script src="../../libraries/tipsy.js"></script>
-  <script src="../../libraries/bootstrap-tokenfield.min.js"></script>
-
-  <script src="../../libraries/jquery-ui.min.js"></script>
-  <!-- plus a jQuery UI theme, here I use "flick" -->
-  <script src="../../libraries/jquery-ui-slider-pips.js"></script>
-  <!-- for query search-->
-  <script src="../../libraries/jquery-editable-select.min.js"></script>
-
-  <!-- to convert svg to downloadable image -->
-  <script src="../../libraries/simg.js"></script>
-
-  <script src="../optionsAccess.js"></script>
-  <script src="../utils.js"></script>
-  <script src="../tooltips.js"></script>
-  <script src="../reactive-breakpoints.js"></script>
-  <script src="../stageStorage.js"></script>
-  <script src="../graphHistory.js"></script>
-  <script src="../dependencyGraph.js"></script>
-  <script src="../search-graph.js"></script>
+  <link rel="stylesheet" href="panel-tooltips.css">
 </head><body>
 
 <div id="dialog" title="Confirmation Required">
@@ -171,6 +144,28 @@
       <div class="tooltip" id="cri-node-tooltip" style=""></div>
     </div>
   </div>
+
+
+  <script src="../../libraries/d3.v3.min.js" charset="utf-8"></script>
+  <script src="../../libraries/dagre-d3.js"></script>
+  <script src="../../libraries/jquery-1.12.4.min.js"></script>
+  <script src="../../libraries/jquery-ui.min.js"></script>
+  <script src="../../libraries/jquery-ui-slider-pips.js"></script> <!-- plus a jQuery UI theme, here I use "flick" -->
+  <script src="../../libraries/jquery-editable-select.min.js"></script> <!-- for query search-->
+  <script src="../../libraries/tipsy.js"></script>
+  <script src="../../libraries/underscore-min.js"></script>
+  <script src="../../libraries/bootstrap/js/bootstrap.min.js"></script>
+  <script src="../../libraries/bootstrap-tokenfield.min.js"></script>
+  <script src="../../libraries/simg.js"></script> <!-- to convert svg to downloadable image -->
+
+  <script src="../optionsAccess.js"></script>
+  <script src="../utils.js"></script>
+  <script src="../tooltips.js"></script>
+  <script src="../reactive-breakpoints.js"></script>
+  <script src="../stageStorage.js"></script>
+  <script src="../graphHistory.js"></script>
+  <script src="../dependencyGraph.js"></script>
+  <script src="../search-graph.js"></script>
 
   <script src="panel.js"></script>
   <script src="../panel-communication.js"></script>

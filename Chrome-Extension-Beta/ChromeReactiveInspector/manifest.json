@@ -3,43 +3,26 @@
   "name": "Chrome Reactive Inspector",
   "version": "3.0.3",
   "description": "This extension enables developers to debug reactive web applications written in Rx.js 5 or Bacon.js. It adds a new panel to the Chrome DevTools that interacts with the inspected page.",
-  "author": "Waqas Abbas, Pradeep Baradur and Benedikt Gross with supervision from Dr.Guido Salvaneschi at TU - Darmstadt",
-  "devtools_page": "devtools/panel/devtools.html",
-  "background": {
-    "scripts": [
-      "background/background-communication.js"
-    ]
-  },
+  "author": "David Richter, Ragnar Mogk; based on work by Waqas Abbas, Pradeep Baradur and Benedikt Gross with supervision from Prof. Guido Salvaneschi at TU-Darmstadt",
+  "icons": { "128": "resources/icon.png" },
   "permissions": [
     "tabs",
-    "activeTab",
     "storage",
+    "activeTab",
     "<all_urls>"
   ],
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "libraries/jquery-1.12.4.min.js",
-        "content-scripts/content-scripts-start.js",
-        "content-scripts/content-script-communication.js",
-        "content-scripts/jalangi-framework.js",
-        "libraries/underscore-min.js"
-      ],
-      "run_at": "document_start",
-      "all_frames": false
-    }
-  ],
-  "icons": {
-    "128": "resources/icon.png"
-  },
-  "web_accessible_resources": [
-    "devtools/panel/panel.js"
-  ],
-  "options_page": "options/options.html",
   "externally_connectable": {
     "matches": ["*://localhost:*/*"]
-  }
+  },
+
+  "options_page":               "options/options.html",
+  "devtools_page":              "devtools/panel/devtools.html",
+  "background": {  "scripts": [ "background/background.js" ] },/* "persistent"; false */
+  "content_scripts": [{ "js": [ "content/content.js" ],
+                        "run_at": "document_start",
+                        "matches": ["<all_urls>"],
+                        "all_frames": false }]
 }
+
+// "web_accessible_resources": [ "devtools/panel/panel.js" ],    // WHY? no errors without it...
+

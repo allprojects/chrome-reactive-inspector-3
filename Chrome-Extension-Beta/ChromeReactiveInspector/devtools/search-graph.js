@@ -64,7 +64,7 @@ _.extend(cri, (function (window) {
         } else {
             this.$searchNode.addClass('error');
         }
-        allEdges.forEach(function (edge) {
+        cri.allEdges.forEach(function (edge) {
             if (type === 'dependencies') {
                 if (edge.endId === tempNode.nodeId) {
                     edges.push(edge.startId);
@@ -79,7 +79,7 @@ _.extend(cri, (function (window) {
         if (edges.length) {
             let tempArray = [];
             if (type === 'dependencies') {
-                let allEdgesReverse = allEdges.slice().reverse();
+                let allEdgesReverse = cri.allEdges.slice().reverse();
                 allEdgesReverse.forEach(function (edge) {
                     if (_.contains(edges, edge.endId))
                         edges.push(edge.startId);
@@ -95,7 +95,7 @@ _.extend(cri, (function (window) {
                 edges = _.unique(edges)
             }
             else {
-                allEdges.forEach(function (edge) {
+                cri.allEdges.forEach(function (edge) {
                     if (_.contains(edges, edge.startId))
                         edges.push(edge.endId);
                     else

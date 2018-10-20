@@ -1,6 +1,6 @@
 var cri = cri || {};
 
-_.extend(cri, (function (window) {
+(function () {
 
     let pendingIcon = "<div class='code-tooltip custom-tooltip'><img class='code-placeholder' src='"+chrome.extension.getURL("resources/loading.gif")+"'></div>";
 
@@ -64,7 +64,7 @@ _.extend(cri, (function (window) {
             let to = sourceInfo.end.line + codePreviewScope;
             let filename = sourceInfo.filename;
 
-            sendObjectToInspectedPage({
+            cri.sendObjectToInspectedPage({
                 destination: 'instrumented',
                 action: 'getSourceCode',
                 content: {to: to, from: from, filename: filename}
@@ -165,5 +165,5 @@ _.extend(cri, (function (window) {
         });
     };
 
-    return {TooltipManager: TooltipManager}
-})(window));
+    cri.TooltipManager = TooltipManager;
+}());

@@ -1,6 +1,6 @@
 var cri = cri || {};
 
-cri.stageStorage = (function (window) {
+(function () {
 
     let storageQueue = [];
     // used to remember what to delete on clear()
@@ -14,26 +14,21 @@ cri.stageStorage = (function (window) {
     function storeOnDisk(stages, getSequentialIdFunction) {
         let storageObject = {};
         let oldHighest = highestId;
-        stages.forEach(function (s) {
+        stages.forEach(s => {
             let id = getSequentialIdFunction(s);
-            if (id > highestId) {
-                highestId = id;
-                storageObject["stage" + id] = s;
-            }
-            // no need to save if id is not new
+            if (id <= highestId) return; // no need to save if id is not new
+            highestId = id;
+            storageObject["stage" + id] = s;
         });
 
-        // abort if all stages have been saved previously
-        if (Object.keys(storageObject).length === 0) {
-            return;
-        }
+        // abort if nothing new to store
+        if (Object.keys(storageObject).length === 0) return;
 
         let operation = function (callBackQueue) {
             chrome.storage.local.set(storageObject, function () {
-                if (chrome.runtime.lastError) {
-                    console.error("Chrome local storage api threw an exception. This is possibly because the local" +
-                        " storage ran out of capacity.")
-                }
+                if (chrome.runtime.lastError)
+                    console.error("Chrome local storage api threw an exception. "
+                      + "This is possibly because the local storage ran out of capacity.")
                 console.log("cri: stored stages on disk.");
                 callBackQueue();
             });
@@ -41,11 +36,10 @@ cri.stageStorage = (function (window) {
 
         // set highest to storage as well in case the extension closes unexpectedly.
         if (oldHighest !== highestId) {
-            chrome.storage.local.set({highestStageId: highestId}, function () {
-                if (chrome.runtime.lastError) {
-                    console.error("Chrome local storage api threw an exception. This is possibly because the local" +
-                        " storage ran out of capacity.")
-                }
+            chrome.storage.local.set({highestStageId: highestId}, () => {
+                if (chrome.runtime.lastError)
+                    console.error("Chrome local storage api threw an exception. "
+                      + "This is possibly because the local storage ran out of capacity.")
             });
         }
 
@@ -128,10 +122,10 @@ cri.stageStorage = (function (window) {
         });
     }
 
-    return {
-        loadFromDisk: loadFromDisk,
-        storeOnDisk: storeOnDisk,
-        clear: clear,
-        initialize: initialize
-    }
-})(window);
+    // exports
+    cri.stageStorage = {};
+    cri.stageStorage.loadFromDisk = loadFromDisk;
+    cri.stageStorage.storeOnDisk = storeOnDisk;
+    cri.stageStorage.clear = clear,
+    cri.stageStorage.initialize = initialize;
+}());

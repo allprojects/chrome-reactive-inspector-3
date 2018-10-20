@@ -1,268 +1,201 @@
 // This creates and maintains the communication channel between
 // the inspectedPage and the dev tools panel.
+// channel is created when we open dev tool and move to our panel.
 
-// channel is created when we open dev tool and move to our panel
-let currentAction = "";
-let tempNode = {
-    'type': '',
-    'nodeName': '',
-    'nodeId': '',
-    'nodeValue': ''
-};
+var cri = cri || {};
 
-let allNodes = [];
-let allEdges = [];
-
-(function createChannel() {
+(function() {
     console.log("creating channel in messaging js that is part of panel ");
-    //Create a port with background page for continuous message communication
-    let port = chrome.runtime.connect({
-        name: "reactive-debugger" //Given a Name
-    });
+
+    // create a port with background page for continuous message communication
+    let port = chrome.runtime.connect({name: "reactive-debugger"});
+
+    let handlers = {
+        // loading is called on page refresh,
+        // then reset the graph and slider and load it again.
+        loading() {
+            cri.graphManager.clearGraph();
+            cri.adjustSlider(0);
+            // Send current tabId to background page. Also trigger injection.
+            // signal background page that everything is cleaned up and the injection can begin.
+            port.postMessage({
+              tabId: chrome.devtools.inspectedWindow.tabId,
+              action: "inject"
+            });
+        },
+
+        saveNode(message) {
+//            console.log(message);
+            let id = message.content.nodeId;
+            let previousNode = cri.graphManager.graph.node(id) || {};
+            let currentAction = previousNode === undefined ? "nodeCreated" : "nodeUpdated";
+
+            let truncatedVal = "";
+            let value = message.content.nodeValue || previousNode.value;
+            if (value || value !== undefined && typeof value.toString === "function") {
+                // "0", "false" and "" are falsy but should be shown non the less.
+                value = value.toString();
+                truncatedVal = value.substring(0, 25);
+            }
+
+            // the new or updated node will have the class "current"
+            let node = {
+                class: (message.content.nodeRef ? " nodeWithRef" : " nodeWithoutRef")
+                     + (message.content.sourceInfo ? " has-source-info" : ""),
+                label: getNodeLabel(node, truncatedVal),
+                labelType: "html",
+                value: value,
+                nodeId: id,
+                nodeUpdates: (previousSavedNode.nodeUpdates || 0) + 1,
+                ref: message.content.nodeRef, // || node.ref,
+                type: message.content.nodeType, // || node.type,
+                method: message.content.nodeMethod, // || node.method,
+                sourceInfo: message.content.sourceInfo, // || node.sourceInfo,
+            };
+
+            // mark only this node as 'current'
+            node.class += " current";
+            cri.graphManager.graph.nodes().forEach(n => {
+                let node = cri.graphManager.graph.node(n);
+                node.class = node.class.replace(/current/g, "");
+            });
+
+            cri.graphManager.graph.setNode(id, node);
+
+            // capture current dependency graph
+            let tempNode = {};
+            tempNode.type = currentAction;
+            tempNode.nodeId = message.content.nodeId;
+            tempNode.nodeName = node.ref;
+            tempNode.nodeValue = truncatedVal;
+            saveStageAndAdvance(currentAction, node, tempNode);
+        },
+
+        saveEdge(message) {
+            if (!message.content.edgeStart || !message.content.edgeEnd) {
+                console.error("Tried to save edge with start or end not set.");
+            }
+
+            // clear current from previous nodes
+            _.each(cri.graphManager.graph.edges(), function (e) {
+                let edge = cri.graphManager.graph.edge(e);
+                if (edge.class) {
+                    // replace class on graph edge, not just via DOM to make it persistent
+                    edge.class = edge.class.replace(/current/g, "");
+                }
+            });
+
+            cri.graphManager.graph.setEdge(message.content.edgeStart, message.content.edgeEnd, {
+                class: "current",
+                label: message.content.edgeLabel
+            });
+
+            saveStageAndAdvance("dependencyCreated", message.content, message.content);
+        },
+
+        updateSavedEdge(message) {
+            _.find(cri.historyEntries, function (history) {
+                if (history.type === 'dependencyCreated') {
+                    if (history.endNodeId === message.content.id) {
+                        history.endNodeName = message.content.name
+                    }
+                    else if (history.startNodeId === message.content.id) {
+                        history.startNodeName = message.content.name
+                    }
+                }
+            });
+        },
+
+        allNodesAndEdges(message) {
+            allNodes = message.content.nodes;
+            allEdges = message.content.edges;
+        },
+
+        removeEdge(message) {
+            cri.graphManager.graph.removeEdge(message.content.edgeStart, message.content.edgeEnd, message.content.edgeLabel);
+            saveStageAndAdvance("removeEdge", message.content, message.content);
+        },
+
+        scriptNames(message) {
+            let scriptNames = message.content.names;
+            initIncludeTokenField(scriptNames);
+        },
+   }
 
     // force clear. This is necessary if the inspector is closed and opened on the same page later.
-    handleLoading();
-    // Send current tabId to background page. Also trigger injection.
-    port.postMessage({
-        tabId: chrome.devtools.inspectedWindow.tabId,
-        action: "inject"
+    handlers.loading();
+
+    function handleGraphMessage(message) {
+//        console.log("panel received: ", message);
+        let handler = handlers[message.action];
+        if (handler) handler(message)
+        else console.warn("Unknown message received. '" + message.action + "' is not implemented. (panel)");
+    }
+
+    // listen to messages from the background page
+    port.onMessage.addListener(event => {
+//        console.log("panel received by port:")
+        handleGraphMessage(event)
     });
 
-    function handleGraphMessage (message) {
+// david: i thought it is impossible for panel to receive from content?
+//    // listen to messages from content
+//    window.addEventListener("message", event => {
+////        console.log("panel received by message", event);
+//        handleGraphMessage(event.data);
+//    });
 
-        console.log("received message in panel: ", message);
+// david: unreliable because the extensions id changes on each computer
+//    // listen to messages from external
+//    chrome.runtime.onMessageExternal.addListener((request, sender, sendResponse) => {
+////        console.log("panel received by external: ", request, sender);
+//        handleGraphMessage(request);
+////        sendResponse("yay")
+//    });
 
-        switch (message.action) {
-            case "loading":
-                // If the user refreshes the page, then reset the graph and slider and load it again.
-                handleLoading();
-                // signal background page that everything is cleaned up and the injection can begin.
-                port.postMessage({action: "inject"});
-                break;
-            case "saveNode":
-                handleSaveNode(message);
-                break;
-            case "saveEdge":
-                handleSaveEdge(message);
-                break;
-            case "updateSavedEdge":
-                handleUpdateSavedEdge(message);
-                break;
-            case "allNodesEdges":
-                handleAllNodesAndEdges(message);
-                break;
-            case "removeEdge":
-                handleRemoveEdge(message);
-                break;
-            case "scriptNames":
-                handleScriptNames(message);
-                break;
-            default:
-                if (message.resCb) {
-                    message.resCb(cri);
-                }
-                else {
-                    console.warn("Unknown message received. '" + message.action + "' is not implemented. (panel)");
-                }
-        }
+//    function getOrDefault(newValue, defaultValue) {
+//        return !newValue || newValue.length === 0 ? defaultValue : newValue;
+//    }
+
+    // this method is to capture all nodes and edges save the graph to the history.
+    function saveStageAndAdvance(action, data, value) {
+        let stageId = cri.history.saveStage(cri.graphManager.graph, {event: action, data: data});
+
+        // Here we should increase steps count in step slider
+        // this will cause the value changed event to fire and thus load and render the new stage.
+        cri.adjustSlider(stageId);
+
+        if (action === 'dependencyCreated')
+            cri.historyEntries.push({
+                'stageId': stageId,
+                'type': 'dependencyCreated',
+                'startNodeName': value.edgeStartName,
+                'startNodeId': value.edgeStart,
+                'endNodeName': value.edgeEndName,
+                'endNodeId': value.edgeEnd
+            })
+        else
+            cri.historyEntries.push({
+                'stageId': stageId,
+                'type': value.type,
+                'nodeName': value.nodeName,
+                'nodeId': value.nodeId,
+                'nodeValue': value.nodeValue
+            })
     }
 
-    window.addEventListener("message", function(event) {
-        console.log("received message", event);
-        handleGraphMessage(event.data);
-    });
-
-    chrome.runtime.onMessageExternal.addListener(
-        function(request, sender, sendResponse) {
-            console.log("background received external: ", request);
-            console.log("sender", sender);
-            handleGraphMessage(request);
-            sendResponse("yay")
-        }
-    );
-
-    // Listen to messages from the background page
-    port.onMessage.addListener(handleGraphMessage);
-
-    function handleLoading() {
-        graphManager.clearGraph();
-        adjustSlider(0, 0);
+    function getNodeLabel(node, truncatedValue) {
+        let lines = [];
+        if (node.nodeId) lines.push("Id: " + node.nodeId);
+        if (node.type != "Evt" && node.type != "Event" && truncatedValue)
+          lines.push("Value: " + truncatedValue)
+        // wrap in html to ensure valid html
+        return $("<div>").append(lines.join("<br />")).html();
     }
 
-    function handleSaveNode(message) {
-        let id = message.content.nodeId;
-        let node = {};
-        let previousNode = graphManager.graph.node(id);
+    // export
+    cri.allNodes = [];
+    cri.allEdges = [];
 
-        if (previousNode !== undefined) {
-            // node already existed
-            node = previousNode;
-            currentAction = "updateNode";
-        } else {
-            currentAction = "newNode";
-        }
-
-        // fill with new data
-
-        let truncatedVal = "";
-        let value = getOrDefault(message.content.nodeValue, node.value);
-        if (value || typeof value !== "undefined" && typeof value.toString === "function") {
-            // "0", "false" and "" are falsy but should be shown non the less.
-            value = value.toString();
-            truncatedVal = value.substring(0, 25);
-        }
-
-        node = {
-            label: "",
-            labelType: "html",
-            ref: getOrDefault(message.content.nodeRef, node.ref),
-            value: value,
-            type: getOrDefault(message.content.nodeType, node.type),
-            method: getOrDefault(message.content.nodeMethod, node.method),
-            nodeId: id,
-            sourceInfo: getOrDefault(message.content.sourceInfo, node.sourceInfo),
-            class: ""
-        };
-
-        // the new or updated node will have the class "current"
-        node.class = "current"
-            + (node.ref ? " nodeWithRef" : " nodeWithoutRef")
-            + (node.sourceInfo ? " has-source-info" : "");
-        node.label = getNodeLabel(node, truncatedVal);
-
-        let previousSavedNode = graphManager.getNode(id);
-        if (previousSavedNode) {
-            node.nodeUpdates = previousSavedNode.nodeUpdates + 1;
-        } else {
-            node.nodeUpdates = 1;
-        }
-
-        // clear current from previous nodes
-        _.each(graphManager.graph.nodes(), function (n) {
-            let node = graphManager.graph.node(n);
-            // replace class on graph node, not just via DOM to make it persistent
-            node.class = node.class.replace(/current/g, "");
-        });
-
-        graphManager.graph.setNode(id, node);
-
-        // update tempNode
-        tempNode.type = previousNode !== undefined ? 'nodeUpdated' : 'nodeCreated';
-        tempNode.nodeId = id;
-        tempNode.nodeName = node.ref;
-        tempNode.nodeValue = truncatedVal;
-
-        // capture current dependency graph
-        let stageId = saveStageAndAdvance(currentAction, node);
-        saveHistory(stageId, currentAction, tempNode);
-    }
-
-    function handleSaveEdge(message) {
-        if (!message.content.edgeStart || !message.content.edgeEnd) {
-            console.error("Tried to save edge with start or end not set.");
-        }
-
-        // clear current from previous nodes
-        _.each(graphManager.graph.edges(), function (e) {
-            let edge = graphManager.graph.edge(e);
-            if (edge.class) {
-                // replace class on graph edge, not just via DOM to make it persistent
-                edge.class = edge.class.replace(/current/g, "");
-            }
-        });
-
-        graphManager.graph.setEdge(message.content.edgeStart, message.content.edgeEnd, {
-            class: "current",
-            label: message.content.edgeLabel
-        });
-
-        let stageId = saveStageAndAdvance("saveEdge", message.content);
-        saveHistory(stageId, "saveEdge", message.content)
-    }
-
-    function handleUpdateSavedEdge(message) {
-        _.find(historyEntries, function (history) {
-            if (history.type === 'dependencyCreated') {
-                if (history.endNodeId === message.content.id) {
-                    history.endNodeName = message.content.name
-                }
-                else if (history.startNodeId === message.content.id) {
-                    history.startNodeName = message.content.name
-                }
-            }
-        });
-    }
-
-    function handleAllNodesAndEdges(message) {
-        allNodes = message.content.nodes;
-        allEdges = message.content.edges;
-    }
-
-    function handleRemoveEdge(message) {
-        graphManager.graph.removeEdge(message.content.edgeStart, message.content.edgeEnd, message.content.edgeLabel);
-        let stageId = saveStageAndAdvance("removeEdge", message.content);
-        saveHistory(stageId, "removeEdge", message.content)
-    }
-
-    function handleScriptNames(message) {
-        let scriptNames = message.content.names;
-        initIncludeTokenField(scriptNames);
-    }
 }());
 
-function getOrDefault(newValue, defaultValue) {
-    if (!newValue || newValue.length === 0) {
-        return defaultValue
-    }
-    return newValue;
-}
-
-// this method is to capture all nodes and edges save the graph to the history.
-function saveStageAndAdvance(event, data) {
-    let stageId = history.saveStage(graphManager.graph, {event: event, data: data});
-
-    let lastStageId = history.getStageCount();
-
-    // Here we should increase steps count in step slider
-    // this will cause the value changed event to fire and thus load and render the new stage.
-    adjustSlider(lastStageId, lastStageId);
-    return stageId;
-}
-
-function saveHistory(stageId, type, value) {
-    if (type !== 'saveEdge') {
-        historyEntries.push({
-            'stageId': stageId,
-            'type': value.type,
-            'nodeName': value.nodeName,
-            'nodeId': value.nodeId,
-            'nodeValue': value.nodeValue
-        })
-
-    } else {
-        historyEntries.push({
-            'stageId': stageId,
-            'type': 'dependencyCreated',
-            'startNodeName': value.edgeStartName,
-            'startNodeId': value.edgeStart,
-            'endNodeName': value.edgeEndName,
-            'endNodeId': value.edgeEnd
-        })
-    }
-}
-
-function getNodeLabel(node, truncatedValue) {
-    let lines = [];
-    if (node.nodeId) lines.push("Id: " + node.nodeId);
-    if (node.type != "Evt" && node.type != "Event" && truncatedValue)
-      lines.push("Value: " + truncatedValue)
-    // wrap in html to ensure valid html
-    return $("<div>").append(lines.join("<br />")).html();
-}
-
-// This sends an object to the background page 
-// where it can be relayed to the inspected page
-function sendObjectToInspectedPage(message, sendResponse) {
-    message.tabId = chrome.devtools.inspectedWindow.tabId;
-    chrome.extension.sendMessage(message, sendResponse);
-}
