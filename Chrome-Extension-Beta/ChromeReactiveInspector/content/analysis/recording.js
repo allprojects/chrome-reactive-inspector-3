@@ -47,17 +47,10 @@ cri.analysis.recording = (function () {
 
 
         if (!checkIfNodeAlreadyExists(id, '', type)) {
-            if (cri.shouldBreakNow('nodeCreated', id, false)) {
-                debugger;
-            }
+            if (cri.shouldBreakNow('saveNode', id, false)) debugger;
         } else {
-            if (cri.shouldBreakNow('nodeUpdated', id, false)) {
-                debugger;
-            }
-
-            if (cri.shouldBreakNow('evaluationYielded', id, val)) {
-                debugger;
-            }
+            if (cri.shouldBreakNow('saveNode', id, false)) debugger;
+            if (cri.shouldBreakNow('nodeWithValue', id, val)) debugger;
         }
         allNodes.push({'nodeId': id, 'type': type, 'name': name});
     }
@@ -91,7 +84,7 @@ cri.analysis.recording = (function () {
             destination: "panel"
         });
         currentStep++;
-        if (cri.shouldBreakNow('dependencyCreated', startId, endId)) {
+        if (cri.shouldBreakNow('saveEdge', startId, endId)) {
             debugger;
         }
     }

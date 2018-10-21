@@ -2,11 +2,9 @@ var cri = cri || {};
 
 (function (){
 
-//    let isConfirmed = false;
-
     // exports
     cri.historyEntries = [];
-    cri.history = new cri.graphHistory.History();
+    cri.history = new cri.History();
 
     // This sends an object to the background page 
     // where it can be relayed to the inspected page
@@ -17,14 +15,8 @@ var cri = cri || {};
 
     cri.graphManager = new cri.GraphManager(
         d3.select("svg"),
-        cri.history,
-        () => { // after changed callback
-          tooltipManager.initializeTooltips(d3.selectAll("svg g.node"))
-        },
-        () => { // after reset callback
-            cri.historyEntries = [];
-//            isConfirmed = false
-        }
+        () => tooltipManager.initializeTooltips(d3.selectAll("svg g.node")), // after changed callback
+        () => cri.historyEntries = [],                                       // after reset callback
     );
 
     cri.adjustSlider = function(value) {
@@ -36,8 +28,7 @@ var cri = cri || {};
         $slider.slider("pips", "refresh");
     };
 
-
-    $('#cri-breakpoint-select').editableSelect({filter: false});
+//    $('#cri-breakpoint-select').editableSelect({filter: false});
     // it is important to query the element after "editableSelect" has been called, because
     // otherwise the selector will not have the proper value due to weird behavior of jquery-editable-select
     let $breakpointSelect = $('#cri-breakpoint-select');
@@ -57,8 +48,8 @@ var cri = cri || {};
 
     let tooltipManager = new cri.TooltipManager($canvasContainer, cri.graphManager);
     let searchGraphManager = new cri.SearchGraphManager(cri.graphManager, $searchNode);
-    let reactiveBreakpointManager = new cri.ReactiveBreakpointManager($breakpointContainer);
-    let historyQueryResult = '';
+    let breakpointManager = new cri.BreakpointManager($breakpointContainer);
+    let historyQueryResult = [];
 
 // dropdown
     $document.ready(() => $(".dropdown-toggle").dropdown());
@@ -231,7 +222,6 @@ var cri = cri || {};
     function setCriStatus(element, status) {
         chrome.storage.sync.set({recordStatus: status});
         if (status) {
-            // isConfirmed = false;
             element.text('Pause Recording');
             element.addClass('btn-info');
             element.removeClass('btn-danger');
@@ -302,103 +292,54 @@ var cri = cri || {};
     /**
      * editable select for find by query feature
      */
-    $('#cri-findnode-select').editableSelect({filter: false});
+//    $('#cri-findnode-select').editableSelect({filter: false});
     $("#cri-history-current-step").text(0);
     $("#cri-history-last-step").text(0);
 
-    $('#cri-history-query-submit').click(function () {
-        let historyQuery, param1, param2 = '';
-        let currentHistoryQuery = $('#cri-findnode-select').val();
-        historyQuery = currentHistoryQuery.substring(0, currentHistoryQuery.indexOf('['));
+    $('#cri-history-query-submit').click(e => {
+        e.preventDefault();
 
-        if (!currentHistoryQuery || !historyQuery) {
+        let queryString = $('#cri-findnode-select').val();
+        if (!queryString) {
             // if the the query is empty, reset the history query feature.
             $("#cri-history-current-step").text(0);
             $("#cri-history-last-step").text(0);
-            historyQueryResult = '';
+            historyQueryResult = [];
             return;
         }
-        let matches = currentHistoryQuery.match(/\[(.*?)\]/g).map(function (val) {
-            return val.replace('[', '').replace(']', '');
-        });
 
-        if (matches) {
-            param1 = matches[0];
-            if (matches[1]) {
-                param2 = matches[1];
-            }
-            if (historyQuery === "nodeCreated") {
-                let _tNode = _.find(cri.allNodes, {name: param1});
-                if (_tNode) {
-                    historyQueryResult = cri.historyEntries.filter(function (history) {
-                        if (history.type === 'nodeCreated' && history.nodeId === _tNode.nodeId)
-                            return history.stageId;
-                    });
-                    displayHistoryQueryResult(historyQueryResult);
-                }
-            } else if (historyQuery === "nodeUpdated") {
-                historyQueryResult = cri.historyEntries.filter(function (history) {
-                    if (history.type === 'nodeUpdated' && history.nodeName === param1)
-                        return history.stageId;
-                });
-                displayHistoryQueryResult(historyQueryResult);
-            } else if (historyQuery === "evaluationYielded") {
-                historyQueryResult = cri.historyEntries.filter(function (history) {
-                    if (history.type === 'nodeUpdated' && history.nodeName === param1) {
-                        // using indexOf here would be problematic, because it would find "5" in "15".
-                        //TODO: this should have an option to provide a regex. For now indexOf replaced with exact match to avoid confusing the user.
-                        if (String(history.nodeValue) === String(param2))
-                            return history.stageId;
-                    }
-                });
-                displayHistoryQueryResult(historyQueryResult);
+        let [action, param1, param2] = queryString.split(":");
 
-            } else if (historyQuery === "dependencyCreated") {
-                let nodeNameSource = param1;
-                let nodeNameDest = param2;
-                let tempResult = [];
-                let filteredHistoryEntries = _.filter(cri.historyEntries, function (history) {
-                    return history.type === 'dependencyCreated'
-                });
+// TODO differentiate node creation from node value change?
+//            if (action === "nodeCreated") {
+//                let _tNode = _.find(cri.allNodes, {name: param1});
+//                if (_tNode) {
+//                    historyQueryResult = cri.historyEntries.filter(function (history) {
+//                        if (history.type === 'nodeCreated' && history.nodeId === _tNode.nodeId)
+//                            return history.stageId;
+//                    });
+//                    displayHistoryQueryResult(historyQueryResult);
+//                }
+//            }
 
-                filteredHistoryEntries.forEach(function (history) {
-                    if (history.startNodeName === nodeNameSource && history.endNodeName === nodeNameDest) {
-                        historyQueryResult = [history];
-                    } else if (history.startNodeName === nodeNameSource) {
-                        tempResult.push(history)
-                    }
-                });
+        if (action === "saveNode" || action === "nodeWithValue")
+            historyQueryResult = cri.historyEntries.filter(history =>
+                   history.nodeType === action
+                && history.nodeId === param1
+                // using indexOf here would be problematic, because it would find "5" in "15".
+                // TODO: this should have an option to provide a regex.
+                // For now indexOf replaced with exact match to avoid confusing the user.
+                && (action === "saveNode" || history.nodeValue === param2) );
+        else if (action === "saveEdge")
+            historyQueryResult = cri.historyEntries.filter(history =>
+                   history.nodeType === action
+                && history.edgeStartName === param1
+                && history.edgeEndName === param2 );
+            // TODO: there once was support to find transitive edges.
+            //       maybe add it again.
 
-                if (!historyQueryResult.length) {
-                    if (tempResult.length) {
-                        tempResult.forEach(function (temp) {
-                            if (temp.endNodeName === nodeNameDest && !historyQueryResult.length) {
-                                historyQueryResult = [temp];
-                            } else {
-                                //TODO: check the desired behavior here. "pop(temp)" does not pop the element temp!
-                                // -> it used pop on the last element, because the function only takes one argument
-                                tempResult.pop(temp);
-                                checkFurtherNodes(temp)
-                            }
-                        });
-                    }
-                }
-
-                function checkFurtherNodes(h) {
-                    filteredHistoryEntries.forEach(function (history) {
-                        if (!historyQueryResult.length) {
-                            if (history.startNodeName === h.endNodeName && history.endNodeName === nodeNameDest) {
-                                historyQueryResult = [history];
-                            } else if (history.startNodeName === h.endNodeName) {
-                                tempResult.push(history)
-                            }
-                        }
-                    });
-                }
-
-                displayHistoryQueryResult(historyQueryResult);
-            }
-        }
+        console.log(historyQueryResult);
+        displayHistoryQueryResult(historyQueryResult);
     });
 
     function displayHistoryQueryResult(queryResult) {
@@ -435,16 +376,14 @@ var cri = cri || {};
         }
     });
 
-    /**
-     * Reactive Breakpoints feature
-     */
-    $('#cri-breakpoint-query-submit').click(function () {
-        reactiveBreakpointManager.submitBreakpoints($breakpointSelect.val());
+    // Reactive Breakpoints feature
+    $('#cri-breakpoint-query-submit').click(e => {
+        e.preventDefault();
+        breakpointManager.submitBreakpoints($breakpointSelect.val());
     });
-
     $breakpointContainer.on("click", "span.bpoint-remove", function () {
         let bpointIndexToRemove = $(this).data('bpoint-index');
-        reactiveBreakpointManager.removeBreakPointByIndex(bpointIndexToRemove);
+        breakpointManager.removeBreakPointByIndex(bpointIndexToRemove);
     });
 
     /* force focus on canvas on mouse over to enable ctrl capture on the canvas used in code tooltips */

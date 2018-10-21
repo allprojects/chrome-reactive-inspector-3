@@ -14,13 +14,13 @@ var cri = cri || {};
 
     cri.stageStorage.initialize();
 
-    History.prototype.saveStage = function (graph, change) {
+    History.prototype.saveStage = function (change) {
         // its very important to keep this function fast, because it will directly affect the recording
 
         let stageId = ++this.nextStageId;
 
         if (isBaseStageId(stageId)) {
-            let stage = new BaseStage(createStage(stageId, graph));
+            let stage = new BaseStage(createStage(stageId));
             this.currentBase = stage;
             this.storage.push(stage);
         } else {
@@ -34,12 +34,12 @@ var cri = cri || {};
         return stageId;
     };
 
-    function createStage(id, graph) {
-        let edges = graph.edges().map(e =>
-            new Edge(e.v, e.w, graph.edge(e)));
+    function createStage(id) {
+        let edges = cri.graphManager.graph.edges().map(e =>
+            new Edge(e.v, e.w, cri.graphManager.graph.edge(e)));
 
-        let nodes = graph.nodes().map(n => {
-            let node = {...graph.node(n)};
+        let nodes = cri.graphManager.graph.nodes().map(n => {
+            let node = {...cri.graphManager.graph.node(n)};
 
             // remove classes added by findNode feature
             node.class = node.class
@@ -72,12 +72,6 @@ var cri = cri || {};
         return getBaseIndex(baseStage.stage.id);
     }
 
-    function findInStorage(self, stageId) {
-        return _.find(self.storage, function (base) {
-            return base.stage.id === stageId;
-        });
-    }
-
     /**
      * Calls the callback with a restored graph
      * @param stageId
@@ -90,9 +84,8 @@ var cri = cri || {};
 
         if (isBaseStageId(stageId)) {
             // case: is base id, so always load
-            loadBaseStage(this, stageId, function () {
-                callback(self.currentBase.stage, null);
-            });
+            loadBaseStage(this, stageId, () =>
+                callback(self.currentBase.stage, null));
         } else if (belongsToBase(stageId, this.currentBase.stage.id)) {
             let upper = (stageId - 1) % deltaWindowSize;
             let lower = (previousStageId - 1) % deltaWindowSize;
@@ -107,55 +100,44 @@ var cri = cri || {};
             }
         } else {
             // case: not base and not the current
-            loadBaseStage(this, getBaseIndex(stageId) * deltaWindowSize + 1, function () {
-                callback(self.currentBase.stage, self.currentBase.deltas.slice(0, (stageId - 1) % deltaWindowSize));
-            });
+            loadBaseStage(this, getBaseIndex(stageId) * deltaWindowSize + 1, () =>
+                callback(self.currentBase.stage, self.currentBase.deltas.slice(0, (stageId - 1) % deltaWindowSize)));
         }
     };
 
     function loadBaseStage(self, stageId, callback) {
+        function findInStorage(stageId) {
+            return self.storage.find(base => base.stage.id === stageId);
+        }
 
-        let isInStorage = findInStorage(self, stageId);
+        let isInStorage = findInStorage(stageId);
         if (isInStorage) {
             self.currentBase = isInStorage;
             callback();
-        } else {
-            // store current storage on disk, because the last stages may not be stored yet.
-            cri.stageStorage.storeOnDisk(self.storage, getBaseKey);
-
-            let baseIndex = getBaseIndex(stageId);
-            let lower = baseIndex - Math.floor(cacheMax / 2);
-            let upper = baseIndex + Math.floor(cacheMax / 2);
-            // get the last BaseStage as a dynamic upper bound.
-            let highest = getBaseIndex(self.nextStageId);
-
-            if (lower < 0) {
-                lower = 0;
-                upper = highest > cacheMax ? cacheMax : highest;
-            } else if (upper > highest) {
-                upper = highest;
-            }
-
-            let idsToLoad = _.range(lower, upper + 1);
-            let alreadyLoaded = _.filter(idsToLoad, function (id) {
-                return findInStorage(self, getStageIdForBaseIndex(id));
-            });
-
-            // prevent already loaded stages from being loaded again
-            idsToLoad = _.difference(idsToLoad, alreadyLoaded);
-
-            let stagesToKeep = _.where(self.storage, function (baseStage) {
-                return alreadyLoaded.indexOf(getBaseIndex(baseStage.stage.id)) !== -1;
-            });
-
-            cri.stageStorage.loadFromDisk(idsToLoad, function (baseStages) {
-                self.storage = _.sortBy(baseStages.concat(stagesToKeep), function (base) {
-                    return base.stage.id;
-                });
-                self.currentBase = findInStorage(self, stageId);
-                callback();
-            });
+            return
         }
+
+        // store current storage on disk, because the last stages may not be stored yet.
+        cri.stageStorage.storeOnDisk(self.storage, getBaseKey);
+
+        let baseIndex = getBaseIndex(stageId);
+        let lowerbound  = 0;
+        let upperbound = getBaseIndex(self.nextStageId); // get the last BaseStage as a dynamic upper bound.
+        let lower = Math.max(lowerbound, baseIndex - Math.floor(cacheMax / 2));
+        let upper = Math.min(upperbound, lower + cacheMax);
+        let therange      = range(lower, upper + 1);
+        let loaded = therange.filter(id => findInStorage(getStageIdForBaseIndex(id)));
+        let toload = therange.filter(id => !findInStorage(getStageIdForBaseIndex(id)));
+
+        let stagesToKeep = self.storage
+          .filter(idx => loaded.includes(getBaseIndex(baseStage.stage.id)));
+
+        cri.stageStorage.loadFromDisk(toload, baseStages => {
+            self.storage = baseStages.concat(stagesToKeep);
+            self.storage.sort((x, y) => x.stage.id < y.stage.id);
+            self.currentBase = findInStorage(stageId);
+            callback();
+        });
     }
 
     History.prototype.clear = function () {
@@ -193,8 +175,11 @@ var cri = cri || {};
         this.data = data;
     }
 
+    function range(from, to) {
+        return Array.from({length: to}, (x,i) => from+i);
+    }
+
     // exports
-    cri.graphHistory = {};
-    cri.graphHistory.History = History;
-    cri.graphHistory.Stage = Stage;
+    cri.History = History;
+    cri.Stage = Stage;
 }());

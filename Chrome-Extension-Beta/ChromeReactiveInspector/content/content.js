@@ -34,7 +34,7 @@ var cri = cri || {};
 
     let recordStatus = null;
     let nodesDoNotSave = null;
-    let reactiveBreakPoints = null;
+    cri.reactiveBreakPoints = null;
     let isPrintOptionSelected = null;
 
     // initialize config once
@@ -46,7 +46,7 @@ var cri = cri || {};
     }, result => {
       printAllValue         = result.printAllValue;
       nodesDoNotSave        = result.nodesDoNotSave;
-      reactiveBreakPoints   = result.reactiveBreakPoints;
+      cri.reactiveBreakPoints   = result.reactiveBreakPoints;
       isPrintOptionSelected = result.isPrintOptionSelected;
     });
 
@@ -55,7 +55,7 @@ var cri = cri || {};
         if (namespace !== "sync") return;
         recordStatus           = changes.recordStatus.newValue;
         nodesDoNotSave         = changes.nodesDoNotSave.newValue;
-        reactiveBreakPoints    = changes.reactiveBreakPoints.newValue;
+        cri.reactiveBreakPoints    = changes.reactiveBreakPoints.newValue;
         isPrintOptionSelected  = changes.printAllValue.newValue;
     });
 
@@ -80,28 +80,10 @@ var cri = cri || {};
 
     // returns true if query matches
     function shouldBreakNow(currentEvent, param1, param2) {
-        for (var index in reactiveBreakPoints) {
-            var currentBreakPoint = reactiveBreakPoints[index];
-            var currentBreakPointQuery = currentBreakPoint.query;
-
-            if (currentEvent === currentBreakPointQuery) {
-                if (currentEvent === "nodeCreated" || currentEvent === "nodeUpdated") {
-                    if (currentBreakPoint.params[0] !== undefined)
-                        if (currentBreakPoint.params[0] == param1)
-                            return true;
-                } else if ((currentEvent === "evaluationYielded") || (currentEvent === "dependencyCreated")) {
-                    if ((currentBreakPoint.params[0] !== undefined) && (currentBreakPoint.params[1] !== undefined))
-                        if ((+currentBreakPoint.params[0] === param1) && (currentBreakPoint.params[1] == param2 || String(param2).includes(currentBreakPoint.params[1])))
-                            return true;
-                }
-            }
-
-            if (currentBreakPoint.params[0] !== undefined)
-                currentBreakPointQuery = currentBreakPointQuery + "[" + currentBreakPoint.params[0] + "]";
-            if (currentBreakPoint.params[1] !== undefined)
-                currentBreakPointQuery = currentBreakPointQuery + "[" + currentBreakPoint.params[1] + "]";
-        }
-        return false;
+        console.log(currentEvent, param1, param2, reactiveBreakPoints);
+        return reactiveBreakPoints.some(bp => currentEvent === bp.query
+                                           && param1 === bp.param1
+                                           && param2 === bp.param2)
     }
 
     // export

@@ -26,63 +26,22 @@ var cri = cri || {};
 
         saveNode(message) {
 //            console.log(message);
-            let id = message.content.nodeId;
-            let previousNode = cri.graphManager.graph.node(id) || {};
-            let currentAction = previousNode === undefined ? "nodeCreated" : "nodeUpdated";
+            let previousNode = cri.graphManager.graph.node(message.content.nodeId) || {};
+            message.content.nodeUpdates = (previousNode.nodeUpdates || 0) + 1
 
-            let truncatedVal = "";
-            let value = message.content.nodeValue || previousNode.value;
-            if (value || value !== undefined && typeof value.toString === "function") {
-                // "0", "false" and "" are falsy but should be shown non the less.
-                value = value.toString();
-                truncatedVal = value.substring(0, 25);
-            }
-
-            // the new or updated node will have the class "current"
-            let node = {
-                class: (message.content.nodeRef ? " nodeWithRef" : " nodeWithoutRef")
-                     + (message.content.sourceInfo ? " has-source-info" : ""),
-                label: getNodeLabel(node, truncatedVal),
-                labelType: "html",
-                value: value,
-                nodeId: id,
-                nodeUpdates: (previousSavedNode.nodeUpdates || 0) + 1,
-                ref: message.content.nodeRef, // || node.ref,
-                type: message.content.nodeType, // || node.type,
-                method: message.content.nodeMethod, // || node.method,
-                sourceInfo: message.content.sourceInfo, // || node.sourceInfo,
-            };
-
-            // mark only this node as 'current'
-            node.class += " current";
-            cri.graphManager.graph.nodes().forEach(n => {
-                let node = cri.graphManager.graph.node(n);
-                node.class = node.class.replace(/current/g, "");
-            });
-
-            cri.graphManager.graph.setNode(id, node);
-
-            // capture current dependency graph
-            let tempNode = {};
-            tempNode.type = currentAction;
-            tempNode.nodeId = message.content.nodeId;
-            tempNode.nodeName = node.ref;
-            tempNode.nodeValue = truncatedVal;
-            saveStageAndAdvance(currentAction, node, tempNode);
+            saveStageAndAdvance("saveNode", message.content);
+            cri.graphManager.graph.setNode(message.content.nodeId, cri.inflateNode(message.content)); // update node
         },
 
         saveEdge(message) {
-            if (!message.content.edgeStart || !message.content.edgeEnd) {
+            if (!message.content.edgeStart || !message.content.edgeEnd)
                 console.error("Tried to save edge with start or end not set.");
-            }
 
             // clear current from previous nodes
-            _.each(cri.graphManager.graph.edges(), function (e) {
+            cri.graphManager.graph.edges().forEach(e => {
                 let edge = cri.graphManager.graph.edge(e);
-                if (edge.class) {
-                    // replace class on graph edge, not just via DOM to make it persistent
-                    edge.class = edge.class.replace(/current/g, "");
-                }
+                // replace class on graph edge, not just via DOM to make it persistent
+                if (edge.class) edge.class = edge.class.replace(/current/g, "");
             });
 
             cri.graphManager.graph.setEdge(message.content.edgeStart, message.content.edgeEnd, {
@@ -90,21 +49,20 @@ var cri = cri || {};
                 label: message.content.edgeLabel
             });
 
-            saveStageAndAdvance("dependencyCreated", message.content, message.content);
+            saveStageAndAdvance("saveEdge", message.content);
         },
 
-        updateSavedEdge(message) {
-            _.find(cri.historyEntries, function (history) {
-                if (history.type === 'dependencyCreated') {
-                    if (history.endNodeId === message.content.id) {
-                        history.endNodeName = message.content.name
-                    }
-                    else if (history.startNodeId === message.content.id) {
-                        history.startNodeName = message.content.name
-                    }
-                }
-            });
-        },
+//        updateSavedEdge(message) {
+//            cri.historyEntries.find(history => {
+//                if (history.type === 'dependencyCreated') {
+//                    if (history.endNodeId === message.content.id) {
+//                        history.endNodeName = message.content.name
+//                    } else if (history.startNodeId === message.content.id) {
+//                        history.startNodeName = message.content.name
+//                    }
+//                }
+//            });
+//        },
 
         allNodesAndEdges(message) {
             allNodes = message.content.nodes;
@@ -113,13 +71,13 @@ var cri = cri || {};
 
         removeEdge(message) {
             cri.graphManager.graph.removeEdge(message.content.edgeStart, message.content.edgeEnd, message.content.edgeLabel);
-            saveStageAndAdvance("removeEdge", message.content, message.content);
+            saveStageAndAdvance("removeEdge", message.content);
         },
 
-        scriptNames(message) {
-            let scriptNames = message.content.names;
-            initIncludeTokenField(scriptNames);
-        },
+//        scriptNames(message) {
+//            let scriptNames = message.content.names;
+//            initIncludeTokenField(scriptNames);
+//        },
    }
 
     // force clear. This is necessary if the inspector is closed and opened on the same page later.
@@ -133,10 +91,7 @@ var cri = cri || {};
     }
 
     // listen to messages from the background page
-    port.onMessage.addListener(event => {
-//        console.log("panel received by port:")
-        handleGraphMessage(event)
-    });
+    port.onMessage.addListener(handleGraphMessage);
 
 // david: i thought it is impossible for panel to receive from content?
 //    // listen to messages from content
@@ -158,37 +113,21 @@ var cri = cri || {};
 //    }
 
     // this method is to capture all nodes and edges save the graph to the history.
-    function saveStageAndAdvance(action, data, value) {
-        let stageId = cri.history.saveStage(cri.graphManager.graph, {event: action, data: data});
+    function saveStageAndAdvance(action, message) {
+        let stageId = cri.history.saveStage({event: action, data: message});
 
         // Here we should increase steps count in step slider
         // this will cause the value changed event to fire and thus load and render the new stage.
         cri.adjustSlider(stageId);
 
-        if (action === 'dependencyCreated')
-            cri.historyEntries.push({
-                'stageId': stageId,
-                'type': 'dependencyCreated',
-                'startNodeName': value.edgeStartName,
-                'startNodeId': value.edgeStart,
-                'endNodeName': value.edgeEndName,
-                'endNodeId': value.edgeEnd
-            })
-        else
-            cri.historyEntries.push({
-                'stageId': stageId,
-                'type': value.type,
-                'nodeName': value.nodeName,
-                'nodeId': value.nodeId,
-                'nodeValue': value.nodeValue
-            })
+        cri.historyEntries.push({ stageId: stageId, nodeType: action, ...message })
     }
 
     function getNodeLabel(node, truncatedValue) {
         let lines = [];
         if (node.nodeId) lines.push("Id: " + node.nodeId);
-        if (node.type != "Evt" && node.type != "Event" && truncatedValue)
-          lines.push("Value: " + truncatedValue)
+//        if (node.type != "Evt" && node.type != "Event" && truncatedValue)
+        lines.push("Value: " + truncatedValue)
         // wrap in html to ensure valid html
         return $("<div>").append(lines.join("<br />")).html();
     }
@@ -196,6 +135,35 @@ var cri = cri || {};
     // export
     cri.allNodes = [];
     cri.allEdges = [];
+    cri.inflateNode = function (message) {
+        let node = {
+             // the new or updated node will have the class "current"
+            class: ""
+                 + (message.nodeRef ? " nodeWithRef" : " nodeWithoutRef")
+//                 + (message.sourceInfo ? " has-source-info" : "")
+            ,
+            labelType: "html", label: "",
+//            value: value,
+            nodeUpdates: message.nodeUpdates,
+            nodeId: message.nodeId,
+//            ref: message.nodeRef, // || node.ref,
+//            method: message.nodeMethod, // || node.method,
+//            sourceInfo: message.sourceInfo, // || node.sourceInfo,
+        };
+
+        let value = message.nodeValue; // || previousNode.value;
+        if (value !== undefined) value = (""+value).substring(0, 25);
+        node.label = getNodeLabel(node, value);
+
+        // mark only this node as 'current'
+        node.class += " current";
+        cri.graphManager.graph.nodes().forEach(n => {
+            let node = cri.graphManager.graph.node(n);
+            node.class = (node.class || "").replace(/current/g, "");
+        });
+
+        return node
+    }
 
 }());
 

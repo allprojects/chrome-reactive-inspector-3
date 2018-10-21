@@ -61,9 +61,9 @@ var cri = cri || {};
 
                     let stage = items[key];
                     if (typeof stage !== "undefined") {
-                        /* # Comment in if loaded stage objects should be of type cri.graphHistory.Stage
-                           # currently not necessary, because cri.graphHistory.Stage has no prototype.
-                        let typedStage = Object.create(cri.graphHistory.Stage, stage);
+                        /* # Comment in if loaded stage objects should be of type cri.Stage
+                           # currently not necessary, because cri.Stage has no prototype.
+                        let typedStage = Object.create(cri.Stage, stage);
                         stages.push(typedStage);
                         */
                         stages.push(stage);

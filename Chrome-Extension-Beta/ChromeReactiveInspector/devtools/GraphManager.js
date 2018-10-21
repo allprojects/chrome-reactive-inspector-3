@@ -4,16 +4,14 @@ var cri = cri || {};
     /**
      * Handles the displayed Dependency Graph and the current stage.
      * @param d3container The parent of the Dependency Graph selected by a d3 selector.
-     * @param history The history that should be used to load stages.
      * @param afterChangedCallback A callback that is invoked after the graph changed and was rendered.
      * @param afterResetCallback A callback that is invoked if the graph is reset.
      * @returns {GraphManager}
      * @constructor {GraphManager}
      */
-    function GraphManager(d3container, history, afterChangedCallback, afterResetCallback) {
+    function GraphManager(d3container, afterChangedCallback, afterResetCallback) {
         this.container = d3container;
         this.graph = null;
-        this.history = history;
 
         // currentStage is initially null but if the stage is later set back to stage 0 it will have the value 0.
         this.currentStage = null;
@@ -32,7 +30,7 @@ var cri = cri || {};
         this.graph = createGraph();
 
         // remove saved data
-        this.history.clear();
+        cri.history.clear();
         this.afterResetCallback();
         console.log("cleared graph",);
     };
@@ -56,7 +54,7 @@ var cri = cri || {};
         //TODO: prevent reload of current stage.
 
         // get data for asked stage
-        this.history.loadStage(stageId, function (baseStage, deltaStages) {
+        cri.history.loadStage(stageId, function (baseStage, deltaStages) {
             self.currentStage = stageId;
 
             if (baseStage) {
@@ -135,9 +133,9 @@ var cri = cri || {};
     function applyDeltaStage(self, delta, isLast) {
         let data = delta.change.data;
         let ev = delta.change.event;
-        if (ev === "newNode" || ev === "updateNode") {
+        if (ev === "saveNode") {
             if (isLast) data.class = (data.class || "") + " current";
-            self.graph.setNode(data.nodeId, data);
+            self.graph.setNode(data.nodeId, cri.inflateNode(data));
         } else if (ev === "saveEdge")
             self.graph.setEdge(data.edgeStart, data.edgeEnd, {
                 label: data.edgeLabel,

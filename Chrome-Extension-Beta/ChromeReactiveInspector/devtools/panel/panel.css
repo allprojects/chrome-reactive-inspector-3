@@ -10,6 +10,7 @@
 
 .nodes .label {
     color: black;
+    font-size:95%;
 }
 
 .node.has-source-info rect {

@@ -50,22 +50,23 @@
     <hr>
 
     <div id="query-item-panel" class="flex-container collapse" style="flex-wrap: wrap">
-      <div class="flex-child-centered" style="padding:0 2em">
+      <div style="padding:0 2em"><!-- class="flex-child-centered"-->
         <h4>History Queries</h4>
         <div class="flex-item-container">
-          <select class="form-control cri-findnode-select" id="cri-findnode-select">
-            <option value="nodeCreated">nodeCreated[nodeName]</option>
-            <option value="nodeUpdated">nodeUpdated[nodeName]</option>
-            <option value="evaluationYielded">evaluationYielded[nodeName][value]</option>
-            <option value="dependencyCreated">dependencyCreated[nodeName][nodeName]</option>
-          </select>
-          <button type="button" class="btn flex-child-centered" id="cri-history-query-submit">Submit Query</button>
+          <form action=#>
+            <input class="form-control" style="display:inline-block;width:unset" id="cri-findnode-select" placeholder="saveNode:NAME" title="possible queries are
+* saveNode:NAME
+* nodeWithValue:NAME:VALUE
+* saveEdge:FROM:TO">
+            <input type="submit" class="btn" id="cri-history-query-submit" value=Search>
+          </form>
           <div class="flex-container flex-align-baseline">
             <button type="button" id="cri-history-query-prev" class="btn btn-default btn-sm">
               <span class="glyphicon glyphicon glyphicon-chevron-left"></span>
             </button>
             <div style="margin: 5px">
               <span id="cri-history-current-step">0</span>/<span id="cri-history-last-step">0</span>
+              hits
             </div>
             <button type="button" id="cri-history-query-next" class="btn btn-default btn-sm">
               <span class="glyphicon glyphicon-chevron-right"></span>
@@ -74,16 +75,16 @@
         </div>
       </div>
 
-      <div class="flex-child-centered" style="padding:0 2em">
+      <div style="padding:0 2em"><!-- class="flex-child-centered"-->
         <h4>Reactive Breakpoints</h4>
         <div class="flex-item-container">
-          <select class="form-control cri-breakpoint-select" id="cri-breakpoint-select">
-            <option>nodeCreated[nodeId]</option>
-            <option>nodeUpdated[nodeId]</option>
-            <option>evaluationYielded[nodeId][value]</option>
-            <option>dependencyCreated[nodeId][nodeId]</option>
-          </select>
-          <button type="button" class="btn" id="cri-breakpoint-query-submit">Add</button>
+          <form action=#>
+            <input class="form-control" style="display:inline-block;width:unset" id="cri-breakpoint-select" placeholder="saveNode:NAME" title="possible break points are:
+* saveNode:NAME
+* nodeWithValue:NAME:VALUE
+* saveEdge:FROM:TO">
+            <input type="submit" class="btn" id="cri-breakpoint-query-submit" value=Add>
+          </form>
         </div>
       </div>
       <div id="cri-breakpoints-container" class="flex-child-centered flex-vertical-container"></div>
@@ -161,10 +162,10 @@
   <script src="../optionsAccess.js"></script>
   <script src="../utils.js"></script>
   <script src="../tooltips.js"></script>
-  <script src="../reactive-breakpoints.js"></script>
   <script src="../stageStorage.js"></script>
-  <script src="../graphHistory.js"></script>
-  <script src="../dependencyGraph.js"></script>
+  <script src="../BreakpointManager.js"></script>
+  <script src="../History.js"></script>
+  <script src="../GraphManager.js"></script>
   <script src="../search-graph.js"></script>
 
   <script src="panel.js"></script>
