@@ -1,5 +1,7 @@
 #svg-canvas {
-    min-height: 400px;
+  background: orange;
+  height: 100%;
+/*    min-height: 400px;*/
 }
 
 .node rect {
@@ -7,73 +9,44 @@
     stroke: #A1C0DB;
     stroke-width: 1.5px;
 }
-
 .nodes .label {
     color: black;
     font-size:95%;
 }
-
 .node.has-source-info rect {
     border-radius: 10px;
     stroke: #004C8C;
     stroke-width: 1.5px;
 }
-
 .edgePath path {
     stroke: #004C8C;
     stroke-width: 1.5px;
 }
-
 .edgeLabel .label {
     fill: #004C8C;
 }
-
 /* This sets the color for "TK" nodes to a light blue green. */
-/*!**/
-g.type-TK > rect {
-    fill: #00ffd0;
-}
-
+g.type-TK > rect { fill: #00ffd0; }
 g.current > rect {
-    stroke: #FF9400 !important;
-    stroke-width: 3 !important;
+  stroke: #FF9400 !important;
+  stroke-width: 3 !important;
 }
-
-g.edgePath.current path {
-    stroke: #FF9400;
-}
-
+g.edgePath.current path { stroke: #FF9400; }
 g.highlight > rect {
     stroke: #00BA6F !important;
     stroke-width: 5 !important;
     opacity: 1 !important;
 }
-
-g.fade > rect {
-    opacity: 0.3;
-}
-
-g.nodeWithRef > rect {
-    fill: #FFE9A4;
-}
-
-g.nodeWithoutRef > rect {
-    fill: white;
-}
-
+g.fade > rect { opacity: 0.3; }
+g.nodeWithRef > rect { fill: #FFE9A4; }
+g.nodeWithoutRef > rect { fill: white; }
 text {
     font-weight: 300;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serf, serif;
     font-size: 14px;
 }
-
-.node text {
-    pointer-events: none;
-}
-
-.container {
-    margin-bottom: 15px;
-}
+.node text { pointer-events: none; }
+.container { margin-bottom: 15px; }
 
 .ui-slider .ui-slider-handle {
     position: absolute;
@@ -84,39 +57,21 @@ text {
     text-align: center;
 }
 
-.column-left {
-    float: left;
-}
+/*.column-left { float: left; }*/
+/*.column-right { float: right; }*/
+/*.column-center {*/
+/*    margin-top: 5px;*/
+/*    display: inline-block;*/
+/*    width: 80%;*/
+/*}*/
 
-.column-right {
-    float: right;
-}
+/*.left-border { border-left: 1px solid black; }*/
 
-.column-center {
-    margin-top: 5px;
-    display: inline-block;
-    width: 80%;
-}
+hr { margin: 5px 0 !important; }
 
-.left-border {
-    border-left: 1px solid black;
-}
-
-hr {
-    margin: 5px 0 !important;
-}
-
-.pd-left-0 {
-    padding-left: 0 !important;
-}
-
-.pd-left-5 {
-    padding-left: 5px !important;
-}
-
-.pd-right-0 {
-    padding-right: 0 !important;
-}
+/*.pd-left-0 { padding-left: 0 !important; }*/
+/*.pd-left-5 { padding-left: 5px !important; }*/
+/*.pd-right-0 { padding-right: 0 !important; }*/
 
 #cri-breakpoints-container {
     max-height: 105px;
@@ -128,7 +83,7 @@ hr {
     background: #D97E00;
     color: white;
     font-size: 12px;
-    padding: 1px 2px;
+    padding: 4px;
     cursor: pointer;
 }
 
@@ -214,47 +169,21 @@ hr {
     position: absolute;
 }
 
-.flex-container {
-    display: flex;
-}
-
-.flex-vertical-container {
-    flex-direction: column;
-    display: flex;
-}
-
-.flex-grow {
-    flex-grow: 1;
-}
-
-.flex-centered {
-    align-items: center;
-}
-
-.flex-child-centered {
-    margin: auto;
-}
-
-.flex-align-baseline {
-    align-items: baseline;
-}
-
-.flex-item-container {
-    display: flex;
-    align-items: baseline;
-}
-
-.flex-item-container > * {
-    margin: 5px 0 5px 5px;
-}
+.flex-horizontal { display: flex; }
+.flex-vertical { display: flex; flex-direction: column; }
+.flex-grow { flex-grow: 1; }
+.flex-centered { align-items: center; }
+.flex-child-centered { margin: auto; }
+.flex-align-baseline { align-items: baseline; }
+.flex-item-container { display: flex; align-items: baseline; }
+.flex-item-container > * { margin: 5px 0 5px 5px; }
 
 h4 {
     white-space: nowrap;
     margin: 10px;
-}
-
-#query-item-panel h4 {
     margin: 5px 0 0 10px;
+}
+#query-item-panel h4 {
 }
 
 #svg-canvas rect {
@@ -262,14 +191,6 @@ h4 {
     ry: 5;
 }
 
-.btn-info {
-    background-color: #004C8C;
-}
-
-.btn-info:hover {
-    background-color: #7AC3FF;
-}
-
-.validation-error {
-    border: 1px solid red;
-}
+.btn-info { background-color: #004C8C; }
+.btn-info:hover { background-color: #7AC3FF; }
+.validation-error { border: 1px solid red; }

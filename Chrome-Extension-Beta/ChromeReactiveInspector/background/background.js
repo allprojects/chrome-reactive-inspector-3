@@ -28,11 +28,12 @@ chrome.runtime.onConnect.addListener(function (port) {
     // alert("chrome.extension.onConnect.addListener");
     let tabId;
 
-    function handleMessage() {
+    function handleMessage(message, sendResponse) {
         if (message.action === "tabInfo") {
             // retrieve url for download feature
-            let response = tab => sendResponse({currentTabUrl: tab.url});
-            chrome.tabs.get(tabId, response);
+            chrome.tabs.get(tabId, tab => {
+              sendResponse({currentTabUrl: tab.url});
+            });
             return true; // return true to enable async answer
         }
 
@@ -40,9 +41,8 @@ chrome.runtime.onConnect.addListener(function (port) {
     }
 
     function extensionListener(message, sender, sendResponse) {
-
         if (message.destination === "background") {
-            handleMessage();
+            return handleMessage(message, sendResponse);
         } else if (message.destination === "panel") {
             let port = sender.tab && tabPorts[sender.tab.id];
             if (port) port.postMessage(message); // Change

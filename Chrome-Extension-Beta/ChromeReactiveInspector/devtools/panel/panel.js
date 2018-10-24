@@ -2,15 +2,15 @@ var cri = cri || {};
 
 (function (){
 
-    // exports
+// exports
     cri.historyEntries = [];
     cri.history = new cri.History();
 
     // This sends an object to the background page 
     // where it can be relayed to the inspected page
-    cri.sendObjectToInspectedPage = function(message, sendResponse) {
+    cri.sendObjectToInspectedPage = function (message, handleResponse) {
         message.tabId = chrome.devtools.inspectedWindow.tabId;
-        chrome.extension.sendMessage(message, sendResponse);
+        chrome.extension.sendMessage(message, handleResponse);
     }
 
     cri.graphManager = new cri.GraphManager(
@@ -31,25 +31,27 @@ var cri = cri || {};
 //    $('#cri-breakpoint-select').editableSelect({filter: false});
     // it is important to query the element after "editableSelect" has been called, because
     // otherwise the selector will not have the proper value due to weird behavior of jquery-editable-select
-    let $breakpointSelect = $('#cri-breakpoint-select');
 
+// defines
     let $document = $(document);
-    let $toolsContainer = $("#cri-tools-container");
-    let $toolsCollapseButton = $("#cri-tools-collapse");
-    let $canvasContainer = $("#canvas-container");
-    let $breakpointContainer = $('#cri-breakpoints-container');
-    let $slider = $("#slider")
+//    let $toolsContainer = $("#cri-tools-container");
+//    let $toolsCollapseButton = $("#cri-tools-collapse");
     let $searchNode = $("#cri-node-search-val");
+    let $breakpointContainer = $('#cri-breakpoints-container');
+    let $breakpointSelect = $('#cri-breakpoint-select');
+    let $slider = $("#slider")
+    let $canvasContainer = $("#canvas-container");
     let $configIncludeFilesField = $('#cri-config-includes');
     let $configRecStatusButton = $('#cri-rec-status');
 
+    let historyQueryResult = [];
     let previousConfigFiles = [];
-    let toolsContainerVisible = true;
+//    let toolsContainerVisible = true;
 
+// imports
     let tooltipManager = new cri.TooltipManager($canvasContainer, cri.graphManager);
     let searchGraphManager = new cri.SearchGraphManager(cri.graphManager, $searchNode);
     let breakpointManager = new cri.BreakpointManager($breakpointContainer);
-    let historyQueryResult = [];
 
 // dropdown
     $document.ready(() => $(".dropdown-toggle").dropdown());
@@ -74,19 +76,19 @@ var cri = cri || {};
         }
     });
 
-// collapse
-    $toolsCollapseButton.click(function () {
-        toolsContainerVisible = !toolsContainerVisible;
-        if (toolsContainerVisible) {
-            $toolsCollapseButton.find("span").removeClass("glyphicon-chevron-down")
-                .addClass("glyphicon-chevron-up");
-            $toolsContainer.show();
-        } else {
-            $toolsCollapseButton.find("span").removeClass("glyphicon-chevron-up")
-                .addClass("glyphicon-chevron-down");
-            $toolsContainer.hide();
-        }
-    });
+//// collapse
+//    $toolsCollapseButton.click(function () {
+//        toolsContainerVisible = !toolsContainerVisible;
+//        if (toolsContainerVisible) {
+//            $toolsCollapseButton.find("span").removeClass("glyphicon-chevron-down")
+//                .addClass("glyphicon-chevron-up");
+//            $toolsContainer.show();
+//        } else {
+//            $toolsCollapseButton.find("span").removeClass("glyphicon-chevron-up")
+//                .addClass("glyphicon-chevron-down");
+//            $toolsContainer.hide();
+//        }
+//    });
 
 // zoom
     // Set up zoom support
@@ -246,24 +248,42 @@ var cri = cri || {};
     });
 
     $('#cri-download-graph').click(function () {
-        sendObjectToInspectedPage({destination: "background", action: "tabInfo"}, function (response) {
+        cri.sendObjectToInspectedPage({destination: "background", action: "tabInfo"}, function (response) {
             let currentTabUrl = response.currentTabUrl;
+            console.log("download response", response)
             if (!currentTabUrl) {
                 console.log('Error retrieving url of current inspected tab.');
-                return;
+//                return;
             }
 
             let filename = currentTabUrl.substring(currentTabUrl.lastIndexOf('/') + 1);
-            if (!filename || filename === "") {
-                return;
-            }
+//            if (!filename || filename === "") {
+//                console.log("too short url");
+//                return;
+//            }
 
             let svgElement = document.getElementById('svg-canvas');
-            let simg = new Simg(svgElement);
-            // Replace the current SVG with an image version of it.
-            // simg.replace();
-            // And trigger a download of the rendered image.
-            simg.download('dependency_graph_' + filename);
+            let html = svgElement.outerHTML.replace(/>/g, ">\n").replace(/<br>/g, "<br />")
+            fetch(document.styleSheets[6].href).then(x => x.text()).then(style => {
+              html = html.replace(/<svg.*?>/, '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">')
+              html = html.substring(0, html.length-7) + "<style type=\"text/css\"> <![CDATA[ " + style + " ]]> </style></svg>";
+              console.log(html);
+
+              let a = document.createElement("a");
+              a.download = "chart";
+              a.href = 'data:image/svg+xml;base64,' + window.btoa(html);
+              a.click();
+
+  //            let simg = new Simg(svgElement);
+  //            // Replace the current SVG with an image version of it.
+  //            console.log(simg)
+  //            simg.replace();
+  //            // And trigger a download of the rendered image.
+  //            let fullname = 'dependency_graph_' + filename + Math.random();
+  //            console.log("download response", response)
+  //            console.log(simg.download(fullname));
+  //            console.log("download response", response)
+            });
         });
     });
 

@@ -18,19 +18,30 @@ var cri = cri || {};
         return this;
     }
 
-    function loadCodeIfNotThere(node, data) {
+    function loadCodeIfNotThere(d3node, data) {
 //        if (!data || !data.sourceInfo) return; // missing source code file
 
         // only load code once
-        let d3node = d3.select(node);
         if (d3node.attr("data-require-code")) return;
         d3node.attr("data-require-code", true);
 
         // refresh tipsy / sidebar
-        d3node.attr("original-title", "this"); $(node).tipsy("show");
+//        d3node.attr("original-title", "this"); $(node).tipsy("show");
         let norm = createNormalTooltipContent(data);
         d3node.attr("tooltip", norm + (data.sourceInfo ? pendingIcon : ""));
-        $("#sidebar").html(d3node.attr("tooltip"));
+
+        function doit() {
+            $("#sidebar").html(d3node.attr("tooltip"));
+            let buttons = Array.from($("#sidebar button"));
+            buttons.forEach(button => {
+                button.onclick = function () {
+                    let value = button.previousSibling.value;
+                    cri.sendObjectToInspectedPage({destination: "rescala", type: "set-signal", value: value});
+                    button.previousSibling.value = "";
+                };
+            })
+        }
+        doit()
 
         // async, refresh tipsy with source code preview
         if (data.sourceInfo) requestCodeSnippetAsync(data.sourceInfo, function (answer) {
@@ -39,7 +50,7 @@ var cri = cri || {};
 
             // refresh tipsy / sidebar
             d3node.attr("tooltip", norm + codeHtml);
-            $("#sidebar").html(d3node.attr("tooltip"));
+            doit()
         });
     }
 
@@ -149,10 +160,10 @@ var cri = cri || {};
     TooltipManager.prototype.initializeTooltips = function (d3nodeCollection) {
         let self = this;
 
-        // give each node a tipsy tooltip
-        d3nodeCollection.each(function () { $(this).tipsy({
-            gravity: "w", opacity: 1, html: true,
-        }) });
+//        // give each node a tipsy tooltip
+//        d3nodeCollection.each(() => $(self).tipsy({
+//            gravity: "w", opacity: 1, html: true,
+//        }) );
 
         // register ui events
         $("body")
@@ -160,8 +171,7 @@ var cri = cri || {};
             .on("keyup",   (e) => { if (!e.ctrlKey) $("body").removeClass("ctrl-key") });
 
         d3nodeCollection.on("mouseenter.code", function (v) {
-            loadCodeIfNotThere(this, self.graphManager.getNode(v));
-            $("#sidebar").html(d3.select(this).attr("tooltip"));
+            loadCodeIfNotThere(d3.select(this), self.graphManager.getNode(v));
         });
     };
 

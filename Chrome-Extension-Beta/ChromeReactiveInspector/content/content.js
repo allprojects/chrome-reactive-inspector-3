@@ -21,11 +21,12 @@ var cri = cri || {};
             console.log("Node details");
             console.log("Node id " + msg.content.id);
             console.log("Node value " + msg.content.value);
-        }
-        else if (msg.action === 'getSourceCode') {
+        } else if (msg.action === 'getSourceCode') {
             sendResponse({
                 code: cri.instrumentor.getCode(msg.content.filename, msg.content.from, msg.content.to)
             });
+        } else {
+          throw "Not Yet Implemented " + JSON.stringify(msg);
         }
     });
 

@@ -9,30 +9,30 @@
   <link rel="stylesheet" href="../../libraries/jquery-ui-slider-pips.css">
   <link rel="stylesheet" href="panel.css">
   <link rel="stylesheet" href="panel-tooltips.css">
-</head><body>
+</head><body class="flex-vertical">
 
-<div id="dialog" title="Confirmation Required">
-  The program has reached the threshold value you have set.
-  Click on Confirm to continue logging the values or cancel to pause the logging.
-</div>
+  <div id="dialog" title="Confirmation Required">
+    The program has reached the threshold value you have set.
+    Click on Confirm to continue logging the values or cancel to pause the logging.
+  </div>
 
-<div id="menu-bar">
-  <ul>
-    <li class="submenu">
-      <div class="dropbtn">Graph</div>
-      <div class="submenu-content">
-        <div id="cri-reload">Reload</div>
-        <div id="cri-reset">Reset</div>
-        <!-- download graph feature is currently hidden, because it is not working in the latest
-        chrome versions. The library "simg" is no longer suitable. -->
-        <div id="cri-download-graph" style="display: none">Download</div>
-      </div>
-    </li>
-    <li class="menuitem">
-      <div id="cri-rec-status" data-rec-status="true">Pause Recording</div>
-    </li>
-  </ul>
-</div>
+  <div id="menu-bar">
+    <ul>
+      <li class="submenu">
+        <div class="dropbtn">Graph</div>
+        <div class="submenu-content">
+          <div id="cri-reload">Reload</div>
+          <div id="cri-reset">Reset</div>
+          <!-- download graph feature is currently hidden, because it is not working in the latest
+          chrome versions. The library "simg" is no longer suitable. -->
+          <div id="cri-download-graph">Download</div>
+        </div>
+      </li>
+      <li class="menuitem">
+        <div id="cri-rec-status" data-rec-status="true">Pause Recording</div>
+      </li>
+    </ul>
+  </div>
 
   <!-- TOGGLE SHOW/HIDE MENU BUTTON -->
   <!--<button id="cri-tools-collapse" type="button" class="btn btn-default btn-sm"-->
@@ -40,16 +40,16 @@
   <!--  <span class="glyphicon glyphicon glyphicon-chevron-down"></span>-->
   <!--</button>-->
 
-  <div id="cri-tools-container">
+<!--  <div id="cri-tools-container">-->
     <!-- INSTRUMENT FILES INPUT -->
-    <!--<div class="flex-container" style="margin: 5px">-->
+    <!--<div class="flex-horizontal" style="margin: 5px">-->
     <!--  <h4>Instrument Files</h4>-->
     <!--  <input id="cri-config-includes" type="text" class="form-control" style="flex-grow: 1"/>-->
     <!--</div>-->
 
-    <hr>
+<!--    <hr>-->
 
-    <div id="query-item-panel" class="flex-container collapse" style="flex-wrap: wrap">
+    <div class="flex-horizontal collapse" style="flex-wrap: wrap">
       <div style="padding:0 2em"><!-- class="flex-child-centered"-->
         <h4>History Queries</h4>
         <div class="flex-item-container">
@@ -60,7 +60,7 @@
 * saveEdge:FROM:TO">
             <input type="submit" class="btn" id="cri-history-query-submit" value=Search>
           </form>
-          <div class="flex-container flex-align-baseline">
+          <div class="flex-horizontal flex-align-baseline">
             <button type="button" id="cri-history-query-prev" class="btn btn-default btn-sm">
               <span class="glyphicon glyphicon glyphicon-chevron-left"></span>
             </button>
@@ -91,7 +91,7 @@
 
       <div class="flex-grow" style="padding:0 2em">
         <h4>History</h4>
-        <div class="flex-container">
+        <div class="flex-horizontal">
           <div class="flex-child-centered">
             <button type="button" id="up" class="btn btn-default btn-sm">
               <span class="glyphicon glyphicon glyphicon-chevron-left"></span>
@@ -132,11 +132,11 @@
   <!--    </div>-->
 
     </div>
-  </div>
+<!--  </div>-->
 
-  <hr>
+  <br>
 
-  <div class="flex-container">
+  <div class="flex-horizontal">
     <div id=sidebar></div>
     <!-- canvas-container needs tabindex to receive key events -->
     <div class="flex-grow" id="canvas-container" tabindex="0">
@@ -145,7 +145,6 @@
       <div class="tooltip" id="cri-node-tooltip" style=""></div>
     </div>
   </div>
-
 
   <script src="../../libraries/d3.v3.min.js" charset="utf-8"></script>
   <script src="../../libraries/dagre-d3.js"></script>
@@ -161,7 +160,7 @@
 
   <script src="../optionsAccess.js"></script>
   <script src="../utils.js"></script>
-  <script src="../tooltips.js"></script>
+  <script src="../TooltipManager.js"></script>
   <script src="../stageStorage.js"></script>
   <script src="../BreakpointManager.js"></script>
   <script src="../History.js"></script>
