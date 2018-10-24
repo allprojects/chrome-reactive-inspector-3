@@ -267,8 +267,6 @@ var cri = cri || {};
             fetch(document.styleSheets[6].href).then(x => x.text()).then(style => {
               html = html.replace(/<svg.*?>/, '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">')
               html = html.substring(0, html.length-7) + "<style type=\"text/css\"> <![CDATA[ " + style + " ]]> </style></svg>";
-              console.log(html);
-
               let a = document.createElement("a");
               a.download = "chart";
               a.href = 'data:image/svg+xml;base64,' + window.btoa(html);

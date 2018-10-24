@@ -19,28 +19,33 @@ var cri = cri || {};
     }
 
     function loadCodeIfNotThere(d3node, data) {
-//        if (!data || !data.sourceInfo) return; // missing source code file
-
-        // only load code once
-        if (d3node.attr("data-require-code")) return;
-        d3node.attr("data-require-code", true);
-
-        // refresh tipsy / sidebar
-//        d3node.attr("original-title", "this"); $(node).tipsy("show");
-        let norm = createNormalTooltipContent(data);
-        d3node.attr("tooltip", norm + (data.sourceInfo ? pendingIcon : ""));
-
         function doit() {
             $("#sidebar").html(d3node.attr("tooltip"));
             let buttons = Array.from($("#sidebar button"));
             buttons.forEach(button => {
                 button.onclick = function () {
                     let value = button.previousSibling.value;
-                    cri.sendObjectToInspectedPage({destination: "rescala", type: "set-signal", value: value});
+                    cri.sendObjectToInspectedPage({destination: "rescala",
+                                                   type: "set-signal",
+                                                   value: value,
+                                                   nodeId: data.nodeId});
                     button.previousSibling.value = "";
                 };
             })
         }
+
+//        if (!data || !data.sourceInfo) return; // missing source code file
+
+        if (d3node.attr("data-require-code")) {
+            doit();
+            return; // only load code once
+        }
+        d3node.attr("data-require-code", true);
+
+        // refresh tipsy / sidebar
+//        d3node.attr("original-title", "this"); $(node).tipsy("show");
+        let norm = createNormalTooltipContent(data);
+        d3node.attr("tooltip", norm + (data.sourceInfo ? pendingIcon : ""));
         doit()
 
         // async, refresh tipsy with source code preview
@@ -50,7 +55,7 @@ var cri = cri || {};
 
             // refresh tipsy / sidebar
             d3node.attr("tooltip", norm + codeHtml);
-            doit()
+            doit();
         });
     }
 

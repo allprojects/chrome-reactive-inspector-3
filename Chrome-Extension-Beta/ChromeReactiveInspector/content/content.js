@@ -16,6 +16,11 @@ var cri = cri || {};
 
     // Listen message from background page, that may be sent from panel
     chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
+        if (msg.destination == "rescala") {
+            window.postMessage(msg, "*");
+            return; // ignore messages for the other one
+        }
+
         // message received to content script from background js
         if (msg.action === 'node_details') {
             console.log("Node details");
@@ -26,7 +31,7 @@ var cri = cri || {};
                 code: cri.instrumentor.getCode(msg.content.filename, msg.content.from, msg.content.to)
             });
         } else {
-          throw "Not Yet Implemented " + JSON.stringify(msg);
+          throw "Not Yet Implemented content " + JSON.stringify(msg);
         }
     });
 
